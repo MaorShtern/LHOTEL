@@ -1,14 +1,72 @@
 import { View, Text, StyleSheet, TextInput, Button, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { format } from "date-fns";
+
+
+
 
 export default function Booking({ navigation }) {
+
+  const [flag, setFlag] = useState(false)
+  const [enteryDate, setEnteryDate] = useState(new Date())
+  // var date = new Date().getDate();
+  // var month = new Date().getMonth() + 1;
+  // var year = new Date().getFullYear();
+  // var formattedDate = format(enteryDate, "MMMM do, yyyy H:mma")
+
+  // console.warn("A date has been picked: ", date.toString());
+  // console.warn("A Day: ", date.getDate());
+  //console.warn("A Month: ", date.getMonth()+1);
+
+  //console.warn("A FullYear: ", date.getFullYear());
+
+  // var time = new Date(2022,2,3)
+  // console.warn(time.getFullYear())
+
+
+  const showDatePicker = () => {
+    setFlag(true);
+  };
+  const hideDatePicker = () => {
+    setFlag(false);
+  };
+  const handleConfirm = (date) => {
+    console.warn(date.getDay())
+    setEnteryDate(date)
+    hideDatePicker();
+  };
+
+
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Booking</Text>
       <View style={styles.label}>
 
-      <Text style={styles.Text}>Full Name: </Text>
-        <TextInput  placeholder='Center Me' style={styles.TextInput}></TextInput>
+        <View style={{ height: 10 }}></View>
+
+        <Button title="Entry date" onPress={showDatePicker} />
+        <DateTimePickerModal
+          isVisible={flag}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker} />
+        <View style={{ height: 20 }}></View>
+
+        <Button title="Entry date" onPress={showDatePicker} />
+        <DateTimePickerModal
+          isVisible={flag}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker} />
+        <View style={{ height: 20 }}></View>
+
+        <TextInput placeholder='Amount of people: ' style={styles.TextInput}></TextInput>
+        <View style={{ height: 10 }}></View>
+        {/* <Text>{enteryDate.getDay()}</Text>
+        <Text>{enteryDate.getMonth()+1}</Text>
+        <Text>{enteryDate.getFullYear()}</Text> */}
+        {/* <Text>{formattedDate}</Text> */}
 
       </View>
     </ScrollView>
@@ -34,6 +92,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 50,
     padding: 10,
+
   },
   Text: {
     marginTop: 10,
