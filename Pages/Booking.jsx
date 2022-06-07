@@ -1,41 +1,59 @@
 import { View, Text, StyleSheet, TextInput, Button, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { format } from "date-fns";
-
+import { RadioButton, Checkbox } from 'react-native-paper';
 
 
 
 export default function Booking({ navigation }) {
 
-  const [flag, setFlag] = useState(false)
+  const [flagEnrty, setFlagEntry] = useState(false)
+  const [flagExit, setFlagExit] = useState(false)
   const [enteryDate, setEnteryDate] = useState(new Date())
-  // var date = new Date().getDate();
-  // var month = new Date().getMonth() + 1;
-  // var year = new Date().getFullYear();
-  // var formattedDate = format(enteryDate, "MMMM do, yyyy H:mma")
+  const [exitDate, setExitDate] = useState(new Date())
 
-  // console.warn("A date has been picked: ", date.toString());
-  // console.warn("A Day: ", date.getDate());
-  //console.warn("A Month: ", date.getMonth()+1);
+  let enteryDay = enteryDate.getDate();
+  let enteryMonth = enteryDate.getMonth() + 1;
+  let enteryYear = enteryDate.getFullYear();
+  let exitDay = exitDate.getDate();
+  let exitMonth = exitDate.getMonth() + 1;
+  let exitYear = exitDate.getFullYear();
 
-  //console.warn("A FullYear: ", date.getFullYear());
+  const [amount_Of_People, setAmount_Of_People] = useState(0)
+  const [single, setSingle] = useState(false)
+  const [double, setDouble] = useState(false)
+  const [svit, setSvit] = useState(false)
 
-  // var time = new Date(2022,2,3)
-  // console.warn(time.getFullYear())
 
 
-  const showDatePicker = () => {
-    setFlag(true);
+
+
+  const showDatePickerEntry = () => {
+    setFlagEntry(true);
   };
-  const hideDatePicker = () => {
-    setFlag(false);
+  const hideDatePickerEntry = () => {
+    setFlagEntry(false);
   };
-  const handleConfirm = (date) => {
-    console.warn(date.getDay())
+
+  const showDatePickerExit = () => {
+    setFlagExit(true);
+  };
+  const hideDatePickerExit = () => {
+    setFlagExit(false);
+  };
+
+
+  const handleConfirmEnteryDate = (date) => {
     setEnteryDate(date)
-    hideDatePicker();
+    hideDatePickerEntry()
   };
+
+  const handleConfirmExitDate = (date) => {
+    setExitDate(date)
+    hideDatePickerExit()
+  };
+
+
 
 
   return (
@@ -45,29 +63,48 @@ export default function Booking({ navigation }) {
 
         <View style={{ height: 10 }}></View>
 
-        <Button title="Entry date" onPress={showDatePicker} />
+
+        <Button title={"Entry date: " + enteryDay + " " + enteryMonth + " " + enteryYear} onPress={showDatePickerEntry} />
         <DateTimePickerModal
-          isVisible={flag}
+          isVisible={flagEnrty}
           mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker} />
+          onConfirm={handleConfirmEnteryDate}
+          onCancel={hideDatePickerEntry} />
         <View style={{ height: 20 }}></View>
 
-        <Button title="Entry date" onPress={showDatePicker} />
+        <Button title={"Exit date: " + exitDay + " " + exitMonth + " " + exitYear} onPress={showDatePickerExit} />
         <DateTimePickerModal
-          isVisible={flag}
+          isVisible={flagExit}
           mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker} />
+          onConfirm={handleConfirmExitDate}
+          onCancel={hideDatePickerExit} />
         <View style={{ height: 20 }}></View>
 
-        <TextInput placeholder='Amount of people: ' style={styles.TextInput}></TextInput>
+        <TextInput placeholder='Amount of people: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setAmount_Of_People(number)}></TextInput>
         <View style={{ height: 10 }}></View>
-        {/* <Text>{enteryDate.getDay()}</Text>
-        <Text>{enteryDate.getMonth()+1}</Text>
-        <Text>{enteryDate.getFullYear()}</Text> */}
-        {/* <Text>{formattedDate}</Text> */}
 
+        <View>
+          <Text style={styles.Text}>Room Type</Text>
+          <View style={styles.RadioCheckbox}>
+            <View style={styles.Checkbox}>
+              <Checkbox label="Item" status={single ? 'checked' : 'unchecked'} onPress={() => { setSingle(!single) }} />
+              <Text>Single</Text>
+            </View>
+            <View style={styles.Checkbox}>
+              <Checkbox label="Item" status={double ? 'checked' : 'unchecked'} onPress={() => { setDouble(!double) }} />
+              <Text>Double</Text>
+            </View>
+            <View style={styles.Checkbox}>
+              <Checkbox label="Item" status={svit ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svit) }} />
+              <Text>Svit</Text>
+            </View>
+            {/* <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
+              <RadioButton.Item label="Single" value='Single'/>
+              <RadioButton.Item label="Double" value='Double' />
+              <RadioButton.Item label="Svit" value='Svit'/>
+            </RadioButton.Group> */}
+          </View>
+        </View>
       </View>
     </ScrollView>
   )
@@ -85,6 +122,17 @@ const styles = StyleSheet.create({
   label: {
     padding: 20,
   },
+  RadioCheckbox: {
+    borderColor: 'black',
+    borderRadius: 15,
+    borderWidth: 2,
+    padding: 10,
+  },
+  Checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   TextInput: {
     flexDirection: 'row',
     borderColor: 'black',
@@ -99,13 +147,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  ButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 70,
-    paddingRight: 70,
-    paddingTop: 20
-  },
+ 
 
 });
