@@ -98,12 +98,11 @@ export default function Booking({ navigation }) {
               <Checkbox label="Item" status={svit ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svit) }} />
               <Text>Svit</Text>
             </View>
-            {/* <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
-              <RadioButton.Item label="Single" value='Single'/>
-              <RadioButton.Item label="Double" value='Double' />
-              <RadioButton.Item label="Svit" value='Svit'/>
-            </RadioButton.Group> */}
           </View>
+          
+
+
+
         </View>
       </View>
     </ScrollView>
@@ -147,6 +146,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
- 
+
 
 });
