@@ -1,12 +1,26 @@
 import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 
-export default function Payment({ navigation }) {
+export default function Payment({ route, navigation }) {
 
 
   const [totalSum, SetTotalSum] = useState(0)
+
+  let { data } = route.params
+
+  useEffect(() => {
+    Calculate_Final_Amount
+  })
+
+
+  const Calculate_Final_Amount = () => {
+    let sum = 0
+    for (let i = 0; i < data.length; i++) {
+        sum += data.pricePerNight 
+    }
+  }
 
   const Delete = () => {
 
@@ -94,11 +108,11 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   button:
-    {
-      backgroundColor: 'gray',
-      padding: 10,
-      borderRadius: 10
-  
-    },
+  {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 10
+
+  },
 
 })

@@ -1,34 +1,37 @@
-import { View, Text, StyleSheet, Image, Alert,TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Counter from "react-native-counters";
 import Back from '../Pic/backround.jpg'
 
+
 export default function CardRoom(props) {
 
-    let { roomType, details, amount } = props
-
+    let { roomType, details } = props
 
     const ShowDetails = () => {
         Alert.alert(details)
     }
 
+    const SetCount = (number) => {
+        props.SetCount(number, roomType)
+    }
+
+    // console.log("count "+ details + ": " + count);
+
     return (
-        <View style={{paddingBottom:10}}>
+        <View style={{ paddingBottom: 10 }}>
             <View style={styles.card}>
                 <View >
                     <Image style={styles.image} source={Back}></Image>
                 </View>
-                <Text style={styles.RoomType}>Single Room</Text>
-
+                <Text style={styles.RoomType}>{roomType}</Text>
                 <View style={styles.ButtonContainer}>
-                    <Counter start={1} style={styles.counter} />
+                    <Counter start={0} style={styles.counter} onChange={SetCount.bind(this)} />
                     <View style={{ width: 70 }}></View>
                     <TouchableOpacity style={styles.button} onPress={() => ShowDetails()}>
                         <Text>Show Details</Text>
                     </TouchableOpacity>
-                    {/* <Button style={styles.button} title='Show Details' onPress={() => ShowDetails()}></Button> */}
                 </View>
-
             </View>
         </View>
     )
@@ -65,9 +68,9 @@ const styles = StyleSheet.create({
     },
     button:
     {
-      backgroundColor: 'gray',
-      padding: 10,
-      borderRadius: 10
-  
+        backgroundColor: 'gray',
+        padding: 10,
+        borderRadius: 10
+
     },
 })
