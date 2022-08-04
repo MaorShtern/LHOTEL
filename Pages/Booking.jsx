@@ -1,9 +1,7 @@
-import { View, Text, StyleSheet, TextInput, ScrollView, Switch, TouchableOpacity } from 'react-native'
+import { View, Text, Alert, StyleSheet, TextInput, ScrollView, Switch, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { RadioButton, Checkbox } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Alert } from '@mui/material';
+import { Checkbox } from 'react-native-paper';
 
 
 
@@ -17,23 +15,6 @@ export default function Booking({ navigation }) {
   const [single, setSingle] = useState(false)
   const [double, setDouble] = useState(false)
   const [svit, setSvit] = useState(false)
-
-
-  // if(getDate() === null)
-  // {
-  //   Alert.alert('Must be logged in with a user to book a hotel room')
-  //   navigation.navigate('Login')
-  // }
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@conect_user')
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      Alert.alert(error)
-    }
-  }
-
 
 
   const showDatePickerEntry = () => {
@@ -64,7 +45,8 @@ export default function Booking({ navigation }) {
   const [amount_Of_People, setAmount_Of_People] = useState(0)
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
   const [breakfast, setreakfast] = useState(false);
-  
+
+
 
   const Delete = () => {
     setAmount_Of_People(0)
@@ -76,6 +58,49 @@ export default function Booking({ navigation }) {
     setEnteryDate(new Date())
     setExitDate(new Date())
   }
+
+  const ChaeckRoomsMarks = () => {
+    if (single === false && double === false && svit === false)
+      return false
+    else
+      return true
+  }
+
+  const CheackAmountOfPeople = () => {
+    if (amount_Of_People <= 0)
+      return false
+    else
+      return true
+  }
+
+  const CheackNumOfNights = () => {
+    if (number_Of_Nights <= 0)
+      return false
+    else
+      return true
+  }
+
+  const CheackDates = () => {
+    if (enteryDate.getFullYear() != exitDate.getFullYear() ||
+      (exitDate.getMonth() + 1) < (enteryDate.getMonth() + 1)) {
+
+      if ((exitDate.getMonth() + 1) === (enteryDate.getMonth() + 1) &&
+        enteryDate.getDate() > exitDate.getDate()) {
+        return false
+      }
+    }
+    else
+      return true
+  }
+
+  const ChaeckAll = () => {
+    if (ChaeckRoomsMarks && CheackAmountOfPeople && CheackNumOfNights) {
+      navigation.navigate('SaveRoom')
+    }
+    else
+      Alert.alert('Some fields are not filled in Properly')
+  }
+
 
   return (
     <ScrollView>
@@ -104,11 +129,19 @@ export default function Booking({ navigation }) {
           mode="date"
           onConfirm={handleConfirmExitDate}
           onCancel={hideDatePickerExit} />
+        <View>
+          {!CheackDates() ? (
+            <Text style={styles.alerts}>*The dates are incorrect* </Text>)
+            : null}
+        </View>
         <View style={{ height: 20 }}></View>
 
         <TextInput value={amount_Of_People} placeholder='Amount of people: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setAmount_Of_People(number)}></TextInput>
-        <View style={{ height: 10 }}></View>
-
+        <View>
+          {!CheackAmountOfPeople() ? (
+            <Text style={styles.alerts}>*Must specify the number of people* </Text>)
+            : null}
+        </View>
         <View>
           <Text style={styles.Text}>Room Type</Text>
           <View style={styles.RadioCheckbox}>
@@ -125,9 +158,20 @@ export default function Booking({ navigation }) {
               <Text>Suit</Text>
             </View>
           </View>
+          <View>
+            {!ChaeckRoomsMarks() ? (
+              <Text style={styles.alerts}>*Must select at least one room type* </Text>)
+              : null}
+          </View>
+
         </View>
         <View style={{ height: 10 }}></View>
         <TextInput value={number_Of_Nights} placeholder='Number of nights: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setNumber_Of_Nights(number)}></TextInput>
+        <View>
+          {!CheackNumOfNights() ? (
+            <Text style={styles.alerts}>*Must specify the number of nights* </Text>)
+            : null}
+        </View>
         <View style={{ height: 10 }}></View>
 
         <View style={styles.switchContainer}>
@@ -140,13 +184,12 @@ export default function Booking({ navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SaveRoom')} >
+          <TouchableOpacity style={styles.button} onPress={ChaeckAll} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
-          {/* <Button title="DELETE" ></Button>
-          <Button title="SUBMIT" onPress={() => navigation.navigate('SaveRoom')} ></Button> */}
         </View>
       </View>
+      <View style={{ height: 30 }}></View>
     </ScrollView>
   )
 }
@@ -219,6 +262,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-
+  alerts: {
+    color: 'red'
+  }
 
 });
+
+
+
+// {/* <Button
+//   title="Hide/Show Component"
+//   onPress={() => setShouldShow(!shouldShow)}
+// />
+// {/*Here we will return the view when state is true
+// and will return false if state is false*/}
+// {
+//   shouldShow ?
+//     (
+//       <Iframe width="560" height="315" src="https://www.youtube.com/embed/bdFJ4H3WL3Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></Iframe>
+//     ) : null
+// } */}

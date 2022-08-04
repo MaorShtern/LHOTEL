@@ -1,10 +1,37 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 export default function Navbar({ navigation }) {
+
     const [flag, SetFlag] = useState(true)
+    // const [ConUser, SetConUser] = useState('')
+
+    // const IsConectedUser = () => {
+    //     console.log("ConUser: " + ConUser);
+
+    // }
+
+    // useEffect(() => { readData(); }, []);
+
+
+    // const readData = async () => {
+    //     try {
+    //         const value = await AsyncStorage.getItem('@ConUser');
+    //         console.log("value: " + value);
+
+    //         if (value !== null) {
+    //             SetConUser(JSON.parse(value))
+    //         }
+    //     } catch (e) {
+    //         alert('Failed to fetch @ConUser from storage');
+    //     }
+    // };
+
+
 
 
     if (flag === true) {

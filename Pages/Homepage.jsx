@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity,Alert } from 'react-native'
+import React, { useState, useEffect } from "react";
 import Navbar from './Navbar'
 import CarouselImages from './CarouselImages'
 import Bar from '../Pic/bar.jpg'
@@ -9,9 +9,26 @@ import Lobi from '../Pic/lobi.jpg'
 import Back from '../Pic/backround.jpg'
 
 
-export default function Homepage({ route, navigation }) {
+export default function Homepage({ route ,navigation }) {
 
     const { full_name } = route.params || " "
+
+    // const [ConUser, SetConUser] = useState('')
+
+    // useEffect(() => { readData(); }, []);
+
+
+    // const readData = async () => {
+    //     try {
+    //         const value = await AsyncStorage.getItem('@ConUser');
+    //         Alert.alert("ConUser: " + value);
+    //         if (value !== null) {
+    //             SetConUser(JSON.stringify(value))
+    //         }
+    //     } catch (e) {
+    //         alert('Failed to fetch the @ConUser from storage');
+    //     }
+    // };
 
 
     const fullAddress = "חדרה"
@@ -20,7 +37,7 @@ export default function Homepage({ route, navigation }) {
         android: `geo:0,0?q=${fullAddress}`,
     })
 
-    console.log("full_name: " + full_name);
+    // console.log("ConUser: " + ConUser);
 
     return (
         <ScrollView>
@@ -116,8 +133,8 @@ const styles = StyleSheet.create({
     {
         backgroundColor: 'black',
         alignItems: 'center',
-        textAlign:'center',
-        color:'white',
+        textAlign: 'center',
+        color: 'white',
         padding: 10,
     }
 });
