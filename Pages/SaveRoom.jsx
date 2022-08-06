@@ -31,11 +31,11 @@ export default function SaveRoom({ route, navigation }) {
   //  הפונקציה הזאת היא זאת שתבצע את הקריאה ך-API
   const FetchData = () => {
 
-    BildData()
+    BilldData()
   }
 
 
-  const BildData = () => {
+  const BilldData = () => {
     let temp = []
     arrRooms.map((per) =>
       temp.push(
@@ -50,31 +50,30 @@ export default function SaveRoom({ route, navigation }) {
       elem => elem.type === ele.type && elem.type === ele.type))
 
     list.map((per) => console.log(per))
-    list.map((per) => console.log(per))
 
-    // SetArrRoomsData(list)
+    
 
-    // arrRoomsData.map((per) => console.log(per))
-
-    // createList(list)
-
-    // console.log(list);
+    // list = CreateList(list)
 
     // list.map((per) => console.log(per))
 
     // SetArrRoomsData(list)
+
   }
 
-  const createList = (list) => {
-    if (singleFlag === false) {
-      SetArrRoomsData( list.filter((per) => per.type !== "Single room"))
-    }
-    if (doubleFlag === false) {
-      SetArrRoomsData( list.filter((per) => per.type !== "Double room"))
-    }
-    if (svitFlag === false) {
-      SetArrRoomsData( list.filter((per) => per.type !== "Suite"))
-    }
+  const CreateList = (list) => {
+    let temp = []
+    // if (singleFlag === false) {
+    //   SetArrRoomsData( list.filter((per) => per.type !== "Single room"))
+    // }
+    // if (doubleFlag === false) {
+    //   SetArrRoomsData( list.filter((per) => per.type !== "Double room"))
+    // }
+    // if (svitFlag === false) {
+    //   SetArrRoomsData( list.filter((per) => per.type !== "Suite"))
+    // }
+    temp.push(list.filter((per) => per.type === "Single room"))
+    return temp
   }
 
 
@@ -118,6 +117,8 @@ export default function SaveRoom({ route, navigation }) {
   }
 
 
+
+  // console.log(arrRoomsData);
 
   let listCardsRooms = arrRoomsData.map((per) => <CardRoom key={per.type}
     roomType={per.type} maxCount={per.count} details={per.details} SendCount={SendCount} />)
