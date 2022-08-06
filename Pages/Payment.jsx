@@ -8,7 +8,7 @@ export default function Payment({ route, navigation }) {
 
   const [totalSum, SetTotalSum] = useState(0)
 
-  let { data } = route.params
+  let { data } = route.params || " "
 
   useEffect(() => {
     Calculate_Final_Amount

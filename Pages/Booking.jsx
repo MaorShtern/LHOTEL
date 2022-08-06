@@ -12,9 +12,9 @@ export default function Booking({ navigation }) {
   const [enteryDate, setEnteryDate] = useState(new Date())
   const [exitDate, setExitDate] = useState(new Date())
 
-  const [single, setSingle] = useState(false)
-  const [double, setDouble] = useState(false)
-  const [svit, setSvit] = useState(false)
+  const [singleFlag, setSingle] = useState(false)
+  const [doubleFlag, setDouble] = useState(false)
+  const [svitFlag, setSvit] = useState(false)
 
 
   const showDatePickerEntry = () => {
@@ -42,14 +42,14 @@ export default function Booking({ navigation }) {
   };
 
 
-  const [amount_Of_People, setAmount_Of_People] = useState(0)
+  // const [amount_Of_People, setAmount_Of_People] = useState(0)
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
   const [breakfast, setreakfast] = useState(false);
 
 
 
   const Delete = () => {
-    setAmount_Of_People(0)
+    // setAmount_Of_People(0)
     setNumber_Of_Nights(0)
     setreakfast(false);
     setSingle(false)
@@ -60,7 +60,7 @@ export default function Booking({ navigation }) {
   }
 
   const ChaeckRoomsMarks = () => {
-    if (single === false && double === false && svit === false)
+    if (singleFlag === false && doubleFlag === false && svitFlag === false)
       return false
     else
       return true
@@ -95,7 +95,7 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
     if (ChaeckRoomsMarks && CheackAmountOfPeople && CheackNumOfNights) {
-      navigation.navigate('SaveRoom')
+      navigation.navigate('SaveRoom' , {singleFlag, doubleFlag, svitFlag, number_Of_Nights, breakfast})
     }
     else
       Alert.alert('Some fields are not filled in Properly')
@@ -134,27 +134,27 @@ export default function Booking({ navigation }) {
             <Text style={styles.alerts}>*The dates are incorrect* </Text>)
             : null}
         </View>
-        <View style={{ height: 20 }}></View>
+        <View style={{ height: 10 }}></View>
 
-        <TextInput value={amount_Of_People} placeholder='Amount of people: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setAmount_Of_People(number)}></TextInput>
+        {/* <TextInput value={amount_Of_People} placeholder='Amount of people: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setAmount_Of_People(number)}></TextInput>
         <View>
           {!CheackAmountOfPeople() ? (
             <Text style={styles.alerts}>*Must specify the number of people* </Text>)
             : null}
-        </View>
+        </View> */}
         <View>
           <Text style={styles.Text}>Room Type</Text>
           <View style={styles.RadioCheckbox}>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={single ? 'checked' : 'unchecked'} onPress={() => { setSingle(!single) }} />
+              <Checkbox label="Item" status={singleFlag ? 'checked' : 'unchecked'} onPress={() => { setSingle(!singleFlag) }} />
               <Text>Single</Text>
             </View>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={double ? 'checked' : 'unchecked'} onPress={() => { setDouble(!double) }} />
+              <Checkbox label="Item" status={doubleFlag ? 'checked' : 'unchecked'} onPress={() => { setDouble(!doubleFlag) }} />
               <Text>Double</Text>
             </View>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={svit ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svit) }} />
+              <Checkbox label="Item" status={svitFlag ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svitFlag) }} />
               <Text>Suit</Text>
             </View>
           </View>

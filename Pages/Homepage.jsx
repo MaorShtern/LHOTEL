@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity,Alert } from 'react-native'
+import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, Alert } from 'react-native'
 import React, { useState, useEffect } from "react";
 import Navbar from './Navbar'
 import CarouselImages from './CarouselImages'
@@ -9,9 +9,16 @@ import Lobi from '../Pic/lobi.jpg'
 import Back from '../Pic/backround.jpg'
 
 
-export default function Homepage({ route ,navigation }) {
+export default function Homepage({ route, navigation }) {
 
     const { full_name } = route.params || " "
+
+    const CheackFull_name = () => {
+        if (route.params)
+            return true
+        else
+            return false
+    }
 
     // const [ConUser, SetConUser] = useState('')
 
@@ -44,7 +51,14 @@ export default function Homepage({ route ,navigation }) {
             <View>
                 <Navbar navigation={navigation} />
             </View>
-            <Text style={styles.user_Name}>{full_name}</Text>
+            {/* <Text style={styles.user_Name}>{full_name}</Text> */}
+            <View>
+            <View>
+          {CheackFull_name() ? (
+            <Text style={styles.user_Name}>{full_name}</Text>)
+            : null}
+        </View>
+            </View>
             <Image source={Back} />
             <Text style={styles.Text}>LHOTEL - DETAILS ABOT THE HOTEL</Text>
             <View style={styles.ButtonContainer}>
