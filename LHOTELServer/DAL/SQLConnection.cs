@@ -61,6 +61,7 @@ namespace DAL
                 SqlCommand comm = new SqlCommand(command, sqlConnection);
                 OpenDB();
                 SqlDataReader reader = comm.ExecuteReader();
+            
                 return reader;
             }
             catch (Exception e)

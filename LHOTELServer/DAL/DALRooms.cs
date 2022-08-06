@@ -34,6 +34,10 @@ namespace DAL
                 Console.WriteLine(e.Message);
                 return null;
             }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
         }
 
         public static Rooms GetRoomById(int id)
@@ -157,6 +161,10 @@ namespace DAL
             {
                 Console.WriteLine(e.Message);
                 return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
             }
         }
     }

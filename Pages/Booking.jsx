@@ -14,7 +14,7 @@ export default function Booking({ navigation }) {
 
   const [single, setSingle] = useState(false)
   const [double, setDouble] = useState(false)
-  const [svit, setSvit] = useState(false)
+  const [suit, setSuit] = useState(false)
 
 
   const showDatePickerEntry = () => {
@@ -54,13 +54,13 @@ export default function Booking({ navigation }) {
     setreakfast(false);
     setSingle(false)
     setDouble(false)
-    setSvit(false)
+    setSuit(false)
     setEnteryDate(new Date())
     setExitDate(new Date())
   }
 
   const ChaeckRoomsMarks = () => {
-    if (single === false && double === false && svit === false)
+    if (single === false && double === false && suit === false)
       return false
     else
       return true
@@ -154,7 +154,7 @@ export default function Booking({ navigation }) {
               <Text>Double</Text>
             </View>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={svit ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svit) }} />
+              <Checkbox label="Item" status={suit ? 'checked' : 'unchecked'} onPress={() => { setSuit(!suit) }} />
               <Text>Suit</Text>
             </View>
           </View>

@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using DAL;
 using BLL;
 
+
 namespace LHOTELServer.Controllers
 {
-    [System.Web.Http.RoutePrefix("api/Rooms")]
+    [EnableCors("*","*","*")]
+    [RoutePrefix("api/Rooms")] 
 
     public class RoomsController : ApiController
     {
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         public IHttpActionResult Get()
         {
             try
@@ -57,7 +59,7 @@ namespace LHOTELServer.Controllers
         //    }
         //}
 
-        [System.Web.Http.HttpPost]
+        [HttpPost]
         public IHttpActionResult Post()
         {
             try
@@ -70,7 +72,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpPut]
+        [HttpPut]
         public IHttpActionResult Put([FromBody] Rooms room)
         {
             try
@@ -83,7 +85,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpDelete]
+        [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
             try
@@ -95,18 +97,18 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        //[System.Web.Http.HttpHead]
-        //public IHttpActionResult GetAvailableRooms()
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLRooms.GetAvailableRooms());
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+        [HttpGet]
+        [Route("GetAvailableRooms")]
+        public IHttpActionResult GetAvailableRooms()
+        {
+            try
+            {
+                return Ok(BLLRooms.GetAvailableRooms());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
