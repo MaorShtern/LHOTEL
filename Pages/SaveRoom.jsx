@@ -49,11 +49,12 @@ export default function SaveRoom({ route, navigation }) {
     let list = temp.filter((ele, ind) => ind === temp.findIndex(
       elem => elem.type === ele.type && elem.type === ele.type))
 
-    // list.map((per) => console.log(per))
+    list.map((per) => console.log(per))
+    list.map((per) => console.log(per))
 
-    SetArrRoomsData(list)
+    // SetArrRoomsData(list)
 
-    arrRoomsData.map((per) => console.log(per))
+    // arrRoomsData.map((per) => console.log(per))
 
     // createList(list)
 
