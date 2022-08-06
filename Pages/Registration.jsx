@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -197,8 +197,14 @@ export default function Registration({ navigation }) {
 
             </View>
             <View style={styles.ButtonContainer}>
-                <Button title="DELETE" onPress={Delete}></Button>
-                <Button title="SUBMIT" onPress={Save_User}></Button>
+                <TouchableOpacity>
+                    <Text style={styles.button} onPress={Delete} >Delete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={styles.button} onPress={Save_User} >SUBMIT</Text>
+                </TouchableOpacity>
+                {/* <Button title="DELETE" onPress={Delete}></Button>
+                <Button title="SUBMIT" onPress={Save_User}></Button> */}
             </View>
         </ScrollView>
     )
@@ -235,5 +241,11 @@ const styles = StyleSheet.create({
         paddingRight: 70,
         paddingTop: 20
     },
+    button:
+    {
+        backgroundColor: 'gray',
+        padding: 10,
+        borderRadius: 10
 
+    },
 });

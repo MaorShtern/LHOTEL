@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -29,17 +29,17 @@ export default function Login({ navigation }) {
 
   const saveUser = async (value) => {
     try {
-        // console.log("arrUsers: " + JSON.stringify(new_Array));
-        await AsyncStorage.setItem('@ConUser', JSON.stringify(value), () => {
-            Alert.alert("User Saved")
-            // navigation.navigate('Login')
-        });
+      // console.log("arrUsers: " + JSON.stringify(new_Array));
+      await AsyncStorage.setItem('@ConUser', JSON.stringify(value), () => {
+        Alert.alert("User Saved")
+        // navigation.navigate('Login')
+      });
 
     }
     catch (error) {
-        Alert.alert(error)
+      Alert.alert(error)
     }
-}
+  }
 
 
   const LogIn = () => {
@@ -53,7 +53,7 @@ export default function Login({ navigation }) {
         let full_name = "Welcome:  " + find_user.first_name + " " + find_user.last_name
         // saveUser(full_name)
         // navigation.navigate('Homepage')
-        navigation.navigate('Homepage',  {full_name})
+        navigation.navigate('Homepage', { full_name })
       }
       else
         Alert.alert("No such user exists in the system")
@@ -114,8 +114,14 @@ export default function Login({ navigation }) {
       </View>
 
       <View style={styles.ButtonContainer}>
-        <Button title="DELETE" onPress={Delete}></Button>
-        <Button title="SUBMIT" onPress={LogIn}></Button>
+        <TouchableOpacity>
+          <Text style={styles.button} onPress={Delete} >Delete</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.button} onPress={LogIn} >SUBMIT</Text>
+        </TouchableOpacity>
+        {/* <Button title="DELETE" onPress={Delete}></Button>
+        <Button title="SUBMIT" onPress={LogIn}></Button> */}
       </View>
 
 
@@ -157,5 +163,11 @@ const styles = StyleSheet.create({
     paddingRight: 70,
     paddingTop: 10
   },
+  button:
+  {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 10
 
+  },
 });

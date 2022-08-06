@@ -46,39 +46,25 @@ export default function SaveRoom({ route, navigation }) {
           pricePerNight: per.pricePerNight
         }))
 
+
+    // console.log(temp);
+
+    if (singleFlag === false) {
+      temp = temp.filter((per) => per.type !== "Single room")
+    }
+    if (doubleFlag === false) {
+      temp = temp.filter((per) => per.type !== "Double room")
+
+    } if (svitFlag === false) {
+      temp = temp.filter((per) => per.type !== "Suite")
+
+    }
+
     let list = temp.filter((ele, ind) => ind === temp.findIndex(
       elem => elem.type === ele.type && elem.type === ele.type))
 
-    list.map((per) => console.log(per))
+    SetArrRoomsData(list)
 
-    
-
-    // list = CreateList(list)
-
-    // list.map((per) => console.log(per))
-
-    // SetArrRoomsData(list)
-
-  }
-
-  const CreateList = (list) => {
-    let temp = []
-    // if (singleFlag === false) {
-    //   SetArrRoomsData( list.filter((per) => per.type !== "Single room"))
-    // }
-    // if (doubleFlag === false) {
-    //   SetArrRoomsData( list.filter((per) => per.type !== "Double room"))
-    // }
-    // if (svitFlag === false) {
-    //   SetArrRoomsData( list.filter((per) => per.type !== "Suite"))
-    // }
-    temp.push(list.filter((per) => per.type === "Single room"))
-    return temp
-  }
-
-
-  const PrintData = () => {
-    console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
   }
 
 
@@ -117,9 +103,6 @@ export default function SaveRoom({ route, navigation }) {
   }
 
 
-
-  // console.log(arrRoomsData);
-
   let listCardsRooms = arrRoomsData.map((per) => <CardRoom key={per.type}
     roomType={per.type} maxCount={per.count} details={per.details} SendCount={SendCount} />)
 
@@ -131,7 +114,7 @@ export default function SaveRoom({ route, navigation }) {
         {listCardsRooms}
       </View>
       <View style={styles.save}>
-        <TouchableOpacity style={styles.button} onPress={PrintData}>
+        <TouchableOpacity style={styles.button} onPress={GoToPayment}>
           <Text>Save</Text>
         </TouchableOpacity>
       </View>
