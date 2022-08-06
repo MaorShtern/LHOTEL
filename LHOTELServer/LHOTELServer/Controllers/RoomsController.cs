@@ -21,6 +21,8 @@ namespace LHOTELServer.Controllers
     public class RoomsController : ApiController
     {
         [HttpGet]
+
+
         public IHttpActionResult Get()
         {
             try

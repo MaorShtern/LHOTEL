@@ -16,6 +16,7 @@ export default function Registration({ navigation }) {
     const [password, setPassword] = useState('')
     const [re_Password, setRe_Password] = useState('')
     const [phone, setPhone] = useState('')
+    
 
 
     // const importData = async () => {

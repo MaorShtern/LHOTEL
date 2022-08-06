@@ -7,19 +7,36 @@ export default function Payment({ route, navigation }) {
 
 
   const [totalSum, SetTotalSum] = useState(0)
+  const [name, setName] = useState('')
+ const [cardNum, setCardNum] = useState('')
 
-  let { data } = route.params
+  // let { data } = route.params
 
+let { data ,Single,Double,Suit} = route.params
   useEffect(() => {
-    Calculate_Final_Amount
+    Calculate_Final_Amount()
+    
   })
 
-
   const Calculate_Final_Amount = () => {
+  
+    let si = 70;
+    let d = 100;
+    let su = 150;
     let sum = 0
-    for (let i = 0; i < data.length; i++) {
-        sum += data.pricePerNight 
-    }
+    // for (let i = 0; i < data.length; i++) {
+    //     sum += data.pricePerNight 
+    // }
+    for (let i = 0; i < Single; i++) {
+      sum += si 
+  }
+    for (let i = 0; i < Double; i++) {
+      sum += d
+  }
+  for (let i = 0; i <Suit; i++) {
+    sum += su
+}
+      SetTotalSum(sum)
   }
 
   const Delete = () => {
@@ -31,15 +48,16 @@ export default function Payment({ route, navigation }) {
     <View>
       <ScrollView>
         <Text style={styles.HeadLine}>Payment</Text>
-        <Text style={styles.Sum}>Total to pay:  {JSON.stringify(totalSum)}</Text>
+        <Text style={styles.Sum}>Total to pay:  {JSON.stringify(totalSum)}$</Text>
         <View style={{ height: 30 }}></View>
         <Text style={styles.SubHeadLine}>Enter payment information</Text>
         <View style={styles.TextInputContainer}>
           <TextInput type="text" placeholder='ID' style={styles.TextInput}></TextInput>
           <View style={{ height: 10 }}></View>
-          <TextInput placeholder="Cardholder's name" style={styles.TextInput}></TextInput>
+          <TextInput placeholder="Cardholder's name" style={styles.TextInput}  onChangeText={(name) => setName(name)}></TextInput>
+          
           <View style={{ height: 10 }}></View>
-          <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput}></TextInput>
+          <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(cardNum) => setCardNum(cardNum)}></TextInput>
           <View style={{ height: 10 }}></View>
           <TextInput keyboardType='date' placeholder="Card's Date:" style={styles.TextInput}></TextInput>
           <View style={{ height: 10 }}></View>
@@ -50,7 +68,7 @@ export default function Payment({ route, navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ConfirmationPage')} >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ConfirmationPage' ,{ total: totalSum,Name:name,CardNum: cardNum,rooms : [Single,Double,Suit]})} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>

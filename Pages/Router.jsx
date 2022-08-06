@@ -24,6 +24,7 @@ export default function Router() {
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="SaveRoom" component={SaveRoom} />
       <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} />
+
     </Stack.Navigator>
   </NavigationContainer>
   )

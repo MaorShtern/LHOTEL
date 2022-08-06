@@ -19,7 +19,7 @@ var requestOptions = {
     headers: myHeaders,
  redirect: 'follow'
   };
-  const URL = 'http://localhost:49674/api/Rooms/';
+  const URL = 'http://192.168.1.240:49674/api/Rooms/';
 
 
   useEffect(() => {fetchData()}, []);
@@ -102,7 +102,7 @@ const fetchData = async () => {
   // }
 
   const GoToPayment = () => {
-    navigation.navigate('Payment', { data: arrData })
+    navigation.navigate('Payment', { data: arrData,Single:single,Double : double,Suit:suit})
   }
 
   const SetCount = (number, roomType) => {

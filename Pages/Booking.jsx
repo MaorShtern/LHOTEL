@@ -1,5 +1,5 @@
 import { View, Text, Alert, StyleSheet, TextInput, ScrollView, Switch, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
 
@@ -60,25 +60,19 @@ export default function Booking({ navigation }) {
   }
 
   const ChaeckRoomsMarks = () => {
-    if (single === false && double === false && suit === false)
-      return false
-    else
-      return true
+   
+    return single ||double || suit ;
   }
 
   const CheackAmountOfPeople = () => {
-    if (amount_Of_People <= 0)
-      return false
-    else
-      return true
-  }
+  
+    return amount_Of_People > 0;
+    }
 
   const CheackNumOfNights = () => {
-    if (number_Of_Nights <= 0)
-      return false
-    else
-      return true
-  }
+   
+    return number_Of_Nights > 0;
+ }
 
   const CheackDates = () => {
     if (enteryDate.getFullYear() != exitDate.getFullYear() ||
@@ -94,11 +88,15 @@ export default function Booking({ navigation }) {
   }
 
   const ChaeckAll = () => {
-    if (ChaeckRoomsMarks && CheackAmountOfPeople && CheackNumOfNights) {
+    if (ChaeckRoomsMarks() && CheackAmountOfPeople() && CheackNumOfNights()) {
       navigation.navigate('SaveRoom')
+  
+      
     }
-    else
+    else{
       Alert.alert('Some fields are not filled in Properly')
+    }
+      
   }
 
 
@@ -184,7 +182,7 @@ export default function Booking({ navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={ChaeckAll} >
+          <TouchableOpacity style={styles.button} onPress={()=>ChaeckAll()} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>
