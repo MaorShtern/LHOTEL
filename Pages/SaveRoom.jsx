@@ -25,7 +25,7 @@ export default function SaveRoom({ route, navigation }) {
 
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
-  useEffect(() => { FetchData() }, []);
+  useEffect(() => { FetchData()}, []);
 
   
   const FetchData = async () => {

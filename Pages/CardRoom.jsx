@@ -6,7 +6,7 @@ import { useState,useEffect } from 'react';
 
 
 export default function CardRoom(props) {
-    useEffect(() => { SetCounter(0),SetCount(0)}, []);
+    useEffect(() => { SetCount(0)}, []);
     let { roomType, details, count } = props
 
     const [counter, SetCounter] = useState(0)
