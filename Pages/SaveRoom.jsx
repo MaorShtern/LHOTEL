@@ -14,149 +14,87 @@ const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, 
 { roomNumber: 7, roomType: "Double room", pricePerNight: 300, exitDate: "2021-06-12T00:00:00", details: "A double room suitable for two people" }]
 
 
-export default function SaveRoom({ navigation }) {
+export default function SaveRoom({ route, navigation }) {
 
+  let { singleFlag, doubleFlag, suitFlag, number_Of_Nights, breakfast, enteryDate, exitDate } = route.params
 
-  const [arrData, SetArrData] = useState([])
+  // const [arrData, SetArrData] = useState([])
 
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
-<<<<<<< Updated upstream
   const [suit, SetSuit] = useState(0)
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json;charset=utf-8");
-  myHeaders.append("Accept", "application/json;charset=utf-8");
-var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
- redirect: 'follow'
-  };
-  const URL = 'http://192.168.1.240:49674/api/Rooms/';
-
-
-  useEffect(() => {fetchData()}, []);
-
-
-
-
-
-// }, []);
-
-
-// export const getUserInfo = (name) => {
-//   let username = name.toLowerCase().trim();
-//   const URL = `https://api.github.com/users/${username}`;
-//   return fetch(URL)
-//           .then((res) => res.json());
-// }
-
-
-
-// const fetchData = async () => {
- 
-    
-//   fetch(URL,{
-//     method: 'GET',
-
-//   headers: new Headers({
-//   'Content-Type': 'application/json; charset=UTF-8',
-// 'Accept':'application/json; charset=UTF-8'})
-//   })
-//   .then(res => {
-//   console.log('res=', res);
-//   console.log('res.status', res.status);
-//   console.log('res.ok', res.ok);
-//   return res.json()
-//   })
-//   .then(
-//   (result) => {
-//   console.log("fetch btnFetchGetStudents= ", result);
- 
-//   },
-//   (error) => {
-//   console.log("err =", error);
-//   });
-  
-// };
-
- 
-const fetchData = async () => {
-  
-    await fetch(URL,{
-          method: 'GET',
-      
-        headers: new Headers({
-        'Content-Type': 'application/json; charset=UTF-8',
-      'Accept':'application/json; charset=UTF-8'})
-        })
-      .then(response => response.text())
-      .then(result => SetArrData(result.data))// SetArrData(result.data)
-      .catch(error => console.log('error', error));
-  
-  // const resp = await fetch("http://localhost:49674/api/Rooms/GetAvailableRooms");
-  // const data = await resp.json();
-
-  // SetArrData(data);
- 
-};
-=======
-  const [svit, SetSvit] = useState(0)
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
-  useEffect(() => { FetchData(); }, []);
+
+  useEffect(() => { BilldData() }, []);
 
 
   //  הפונקציה הזאת היא זאת שתבצע את הקריאה ך-API
-  const FetchData = () => {
-    // const FetchData = async () => {
-      const requestOptions = {
-        method: 'POST',
-        redirect: 'follow'
-      };
-  
-      await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result.data))
-        .catch(error => console.log('error', error));
-    }
+  const FetchData = async () => {
+    const requestOptions = {
+      method: 'POST',
+      redirect: 'follow'
+    };
+    await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions)
+      .then(response => response.json())
+      .then(result => SetArrRoomsData(result))
+      // .then(result => () => { return result})
+      .catch(error => console.log('error', error));
+
     // BilldData()
-  
-
-
-  const BilldData = () => {
-    let temp = []
-    arrRooms.map((per) =>
-      temp.push(
-        {
-          type: per.roomType,
-          count: arrRooms.filter((room) => room.roomType === per.roomType).length,
-          details: per.details,
-          pricePerNight: per.pricePerNight
-        }))
+  }
+  // BilldData()
 
 
 
-    if (singleFlag === false) {
-      temp = temp.filter((per) => per.type !== "Single room")
-    }
-    if (doubleFlag === false) {
-      temp = temp.filter((per) => per.type !== "Double room")
+  const BilldData = async () => {
 
-    } if (svitFlag === false) {
-      temp = temp.filter((per) => per.type !== "Suite")
-
+    while (arrRoomsData === null || arrRoomsData === []) {
+      await FetchData()
     }
 
-    let list = temp.filter((ele, ind) => ind === temp.findIndex(
-      elem => elem.type === ele.type && elem.type === ele.type))
 
-    SetArrRoomsData(list)
+    // while (arrRoomsData == null || arrRoomsData == []) {
+    //   FetchData()
+    // }
+    // console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+
+
+
+    // console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+
+    // let temp = []
+    // arrRooms.map((per) =>
+    //   temp.push(
+    //     {
+    //       type: per.roomType,
+    //       count: arrRooms.filter((room) => room.roomType === per.roomType).length,
+    //       details: per.details,
+    //       pricePerNight: per.pricePerNight
+    //     }))
+
+
+
+    // if (singleFlag === false) {
+    //   temp = temp.filter((per) => per.type !== "Single room")
+    // }
+    // if (doubleFlag === false) {
+    //   temp = temp.filter((per) => per.type !== "Double room")
+
+    // } if (suitFlag === false) {
+    //   temp = temp.filter((per) => per.type !== "Suite")
+
+    // }
+
+    // let list = temp.filter((ele, ind) => ind === temp.findIndex(
+    //   elem => elem.type === ele.type && elem.type === ele.type))
+
+    // SetArrRoomsData(list)
 
   }
 
 
   // useEffect(() => { FetchData(); }, []);
->>>>>>> Stashed changes
 
   // const FetchData = async () => {
   //   const requestOptions = {
@@ -165,14 +103,17 @@ const fetchData = async () => {
   //   };
 
 
-    // await fetch('http://localhost:49674/api/Rooms/GetAvailableRooms', requestOptions)
-    //   .then(response =>  console.log(response.text()))
-    //   .then(result => SetArrData(result.data))// SetArrData(result.data)
-    //   .catch(error => console.log('error', error));
+  // await fetch('http://localhost:49674/api/Rooms/GetAvailableRooms', requestOptions)
+  //   .then(response =>  console.log(response.text()))
+  //   .then(result => SetArrData(result.data))// SetArrData(result.data)
+  //   .catch(error => console.log('error', error));
   // }
 
+
+
+
   const GoToPayment = () => {
-    navigation.navigate('Payment', { data: arrData,Single:single,Double : double,Suit:suit})
+    navigation.navigate('Payment', { data: arrRoomsData, Single: single, Double: double, Suit: suit })
   }
 
   const SetCount = (number, roomType) => {
@@ -196,6 +137,11 @@ const fetchData = async () => {
   // console.log("Suit: " + suit);
   // console.log("arr: " + JSON.stringify(arrData));
 
+  console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+  // console.log(JSON.stringify(arrRoomsData) !== null);
+
+
+
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Choose a room</Text>
@@ -203,7 +149,7 @@ const fetchData = async () => {
       <CardRoom SetCount={SetCount} roomType="Double" details="Double Room" />
       <CardRoom SetCount={SetCount} roomType="Suit" details="Suit Room" />
       <View style={styles.save}>
-        <TouchableOpacity style={styles.button} onPress={GoToPayment} >
+        <TouchableOpacity style={styles.button} onPress={BilldData} >
           <Text>Save</Text>
         </TouchableOpacity>
       </View>

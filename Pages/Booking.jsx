@@ -82,7 +82,8 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
     if (ChaeckRoomsMarks() && CheackNumOfNights()) {
-      navigation.navigate('SaveRoom' , {rooms_amounts: [singleFlag, doubleFlag, suitFlag]})
+      navigation.navigate('SaveRoom' , {singleFlag: singleFlag,doubleFlag: doubleFlag, suitFlag:suitFlag,
+        number_Of_Nights:number_Of_Nights, breakfast:breakfast,enteryDate:enteryDate , exitDate:exitDate })
     }
     else
       Alert.alert('Some fields are not filled in Properly')

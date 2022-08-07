@@ -7,3 +7,12 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTEL\Server\LHOTELServer\BLL\o
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTEL\Server\LHOTELServer\BLL\obj\Debug\BLL.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTEL\Server\LHOTELServer\BLL\obj\Debug\BLL.pdb
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTEL\Server\LHOTELServer\BLL\obj\Debug\BLL.csproj.CopyComplete
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\BLL.dll
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\BLL.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\DAL.dll
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\DAL.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.csproj.AssemblyReference.cache
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.csproj.CopyComplete
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.dll
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.pdb
