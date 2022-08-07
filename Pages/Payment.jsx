@@ -8,7 +8,7 @@ export default function Payment({ route, navigation }) {
   const [totalSum, SetTotalSum] = useState(0)
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
-  let { Single,Double,Suit} = route.params 
+  let { data,rooms_amounts} = route.params 
 
   useEffect(() => {
     Calculate_Final_Amount()
@@ -16,19 +16,17 @@ export default function Payment({ route, navigation }) {
 
 
   const Calculate_Final_Amount = () => {
-    let singleP = 100
-    let doubleP = 300
-    let suitP = 500
+  console.log(rooms_amounts);
+  console.log(data);
     let sum = 0
-    for (let i = 0; i < Single; i++) {
-      sum += singleP 
+    for (let i = 0; i < data.length; i++) {
+      let temp_room = data[i];
+ 
+      let tempToatal = temp_room.pricePerNight * rooms_amounts[temp_room.type];
+      // console.log(tempToatal);
+      sum += tempToatal;
   }
-    for (let i = 0; i < Double; i++) {
-      sum += doubleP
-  }
-  for (let i = 0; i <Suit; i++) {
-    sum += suitP
-}
+  
       SetTotalSum(sum)
   }
     // let sum = 0
@@ -66,7 +64,7 @@ export default function Payment({ route, navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ConfirmationPage',{ total: totalSum,Name:name,CardNum: cardNum,rooms : [Single,Double,Suit]})} >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ConfirmationPage',{ total: totalSum,Name:name,CardNum: cardNum,rooms : data})} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>

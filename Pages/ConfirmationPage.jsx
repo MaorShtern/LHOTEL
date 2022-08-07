@@ -8,30 +8,28 @@ export default function ConfirmationPage( {route},props) {
    
     const [arrRooms, setarrRooms] = useState([])
 
-     let { entryDate, exitDate} = props
-     let entry  = "06/08/22"
-     let exit  = "09/08/22"
+     let { entryDate, exitDate ,number_Of_Nights, breakfast} = props
+   
 
      useEffect(() => {func()}, []);
         
     
     // let { entryDate, exitDate, totalPrice, cardholder_Name, card_Number, amount_of_people } = props
-    let numberOfNights = exitDate - entryDate
+    // let numberOfNights = exitDate - entryDate
     let { total,Name,CardNum ,rooms} = route.params
     // const persons = [];
     const  func = ()=> {
         let arr = [];
         let  counter = 0;
-        let room_type =['Single','Double','Suit'];
-        let room_price =[100,300,500];
-       rooms.map((item,index)=>{
-            if (item > 0){
-              for (let i = 0; i<item; i++){
+       console.log(breakfast);
+       rooms.map((room)=>{
             
-                arr.push (<ReservationCard key={counter} roomType ={room_type[index]}  pricePerNight= {room_price[index]} entryDate={entry} exitDate={exit} breakfast={false}/>)
+              for (let i = 0; i<room.count; i++){
+            
+                arr.push (<ReservationCard key={counter} roomType ={room.type}  pricePerNight= {room.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast}/>)
                 counter++;
             }
-            }
+            
             // for (let i = 0; i<item; i++){
                 // console.log(item);
                 // console.log(index);
@@ -81,7 +79,7 @@ export default function ConfirmationPage( {route},props) {
                     <Text>total Price: {total}$</Text>
                     <Text>Cardholder's Name: {Name}</Text>
                     <Text>Card Number: {CardNum}</Text>
-                   <Text>Number Of Nights : 3</Text>
+                   <Text>Number Of Nights : {number_Of_Nights}</Text>
                 </View>
             </View>
            
