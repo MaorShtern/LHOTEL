@@ -172,6 +172,6 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.AssemblyReference.cache
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CoreCompileInputs.cache
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete

@@ -23,35 +23,57 @@ export default function SaveRoom({ route, navigation }) {
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
   const [suit, SetSuit] = useState(0)
+
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
 
-  useEffect(() => { BilldData() }, []);
+  useEffect(() => { FetchData() }, []);
 
 
   //  הפונקציה הזאת היא זאת שתבצע את הקריאה ך-API
   const FetchData = async () => {
     const requestOptions = {
       method: 'POST',
-      redirect: 'follow'
+      headers: { 'Content-Type': 'application/json' }
     };
-    await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions)
-      .then(response => response.json())
-      .then(result => SetArrRoomsData(result))
-      // .then(result => () => { return result})
-      .catch(error => console.log('error', error));
+    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions);
+    let rooms = await result.json();
+    if (rooms !== null) {
+      SetArrRoomsData(rooms)
+      BilldData(rooms)
+      return
+    }
+    FetchData()
 
-    // BilldData()
+    // await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions)
+    //   .then(response => response.json())
+    //   .then(result => SetArrRoomsData(result))
+    //   // .then(result => () => { return result })
+    //   .catch(error => console.log('error', error));
   }
+
   // BilldData()
 
 
 
-  const BilldData = async () => {
+  const BilldData = (rooms) => {
 
-    while (arrRoomsData === null || arrRoomsData === []) {
-      await FetchData()
-    }
+    console.log("rooms: " + JSON.stringify(rooms));
+
+    // while (arrRoomsData === null || arrRoomsData === []) {
+    //   await FetchData()
+    // }
+
+    // if (arrRoomsData !== null || arrRoomsData !== [])
+    //   console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+    // else
+    // console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+
+    // while (arrRoomsData === null || arrRoomsData === []) {
+    //   let temp = await FetchData()
+    //   if (temp === null || temp === [])
+    //     console.log("arrRoomsData: " + JSON.stringify(temp));
+    // }
 
 
     // while (arrRoomsData == null || arrRoomsData == []) {
@@ -137,7 +159,7 @@ export default function SaveRoom({ route, navigation }) {
   // console.log("Suit: " + suit);
   // console.log("arr: " + JSON.stringify(arrData));
 
-  console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
+  // console.log("arrRoomsData: " + JSON.stringify(arrRoomsData));
   // console.log(JSON.stringify(arrRoomsData) !== null);
 
 
