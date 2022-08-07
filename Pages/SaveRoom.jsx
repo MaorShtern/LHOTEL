@@ -21,6 +21,7 @@ export default function SaveRoom({ navigation }) {
 
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
+<<<<<<< Updated upstream
   const [suit, SetSuit] = useState(0)
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json;charset=utf-8");
@@ -98,6 +99,64 @@ const fetchData = async () => {
   // SetArrData(data);
  
 };
+=======
+  const [svit, SetSvit] = useState(0)
+  const [arrRoomsData, SetArrRoomsData] = useState([])
+
+  useEffect(() => { FetchData(); }, []);
+
+
+  //  הפונקציה הזאת היא זאת שתבצע את הקריאה ך-API
+  const FetchData = () => {
+    // const FetchData = async () => {
+      const requestOptions = {
+        method: 'POST',
+        redirect: 'follow'
+      };
+  
+      await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result.data))
+        .catch(error => console.log('error', error));
+    }
+    // BilldData()
+  
+
+
+  const BilldData = () => {
+    let temp = []
+    arrRooms.map((per) =>
+      temp.push(
+        {
+          type: per.roomType,
+          count: arrRooms.filter((room) => room.roomType === per.roomType).length,
+          details: per.details,
+          pricePerNight: per.pricePerNight
+        }))
+
+
+
+    if (singleFlag === false) {
+      temp = temp.filter((per) => per.type !== "Single room")
+    }
+    if (doubleFlag === false) {
+      temp = temp.filter((per) => per.type !== "Double room")
+
+    } if (svitFlag === false) {
+      temp = temp.filter((per) => per.type !== "Suite")
+
+    }
+
+    let list = temp.filter((ele, ind) => ind === temp.findIndex(
+      elem => elem.type === ele.type && elem.type === ele.type))
+
+    SetArrRoomsData(list)
+
+  }
+
+
+  // useEffect(() => { FetchData(); }, []);
+>>>>>>> Stashed changes
 
   // const FetchData = async () => {
   //   const requestOptions = {
