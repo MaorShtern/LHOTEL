@@ -59,12 +59,12 @@ export default function Booking({ navigation }) {
   }
 
   const ChaeckRoomsMarks = () => {
-    return singleFlag ||doubleFlag || suitFlag ;
- 
+    return singleFlag || doubleFlag || suitFlag;
+
   }
 
- const CheackNumOfNights = () => {
-  return number_Of_Nights > 0;
+  const CheackNumOfNights = () => {
+    return number_Of_Nights > 0;
   }
 
   const CheackDates = () => {
@@ -82,8 +82,16 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
     if (ChaeckRoomsMarks() && CheackNumOfNights()) {
-      navigation.navigate('SaveRoom' , {singleFlag: singleFlag,doubleFlag: doubleFlag, suitFlag:suitFlag,
-        number_Of_Nights:number_Of_Nights, breakfast:breakfast,enteryDate:enteryDate , exitDate:exitDate })
+
+      rooms_flags = {
+        'Single room':  singleFlag ,
+        'Double room':  doubleFlag ,
+        'Suite':  suitFlag 
+      }
+
+      navigation.navigate('SaveRoom', {
+        rooms_flags,number_Of_Nights: number_Of_Nights, breakfast: breakfast,
+         enteryDate: enteryDate, exitDate: exitDate})
     }
     else
       Alert.alert('Some fields are not filled in Properly')

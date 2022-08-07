@@ -2,7 +2,6 @@ import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity } from 
 import React, { useEffect, useState } from 'react'
 
 
-
 export default function Payment({ route, navigation }) {
 
 
