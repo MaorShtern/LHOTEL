@@ -5,7 +5,8 @@ import Back from '../Pic/backround.jpg'
 
 export default function ReservationCard(props) {
 
-    let { roomType, pricePerNight, entryDate, exitDate, breakfast, amountOfRooms } = props
+    // let { roomType, pricePerNight, entryDate, exitDate, breakfast, amountOfRooms } = props
+    let { roomType, pricePerNight, entryDate, exitDate, breakfast} = props
 
     return (
         <ScrollView>
@@ -15,7 +16,7 @@ export default function ReservationCard(props) {
                     <Text>ROOM TYPE: {roomType}</Text>
                     <Text>{entryDate} -- {exitDate}</Text>
                     <Text>breakfast: {breakfast ? <Text>Yes</Text> : <Text>No</Text>}</Text>
-                    <Text>Amount Of Rooms: {amountOfRooms}</Text>
+                 
                     <Text>Price Per Night: {pricePerNight}</Text>
                 </View>
             </View>

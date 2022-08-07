@@ -14,7 +14,9 @@ export default function Booking({ navigation }) {
 
   const [singleFlag, setSingle] = useState(false)
   const [doubleFlag, setDouble] = useState(false)
-  const [svitFlag, setSvit] = useState(false)
+  const [suitFlag, setSuit] = useState(false)
+  const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
+  const [breakfast, setreakfast] = useState(false);
 
 
   const showDatePickerEntry = () => {
@@ -42,9 +44,6 @@ export default function Booking({ navigation }) {
   };
 
 
-  // const [amount_Of_People, setAmount_Of_People] = useState(0)
-  const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
-  const [breakfast, setreakfast] = useState(false);
 
 
 
@@ -54,30 +53,18 @@ export default function Booking({ navigation }) {
     setreakfast(false);
     setSingle(false)
     setDouble(false)
-    setSvit(false)
+    setSuit(false)
     setEnteryDate(new Date())
     setExitDate(new Date())
   }
 
   const ChaeckRoomsMarks = () => {
-    if (singleFlag === false && doubleFlag === false && svitFlag === false)
-      return false
-    else
-      return true
+    return singleFlag ||doubleFlag || suitFlag ;
+ 
   }
 
-  const CheackAmountOfPeople = () => {
-    if (amount_Of_People <= 0)
-      return false
-    else
-      return true
-  }
-
-  const CheackNumOfNights = () => {
-    if (number_Of_Nights <= 0)
-      return false
-    else
-      return true
+ const CheackNumOfNights = () => {
+  return number_Of_Nights > 0;
   }
 
   const CheackDates = () => {
@@ -94,8 +81,8 @@ export default function Booking({ navigation }) {
   }
 
   const ChaeckAll = () => {
-    if (ChaeckRoomsMarks && CheackAmountOfPeople && CheackNumOfNights) {
-      navigation.navigate('SaveRoom' , {singleFlag, doubleFlag, svitFlag, number_Of_Nights, breakfast})
+    if (ChaeckRoomsMarks() && CheackNumOfNights()) {
+      navigation.navigate('SaveRoom' , {rooms_amounts: [singleFlag, doubleFlag, suitFlag]})
     }
     else
       Alert.alert('Some fields are not filled in Properly')
@@ -154,7 +141,7 @@ export default function Booking({ navigation }) {
               <Text>Double</Text>
             </View>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={svitFlag ? 'checked' : 'unchecked'} onPress={() => { setSvit(!svitFlag) }} />
+              <Checkbox label="Item" status={suitFlag ? 'checked' : 'unchecked'} onPress={() => { setSuit(!suitFlag) }} />
               <Text>Suit</Text>
             </View>
           </View>

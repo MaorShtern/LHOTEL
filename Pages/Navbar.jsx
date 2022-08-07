@@ -56,7 +56,7 @@ export default function Navbar({ navigation }) {
                     <View>
                         <TouchableOpacity onPress={() => SetFlag(!flag)}>
                             <View style={styles.navbarIcon} >
-                                <Text style={styles.header}>Menu</Text>
+                                
                                 <View style={{ width: 10 }}></View>
                                 <Icon name='three-bars' size={30} color='white' />
                             </View>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 20,
         textAlign: "center",
-        textDecorationLine: 'underline'
+    
     },
     navbarIcon:
     {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        textDecorationLine: 'underline',
+      
         padding: 5
     }
 

@@ -14,61 +14,90 @@ const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, 
 { roomNumber: 7, roomType: "Double room", pricePerNight: 300, exitDate: "2021-06-12T00:00:00", details: "A double room suitable for two people" }]
 
 
-export default function SaveRoom({ route, navigation }) {
+export default function SaveRoom({ navigation }) {
 
 
-  let { singleFlag, doubleFlag, svitFlag, number_Of_Nights, breakfast } = route.params
-
+  const [arrData, SetArrData] = useState([])
 
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
-  const [svit, SetSvit] = useState(0)
-  const [arrRoomsData, SetArrRoomsData] = useState([])
-
-  useEffect(() => { FetchData(); }, []);
-
-
-  //  הפונקציה הזאת היא זאת שתבצע את הקריאה ך-API
-  const FetchData = () => {
-
-    BilldData()
-  }
-
-
-  const BilldData = () => {
-    let temp = []
-    arrRooms.map((per) =>
-      temp.push(
-        {
-          type: per.roomType,
-          count: arrRooms.filter((room) => room.roomType === per.roomType).length,
-          details: per.details,
-          pricePerNight: per.pricePerNight
-        }))
+  const [suit, SetSuit] = useState(0)
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json;charset=utf-8");
+  myHeaders.append("Accept", "application/json;charset=utf-8");
+var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+ redirect: 'follow'
+  };
+  const URL = 'http://192.168.1.240:49674/api/Rooms/';
 
 
-    // console.log(temp);
-
-    if (singleFlag === false) {
-      temp = temp.filter((per) => per.type !== "Single room")
-    }
-    if (doubleFlag === false) {
-      temp = temp.filter((per) => per.type !== "Double room")
-
-    } if (svitFlag === false) {
-      temp = temp.filter((per) => per.type !== "Suite")
-
-    }
-
-    let list = temp.filter((ele, ind) => ind === temp.findIndex(
-      elem => elem.type === ele.type && elem.type === ele.type))
-
-    SetArrRoomsData(list)
-
-  }
+  useEffect(() => {fetchData()}, []);
 
 
-  // useEffect(() => { FetchData(); }, []);
+
+
+
+// }, []);
+
+
+// export const getUserInfo = (name) => {
+//   let username = name.toLowerCase().trim();
+//   const URL = `https://api.github.com/users/${username}`;
+//   return fetch(URL)
+//           .then((res) => res.json());
+// }
+
+
+
+// const fetchData = async () => {
+ 
+    
+//   fetch(URL,{
+//     method: 'GET',
+
+//   headers: new Headers({
+//   'Content-Type': 'application/json; charset=UTF-8',
+// 'Accept':'application/json; charset=UTF-8'})
+//   })
+//   .then(res => {
+//   console.log('res=', res);
+//   console.log('res.status', res.status);
+//   console.log('res.ok', res.ok);
+//   return res.json()
+//   })
+//   .then(
+//   (result) => {
+//   console.log("fetch btnFetchGetStudents= ", result);
+ 
+//   },
+//   (error) => {
+//   console.log("err =", error);
+//   });
+  
+// };
+
+ 
+const fetchData = async () => {
+  
+    await fetch(URL,{
+          method: 'GET',
+      
+        headers: new Headers({
+        'Content-Type': 'application/json; charset=UTF-8',
+      'Accept':'application/json; charset=UTF-8'})
+        })
+      .then(response => response.text())
+      .then(result => SetArrData(result.data))// SetArrData(result.data)
+      .catch(error => console.log('error', error));
+  
+  // const resp = await fetch("http://localhost:49674/api/Rooms/GetAvailableRooms");
+  // const data = await resp.json();
+
+  // SetArrData(data);
+ 
+};
 
   // const FetchData = async () => {
   //   const requestOptions = {
@@ -76,19 +105,18 @@ export default function SaveRoom({ route, navigation }) {
   //     redirect: 'follow'
   //   };
 
-  //   await fetch('http://localhost:49674/api/Rooms', requestOptions)
-  //     .then(response => response.text())
-  //     .then(result => SetArrData(result.data))
-  //     .catch(error => console.log('error', error));
+
+    // await fetch('http://localhost:49674/api/Rooms/GetAvailableRooms', requestOptions)
+    //   .then(response =>  console.log(response.text()))
+    //   .then(result => SetArrData(result.data))// SetArrData(result.data)
+    //   .catch(error => console.log('error', error));
   // }
 
-
   const GoToPayment = () => {
-    navigation.navigate('Payment')
+    navigation.navigate('Payment', { data: arrData,Single:single,Double : double,Suit:suit})
   }
 
-
-  const SendCount = (number, roomType) => {
+  const SetCount = (number, roomType) => {
     switch (roomType) {
       case "Single":
         SetSingle(number)
@@ -96,25 +124,27 @@ export default function SaveRoom({ route, navigation }) {
       case "Double":
         SetDouble(number)
         break;
-      case "Svit":
-        SetSvit(number)
+      case "Suit":
+        SetSuit(number)
         break;
     }
   }
 
 
-  let listCardsRooms = arrRoomsData.map((per) => <CardRoom key={per.type}
-    roomType={per.type} maxCount={per.count} details={per.details} SendCount={SendCount} />)
 
+  // console.log("Single: " + single);
+  // console.log("Double: " + double);
+  // console.log("Suit: " + suit);
+  // console.log("arr: " + JSON.stringify(arrData));
 
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Choose a room</Text>
-      <View>
-        {listCardsRooms}
-      </View>
+      <CardRoom SetCount={SetCount} roomType="Single" details="Single Room" />
+      <CardRoom SetCount={SetCount} roomType="Double" details="Double Room" />
+      <CardRoom SetCount={SetCount} roomType="Suit" details="Suit Room" />
       <View style={styles.save}>
-        <TouchableOpacity style={styles.button} onPress={GoToPayment}>
+        <TouchableOpacity style={styles.button} onPress={GoToPayment} >
           <Text>Save</Text>
         </TouchableOpacity>
       </View>

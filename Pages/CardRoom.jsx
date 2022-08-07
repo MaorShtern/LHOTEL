@@ -2,30 +2,21 @@ import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-na
 import React from 'react'
 import Counter from "react-native-counters";
 import Back from '../Pic/backround.jpg'
-import { useState } from 'react';
 
 
 export default function CardRoom(props) {
 
-    const [count, SetCount] = useState(0)
-    let { roomType, maxCount, details } = props
+    let { roomType, details } = props
 
     const ShowDetails = () => {
         Alert.alert(details)
     }
 
-    const SendCount = (number) => {
-        SetCount(number)
-        props.SendCount(number, roomType)
+    const SetCount = (number) => {
+        props.SetCount(number, roomType)
     }
 
-    const CheackMaxCount = () => {
-        if (maxCount < count)
-            return false
-        else
-            return true
-    }
-
+    // console.log("count "+ details + ": " + count);
 
     return (
         <View style={{ paddingBottom: 10 }}>
@@ -35,20 +26,14 @@ export default function CardRoom(props) {
                 </View>
                 <Text style={styles.RoomType}>{roomType}</Text>
                 <View style={styles.ButtonContainer}>
-                    <Counter start={0} style={styles.counter} onChange={SendCount.bind(this)} />
+                    <Counter start={0} style={styles.counter} onChange={SetCount.bind(this)} />
                     <View style={{ width: 70 }}></View>
-                    <TouchableOpacity style={styles.button} onPress={ShowDetails}>
+                    <TouchableOpacity style={styles.button} onPress={() => ShowDetails()}>
                         <Text>Show Details</Text>
                     </TouchableOpacity>
                 </View>
-                <View>
-                    {!CheackMaxCount() ? (
-                        <Text style={styles.alerts}>*There are'nt such amount of available rooms* </Text>)
-                        : null}
-                </View>
             </View>
         </View>
-
     )
 }
 
@@ -88,7 +73,4 @@ const styles = StyleSheet.create({
         borderRadius: 10
 
     },
-    alerts: {
-        color: 'red'
-    }
 })
