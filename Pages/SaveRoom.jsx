@@ -7,14 +7,14 @@ import moment from 'moment';
 
 
 
-const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
-{ roomNumber: 4, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
-{ roomNumber: 6, roomType: "Double room", pricePerNight: 300, exitDate: "2022-07-25T00:00:00", details: "A double room suitable for two people" },
-{ roomNumber: 8, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-20T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-{ roomNumber: 10, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-11T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-{ roomNumber: 5, roomType: "Double room", pricePerNight: 300, exitDate: "2021-10-10T00:00:00", details: "A double room suitable for two people" },
-{ roomNumber: 9, roomType: "Suite", pricePerNight: 500, exitDate: "2021-07-08T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-{ roomNumber: 7, roomType: "Double room", pricePerNight: 300, exitDate: "2021-06-12T00:00:00", details: "A double room suitable for two people" }]
+// const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
+// { roomNumber: 4, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
+// { roomNumber: 6, roomType: "Double room", pricePerNight: 300, exitDate: "2022-07-25T00:00:00", details: "A double room suitable for two people" },
+// { roomNumber: 8, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-20T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
+// { roomNumber: 10, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-11T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
+// { roomNumber: 5, roomType: "Double room", pricePerNight: 300, exitDate: "2021-10-10T00:00:00", details: "A double room suitable for two people" },
+// { roomNumber: 9, roomType: "Suite", pricePerNight: 500, exitDate: "2021-07-08T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
+// { roomNumber: 7, roomType: "Double room", pricePerNight: 300, exitDate: "2021-06-12T00:00:00", details: "A double room suitable for two people" }]
 
 
 export default function SaveRoom({ route, navigation }) {
@@ -52,25 +52,33 @@ export default function SaveRoom({ route, navigation }) {
 
   const BilldData = (rooms) => {
 
+    // console.log(JSON.stringify(rooms));
+
+    // console.log(rooms.filter((per) => per.roomType === 'Single room').length);
+
     let temp = []
     rooms.map((per) =>
       temp.push(
         {
           type: per.roomType,
-          count: arrRooms.filter((room) => room.roomType === per.roomType).length,
-          details: per.roomType,
+          count: rooms.filter((room) => room.roomType === per.roomType).length,
+          details: per.details,
           pricePerNight: per.pricePerNight
         }))
 
-    let list = []
 
-    for (const [key, value] of Object.entries(rooms_flags)) {
-      if (value) {
-        let room = temp.filter((per) => per.type === key)
-        room = room[0]
-        list.push(room)
-      }
-    }
+    let list = temp.filter((ele, ind) => ind === temp.findIndex(
+      elem => elem.type === ele.type && elem.type === ele.type))
+
+    // for (const [key, value] of Object.entries(rooms_flags)) {
+    //   if (value) {
+    //     let room = temp.filter((per) => per.type === key)
+    //     // room = room[0]
+    //     list.push(room)
+    //   }
+    // }
+
+    // console.log(JSON.stringify(list));
     SetArrRoomsData(list)
   }
 
@@ -102,8 +110,10 @@ export default function SaveRoom({ route, navigation }) {
 
 
 
-    navigation.navigate('Payment', { the_data: the_data, rooms_amounts: rooms_amounts,
-      number_Of_Nights:number_Of_Nights , breakfast:breakfast, enteryDate:enteryDate, exitDate:exitDate })
+    navigation.navigate('Payment', {
+      the_data: the_data, rooms_amounts: rooms_amounts,
+      number_Of_Nights: number_Of_Nights, breakfast: breakfast, enteryDate: enteryDate, exitDate: exitDate
+    })
     // if (value) {
     //   let room = temp.filter((per) => per.type === key)
     //   room = room[0]
