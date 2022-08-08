@@ -17,7 +17,7 @@ export default function ReservationCard(props) {
                     <Text>{entryDate} -- {exitDate}</Text>
                     <Text>breakfast: {breakfast ? <Text>Yes</Text> : <Text>No</Text>}</Text>
                  
-                    <Text>Price Per Night: {pricePerNight}</Text>
+                    <Text>Price Per Night: {pricePerNight}$</Text>
                 </View>
             </View>
         </ScrollView>

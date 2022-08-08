@@ -2,11 +2,11 @@ import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-na
 import React from 'react'
 import Counter from "react-native-counters";
 import Back from '../Pic/backround.jpg'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 
 export default function CardRoom(props) {
-
+    useEffect(() => { SetCount(0)}, []);
     let { roomType, details, count } = props
 
     const [counter, SetCounter] = useState(0)
@@ -21,10 +21,8 @@ export default function CardRoom(props) {
     }
 
     const CheakCounter = () => {
-        if (count < counter)
-            return false;
-        else
-            return true;
+        return count >= counter
+           
     }
 
     // console.log("count "+ details + ": " + count);
@@ -37,7 +35,7 @@ export default function CardRoom(props) {
                 </View>
                 <Text style={styles.RoomType}>{roomType}</Text>
                 <View style={styles.ButtonContainer}>
-                    <Counter start={0} style={styles.counter} onChange={SetCount.bind(this)} />
+                    <Counter start={0} max={count+1} style={styles.counter} onChange={SetCount.bind(this)} />
                     <View style={{ width: 70 }}></View>
                     <TouchableOpacity style={styles.button} onPress={() => ShowDetails()}>
                         <Text>Show Details</Text>

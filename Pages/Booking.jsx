@@ -1,7 +1,9 @@
 import { View, Text, Alert, StyleSheet, TextInput, ScrollView, Switch, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
+import moment from 'moment';
+
 
 
 
@@ -17,7 +19,6 @@ export default function Booking({ navigation }) {
   const [suitFlag, setSuit] = useState(false)
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
   const [breakfast, setreakfast] = useState(false);
-
 
   const showDatePickerEntry = () => {
     setFlagEntry(true);
@@ -42,6 +43,25 @@ export default function Booking({ navigation }) {
   };
 
 
+  useEffect(() => {
+    let tomorrow = new Date(enteryDate);
+    tomorrow.setDate(tomorrow.getDate() + 1)
+ 
+
+if(exitDate.toDateString() === tomorrow.toDateString()){
+  setNumber_Of_Nights(1)
+  return;
+}
+if (moment(exitDate).diff(moment(tomorrow), "days") <= 0){
+  setNumber_Of_Nights(0) 
+}else{
+  setNumber_Of_Nights(moment(exitDate).diff(moment(enteryDate), "days"))
+}
+
+
+
+  })
+
 
   const Delete = () => {
     setNumber_Of_Nights(0)
@@ -58,25 +78,52 @@ export default function Booking({ navigation }) {
 
   }
 
-  const CheackNumOfNights = () => {
-    return number_Of_Nights > 0;
-  }
+  
 
-  const CheackDates = () => {
-    if (enteryDate.getFullYear() != exitDate.getFullYear() ||
-      (exitDate.getMonth() + 1) < (enteryDate.getMonth() + 1)) {
 
-      if ((exitDate.getMonth() + 1) === (enteryDate.getMonth() + 1) &&
-        enteryDate.getDate() > exitDate.getDate()) {
-        return false
-      }
-    }
-    else
-      return true
+  const CheackDates = (date) => {
+
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+
+
+
+
+
+
+  //   if (enteryDate.getFullYear() != exitDate.getFullYear() ||
+  //     (exitDate.getMonth() + 1) < (enteryDate.getMonth() + 1)) {
+
+  //     if ((exitDate.getMonth() + 1) === (enteryDate.getMonth() + 1) &&
+  //       enteryDate.getDate() > exitDate.getDate()) {
+  //       return false
+  //     }
+  //   }
+  //   else
+  //     return true
   }
+ 
+//npm install moment
+  
+
+
+
+
+
+
+
+
+
+
+
 
   const ChaeckAll = () => {
-    if (ChaeckRoomsMarks() && CheackNumOfNights()) {
+   
+   if(CheackDates(enteryDate) || CheackDates(exitDate)){
+    Alert.alert('Error selecting dates')
+    return;
+
+   }
+    if (ChaeckRoomsMarks()) {
 
       rooms_flags = {
         'Single room':  singleFlag ,
@@ -121,7 +168,7 @@ export default function Booking({ navigation }) {
           onConfirm={handleConfirmExitDate}
           onCancel={hideDatePickerExit} />
         <View>
-          {!CheackDates() ? (
+          {CheackDates(enteryDate) || CheackDates(exitDate) || number_Of_Nights===0? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>)
             : null}
         </View>
@@ -150,12 +197,15 @@ export default function Booking({ navigation }) {
 
         </View>
         <View style={{ height: 10 }}></View>
-        <TextInput value={number_Of_Nights} placeholder='Number of nights: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setNumber_Of_Nights(number)}></TextInput>
-        <View>
+        {CheackDates(enteryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? null: <Text > Number of nights: {number_Of_Nights} </Text>}
+        
+        {/* <Text> Number of nights: {number_Of_Nights} </Text> */}
+        {/* <TextInput value={number_Of_Nights} placeholder='Number of nights: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setNumber_Of_Nights(number)}></TextInput> */}
+        {/* <View>
           {!CheackNumOfNights() ? (
             <Text style={styles.alerts}>*Must specify the number of nights* </Text>)
             : null}
-        </View>
+        </View> */}
         <View style={{ height: 10 }}></View>
 
         <View style={styles.switchContainer}>
