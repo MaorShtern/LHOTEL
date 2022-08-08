@@ -25,14 +25,12 @@ export default function Booking({ navigation }) {
   const hideDatePickerEntry = () => {
     setFlagEntry(false);
   };
-
   const showDatePickerExit = () => {
     setFlagExit(true);
   };
   const hideDatePickerExit = () => {
     setFlagExit(false);
   };
-
   const handleConfirmEnteryDate = (date) => {
     setEnteryDate(date)
     hideDatePickerEntry()
@@ -45,10 +43,7 @@ export default function Booking({ navigation }) {
 
 
 
-
-
   const Delete = () => {
-    // setAmount_Of_People(0)
     setNumber_Of_Nights(0)
     setreakfast(false);
     setSingle(false)
@@ -131,13 +126,6 @@ export default function Booking({ navigation }) {
             : null}
         </View>
         <View style={{ height: 10 }}></View>
-
-        {/* <TextInput value={amount_Of_People} placeholder='Amount of people: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setAmount_Of_People(number)}></TextInput>
-        <View>
-          {!CheackAmountOfPeople() ? (
-            <Text style={styles.alerts}>*Must specify the number of people* </Text>)
-            : null}
-        </View> */}
         <View>
           <Text style={styles.Text}>Room Type</Text>
           <View style={styles.RadioCheckbox}>
@@ -264,17 +252,3 @@ const styles = StyleSheet.create({
 
 });
 
-
-
-// {/* <Button
-//   title="Hide/Show Component"
-//   onPress={() => setShouldShow(!shouldShow)}
-// />
-// {/*Here we will return the view when state is true
-// and will return false if state is false*/}
-// {
-//   shouldShow ?
-//     (
-//       <Iframe width="560" height="315" src="https://www.youtube.com/embed/bdFJ4H3WL3Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></Iframe>
-//     ) : null
-// } */}
