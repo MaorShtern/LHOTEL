@@ -2,24 +2,11 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Alert } from 'rea
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator } from "react-native";
 import CardRoom from './CardRoom'
-import moment from 'moment';
-// import Spinner from './Spinner'
-
-
-
-// const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
-// { roomNumber: 4, roomType: "Single room", pricePerNight: 100, exitDate: "2022-07-25T00:00:00", details: "A personal room adapted for a single person" },
-// { roomNumber: 6, roomType: "Double room", pricePerNight: 300, exitDate: "2022-07-25T00:00:00", details: "A double room suitable for two people" },
-// { roomNumber: 8, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-20T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-// { roomNumber: 10, roomType: "Suite", pricePerNight: 500, exitDate: "2022-07-11T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-// { roomNumber: 5, roomType: "Double room", pricePerNight: 300, exitDate: "2021-10-10T00:00:00", details: "A double room suitable for two people" },
-// { roomNumber: 9, roomType: "Suite", pricePerNight: 500, exitDate: "2021-07-08T00:00:00", details: "A suite designed to accommodate an amount of about 3 to 10 people" },
-// { roomNumber: 7, roomType: "Double room", pricePerNight: 300, exitDate: "2021-06-12T00:00:00", details: "A double room suitable for two people" }]
 
 
 export default function SaveRoom({ route, navigation }) {
 
-  let { rooms_flags, number_Of_Nights, breakfast, enteryDate, exitDate } = route.params
+  let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
 
 
   const [single, SetSingle] = useState(0)
@@ -39,7 +26,6 @@ export default function SaveRoom({ route, navigation }) {
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
-      SetArrRoomsData(rooms)
       BilldData(rooms)
       SetLoading(true)
       return
@@ -51,10 +37,6 @@ export default function SaveRoom({ route, navigation }) {
 
 
   const BilldData = (rooms) => {
-
-    // console.log(JSON.stringify(rooms));
-
-    // console.log(rooms.filter((per) => per.roomType === 'Single room').length);
 
     let temp = []
     rooms.map((per) =>
@@ -70,16 +52,18 @@ export default function SaveRoom({ route, navigation }) {
     let list = temp.filter((ele, ind) => ind === temp.findIndex(
       elem => elem.type === ele.type && elem.type === ele.type))
 
-    // for (const [key, value] of Object.entries(rooms_flags)) {
-    //   if (value) {
-    //     let room = temp.filter((per) => per.type === key)
-    //     // room = room[0]
-    //     list.push(room)
-    //   }
-    // }
+    let array = []
 
-    // console.log(JSON.stringify(list));
-    SetArrRoomsData(list)
+    for (const [key, value] of Object.entries(rooms_flags)) {
+      if (value) {
+        let room = list.filter((per) => per.type === key)
+        if (room[0] !== undefined) {
+          room = room[0]
+          array.push(room)
+        }
+      }
+    }
+    SetArrRoomsData(array)
   }
 
 
@@ -90,8 +74,7 @@ export default function SaveRoom({ route, navigation }) {
       'Double room': double,
       'Suite': suit
     }
-    // console.log("arrRoomsData: " + JSON.stringify( arrRoomsData));
-    rooms_amounts = Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key] > 0));
+
     let the_data = []
     for (const [key, value] of Object.entries(rooms_amounts)) {
       for (let i = 0; i < arrRoomsData.length; i++) {
@@ -100,66 +83,24 @@ export default function SaveRoom({ route, navigation }) {
             Alert.alert('Some fields are not filled in Properly')
             return;
           }
-          // arrRoomsData[i].count = value;
-          the_data.push(arrRoomsData[i]);
+          let room_temp = {
+            type: arrRoomsData[i].type,
+            count: value,
+            details: arrRoomsData[i].details,
+            pricePerNight: arrRoomsData[i].pricePerNight
+          }
+          the_data.push(room_temp);
         }
       }
     }
-    // console.log("the_data: " + JSON.stringify(the_data));
 
 
-
-
+    // console.log("the_data:" + JSON.stringify(the_data));
+  
     navigation.navigate('Payment', {
-      the_data: the_data, rooms_amounts: rooms_amounts,
-      number_Of_Nights: number_Of_Nights, breakfast: breakfast, enteryDate: enteryDate, exitDate: exitDate
+      the_data: the_data, number_Of_Nights: number_Of_Nights, 
+      breakfast: breakfast, entryDate: entryDate, exitDate: exitDate
     })
-    // if (value) {
-    //   let room = temp.filter((per) => per.type === key)
-    //   room = room[0]
-    //   list.push(room)
-    // }
-
-    //     arrRoomsData.map(function(room,index){
-    //     return text + ' ' + array2[index]
-    //  })
-    // let room =  rooms_amount.filter((room_amount) => room_amount !== 0)
-    // console.log(rooms_amount);
-    // let room  =   Object.keys(rooms_amounts).map((room_type) => {
-    //   rooms_amounts[room_type] === 0; // you can update on any condition if you like, this line will update all dictionary object values. 
-
-    // });
-    // for (const [key, value] of Object.entries(rooms_amounts)) {
-    //   if (value) {
-    //     let room = temp.filter((per) => per.type === key)
-    //     room = room[0]
-    //     list.push(room)
-    //   }
-    //   Object.keys(rooms_amounts).
-    // filter((key) => key.includes('Name')).
-    // reduce((cur, key) => { return Object.assign(cur, { [key]: obj[key] })}, {});
-    //  Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]>0).reduce((cur,key)=>{
-    //   { console.log(Object.assign(cur, { [key]: rooms_amounts[key] })); }
-    //  });
-    // console.log(Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]> 0)));
-
-    // Object.entries(rooms_amounts).map((room_type)=>console.log(room_type))
-    // rooms_amounts.fi
-    //   rooms_amounts.reduce((result, filter) => {
-    //     result[filter.name] > 0;
-    //     console.log(result)
-    // });
-    // for (const [key, value] of Object.entries(rooms_amount)) {
-    //   console.log(index);
-    //   // if (value) {
-    //   //   let room = temp.filter((per) => per.type === key)
-    //   //   room = room[0]
-    //   //   list.push(room)
-    //   }
-    // arrRoomsData.map(function(room,index){
-    //   return text + ' ' + array2[index]
-    //  })
-    // navigation.navigate('Payment', { data: arrRoomsData, Single: single, Double: double, Suit: suit })
   }
 
 

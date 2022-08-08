@@ -1,5 +1,0 @@
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\bin\Release\DAL.dll
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\bin\Release\DAL.pdb
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\obj\Release\DAL.csproj.CoreCompileInputs.cache
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\obj\Release\DAL.dll
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\obj\Release\DAL.pdb

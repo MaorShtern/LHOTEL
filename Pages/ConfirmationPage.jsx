@@ -1,56 +1,63 @@
-import { View, ScrollView, Text, StyleSheet, Button, TouchableOpacity } from 'react-native'
-import React,{ useState,useEffect } from 'react'
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
 import ReservationCard from './ReservationCard'
 
-export default function ConfirmationPage( {route},props) {
-   
-   
+export default function ConfirmationPage({ route, navigation }) {
+
+
     const [arrRooms, setarrRooms] = useState([])
 
-     let { entryDate, exitDate ,number_Of_Nights, breakfast} = props
-   
+    //  let { entryDate, exitDate ,number_Of_Nights, breakfast} = route.params
+    let { the_data, number_Of_Nights, breakfast,
+        entryDate, exitDate, total, Name, CardNum } = route.params
 
-     useEffect(() => {func()}, []);
-        
-    
-    // let { entryDate, exitDate, totalPrice, cardholder_Name, card_Number, amount_of_people } = props
-    // let numberOfNights = exitDate - entryDate
-    let { total,Name,CardNum ,rooms} = route.params
-    // const persons = [];
-    const  func = ()=> {
-        let arr = [];
-        let  counter = 0;
-       console.log(breakfast);
-       rooms.map((room)=>{
-            
-              for (let i = 0; i<room.count; i++){
-            
-                arr.push (<ReservationCard key={counter} roomType ={room.type}  pricePerNight= {room.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast}/>)
-                counter++;
-            }
-            
-            // for (let i = 0; i<item; i++){
-                // console.log(item);
-                // console.log(index);
-            //   }
-            //   console.log(arrRooms.length);
-            //   //setarrRooms(arrRooms)
-            //   return arrRooms;
+    // console.log(entryDate);
+    // console.log(exitDate);
 
- })
+    // useEffect(() => { CrateListCards() }, []);
 
 
- setarrRooms(arr)
+    // // let { entryDate, exitDate, totalPrice, cardholder_Name, card_Number, amount_of_people } = props
+    // // let numberOfNights = exitDate - entryDate
+    // // const persons = [];
+    // const CrateListCards = () => {
+
+    //     the_data.map((per) => console.log(JSON.stringify(per)))
+
+    // let arr = [];
+    // let counter = 0;
+    // console.log("the_data:" + JSON.stringify(the_data));
+    // the_data.map((the_data) => {
+    //     for (let i = 0; i < the_data.count; i++) {
+    // arr.push(<ReservationCard key={counter} roomType={the_data.type} pricePerNight={the_data.pricePerNight}
+    //     entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
+    //         counter++;
+    //     }
+    // })
+
+    //     // { roomType, pricePerNight, entryDate, exitDate, breakfast}
+    //     // for (let i = 0; i<item; i++){
+    //     // console.log(item);
+    //     // console.log(index);
+    //     //   }
+    //     //   console.log(arrRooms.length);
+    //     //   //setarrRooms(arrRooms)
+    //     //   return arrRooms;
 
 
-}
+    //     setarrRooms(arr)
+    // roomType,count , pricePerNight, entryDate, exitDate, breakfast
+    // }
+
+    let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
+        pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
 
     return (
         <ScrollView>
-            <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40}  color='green' /></Text>
+            <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
             <Text style={styles.SubHeadLine}>Your order has been successfully saved! looking forward to see you!!!</Text>
-            {arrRooms}
+            {listCards}
             {/* {rooms.map((item)=>{
                 
                 if (item >0)
@@ -79,10 +86,10 @@ export default function ConfirmationPage( {route},props) {
                     <Text>total Price: {total}$</Text>
                     <Text>Cardholder's Name: {Name}</Text>
                     <Text>Card Number: {CardNum}</Text>
-                   <Text>Number Of Nights : {number_Of_Nights}</Text>
+                    <Text>Number Of Nights : {number_Of_Nights}</Text>
                 </View>
             </View>
-           
+
 
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity style={styles.button}>
@@ -111,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-   
+
     },
     SubHeadLine: {
         fontSize: 21,

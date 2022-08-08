@@ -13,7 +13,7 @@ export default function Booking({ navigation }) {
   const [flagExit, setFlagExit] = useState(false)
   // const [enteryDate, setEnteryDate] = useState(new Date())
   // const [exitDate, setExitDate] = useState(new Date())
-  const [enteryDate, setEnteryDate] = useState(new Date())
+  const [entryDate, setEntryDate] = useState(new Date())
   const [exitDate, setExitDate] = useState(new Date())
 
   const [singleFlag, setSingle] = useState(false)
@@ -36,7 +36,7 @@ export default function Booking({ navigation }) {
   };
   const handleConfirmEnteryDate = (date) => {
 
-    setEnteryDate(date)
+    setEntryDate(date)
     hideDatePickerEntry()
   };
 
@@ -47,7 +47,7 @@ export default function Booking({ navigation }) {
 
 
   useEffect(() => {
-    let tomorrow = new Date(enteryDate);
+    let tomorrow = new Date(entryDate);
     tomorrow.setDate(tomorrow.getDate() + 1)
     if (exitDate.toDateString() === tomorrow.toDateString()) {
       setNumber_Of_Nights(1)
@@ -56,7 +56,7 @@ export default function Booking({ navigation }) {
     if (moment(exitDate).diff(moment(tomorrow), "days") <= 0) {
       setNumber_Of_Nights(0)
     } else {
-      setNumber_Of_Nights(moment(exitDate).diff(moment(enteryDate), "days"))
+      setNumber_Of_Nights(moment(exitDate).diff(moment(entryDate), "days"))
     }
   })
 
@@ -67,7 +67,7 @@ export default function Booking({ navigation }) {
     setSingle(false)
     setDouble(false)
     setSuit(false)
-    setEnteryDate(new Date())
+    setEntryDate(new Date())
     setExitDate(new Date())
   }
 
@@ -108,7 +108,7 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
 
-    if (CheackDates(enteryDate) || CheackDates(exitDate)) {
+    if (CheackDates(entryDate) || CheackDates(exitDate)) {
       Alert.alert('Error selecting dates')
       return;
 
@@ -121,12 +121,12 @@ export default function Booking({ navigation }) {
         'Suite': suitFlag
       }
 
-      let entry = moment(enteryDate).format('DD-MM-YYYY')
+      let entry = moment(entryDate).format('DD-MM-YYYY')
       let exit = moment(exitDate).format('DD-MM-YYYY')
 
       navigation.navigate('SaveRoom', {
         rooms_flags: rooms_flags, number_Of_Nights: number_Of_Nights, breakfast: breakfast,
-        enteryDate: entry, exitDate: exit
+        entryDate: entry, exitDate: exit
       })
     }
     else
@@ -142,7 +142,7 @@ export default function Booking({ navigation }) {
         <View style={{ height: 10 }}></View>
 
         <TouchableOpacity style={styles.button} onPress={showDatePickerEntry} >
-          <Text>{"Entry date: " + enteryDate.getDate() + "/" + (enteryDate.getMonth() + 1) + "/" + enteryDate.getFullYear()}</Text>
+          <Text>{"Entry date: " + entryDate.getDate() + "/" + (entryDate.getMonth() + 1) + "/" + entryDate.getFullYear()}</Text>
         </TouchableOpacity>
 
         <DateTimePickerModal
@@ -162,13 +162,13 @@ export default function Booking({ navigation }) {
           onConfirm={handleConfirmExitDate}
           onCancel={hideDatePickerExit} />
         <View>
-          {CheackDates(enteryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? (
+          {CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>)
             : null}
         </View>
         <View>
           <View style={{ height: 10 }}></View>
-          {CheackDates(enteryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? null : <Text > Number of nights: {number_Of_Nights} </Text>}
+          {CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? null : <Text > Number of nights: {number_Of_Nights} </Text>}
         </View>
         <View style={{ height: 10 }}></View>
         <View>

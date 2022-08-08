@@ -1,34 +1,44 @@
 import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Customer from './Class/Customer'
 
 
 export default function Payment({ route, navigation }) {
 
-  let { the_data, rooms_amounts, number_Of_Nights, breakfast, enteryDate, exitDate } = route.params
+  let { the_data, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
+
+  // console.log("the_data: "+JSON.stringify(the_data));
+  // console.log("number_Of_Nights: "+number_Of_Nights);
+  // console.log("breakfast: "+breakfast);
+  // console.log("enteryDate: "+entryDate);
+  // console.log("exitDate: "+exitDate);
 
 
   const [totalSum, SetTotalSum] = useState(0)
 
-  const [id, SetID] = useState('')
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
   const [cardDate, SetCardData] = useState('')
   const [cardCVC, SetCardCVC] = useState('')
 
+  const [user, SetUser] = useState([])
 
-  useEffect(() => {
-    Calculate_Final_Amount()
-  })
+
+  useEffect(() => { readData(); }, []);
+
 
 
   const Calculate_Final_Amount = () => {
     let sum = 0
+    // console.log("the_data:" + JSON.stringify(the_data));
     for (let i = 0; i < the_data.length; i++) {
-      let temp_room = the_data[i];
-      let tempToatal = temp_room.pricePerNight * rooms_amounts[temp_room.type];
+      let pricePerNight = the_data[i].pricePerNight;
+      let count = the_data[i].count;
+      let tempToatal = pricePerNight * count
+      // let tempToatal = temp_room.pricePerNight * the_data[temp_room.type];
       sum += tempToatal;
     }
-
     SetTotalSum(sum)
   }
   // let sum = 0
@@ -39,7 +49,6 @@ export default function Payment({ route, navigation }) {
   // }
 
   const Delete = () => {
-    SetID('')
     setName('')
     setCardNum('')
     SetCardData('')
@@ -62,21 +71,73 @@ export default function Payment({ route, navigation }) {
       return true
   }
 
+  const readData = async () => {
+    try {
+      const user = await AsyncStorage.getItem('@ConUser');
+      const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
+
+      if (arrUsers !== null && user !== null) {
+        let email = JSON.parse(user)
+        let arr = JSON.parse(arrUsers)
+        let userDetails = arr.filter((per) => per.email === email)
+        SetUser(userDetails[0])
+      }
+      Calculate_Final_Amount()
+    } catch (e) {
+      alert('Failed to fetch the input from storage');
+    }
+  };
+
+  const CustomerToDataBS = async (value) => {
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(value),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
+    let customerResult = await result.json();
+    if (customerResult)
+      navigation.navigate('ConfirmationPage',{ the_data:the_data,
+         number_Of_Nights:number_Of_Nights,breakfast:breakfast, entryDate:entryDate, exitDate:exitDate,
+         total:totalSum, Name:name,CardNum: cardNum  })
+    else
+      alert("Erorr")
+
+  }
+
 
 
   const ConfirmInformation = () => {
-    if (!(id.length < 9 || name <= 1 || cardNum < 12 || !CheackCardDate || cardCVC.length != 3)) {
-
-      navigation.navigate('ConfirmationPage', { total: totalSum, Name: name, CardNum: cardNum, rooms: data })
-
+    if (!( name <= 1 || cardNum < 12 || !CheackCardDate || cardCVC.length != 3)) {
+      // console.log(user);
+      let newCustomer = {
+        calssName: Customer,
+        fields: {
+          customerID: user.id,
+          customerType: 1,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          mail: user.email,
+          phoneNumber: user.phone,
+          cardHolderName: name,
+          creditCardDate: cardDate,
+          threeDigit: cardCVC
+        }
+      }
+      // console.log(newCustomer.fields);
+      CustomerToDataBS(newCustomer.fields)
+      // console.log(customerResult);
+      // if (customerResult)
+      //   navigation.navigate('ConfirmationPage')
+      // else
+      //   alert("Erorr")
     }
     else
       Alert.alert("The card details are incorrect")
   }
 
 
-
-  // console.log(cardDate);
+  // console.log(user);
 
   return (
     <View>
@@ -86,8 +147,8 @@ export default function Payment({ route, navigation }) {
         <View style={{ height: 30 }}></View>
         <Text style={styles.SubHeadLine}>Enter payment information</Text>
         <View style={styles.TextInputContainer}>
-          <TextInput keyboardType='numeric' type="text" placeholder='ID' style={styles.TextInput} onChangeText={(id) => SetID(id)}>{id}</TextInput>
-          <View style={{ height: 10 }}></View>
+          {/* <TextInput keyboardType='numeric' type="text" placeholder='ID' style={styles.TextInput} onChangeText={(id) => SetID(id)}>{id}</TextInput>
+          <View style={{ height: 10 }}></View> */}
           <TextInput placeholder="Cardholder's name" style={styles.TextInput} onChangeText={(name) => setName(name)}>{name}</TextInput>
           <View style={{ height: 10 }}></View>
           <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(cardNum) => setCardNum(cardNum)}>{cardNum}</TextInput>

@@ -55,7 +55,7 @@ export default function Homepage({ route, navigation }) {
             <View>
             <View>
           {CheackFull_name() ? (
-            <Text style={styles.user_Name}>{full_name}</Text>)
+            <Text style={styles.user_Name}>Welcome: {full_name}</Text>)
             : null}
         </View>
             </View>

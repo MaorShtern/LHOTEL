@@ -50,9 +50,8 @@ export default function Login({ navigation }) {
       find_user = find_user[0]
 
       if (find_user !== undefined) {
-        let full_name = "Welcome:  " + find_user.first_name + " " + find_user.last_name
-        // saveUser(full_name)
-        // navigation.navigate('Homepage')
+        saveUser(email)
+        let full_name = find_user.first_name + " " + find_user.last_name
         navigation.navigate('Homepage', { full_name })
       }
       else
