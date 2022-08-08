@@ -1,14 +1,20 @@
-import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 
 export default function Payment({ route, navigation }) {
 
+  let { the_data, rooms_amounts, number_Of_Nights, breakfast, enteryDate, exitDate } = route.params
+
 
   const [totalSum, SetTotalSum] = useState(0)
+
+  const [id, SetID] = useState('')
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
-  let { data,rooms_amounts} = route.params 
+  const [cardDate, SetCardData] = useState('')
+  const [cardCVC, SetCardCVC] = useState('')
+
 
   useEffect(() => {
     Calculate_Final_Amount()
@@ -16,30 +22,61 @@ export default function Payment({ route, navigation }) {
 
 
   const Calculate_Final_Amount = () => {
-  console.log(rooms_amounts);
-  console.log(data);
     let sum = 0
-    for (let i = 0; i < data.length; i++) {
-      let temp_room = data[i];
- 
+    for (let i = 0; i < the_data.length; i++) {
+      let temp_room = the_data[i];
       let tempToatal = temp_room.pricePerNight * rooms_amounts[temp_room.type];
-      // console.log(tempToatal);
       sum += tempToatal;
+    }
+
+    SetTotalSum(sum)
   }
-  
-      SetTotalSum(sum)
-  }
-    // let sum = 0
-    // for (let i = 0; i < data.length; i++) {
-    //     sum += data[i].pricePerNight 
-    // }
-    // SetTotalSum(sum);
+  // let sum = 0
+  // for (let i = 0; i < data.length; i++) {
+  //     sum += data[i].pricePerNight 
+  // }
+  // SetTotalSum(sum);
   // }
 
   const Delete = () => {
-
+    SetID('')
+    setName('')
+    setCardNum('')
+    SetCardData('')
+    SetCardCVC('')
   }
 
+  const fixCardDate = (text) => {
+    if (text.length == 2 && cardDate.length == 1) {
+      text += '/'
+    } else if (text.length == 2 && cardDate.length == 3) {
+      text = text.substring(0, text.length - 1)
+    }
+    SetCardData(text)
+  }
+
+  const CheackCardDate = () => {
+    if (cardDate.length != 5)
+      return false
+    else
+      return true
+  }
+
+
+
+  const ConfirmInformation = () => {
+    if (!(id.length < 9 || name <= 1 || cardNum < 12 || !CheackCardDate || cardCVC.length != 3)) {
+
+      navigation.navigate('ConfirmationPage', { total: totalSum, Name: name, CardNum: cardNum, rooms: data })
+
+    }
+    else
+      Alert.alert("The card details are incorrect")
+  }
+
+
+
+  // console.log(cardDate);
 
   return (
     <View>
@@ -49,22 +86,26 @@ export default function Payment({ route, navigation }) {
         <View style={{ height: 30 }}></View>
         <Text style={styles.SubHeadLine}>Enter payment information</Text>
         <View style={styles.TextInputContainer}>
-          <TextInput type="text" placeholder='ID' style={styles.TextInput}></TextInput>
+          <TextInput keyboardType='numeric' type="text" placeholder='ID' style={styles.TextInput} onChangeText={(id) => SetID(id)}>{id}</TextInput>
           <View style={{ height: 10 }}></View>
-          <TextInput placeholder="Cardholder's name" style={styles.TextInput} onChangeText={(name) => setName(name)}></TextInput>
+          <TextInput placeholder="Cardholder's name" style={styles.TextInput} onChangeText={(name) => setName(name)}>{name}</TextInput>
           <View style={{ height: 10 }}></View>
-          <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(cardNum) => setCardNum(cardNum)}></TextInput>
+          <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(cardNum) => setCardNum(cardNum)}>{cardNum}</TextInput>
           <View style={{ height: 10 }}></View>
-          <TextInput keyboardType='date' placeholder="Card's Date:" style={styles.TextInput}></TextInput>
+          <TextInput keyboardType='date' placeholder="Card's Date:" style={styles.TextInput} onChangeText={(text) => { fixCardDate(text) }}>{cardDate}</TextInput>
+          <View>
+            {!CheackCardDate() ? (
+              <Text style={styles.alerts}>*The card DATE is incorrect*</Text>)
+              : null}
+          </View>
           <View style={{ height: 10 }}></View>
-          <TextInput keyboardType='numeric' placeholder='cvv' style={styles.TextInput}></TextInput>
+          <TextInput keyboardType='numeric' placeholder='cvv' style={styles.TextInput} onChangeText={(cvv) => SetCardCVC(cvv)}>{cardCVC}</TextInput>
         </View>
-
         <View style={styles.ButtonContainer}>
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ConfirmationPage',{ total: totalSum,Name:name,CardNum: cardNum,rooms : data})} >
+          <TouchableOpacity style={styles.button} onPress={ConfirmInformation} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>
@@ -128,5 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
 
   },
-
+  alerts: {
+    color: 'red'
+  }
 })

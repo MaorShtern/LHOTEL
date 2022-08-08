@@ -1,7 +1,8 @@
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator} from "react-native";
+import { ActivityIndicator } from "react-native";
 import CardRoom from './CardRoom'
+import moment from 'moment';
 // import Spinner from './Spinner'
 
 
@@ -17,7 +18,7 @@ const arrRooms = [{ roomNumber: 3, roomType: "Single room", pricePerNight: 100, 
 
 
 export default function SaveRoom({ route, navigation }) {
-  
+
   let { rooms_flags, number_Of_Nights, breakfast, enteryDate, exitDate } = route.params
 
 
@@ -27,9 +28,9 @@ export default function SaveRoom({ route, navigation }) {
   const [loading, SetLoading] = useState(false)
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
-  useEffect(() => { FetchData()}, []);
+  useEffect(() => { FetchData() }, []);
 
-  
+
   const FetchData = async () => {
     const requestOptions = {
       method: 'POST',
@@ -75,46 +76,48 @@ export default function SaveRoom({ route, navigation }) {
 
 
   const GoToPayment = () => {
- 
 
-   let rooms_amounts = {
-    'Single room':  single ,
-    'Double room':  double ,
-    'Suite':  suit 
-  }
-    console.log(JSON.stringify(arrRoomsData));
-    rooms_amounts = Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]> 0));
-    console.log(rooms_amounts);
-let the_data = []
+    let rooms_amounts = {
+      'Single room': single,
+      'Double room': double,
+      'Suite': suit
+    }
+    // console.log("arrRoomsData: " + JSON.stringify( arrRoomsData));
+    rooms_amounts = Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key] > 0));
+    let the_data = []
     for (const [key, value] of Object.entries(rooms_amounts)) {
-      for (let i = 0; i <arrRoomsData.length; i++) {
-        if(arrRoomsData[i].type === key){
-          if(arrRoomsData[i].count <value){
+      for (let i = 0; i < arrRoomsData.length; i++) {
+        if (arrRoomsData[i].type === key) {
+          if (arrRoomsData[i].count < value) {
             Alert.alert('Some fields are not filled in Properly')
             return;
           }
-          arrRoomsData[i].count = value;
+          // arrRoomsData[i].count = value;
           the_data.push(arrRoomsData[i]);
-
         }
-      
+      }
     }
-  }
-   navigation.navigate('Payment', { data: the_data,rooms_amounts})
-      // if (value) {
-      //   let room = temp.filter((per) => per.type === key)
-      //   room = room[0]
-      //   list.push(room)
-      // }
+    // console.log("the_data: " + JSON.stringify(the_data));
 
-  //     arrRoomsData.map(function(room,index){
-  //     return text + ' ' + array2[index]
-  //  })
+
+
+
+    navigation.navigate('Payment', { the_data: the_data, rooms_amounts: rooms_amounts,
+      number_Of_Nights:number_Of_Nights , breakfast:breakfast, enteryDate:enteryDate, exitDate:exitDate })
+    // if (value) {
+    //   let room = temp.filter((per) => per.type === key)
+    //   room = room[0]
+    //   list.push(room)
+    // }
+
+    //     arrRoomsData.map(function(room,index){
+    //     return text + ' ' + array2[index]
+    //  })
     // let room =  rooms_amount.filter((room_amount) => room_amount !== 0)
     // console.log(rooms_amount);
     // let room  =   Object.keys(rooms_amounts).map((room_type) => {
     //   rooms_amounts[room_type] === 0; // you can update on any condition if you like, this line will update all dictionary object values. 
- 
+
     // });
     // for (const [key, value] of Object.entries(rooms_amounts)) {
     //   if (value) {
@@ -122,20 +125,20 @@ let the_data = []
     //     room = room[0]
     //     list.push(room)
     //   }
-  //   Object.keys(rooms_amounts).
-  // filter((key) => key.includes('Name')).
-  // reduce((cur, key) => { return Object.assign(cur, { [key]: obj[key] })}, {});
-  //  Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]>0).reduce((cur,key)=>{
-  //   { console.log(Object.assign(cur, { [key]: rooms_amounts[key] })); }
-  //  });
-  // console.log(Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]> 0)));
+    //   Object.keys(rooms_amounts).
+    // filter((key) => key.includes('Name')).
+    // reduce((cur, key) => { return Object.assign(cur, { [key]: obj[key] })}, {});
+    //  Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]>0).reduce((cur,key)=>{
+    //   { console.log(Object.assign(cur, { [key]: rooms_amounts[key] })); }
+    //  });
+    // console.log(Object.fromEntries(Object.entries(rooms_amounts).filter(([key]) => rooms_amounts[key]> 0)));
 
     // Object.entries(rooms_amounts).map((room_type)=>console.log(room_type))
     // rooms_amounts.fi
-  //   rooms_amounts.reduce((result, filter) => {
-  //     result[filter.name] > 0;
-  //     console.log(result)
-  // });
+    //   rooms_amounts.reduce((result, filter) => {
+    //     result[filter.name] > 0;
+    //     console.log(result)
+    // });
     // for (const [key, value] of Object.entries(rooms_amount)) {
     //   console.log(index);
     //   // if (value) {
@@ -145,7 +148,7 @@ let the_data = []
     //   }
     // arrRoomsData.map(function(room,index){
     //   return text + ' ' + array2[index]
-  //  })
+    //  })
     // navigation.navigate('Payment', { data: arrRoomsData, Single: single, Double: double, Suit: suit })
   }
 
@@ -165,20 +168,20 @@ let the_data = []
   }
 
 
-  let roomsList = arrRoomsData.map((per,index) => <CardRoom key={index} SetCount={SetCount} roomType={per.type}
+  let roomsList = arrRoomsData.map((per, index) => <CardRoom key={index} SetCount={SetCount} roomType={per.type}
     details={per.details} count={per.count} />)
 
   return (
     <ScrollView>
-     <Text style={styles.HeadLine}>Choose a room</Text>
-       <View>
-      {loading ?  roomsList:<Spinner/>}
-    </View>
+      <Text style={styles.HeadLine}>Choose a room</Text>
+      <View>
+        {loading ? roomsList : <Spinner />}
+      </View>
       <View style={styles.save}>
-      {loading ? 
-       <TouchableOpacity style={styles.button} onPress={GoToPayment} >
-       <Text>Save</Text>
-     </TouchableOpacity>:null}
+        {loading ?
+          <TouchableOpacity style={styles.button} onPress={GoToPayment} >
+            <Text>Save</Text>
+          </TouchableOpacity> : null}
         {/* <TouchableOpacity style={styles.button} onPress={GoToPayment} >
           <Text>Save</Text>
         </TouchableOpacity> */}
@@ -188,10 +191,11 @@ let the_data = []
 }
 const Spinner = () => (
 
-<View style={[styles.container, styles.horizontal]}>
-<ActivityIndicator size="large" />
-</View>
+  <View style={[styles.container, styles.horizontal]}>
+    <ActivityIndicator size="large" />
+  </View>
 );
+
 const styles = StyleSheet.create({
   HeadLine: {
     fontSize: 30,
