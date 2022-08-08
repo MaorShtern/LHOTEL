@@ -1,6 +1,8 @@
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { ActivityIndicator} from "react-native";
 import CardRoom from './CardRoom'
+// import Spinner from './Spinner'
 
 
 
@@ -22,7 +24,7 @@ export default function SaveRoom({ route, navigation }) {
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
   const [suit, SetSuit] = useState(0)
-
+  const [loading, SetLoading] = useState(false)
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
   useEffect(() => { FetchData()}, []);
@@ -38,6 +40,7 @@ export default function SaveRoom({ route, navigation }) {
     if (rooms !== null) {
       SetArrRoomsData(rooms)
       BilldData(rooms)
+      SetLoading(true)
       return
     }
     FetchData()
@@ -167,19 +170,28 @@ let the_data = []
 
   return (
     <ScrollView>
-      <Text style={styles.HeadLine}>Choose a room</Text>
-      <View>
-        {roomsList}
-      </View>
+     <Text style={styles.HeadLine}>Choose a room</Text>
+       <View>
+      {loading ?  roomsList:<Spinner/>}
+    </View>
       <View style={styles.save}>
-        <TouchableOpacity style={styles.button} onPress={GoToPayment} >
+      {loading ? 
+       <TouchableOpacity style={styles.button} onPress={GoToPayment} >
+       <Text>Save</Text>
+     </TouchableOpacity>:null}
+        {/* <TouchableOpacity style={styles.button} onPress={GoToPayment} >
           <Text>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   )
 }
+const Spinner = () => (
 
+<View style={[styles.container, styles.horizontal]}>
+<ActivityIndicator size="large" />
+</View>
+);
 const styles = StyleSheet.create({
   HeadLine: {
     fontSize: 30,
@@ -205,4 +217,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center'
   },
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+
+  }
 })
