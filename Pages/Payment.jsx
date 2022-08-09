@@ -174,7 +174,8 @@ export default function Payment({ route, navigation }) {
       }
 
 
-      if(userDB !== null)
+      // console.log(userDB);
+      if(userDB !== null && userDB.length !== 0)
       {
         AlterCustomer(newCustomer.fields)
       }
@@ -224,7 +225,8 @@ export default function Payment({ route, navigation }) {
   }
 
 
-  // console.log(user);
+
+
 
   return (
     <View>
