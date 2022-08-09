@@ -45,6 +45,9 @@ export default function Booking({ navigation }) {
     hideDatePickerExit()
   };
 
+  const entry = moment(entryDate).format('DD/MM/YYYY')
+  const exit = moment(exitDate).format('DD/MM/YYYY')
+
 
   useEffect(() => {
     let tomorrow = new Date(entryDate);
@@ -104,8 +107,6 @@ export default function Booking({ navigation }) {
 
 
 
-
-
   const ChaeckAll = () => {
 
     if (CheackDates(entryDate) || CheackDates(exitDate)) {
@@ -121,8 +122,8 @@ export default function Booking({ navigation }) {
         'Suite': suitFlag
       }
 
-      let entry = moment(entryDate).format('DD-MM-YYYY')
-      let exit = moment(exitDate).format('DD-MM-YYYY')
+      // let entry = moment(entryDate).format('DD-MM-YYYY')
+      // let exit = moment(exitDate).format('DD-MM-YYYY')
 
       navigation.navigate('SaveRoom', {
         rooms_flags: rooms_flags, number_Of_Nights: number_Of_Nights, breakfast: breakfast,
@@ -142,7 +143,7 @@ export default function Booking({ navigation }) {
         <View style={{ height: 10 }}></View>
 
         <TouchableOpacity style={styles.button} onPress={showDatePickerEntry} >
-          <Text>{"Entry date: " + entryDate.getDate() + "/" + (entryDate.getMonth() + 1) + "/" + entryDate.getFullYear()}</Text>
+          <Text>{"Entry date: " + entry}</Text>
         </TouchableOpacity>
 
         <DateTimePickerModal
@@ -153,7 +154,7 @@ export default function Booking({ navigation }) {
         <View style={{ height: 20 }}></View>
 
         <TouchableOpacity style={styles.button} onPress={showDatePickerExit} >
-          <Text>{"Exit date: " + exitDate.getDate() + "/" + (exitDate.getMonth() + 1) + "/" + exitDate.getFullYear()}</Text>
+          <Text>{"Exit date: " + exit}</Text>
         </TouchableOpacity>
 
         <DateTimePickerModal

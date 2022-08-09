@@ -64,11 +64,10 @@ export default function Payment({ route, navigation }) {
     SetCardData(text)
   }
 
-  const CheackCardDate = () => {
-    if (cardDate.length != 5)
-      return false
-    else
-      return true
+  const isValidCardDetails = () => {
+    return  cardNum < 12 || cardDate.length !== 5 || cardCVC.length !== 3 ? false : true
+   
+  
   }
 
   const readData = async () => {
@@ -96,6 +95,7 @@ export default function Payment({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
     let customerResult = await result.json();
+       console.log(customerResult);
     if (customerResult)
       navigation.navigate('ConfirmationPage',{ the_data:the_data,
          number_Of_Nights:number_Of_Nights,breakfast:breakfast, entryDate:entryDate, exitDate:exitDate,
@@ -108,7 +108,7 @@ export default function Payment({ route, navigation }) {
 
 
   const ConfirmInformation = () => {
-    if (!( name <= 1 || cardNum < 12 || !CheackCardDate || cardCVC.length != 3)) {
+    if ( name > 1 && isValidCardDetails()) {
       // console.log(user);
       let newCustomer = {
         calssName: Customer,
@@ -155,7 +155,7 @@ export default function Payment({ route, navigation }) {
           <View style={{ height: 10 }}></View>
           <TextInput keyboardType='date' placeholder="Card's Date:" style={styles.TextInput} onChangeText={(text) => { fixCardDate(text) }}>{cardDate}</TextInput>
           <View>
-            {!CheackCardDate() ? (
+            {cardDate.length !== 5  ? (
               <Text style={styles.alerts}>*The card DATE is incorrect*</Text>)
               : null}
           </View>
