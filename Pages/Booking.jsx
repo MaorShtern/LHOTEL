@@ -3,16 +3,17 @@ import React, { useState, useEffect } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
 
 export default function Booking({ navigation }) {
 
+
   const [flagEnrty, setFlagEntry] = useState(false)
   const [flagExit, setFlagExit] = useState(false)
-  // const [enteryDate, setEnteryDate] = useState(new Date())
-  // const [exitDate, setExitDate] = useState(new Date())
+
   const [entryDate, setEntryDate] = useState(new Date())
   const [exitDate, setExitDate] = useState(new Date())
 

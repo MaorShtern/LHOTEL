@@ -2,7 +2,6 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, Alert } from 'react-n
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export default function Navbar({ navigation }) {
@@ -10,26 +9,33 @@ export default function Navbar({ navigation }) {
     const [flag, SetFlag] = useState(true)
     // const [ConUser, SetConUser] = useState('')
 
+
     // const IsConectedUser = () => {
     //     console.log("ConUser: " + ConUser);
 
     // }
 
-    // useEffect(() => { readData(); }, []);
+    // useEffect(() => { GetConUser(); }, []);
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         GetConUser();
+    //     });
+    //     return unsubscribe;
+    // }, [navigation]);
 
 
-    // const readData = async () => {
+    // const GetConUser = async () => {
     //     try {
     //         const value = await AsyncStorage.getItem('@ConUser');
-    //         console.log("value: " + value);
-
+    //         // console.log("value: " + value);
     //         if (value !== null) {
     //             SetConUser(JSON.parse(value))
     //         }
     //     } catch (e) {
-    //         alert('Failed to fetch @ConUser from storage');
+    //         alert('Failed to fetch the input from storage');
     //     }
     // };
+
 
 
 
@@ -56,7 +62,7 @@ export default function Navbar({ navigation }) {
                     <View>
                         <TouchableOpacity onPress={() => SetFlag(!flag)}>
                             <View style={styles.navbarIcon} >
-                                
+
                                 <View style={{ width: 10 }}></View>
                                 <Icon name='three-bars' size={30} color='white' />
                             </View>
@@ -72,9 +78,9 @@ export default function Navbar({ navigation }) {
                         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registration')}>
                             <Text style={styles.text}>Registration</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Booking')}>
+                        {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Booking')}>
                             <Text style={styles.text}>Booking</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
                 {/* <View style={{height:10}}></View> */}
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 20,
         textAlign: "center",
-    
+
     },
     navbarIcon:
     {
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-      
+
         padding: 5
     }
 

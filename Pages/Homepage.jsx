@@ -28,8 +28,8 @@ export default function Homepage({ navigation }) {
     const readUserCon = async () => {
         try {
             const value = await AsyncStorage.getItem('@ConUser');
-            console.log("value: " + value);
-            if (value !== "") {
+            // console.log("value: " + value);
+            if (value !== null) {
                 SetFullName(JSON.parse(value))
             }
         } catch (e) {
@@ -45,6 +45,15 @@ export default function Homepage({ navigation }) {
         }
         catch (error) {
             Alert.alert(error)
+        }
+    }
+
+    const CheackConectedUser = () => {
+        if (full_name !== "") {
+            navigation.navigate('Booking')
+        }
+        else {
+            alert('Must be logged in as a user to book a room')
         }
     }
 
@@ -87,7 +96,7 @@ export default function Homepage({ navigation }) {
         android: `geo:0,0?q=${fullAddress}`,
     })
 
-    console.log("full_name: " + full_name);
+    // console.log("full_name: " + full_name);
 
     return (
         <ScrollView>
@@ -100,6 +109,9 @@ export default function Homepage({ navigation }) {
                     {/* {CheackUser()} */}
                     {full_name !== '' ? (
                         <View style={styles.user_Name}>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate('Booking')}>
+                                <Text style={styles.innerText}>Booking</Text>
+                            </TouchableOpacity> */}
                             <TouchableOpacity onPress={Logout}>
                                 <Text style={styles.innerText}>Logout</Text>
                             </TouchableOpacity>
@@ -123,6 +135,10 @@ export default function Homepage({ navigation }) {
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL(url)}>
                     <Text>ADDRESS</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={CheackConectedUser}>
+                    <Text >Booking</Text>
                 </TouchableOpacity>
 
             </View>
