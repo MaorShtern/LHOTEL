@@ -6,11 +6,27 @@ import ReservationCard from './ReservationCard'
 export default function ConfirmationPage({ route, navigation }) {
 
 
-    const [arrRooms, setarrRooms] = useState([])
-
     //  let { entryDate, exitDate ,number_Of_Nights, breakfast} = route.params
-    let { the_data, number_Of_Nights, breakfast,
+    let {  id,the_data, number_Of_Nights, breakfast,
         entryDate, exitDate, total, Name, CardNum } = route.params
+
+
+    const Delete =  async() => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+          };
+          let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
+          let deleteResult = await result.json();
+          if(deleteResult){
+            alert("The user has been removed")
+            navigation.navigate('Homepage')
+          }
+          else{
+            alert("ERROR")
+          }
+          // console.log(customerResult);
+    }
 
     // console.log(entryDate);
     // console.log(exitDate);
@@ -83,6 +99,7 @@ export default function ConfirmationPage({ route, navigation }) {
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
+                    <Text>ID: {id}</Text>
                     <Text>total Price: {total}$</Text>
                     <Text>Cardholder's Name: {Name}</Text>
                     <Text>Card Number: {CardNum}</Text>
@@ -92,10 +109,12 @@ export default function ConfirmationPage({ route, navigation }) {
 
 
             <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={Delete}>
                     <Text>Delete order</Text>
                 </TouchableOpacity>
-                {/* <Button title="Delete order" ></Button> */}
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Homepage')}>
+                    <Text>Home Page</Text>
+                </TouchableOpacity>
             </View>
 
             {/* <TouchableOpacity title='kfnknvks' style={styles.appButtonContainer}>
@@ -130,9 +149,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     ButtonContainer: {
-        paddingTop: 15,
-        width: 200,
-        alignSelf: 'center'
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 30,
+        justifyContent: 'space-between'
     },
     appButtonContainer: {
         elevation: 8,

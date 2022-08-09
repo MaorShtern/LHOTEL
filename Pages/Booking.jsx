@@ -106,6 +106,7 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
 
+  
     if (CheackDates(entryDate) || CheackDates(exitDate)) {
       Alert.alert('Error selecting dates')
       return;

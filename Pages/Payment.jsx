@@ -4,15 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Customer from './Class/Customer'
 
 
+
 export default function Payment({ route, navigation }) {
 
   let { the_data, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
-
-  // console.log("the_data: "+JSON.stringify(the_data));
-  // console.log("number_Of_Nights: "+number_Of_Nights);
-  // console.log("breakfast: "+breakfast);
-  // console.log("enteryDate: "+entryDate);
-  // console.log("exitDate: "+exitDate);
 
 
   const [totalSum, SetTotalSum] = useState(0)
@@ -64,10 +59,22 @@ export default function Payment({ route, navigation }) {
     SetCardData(text)
   }
 
+  const CheackDate = () => {
+    let courentYear = new Date().getFullYear();
+    let courentMonth = new Date().getMonth() + 1;
+    let month = cardDate.substring(0, 2)
+    let year = "20" + cardDate.substring(3, 5)
+
+    if (cardDate.length === 5 && year >= courentYear && month > courentMonth
+      && month >= '01' && month <= '12') {
+      return true
+    }
+    else
+      return false
+  }
+
   const isValidCardDetails = () => {
-    return  cardNum < 12 || cardDate.length !== 5 || cardCVC.length !== 3 ? false : true
-   
-  
+    return cardNum.length !== 16 || !CheackDate() || cardCVC.length !== 3 ? false : true
   }
 
   const readData = async () => {
@@ -88,6 +95,7 @@ export default function Payment({ route, navigation }) {
   };
 
   const CustomerToDataBS = async (value) => {
+
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(value),
@@ -95,11 +103,13 @@ export default function Payment({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
     let customerResult = await result.json();
-       console.log(customerResult);
+    // console.log(customerResult);
     if (customerResult)
-      navigation.navigate('ConfirmationPage',{ the_data:the_data,
-         number_Of_Nights:number_Of_Nights,breakfast:breakfast, entryDate:entryDate, exitDate:exitDate,
-         total:totalSum, Name:name,CardNum: cardNum  })
+      navigation.navigate('ConfirmationPage', {
+        id: value.customerID, the_data: the_data,
+        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+        total: totalSum, Name: name, CardNum: cardNum
+      })
     else
       alert("Erorr")
 
@@ -108,7 +118,8 @@ export default function Payment({ route, navigation }) {
 
 
   const ConfirmInformation = () => {
-    if ( name > 1 && isValidCardDetails()) {
+
+    if (name.length > 1 && isValidCardDetails()) {
       // console.log(user);
       let newCustomer = {
         calssName: Customer,
@@ -124,7 +135,7 @@ export default function Payment({ route, navigation }) {
           threeDigit: cardCVC
         }
       }
-      // console.log(newCustomer.fields);
+      // console.log(newCustomer.fields.customerID);
       CustomerToDataBS(newCustomer.fields)
       // console.log(customerResult);
       // if (customerResult)
@@ -147,15 +158,13 @@ export default function Payment({ route, navigation }) {
         <View style={{ height: 30 }}></View>
         <Text style={styles.SubHeadLine}>Enter payment information</Text>
         <View style={styles.TextInputContainer}>
-          {/* <TextInput keyboardType='numeric' type="text" placeholder='ID' style={styles.TextInput} onChangeText={(id) => SetID(id)}>{id}</TextInput>
-          <View style={{ height: 10 }}></View> */}
           <TextInput placeholder="Cardholder's name" style={styles.TextInput} onChangeText={(name) => setName(name)}>{name}</TextInput>
           <View style={{ height: 10 }}></View>
           <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(cardNum) => setCardNum(cardNum)}>{cardNum}</TextInput>
           <View style={{ height: 10 }}></View>
-          <TextInput keyboardType='date' placeholder="Card's Date:" style={styles.TextInput} onChangeText={(text) => { fixCardDate(text) }}>{cardDate}</TextInput>
+          <TextInput placeholder="Card's Date:" style={styles.TextInput} onChangeText={(text) => { fixCardDate(text) }}>{cardDate}</TextInput>
           <View>
-            {cardDate.length !== 5  ? (
+            {!CheackDate() ? (
               <Text style={styles.alerts}>*The card DATE is incorrect*</Text>)
               : null}
           </View>
