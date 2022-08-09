@@ -225,9 +225,6 @@ export default function Payment({ route, navigation }) {
   }
 
 
-
-
-
   return (
     <View>
       <ScrollView>
