@@ -23,7 +23,14 @@ export default function Payment({ route, navigation }) {
   const [userDB, SetUserDB] = useState([])
 
 
-  useEffect(() => { readData(); }, []);
+  // useEffect(() => { readData(); }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      readData();
+    });
+    return unsubscribe;
+}, [navigation]);
 
 
 
@@ -130,6 +137,11 @@ export default function Payment({ route, navigation }) {
     if (deleteResult !== null) {
       // console.log("true: " + true);
       SetUserDB(deleteResult)
+      return
+    }
+    else
+    {
+      cheackForUser(value)
     }
   }
 
@@ -223,6 +235,8 @@ export default function Payment({ route, navigation }) {
     else
       Alert.alert("The card details are incorrect")
   }
+
+  console.log(userDB);
 
 
   return (
