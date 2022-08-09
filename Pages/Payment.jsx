@@ -11,6 +11,7 @@ export default function Payment({ route, navigation }) {
 
 
   const [totalSum, SetTotalSum] = useState(0)
+  const[flagUser, SetFlagUser] = useState(false)
 
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
@@ -95,7 +96,6 @@ export default function Payment({ route, navigation }) {
   };
 
   const CustomerToDataBS = async (value) => {
-
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(value),
@@ -111,11 +111,49 @@ export default function Payment({ route, navigation }) {
         total: totalSum, Name: name, CardNum: cardNum
       })
     else
-      alert("Erorr")
+      alert("CustomerToDataBS")
+
+  }
+
+  const cheackForUser = async (value) => {
+    // console.log(value);
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
+    let deleteResult = await result.json();
+    // console.log("deleteResult: "+deleteResult !== null);
+    if (deleteResult !== null) {
+      // console.log("true: " + true);
+      SetFlagUser(true)
+    }
+    else {
+      SetFlagUser(false)
+    }
 
   }
 
 
+  const AlterCustomer = async (value) => {
+    // console.log("value: "+value);
+    const requestOptions = {
+      method: 'PUT',
+      body: JSON.stringify(value),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
+    let customerResult = await result.json();
+    if (customerResult)
+      navigation.navigate('ConfirmationPage', {
+        id: value.customerID, the_data: the_data,
+        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+        total: totalSum, Name: name, CardNum: cardNum
+      })
+    else
+      alert("AlterCustomer")
+
+  }
 
   const ConfirmInformation = () => {
 
@@ -135,8 +173,36 @@ export default function Payment({ route, navigation }) {
           threeDigit: cardCVC
         }
       }
-      // console.log(newCustomer.fields.customerID);
-      CustomerToDataBS(newCustomer.fields)
+      // console.log(cheackForUser(newCustomer.fields.customerID));
+
+      // let flag = cheackForUser(newCustomer.fields.customerID)
+      cheackForUser(newCustomer.fields.customerID)
+      console.log("flagUser: "+flagUser);
+
+      if(flagUser=== true)
+      {
+        AlterCustomer(newCustomer.fields)
+      }
+      else{
+        CustomerToDataBS(newCustomer.fields)
+      }
+
+      // if (cheackForUser(newCustomer.fields.customerID) === true) {
+      //   AlterCustomer(newCustomer.fields)
+      // }
+      // else {
+      //   CustomerToDataBS(newCustomer.fields)}
+        // navigation.navigate('ConfirmationPage', {
+        //   id: value.customerID, the_data: the_data,
+        //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+        //   total: totalSum, Name: name, CardNum: cardNum
+        // })
+      
+      // console.log(cheackForUser(newCustomer.fields.customerID));
+      // // console.log(newCustomer.fields.customerID);
+      // console.log("existUser: " +existUser);
+
+      // CustomerToDataBS(newCustomer.fields)
       // console.log(customerResult);
       // if (customerResult)
       //   navigation.navigate('ConfirmationPage')
