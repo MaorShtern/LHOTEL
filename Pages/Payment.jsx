@@ -11,7 +11,8 @@ export default function Payment({ route, navigation }) {
 
 
   const [totalSum, SetTotalSum] = useState(0)
-  const[flagUser, SetFlagUser] = useState(false)
+  const [flagUser, SetFlagUser] = useState(false)
+  // const[user,SetUser] = useState([])
 
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
@@ -19,6 +20,7 @@ export default function Payment({ route, navigation }) {
   const [cardCVC, SetCardCVC] = useState('')
 
   const [user, SetUser] = useState([])
+  const [userDB, SetUserDB] = useState([])
 
 
   useEffect(() => { readData(); }, []);
@@ -82,11 +84,12 @@ export default function Payment({ route, navigation }) {
     try {
       const user = await AsyncStorage.getItem('@ConUser');
       const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
-
       if (arrUsers !== null && user !== null) {
         let email = JSON.parse(user)
         let arr = JSON.parse(arrUsers)
         let userDetails = arr.filter((per) => per.email === email)
+        id = userDetails[0].id
+        cheackForUser(id)
         SetUser(userDetails[0])
       }
       Calculate_Final_Amount()
@@ -123,20 +126,16 @@ export default function Payment({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
     let deleteResult = await result.json();
-    // console.log("deleteResult: "+deleteResult !== null);
+    // console.log("deleteResult: "+JSON.stringify(deleteResult));
     if (deleteResult !== null) {
       // console.log("true: " + true);
-      SetFlagUser(true)
+      SetUserDB(deleteResult)
     }
-    else {
-      SetFlagUser(false)
-    }
-
   }
 
 
   const AlterCustomer = async (value) => {
-    // console.log("value: "+value);
+    // console.log("value: "+JSON.stringify(value));
     const requestOptions = {
       method: 'PUT',
       body: JSON.stringify(value),
@@ -173,31 +172,42 @@ export default function Payment({ route, navigation }) {
           threeDigit: cardCVC
         }
       }
-      // console.log(cheackForUser(newCustomer.fields.customerID));
 
-      // let flag = cheackForUser(newCustomer.fields.customerID)
-      cheackForUser(newCustomer.fields.customerID)
-      console.log("flagUser: "+flagUser);
 
-      if(flagUser=== true)
+      if(userDB !== null)
       {
         AlterCustomer(newCustomer.fields)
       }
       else{
         CustomerToDataBS(newCustomer.fields)
       }
+      // console.log(cheackForUser(newCustomer.fields.customerID));
+
+      // let flag = cheackForUser(newCustomer.fields.customerID)
+      // cheackForUser(newCustomer.fields.customerID)
+      // cheackForUser(111)
+
+      // console.log("flagUser: " + flagUser);
+
+      // if(flagUser=== true)
+      // {
+      //   AlterCustomer(newCustomer.fields)
+      // }
+      // else{
+      //   CustomerToDataBS(newCustomer.fields)
+      // }
 
       // if (cheackForUser(newCustomer.fields.customerID) === true) {
       //   AlterCustomer(newCustomer.fields)
       // }
       // else {
       //   CustomerToDataBS(newCustomer.fields)}
-        // navigation.navigate('ConfirmationPage', {
-        //   id: value.customerID, the_data: the_data,
-        //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-        //   total: totalSum, Name: name, CardNum: cardNum
-        // })
-      
+      // navigation.navigate('ConfirmationPage', {
+      //   id: value.customerID, the_data: the_data,
+      //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+      //   total: totalSum, Name: name, CardNum: cardNum
+      // })
+
       // console.log(cheackForUser(newCustomer.fields.customerID));
       // // console.log(newCustomer.fields.customerID);
       // console.log("existUser: " +existUser);
