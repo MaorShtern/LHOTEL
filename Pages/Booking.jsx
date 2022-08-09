@@ -86,10 +86,6 @@ export default function Booking({ navigation }) {
     return new Date(date.toDateString()) < new Date(new Date().toDateString());
 
 
-
-
-
-
     //   if (enteryDate.getFullYear() != exitDate.getFullYear() ||
     //     (exitDate.getMonth() + 1) < (enteryDate.getMonth() + 1)) {
 
@@ -115,15 +111,11 @@ export default function Booking({ navigation }) {
 
     }
     if (ChaeckRoomsMarks()) {
-
       rooms_flags = {
         'Single room': singleFlag,
         'Double room': doubleFlag,
         'Suite': suitFlag
       }
-
-      // let entry = moment(entryDate).format('DD-MM-YYYY')
-      // let exit = moment(exitDate).format('DD-MM-YYYY')
 
       navigation.navigate('SaveRoom', {
         rooms_flags: rooms_flags, number_Of_Nights: number_Of_Nights, breakfast: breakfast,
@@ -139,9 +131,7 @@ export default function Booking({ navigation }) {
     <ScrollView>
       <Text style={styles.HeadLine}>Booking</Text>
       <View style={styles.label}>
-
         <View style={{ height: 10 }}></View>
-
         <TouchableOpacity style={styles.button} onPress={showDatePickerEntry} >
           <Text>{"Entry date: " + entry}</Text>
         </TouchableOpacity>

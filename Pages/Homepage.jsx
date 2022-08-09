@@ -7,18 +7,61 @@ import Events from '../Pic/events.jpg'
 import Spa from '../Pic/spa.jpg'
 import Lobi from '../Pic/lobi.jpg'
 import Back from '../Pic/backround.jpg'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-export default function Homepage({ route, navigation }) {
 
-    const { full_name } = route.params || " "
+export default function Homepage({ navigation }) {
 
-    const CheackFull_name = () => {
-        if (route.params)
-            return true
-        else
-            return false
+
+    const [full_name, SetFullName] = useState('')
+
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            readUserCon();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+
+    const readUserCon = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@ConUser');
+            console.log("value: " + value);
+            if (value !== "") {
+                SetFullName(JSON.parse(value))
+            }
+        } catch (e) {
+            alert('Failed to fetch the input from storage');
+        }
     }
+
+    const Logout = async () => {
+        try {
+            await AsyncStorage.removeItem('@ConUser', () => {
+                SetFullName('')
+            });
+        }
+        catch (error) {
+            Alert.alert(error)
+        }
+    }
+
+    // const CheackUser = async () => {
+    //     await readUserCon()
+    //     if (full_name !== '') {
+    //         return <View style={styles.user_Name}>
+    //             <TouchableOpacity onPress={Logout}>
+    //                 <Text style={styles.innerText}>Logout</Text>
+    //             </TouchableOpacity>
+    //             <Text style={styles.innerText}>Welcome: {full_name}</Text>
+    //         </View>
+    //     }
+    //     else {
+    //         return null
+    //     }
+    // }
 
     // const [ConUser, SetConUser] = useState('')
 
@@ -44,7 +87,7 @@ export default function Homepage({ route, navigation }) {
         android: `geo:0,0?q=${fullAddress}`,
     })
 
-    // console.log("ConUser: " + ConUser);
+    console.log("full_name: " + full_name);
 
     return (
         <ScrollView>
@@ -53,11 +96,17 @@ export default function Homepage({ route, navigation }) {
             </View>
             {/* <Text style={styles.user_Name}>{full_name}</Text> */}
             <View>
-            <View>
-          {CheackFull_name() ? (
-            <Text style={styles.user_Name}>Welcome: {full_name}</Text>)
-            : null}
-        </View>
+                <View>
+                    {/* {CheackUser()} */}
+                    {full_name !== '' ? (
+                        <View style={styles.user_Name}>
+                            <TouchableOpacity onPress={Logout}>
+                                <Text style={styles.innerText}>Logout</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.innerText}>Welcome: {full_name}</Text>
+                        </View>
+                    ) : null}
+                </View>
             </View>
             <Image source={Back} />
             <Text style={styles.Text}>LHOTEL - DETAILS ABOT THE HOTEL</Text>
@@ -148,7 +197,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         alignItems: 'center',
         textAlign: 'center',
+    },
+    innerText: {
         color: 'white',
-        padding: 10,
+        padding: 5
     }
 });

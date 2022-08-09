@@ -31,8 +31,8 @@ export default function Login({ navigation }) {
     try {
       // console.log("arrUsers: " + JSON.stringify(new_Array));
       await AsyncStorage.setItem('@ConUser', JSON.stringify(value), () => {
-        Alert.alert("User Saved")
-        // navigation.navigate('Login')
+        // Alert.alert("User Saved")
+        navigation.navigate('Homepage')
       });
 
     }
@@ -51,8 +51,7 @@ export default function Login({ navigation }) {
 
       if (find_user !== undefined) {
         saveUser(email)
-        let full_name = find_user.first_name + " " + find_user.last_name
-        navigation.navigate('Homepage', { full_name })
+        // navigation.navigate('Homepage')
       }
       else
         Alert.alert("No such user exists in the system")
