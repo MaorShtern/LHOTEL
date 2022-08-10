@@ -1,56 +1,64 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export default function Navbar({ navigation }) {
 
     const [flag, SetFlag] = useState(true)
-    // const [ConUser, SetConUser] = useState('')
+    const [full_name, SetFullName] = useState('')
+  
+  
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+        
+            readData();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
-    // const IsConectedUser = () => {
-    //     console.log("ConUser: " + ConUser);
-
-    // }
-
-    // useEffect(() => { GetConUser(); }, []);
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         GetConUser();
-    //     });
-    //     return unsubscribe;
-    // }, [navigation]);
-
-
-    // const GetConUser = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('@ConUser');
-    //         // console.log("value: " + value);
-    //         if (value !== null) {
-    //             SetConUser(JSON.parse(value))
-    //         }
-    //     } catch (e) {
-    //         alert('Failed to fetch the input from storage');
-    //     }
-    // };
-
-
-
-
-
-    if (flag === true) {
+    const readData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@ConUser');
+      
+            if (value !== null) {
+                SetFullName(JSON.parse(value))
+                console.log("full_nameread"+full_name);
+            }
+        } catch (e) {
+            alert('Failed to fetch the input from storage');
+        }
+    };
+   
+    const Logout = async () => {
+        try {
+            await AsyncStorage.removeItem('@ConUser', () => {
+                SetFullName('');
+            
+            });
+            Alert.alert("You have logged out")  
+        }
+        catch (error) {
+            Alert.alert(error)
+        }
+    }
+  
+    if (flag) {
         return (
             <View style={styles.navbar}>
                 <View>
-                    <TouchableOpacity onPress={() => SetFlag(!flag)}>
-                        <View style={styles.navbarIcon} >
-                            <Text style={styles.header}>Menu</Text>
+                  <View style={styles.navbarIcon} >
+                 
+                  {full_name !== ''? <TouchableOpacity ><Text style={styles.headerRight} onPress={() =>  Logout()}>Log Out</Text></TouchableOpacity>: null}
+                            <Text style={styles.header}>LHOTEL</Text>
+                           
                             <View style={{ width: 10 }}></View>
-                            <Icon name='three-bars' size={30} color='white' />
+                            <Icon name='three-bars' size={35} color='white' onPress={() => SetFlag(!flag)} />
                         </View>
-                    </TouchableOpacity>
+                  
                 </View>
             </View>
         )
@@ -60,30 +68,29 @@ export default function Navbar({ navigation }) {
             <View>
                 <View style={styles.navbar}>
                     <View>
-                        <TouchableOpacity onPress={() => SetFlag(!flag)}>
+                      
                             <View style={styles.navbarIcon} >
 
-                                <View style={{ width: 10 }}></View>
-                                <Icon name='three-bars' size={30} color='white' />
+                        <View style={{ width: 10 }}></View>
+                                <Icon name='three-bars' size={35} color='white' onPress={() => SetFlag(!flag)} />
                             </View>
-                        </TouchableOpacity>
+                     
                     </View>
                     <View style={styles.containButtons}>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Homepage')}>
-                            <Text style={styles.text}>Homepage</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+                   
+                        <TouchableOpacity style={styles.button} onPress={() => {SetFlag(true),navigation.navigate('Login')}}>
                             <Text style={styles.text}>Login</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Registration')}>
+                        <TouchableOpacity style={styles.button} onPress={() => {SetFlag(true),navigation.navigate('Registration')}}>
                             <Text style={styles.text}>Registration</Text>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Booking')}>
+                        { full_name !== ''?     <TouchableOpacity style={styles.button} onPress={() => {SetFlag(true),navigation.navigate('Booking')}}>
                             <Text style={styles.text}>Booking</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>: null}
+                   
                     </View>
                 </View>
-                {/* <View style={{height:10}}></View> */}
+   
             </View>
         )
     }
@@ -93,6 +100,10 @@ const styles = StyleSheet.create({
 
     navbar: {
         backgroundColor: 'black',
+        paddingTop: 10,
+        paddingBottom: 10,
+
+
     },
 
     Icon: {
@@ -103,8 +114,17 @@ const styles = StyleSheet.create({
 
     header: {
         color: "white",
-        fontSize: 20,
+        fontSize: 25,
         textAlign: "center",
+
+    },
+    headerRight:{
+        color: "white",
+        fontSize: 17,
+        paddingLeft: 160,
+       paddingTop: 5,
+       color:"#888"
+   
 
     },
     navbarIcon:
@@ -124,6 +144,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        fontSize: 20,
 
         padding: 5
     }

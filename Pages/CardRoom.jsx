@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Counter from "react-native-counters";
-import Back from '../Pic/backround.jpg'
-import { useState,useEffect } from 'react';
 
+import { useState,useEffect } from 'react';
+import single_room from '../Pic/single-room.jpg'
+import double_room from '../Pic/double-room.jpg'
+import suites_room from '../Pic/suites-room.jpg'
 
 export default function CardRoom(props) {
     useEffect(() => { SetCount(0)}, []);
@@ -24,14 +26,15 @@ export default function CardRoom(props) {
         return count >= counter
            
     }
+const roomType_arr = {"Single room":single_room,"Double room":double_room,"Suite":suites_room}
 
-    // console.log("count "+ details + ": " + count);
+   
 
     return (
         <View style={{ paddingBottom: 10 }}>
             <View style={styles.card}>
                 <View >
-                    <Image style={styles.image} source={Back}></Image>
+                    <Image style={styles.image} source={roomType_arr[roomType]}></Image>
                 </View>
                 <Text style={styles.RoomType}>{roomType}</Text>
                 <View style={styles.ButtonContainer}>
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        width: 100,
+        width: 200,
         height: 100
     },
     RoomType: {

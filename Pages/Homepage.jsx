@@ -7,148 +7,49 @@ import Events from '../Pic/events.jpg'
 import Spa from '../Pic/spa.jpg'
 import Lobi from '../Pic/lobi.jpg'
 import Back from '../Pic/backround.jpg'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
+
+
+import { Platform,StatusBar} from 'react-native';
 
 
 export default function Homepage({ navigation }) {
 
-
-    const [full_name, SetFullName] = useState('')
-
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            readUserCon();
-        });
-        return unsubscribe;
-    }, [navigation]);
-
-
-    const readUserCon = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@ConUser');
-            // console.log("value: " + value);
-            if (value !== null) {
-                SetFullName(JSON.parse(value))
-            }
-        } catch (e) {
-            alert('Failed to fetch the input from storage');
-        }
-    }
-
-    const Logout = async () => {
-        try {
-            await AsyncStorage.removeItem('@ConUser', () => {
-                SetFullName('')
-            });
-        }
-        catch (error) {
-            Alert.alert(error)
-        }
-    }
-
-    const CheackConectedUser = () => {
-        if (full_name !== "") {
-            navigation.navigate('Booking')
-        }
-        else {
-            alert('Must be logged in as a user to book a room')
-        }
-    }
-
-    // const CheackUser = async () => {
-    //     await readUserCon()
-    //     if (full_name !== '') {
-    //         return <View style={styles.user_Name}>
-    //             <TouchableOpacity onPress={Logout}>
-    //                 <Text style={styles.innerText}>Logout</Text>
-    //             </TouchableOpacity>
-    //             <Text style={styles.innerText}>Welcome: {full_name}</Text>
-    //         </View>
-    //     }
-    //     else {
-    //         return null
-    //     }
-    // }
-
-    // const [ConUser, SetConUser] = useState('')
-
-    // useEffect(() => { readData(); }, []);
-
-
-    // const readData = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('@ConUser');
-    //         Alert.alert("ConUser: " + value);
-    //         if (value !== null) {
-    //             SetConUser(JSON.stringify(value))
-    //         }
-    //     } catch (e) {
-    //         alert('Failed to fetch the @ConUser from storage');
-    //     }
-    // };
-
-
+  
     const fullAddress = "חדרה"
     const url = Platform.select({
         ios: `maps:0,0?q=${fullAddress}`,
         android: `geo:0,0?q=${fullAddress}`,
     })
 
-    // console.log("full_name: " + full_name);
+
 
     return (
-        <ScrollView>
+        <ScrollView><StatusBar style="light" backgroundColor="#000000" />
+       
             <View>
                 <Navbar navigation={navigation} />
             </View>
-            {/* <Text style={styles.user_Name}>{full_name}</Text> */}
-            <View>
-                <View>
-                    {/* {CheackUser()} */}
-                    {full_name !== '' ? (
-                        <View style={styles.user_Name}>
-                            {/* <TouchableOpacity onPress={() => navigation.navigate('Booking')}>
-                                <Text style={styles.innerText}>Booking</Text>
-                            </TouchableOpacity> */}
-                            <TouchableOpacity onPress={Logout}>
-                                <Text style={styles.innerText}>Logout</Text>
-                            </TouchableOpacity>
-                            <Text style={styles.innerText}>Welcome: {full_name}</Text>
-                        </View>
-                    ) : null}
-                </View>
-            </View>
             <Image source={Back} />
-            <Text style={styles.Text}>LHOTEL - DETAILS ABOT THE HOTEL</Text>
+            <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text>
             <View style={styles.ButtonContainer}>
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:maor100maor@example.com')}
                     title="support@example.com">
-                    <Text>EMAIL</Text>
+                    <Text style={styles.buttonText}>EMAIL</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('tel:052-6211881')}>
-                    <Text>CALL</Text>
+                    <Text  style={styles.buttonText}>CALL</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL(url)}>
-                    <Text>ADDRESS</Text>
+                    <Text  style={styles.buttonText}>ADDRESS</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={CheackConectedUser}>
-                    <Text >Booking</Text>
-                </TouchableOpacity>
-
             </View>
             <Text style={styles.Text}>POPULERS ROOMS</Text>
             <CarouselImages />
-            {/* <View style={{padding:2, paddingBottom:20, paddingTop:20}}>
-                <TouchableOpacity style={styles.buttonRooms}>
-                    <Text>CHECK ALL ROOMS</Text>
-                </TouchableOpacity>
-            </View> */}
+           
             <View style={{ height: 10 }}></View>
 
             <Text style={styles.Text}>ACTIVITES</Text>
@@ -198,9 +99,17 @@ const styles = StyleSheet.create({
     },
     button:
     {
-        backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 10
+      
+        padding:10, 
+       
+    
+    },
+    buttonText:{
+        fontSize:20,
+        textShadowColor: 'rgba(0, 0, 0, 0.4)',
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 10
+
     },
     buttonRooms: {
         flex: 1,
@@ -218,4 +127,4 @@ const styles = StyleSheet.create({
         color: 'white',
         padding: 5
     }
-});
+});  

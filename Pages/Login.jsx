@@ -29,10 +29,9 @@ export default function Login({ navigation }) {
 
   const saveUser = async (value) => {
     try {
-      // console.log("arrUsers: " + JSON.stringify(new_Array));
+   
       await AsyncStorage.setItem('@ConUser', JSON.stringify(value), () => {
-        // Alert.alert("User Saved")
-        navigation.navigate('Homepage')
+      navigation.navigate('Homepage')
       });
 
     }
@@ -51,7 +50,7 @@ export default function Login({ navigation }) {
 
       if (find_user !== undefined) {
         saveUser(email)
-        // navigation.navigate('Homepage')
+      
       }
       else
         Alert.alert("No such user exists in the system")
@@ -68,36 +67,7 @@ export default function Login({ navigation }) {
     setPassword('')
   }
 
-  // const getData = async () => {
-  //   try {
-  //     const jsonValue = await AsyncStorage.getItem('@storage_Key_0')
-  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
-  //   } catch (error) {
-  //     Alert.alert(error)
-  //   }
-  // }
-
-
-  // const LogIn = () => {
-  //   // if(email.length != 0 && password.length != 0)
-  //   // {
-  //   //   let array = getData()
-  //   //   console.log("array: " +JSON.stringify(array));
-
-  //   //   let find_user = array.filter((per) => per.email === email && per.password === password)
-  //   //   console.log("find_user: " + find_user);
-  //   //   if(find_user !== null)
-  //   //   {
-
-  //   //   }
-  //   // }
-  //   // else
-  //   // {
-  //   //   Alert.alert("The fields are not complete")
-  //   // }
-  // }
-
-
+  
 
   return (
     <View>
@@ -113,13 +83,12 @@ export default function Login({ navigation }) {
 
       <View style={styles.ButtonContainer}>
         <TouchableOpacity>
-          <Text style={styles.button} onPress={Delete} >Delete</Text>
+          <Text style={styles.button} onPress={Delete} >DELETE</Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.button} onPress={LogIn} >SUBMIT</Text>
         </TouchableOpacity>
-        {/* <Button title="DELETE" onPress={Delete}></Button>
-        <Button title="SUBMIT" onPress={LogIn}></Button> */}
+       
       </View>
 
 
@@ -135,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-    textDecorationLine: 'underline'
+   
 
   },
   label: {

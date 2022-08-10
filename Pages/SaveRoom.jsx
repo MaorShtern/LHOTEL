@@ -11,7 +11,7 @@ export default function SaveRoom({ route, navigation }) {
 
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
-  const [suit, SetSuit] = useState(0)
+  const [suite, SetSuite] = useState(0)
   const [loading, SetLoading] = useState(false)
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
@@ -28,6 +28,7 @@ export default function SaveRoom({ route, navigation }) {
     if (rooms !== null) {
       BilldData(rooms)
       SetLoading(true)
+   
       return
     }
     FetchData()
@@ -37,7 +38,7 @@ export default function SaveRoom({ route, navigation }) {
 
 
   const BilldData = (rooms) => {
-
+  
     let temp = []
     rooms.map((per) =>
       temp.push(
@@ -48,12 +49,12 @@ export default function SaveRoom({ route, navigation }) {
           pricePerNight: per.pricePerNight
         }))
 
-
+       
     let list = temp.filter((ele, ind) => ind === temp.findIndex(
       elem => elem.type === ele.type && elem.type === ele.type))
-
+      
     let array = []
-
+    console.log("list"+ JSON.stringify(arrRoomsData));
     for (const [key, value] of Object.entries(rooms_flags)) {
       if (value) {
         let room = list.filter((per) => per.type === key)
@@ -72,9 +73,9 @@ export default function SaveRoom({ route, navigation }) {
     let rooms_amounts = {
       'Single room': single,
       'Double room': double,
-      'Suite': suit
+      'Suite': suite
     }
-
+    console.log( JSON.stringify(arrRoomsData))  
     let the_data = []
     for (const [key, value] of Object.entries(rooms_amounts)) {
       for (let i = 0; i < arrRoomsData.length; i++) {
@@ -94,8 +95,8 @@ export default function SaveRoom({ route, navigation }) {
       }
     }
 
-
-    // console.log("the_data:" + JSON.stringify(the_data));
+ 
+    console.log("the_data:" + JSON.stringify(the_data));
   
     navigation.navigate('Payment', {
       the_data: the_data, number_Of_Nights: number_Of_Nights, 
@@ -113,7 +114,7 @@ export default function SaveRoom({ route, navigation }) {
         SetDouble(number)
         break;
       case "Suite":
-        SetSuit(number)
+        SetSuite(number)
         break;
     }
   }
@@ -133,9 +134,7 @@ export default function SaveRoom({ route, navigation }) {
           <TouchableOpacity style={styles.button} onPress={GoToPayment} >
             <Text>Save</Text>
           </TouchableOpacity> : null}
-        {/* <TouchableOpacity style={styles.button} onPress={GoToPayment} >
-          <Text>Save</Text>
-        </TouchableOpacity> */}
+       
       </View>
     </ScrollView>
   )

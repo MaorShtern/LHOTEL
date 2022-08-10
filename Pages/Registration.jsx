@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { useEffect } from 'react'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import User from './Class/User'
 
@@ -17,27 +17,6 @@ export default function Registration({ navigation }) {
     const [re_Password, setRe_Password] = useState('')
     const [phone, setPhone] = useState('')
 
-
-    // const importData = async () => {
-    //   try {
-    //     const keys = await AsyncStorage.getAllKeys();
-    //     console.log(keys);
-    //     const result = await AsyncStorage.multiGet(keys);
-    //     console.log(result);
-
-    //     // return result.map(req => JSON.parse(req)).forEach(console.log);
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-
-    // }
-
-
-    // useEffect(() => {
-    //   AsyncStorage.getItem('storage_Key').then((myClientID) => {
-    //     setArrUsers(myClientID);
-    //   })
-    // }, [])
 
     const CheackFields = () => {
         if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 || last_name.length == 0 || !email.includes('@gmail.com') || phone.length == 0)
@@ -76,39 +55,9 @@ export default function Registration({ navigation }) {
     }
 
 
-    // const Save_User = () => {
-    //   if (id.length === 9 && first_name.length != 0 && last_name.length != 0 && email.includes('@gmail.com')
-    //     && password.length != 0 && re_Password.length != 0 & phone.length != 0) {
-    //     if (CheackPass() === true) {
-
-    //       let array = getData()
-
-    //       let new_user = CreateUser()
-
-    //       if (array === null) {
-    //         setArrUsers([])
-    //       }
-    //       else {
-    //         setArrUsers(array)
-    //       }
-
-    //       let new_Array = [...arrUsers, new_user.fields]
-
-    //       setArrUsers(new_Array)
-
-    //       saveData(new_Array)
-
-    //     }
-
-    //   }
-    //   else
-    //     Alert.alert("All fields must be filled")
-    // }
-
-
     const saveData = async (new_Array) => {
         try {
-            // console.log("arrUsers: " + JSON.stringify(new_Array));
+           
             await AsyncStorage.setItem('@storage_Key_0', JSON.stringify(new_Array), () => {
                 Alert.alert("Data Saved")
                 navigation.navigate('Login')
@@ -203,8 +152,7 @@ export default function Registration({ navigation }) {
                 <TouchableOpacity>
                     <Text style={styles.button} onPress={Save_User} >SUBMIT</Text>
                 </TouchableOpacity>
-                {/* <Button title="DELETE" onPress={Delete}></Button>
-                <Button title="SUBMIT" onPress={Save_User}></Button> */}
+               
             </View>
         </ScrollView>
     )
@@ -218,7 +166,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-        textDecorationLine: 'underline'
+      
 
     },
     label: {

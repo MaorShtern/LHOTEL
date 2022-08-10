@@ -11,9 +11,6 @@ export default function Payment({ route, navigation }) {
 
 
   const [totalSum, SetTotalSum] = useState(0)
-  const [flagUser, SetFlagUser] = useState(false)
-  // const[user,SetUser] = useState([])
-
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
   const [cardDate, SetCardData] = useState('')
@@ -23,7 +20,6 @@ export default function Payment({ route, navigation }) {
   const [userDB, SetUserDB] = useState([])
 
 
-  // useEffect(() => { readData(); }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -36,23 +32,17 @@ export default function Payment({ route, navigation }) {
 
   const Calculate_Final_Amount = () => {
     let sum = 0
-    // console.log("the_data:" + JSON.stringify(the_data));
+
     for (let i = 0; i < the_data.length; i++) {
       let pricePerNight = the_data[i].pricePerNight;
       let count = the_data[i].count;
       let tempToatal = pricePerNight * count
-      // let tempToatal = temp_room.pricePerNight * the_data[temp_room.type];
+   
       sum += tempToatal;
     }
     SetTotalSum(sum)
   }
-  // let sum = 0
-  // for (let i = 0; i < data.length; i++) {
-  //     sum += data[i].pricePerNight 
-  // }
-  // SetTotalSum(sum);
-  // }
-
+ 
   const Delete = () => {
     setName('')
     setCardNum('')
@@ -113,7 +103,7 @@ export default function Payment({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
     let customerResult = await result.json();
-    // console.log(customerResult);
+ 
     if (customerResult)
       navigation.navigate('ConfirmationPage', {
         id: value.customerID, the_data: the_data,
@@ -126,16 +116,16 @@ export default function Payment({ route, navigation }) {
   }
 
   const cheackForUser = async (value) => {
-    // console.log(value);
+   
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
     let deleteResult = await result.json();
-    // console.log("deleteResult: "+JSON.stringify(deleteResult));
+ 
     if (deleteResult !== null) {
-      // console.log("true: " + true);
+ 
       SetUserDB(deleteResult)
       return
     }
@@ -147,7 +137,7 @@ export default function Payment({ route, navigation }) {
 
 
   const AlterCustomer = async (value) => {
-    // console.log("value: "+JSON.stringify(value));
+
     const requestOptions = {
       method: 'PUT',
       body: JSON.stringify(value),
@@ -186,7 +176,7 @@ export default function Payment({ route, navigation }) {
       }
 
 
-      // console.log(userDB);
+     
       if(userDB !== null && userDB.length !== 0)
       {
         AlterCustomer(newCustomer.fields)
@@ -194,43 +184,7 @@ export default function Payment({ route, navigation }) {
       else{
         CustomerToDataBS(newCustomer.fields)
       }
-      // console.log(cheackForUser(newCustomer.fields.customerID));
-
-      // let flag = cheackForUser(newCustomer.fields.customerID)
-      // cheackForUser(newCustomer.fields.customerID)
-      // cheackForUser(111)
-
-      // console.log("flagUser: " + flagUser);
-
-      // if(flagUser=== true)
-      // {
-      //   AlterCustomer(newCustomer.fields)
-      // }
-      // else{
-      //   CustomerToDataBS(newCustomer.fields)
-      // }
-
-      // if (cheackForUser(newCustomer.fields.customerID) === true) {
-      //   AlterCustomer(newCustomer.fields)
-      // }
-      // else {
-      //   CustomerToDataBS(newCustomer.fields)}
-      // navigation.navigate('ConfirmationPage', {
-      //   id: value.customerID, the_data: the_data,
-      //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-      //   total: totalSum, Name: name, CardNum: cardNum
-      // })
-
-      // console.log(cheackForUser(newCustomer.fields.customerID));
-      // // console.log(newCustomer.fields.customerID);
-      // console.log("existUser: " +existUser);
-
-      // CustomerToDataBS(newCustomer.fields)
-      // console.log(customerResult);
-      // if (customerResult)
-      //   navigation.navigate('ConfirmationPage')
-      // else
-      //   alert("Erorr")
+      
     }
     else
       Alert.alert("The card details are incorrect")

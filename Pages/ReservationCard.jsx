@@ -1,12 +1,11 @@
 import { View, ScrollView, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import Back from '../Pic/backround.jpg'
+
 
 
 export default function ReservationCard(props) {
 
-    // let { roomType, pricePerNight, entryDate, exitDate, breakfast, amountOfRooms } = props
-    // roomType={per.type} pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast}
+
     let { roomType,count , pricePerNight, entryDate, exitDate, breakfast} = props
 
 
@@ -14,7 +13,7 @@ export default function ReservationCard(props) {
     return (
         <ScrollView>
             <View style={styles.OrderDetails}>
-                <Image style={styles.Image} source={Back} />
+               
                 <View >
                     <Text>ROOM TYPE: {roomType}</Text>
                     <Text>{entryDate} -- {exitDate}</Text>

@@ -6,7 +6,7 @@ import ReservationCard from './ReservationCard'
 export default function ConfirmationPage({ route, navigation }) {
 
 
-    //  let { entryDate, exitDate ,number_Of_Nights, breakfast} = route.params
+
     let {  id,the_data, number_Of_Nights, breakfast,
         entryDate, exitDate, total, Name, CardNum } = route.params
 
@@ -19,52 +19,15 @@ export default function ConfirmationPage({ route, navigation }) {
           let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
           let deleteResult = await result.json();
           if(deleteResult){
-            alert("The user has been removed")
+            alert("The order has been removed")
             navigation.navigate('Homepage')
           }
           else{
             alert("ERROR")
           }
-          // console.log(customerResult);
+         
     }
 
-    // console.log(entryDate);
-    // console.log(exitDate);
-
-    // useEffect(() => { CrateListCards() }, []);
-
-
-    // // let { entryDate, exitDate, totalPrice, cardholder_Name, card_Number, amount_of_people } = props
-    // // let numberOfNights = exitDate - entryDate
-    // // const persons = [];
-    // const CrateListCards = () => {
-
-    //     the_data.map((per) => console.log(JSON.stringify(per)))
-
-    // let arr = [];
-    // let counter = 0;
-    // console.log("the_data:" + JSON.stringify(the_data));
-    // the_data.map((the_data) => {
-    //     for (let i = 0; i < the_data.count; i++) {
-    // arr.push(<ReservationCard key={counter} roomType={the_data.type} pricePerNight={the_data.pricePerNight}
-    //     entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
-    //         counter++;
-    //     }
-    // })
-
-    //     // { roomType, pricePerNight, entryDate, exitDate, breakfast}
-    //     // for (let i = 0; i<item; i++){
-    //     // console.log(item);
-    //     // console.log(index);
-    //     //   }
-    //     //   console.log(arrRooms.length);
-    //     //   //setarrRooms(arrRooms)
-    //     //   return arrRooms;
-
-
-    //     setarrRooms(arr)
-    // roomType,count , pricePerNight, entryDate, exitDate, breakfast
-    // }
 
     let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
         pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
@@ -74,28 +37,7 @@ export default function ConfirmationPage({ route, navigation }) {
             <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
             <Text style={styles.SubHeadLine}>Your order has been successfully saved! looking forward to see you!!!</Text>
             {listCards}
-            {/* {rooms.map((item)=>{
-                
-                if (item >0)
-                { 
-                 for (let i = 0; i<item; i++){
-                    arrRooms.push(<ReservationCard key={counter} roomType ={counter}  pricePerNight= {70} entryDate={entryDate} exitDate={exitDate} breakfast={false} amountOfRooms = {2}/>) 
-                    counter++;
-                 }
-                 return arrRooms
-                }
-            // for (let i = 0; i<item; i++){
-             
-                // console.log(item);
-                // console.log(index);
-            //   }
-            //   console.log(arrRooms.length);
-            //   //setarrRooms(arrRooms)
-            //   return arrRooms;
-
-  })} */}
-            {/* <ReservationCard />
-            <ReservationCard /> */}
+           
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
@@ -116,12 +58,7 @@ export default function ConfirmationPage({ route, navigation }) {
                     <Text>Home Page</Text>
                 </TouchableOpacity>
             </View>
-
-            {/* <TouchableOpacity title='kfnknvks' style={styles.appButtonContainer}>
-                <Text style={styles.appButtonText}>vdvdvxv c</Text>
-            </TouchableOpacity> */}
-
-            <View style={{ height: 30 }}></View>
+             <View style={{ height: 30 }}></View>
 
         </ScrollView>
     )
@@ -183,5 +120,4 @@ const styles = StyleSheet.create({
         alignItems: 'center'
 
     },
-
 })

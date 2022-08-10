@@ -17,13 +17,18 @@ export default function Router() {
   return (
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Homepage">
-      <Stack.Screen name="Homepage" component={Homepage} />
-      <Stack.Screen name="Booking" component={Booking} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Payment" component={Payment} />
-      <Stack.Screen name="Registration" component={Registration} />
-      <Stack.Screen name="SaveRoom" component={SaveRoom} />
-      <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} />
+      <Stack.Screen name="Homepage" component={Homepage} options={{headerShown : false,
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+      }}/>
+      <Stack.Screen name="Booking" component={Booking} options={{title : " "}}/>
+      <Stack.Screen name="Login" component={Login}  options={{title : " "}}/>
+      <Stack.Screen name="Payment" component={Payment}options={{title : " "}} />
+      <Stack.Screen name="Registration" component={Registration} options={{title : " "}}/>
+      <Stack.Screen name="SaveRoom" component={SaveRoom}options={{title : " "}} />
+      <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} options={{title : " "}}/>
     </Stack.Navigator>
   </NavigationContainer>
   )

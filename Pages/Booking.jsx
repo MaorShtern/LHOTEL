@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
 import moment from 'moment';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 
 
@@ -19,7 +19,7 @@ export default function Booking({ navigation }) {
 
   const [singleFlag, setSingle] = useState(false)
   const [doubleFlag, setDouble] = useState(false)
-  const [suitFlag, setSuit] = useState(false)
+  const [suiteFlag, setSuite] = useState(false)
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
   const [breakfast, setreakfast] = useState(false);
 
@@ -70,13 +70,13 @@ export default function Booking({ navigation }) {
     setreakfast(false);
     setSingle(false)
     setDouble(false)
-    setSuit(false)
+    setSuite(false)
     setEntryDate(new Date())
     setExitDate(new Date())
   }
 
   const ChaeckRoomsMarks = () => {
-    return singleFlag || doubleFlag || suitFlag;
+    return singleFlag || doubleFlag || suiteFlag;
   }
 
 
@@ -86,20 +86,9 @@ export default function Booking({ navigation }) {
 
     return new Date(date.toDateString()) < new Date(new Date().toDateString());
 
-
-    //   if (enteryDate.getFullYear() != exitDate.getFullYear() ||
-    //     (exitDate.getMonth() + 1) < (enteryDate.getMonth() + 1)) {
-
-    //     if ((exitDate.getMonth() + 1) === (enteryDate.getMonth() + 1) &&
-    //       enteryDate.getDate() > exitDate.getDate()) {
-    //       return false
-    //     }
-    //   }
-    //   else
-    //     return true
   }
 
-  //npm install moment
+ 
 
 
 
@@ -107,7 +96,7 @@ export default function Booking({ navigation }) {
   const ChaeckAll = () => {
 
   
-    if (CheackDates(entryDate) || CheackDates(exitDate)) {
+    if (CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights ===0) {
       Alert.alert('Error selecting dates')
       return;
 
@@ -116,7 +105,7 @@ export default function Booking({ navigation }) {
       rooms_flags = {
         'Single room': singleFlag,
         'Double room': doubleFlag,
-        'Suite': suitFlag
+        'Suite': suiteFlag
       }
 
       navigation.navigate('SaveRoom', {
@@ -176,8 +165,8 @@ export default function Booking({ navigation }) {
               <Text>Double</Text>
             </View>
             <View style={styles.Checkbox}>
-              <Checkbox label="Item" status={suitFlag ? 'checked' : 'unchecked'} onPress={() => { setSuit(!suitFlag) }} />
-              <Text>Suit</Text>
+              <Checkbox label="Item" status={suiteFlag ? 'checked' : 'unchecked'} onPress={() => { setSuite(!suiteFlag) }} />
+              <Text>Suite</Text>
             </View>
           </View>
           <View>
@@ -187,16 +176,7 @@ export default function Booking({ navigation }) {
           </View>
 
         </View>
-        {/* <View style={{ height: 10 }}></View>
-        {CheackDates(enteryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? null : <Text > Number of nights: {number_Of_Nights} </Text>} */}
-
-        {/* <Text> Number of nights: {number_Of_Nights} </Text> */}
-        {/* <TextInput value={number_Of_Nights} placeholder='Number of nights: ' style={styles.TextInput} keyboardType="number-pad" onChangeText={(number) => setNumber_Of_Nights(number)}></TextInput> */}
-        {/* <View>
-          {!CheackNumOfNights() ? (
-            <Text style={styles.alerts}>*Must specify the number of nights* </Text>)
-            : null}
-        </View> */}
+       
         <View style={{ height: 10 }}></View>
 
         <View style={styles.switchContainer}>
@@ -292,4 +272,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
