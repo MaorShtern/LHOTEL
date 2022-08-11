@@ -26,7 +26,7 @@ export default function Navbar({ navigation }) {
       
             if (value !== null) {
                 SetFullName(JSON.parse(value))
-                console.log("full_nameread"+full_name);
+                // console.log("full_nameread"+full_name);
             }
         } catch (e) {
             alert('Failed to fetch the input from storage');
