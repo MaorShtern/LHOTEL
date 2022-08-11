@@ -28,7 +28,6 @@ export default function SaveRoom({ route, navigation }) {
     if (rooms !== null) {
       BilldData(rooms)
       SetLoading(true)
-   
       return
     }
     FetchData()

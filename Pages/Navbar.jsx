@@ -13,7 +13,6 @@ export default function Navbar({ navigation }) {
   
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-        
             readData();
         });
         return unsubscribe;
