@@ -29,6 +29,7 @@ namespace DAL
                         (string)reader["First_Name"],
                         (string)reader["Last_Name"],
                         (string)reader["Mail"],
+                        (string)reader["Password"],
                         (string)reader["Phone_Number"],
                         (string)reader["Card_Holder_Name"],
                         (string)reader["Credit_Card_Date"],
@@ -44,11 +45,11 @@ namespace DAL
             }
         }
 
-        public static Customers GetCustomerById(int id)
+        public static Customers GetCustomerByMailAndPassword(string mail, string password)
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetCustomerById {id}");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetCustomerByMailAndPassword '{mail}','{password}'");
                 if (reader == null && !reader.HasRows)
                 {
                     return null;
@@ -57,11 +58,12 @@ namespace DAL
                 while (reader.Read())
                 {
                     customer = new Customers(
-                         (int)reader["Customer_ID"],
+                        (int)reader["Customer_ID"],
                         (int)reader["Customer_Type"],
                         (string)reader["First_Name"],
                         (string)reader["Last_Name"],
                         (string)reader["Mail"],
+                        (string)reader["Password"],
                         (string)reader["Phone_Number"],
                         (string)reader["Card_Holder_Name"],
                         (string)reader["Credit_Card_Date"],
@@ -85,10 +87,10 @@ namespace DAL
         {
             try
             {
-                if (GetCustomerById(customer.customerID) == null)
+                if (GetCustomerByMailAndPassword(customer.mail , customer.password) == null)
                 {
                     string str = $@"exec AddNewCustomer {customer.customerID},{customer.customerType},
-'{customer.firstName}','{customer.lastName}','{customer.mail}',
+'{customer.firstName}','{customer.lastName}','{customer.mail}','{customer.password}',
 '{customer.phoneNumber}','{customer.cardHolderName}','{customer.creditCardDate}',{customer.threeDigit}";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
@@ -108,13 +110,13 @@ namespace DAL
         {
             try
             {
-                Customers findCustomer = GetCustomerById(customer.customerID);
+                Customers findCustomer = GetCustomerByMailAndPassword(customer.mail, customer.password);
                 if (findCustomer == null)
                 {
                     return false;
                 }
                 string str = $@"exec AlterCustomerById {customer.customerID},{customer.customerType},
-'{customer.firstName}','{customer.lastName}','{customer.mail}',
+'{customer.firstName}','{customer.lastName}','{customer.mail}','{customer.password}',
 '{customer.phoneNumber}','{customer.cardHolderName}','{customer.creditCardDate}',{customer.threeDigit}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
@@ -129,26 +131,26 @@ namespace DAL
             }
         }
 
-        public static bool DeleteCustomerById(int id)
-        {
-            try
-            {
-                Customers findCustomer = GetCustomerById(id);
-                if (findCustomer == null)
-                {
-                    return false;
-                }
-                string str = $@"exec DeleteCustomerById {id}";
-                int result = SQLConnection.ExeNonQuery(str);
-                if (result == 1)
-                    return true;
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
+        //public static bool DeleteCustomerById(int id)
+        //{
+        //    try
+        //    {
+        //        Customers findCustomer = GetCustomerByMailAndPassword(customer.mail, customer.password);
+        //        if (findCustomer == null)
+        //        {
+        //            return false;
+        //        }
+        //        string str = $@"exec DeleteCustomerById {id}";
+        //        int result = SQLConnection.ExeNonQuery(str);
+        //        if (result == 1)
+        //            return true;
+        //        return false;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //}
     }
 }

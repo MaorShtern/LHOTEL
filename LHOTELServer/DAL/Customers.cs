@@ -8,24 +8,35 @@ namespace DAL
 {
     public class Customers
     {
-        public Customers(int customerID, int customerType, string firstName, string lastName, string mail, string phoneNumber, string cardHolderName, string creditCardDate, int threeDigit)
+        //public Customers(string mail, string password)
+        //{
+        //    this.mail = mail;
+        //    this.password = password;
+        //}
+
+        public Customers(int customerID, int customerType, string firstName, string lastName, string mail,string password, string phoneNumber, string cardHolderName, string creditCardDate, int threeDigit)
         {
             this.customerID = customerID;
             this.customerType = customerType;
             this.firstName = firstName;
             this.lastName = lastName;
             this.mail = mail;
+            this.password = password;
             this.phoneNumber = phoneNumber;
             this.cardHolderName = cardHolderName;
             this.creditCardDate = creditCardDate;
             this.threeDigit = threeDigit;
         }
+        
+    
 
         public int customerID { set; get; }
         public int customerType { set; get; }
         public string firstName { set; get; }
         public string lastName { set; get; }
         public string mail { set; get; }
+        public string password { set; get; }
+
         public string phoneNumber { set; get; }
         public string cardHolderName { set; get; }
         public string creditCardDate { set; get; }

@@ -13,9 +13,9 @@ namespace BLL
         {
             return DALCustomers.GetAllCustomers();
         }
-        public static Customers GetCustomerById(int id)
+        public static Customers GetCustomerByMailAndPassword(string mail, string password)
         {
-            return DALCustomers.GetCustomerById(id);
+            return DALCustomers.GetCustomerByMailAndPassword(mail, password);
         }
         public static bool AddNewCustomer(Customers customer)
         {
@@ -25,10 +25,10 @@ namespace BLL
         {
             return DALCustomers.AlterCustomerById(customer);
         }
-        public static bool DeleteCustomerById(int id)
-        {
-            return DALCustomers.DeleteCustomerById(id);
-        }
+        //public static bool DeleteCustomerById(int id)
+        //{
+        //    return DALCustomers.DeleteCustomerById(id);
+        //}
 
     }
 }

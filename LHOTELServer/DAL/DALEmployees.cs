@@ -27,7 +27,8 @@ namespace DAL
                         (DateTime)reader["Birth_Date"],
                         (int)reader["Worker_Code"],
                         (int)reader["Hourly_Wage"],
-                        (string)reader["Address"]
+                        (string)reader["Address"],
+                        (int)reader["Employee_Code"]
                         ));
                 }
                 return employees;
@@ -64,7 +65,8 @@ namespace DAL
                         (DateTime)reader["Birth_Date"],
                         (int)reader["Worker_Code"],
                         (int)reader["Hourly_Wage"],
-                        (string)reader["Address"]
+                        (string)reader["Address"],
+                        (int)reader["Employee_Code"]
                         );
                 }
                 return employee;
@@ -87,7 +89,8 @@ namespace DAL
                 if (GetEmployeesById(newEmployee.id) == null)
                 {
                     string str = $@"exec InsertEmployee {newEmployee.id},'{newEmployee.name}','{newEmployee.phoneNumber}',
-'{newEmployee.birthDate.ToShortDateString()}',{newEmployee.worker_Code},{newEmployee.hourly_Wage},'{newEmployee.address}'";
+'{newEmployee.birthDate.ToShortDateString()}',{newEmployee.worker_Code},{newEmployee.hourly_Wage},
+'{newEmployee.address}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected >= 1)
@@ -115,7 +118,7 @@ namespace DAL
 '{employee.birthDate.ToShortDateString()}',{employee.worker_Code},{employee.hourly_Wage},'{employee.address}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
+                if (result == 1)
                     return true;
                 return false;
             }
@@ -147,6 +150,7 @@ namespace DAL
                 return false;
             }
         }
+
     }
 }
 

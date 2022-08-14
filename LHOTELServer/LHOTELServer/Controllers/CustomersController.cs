@@ -31,11 +31,12 @@ namespace LHOTELServer.Controllers
 
         }
 
-        public IHttpActionResult Get(int id)
+        //[System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
+        public IHttpActionResult Get(string mail, string password)
         {
             try
             {
-                return Ok(BLLCustomers.GetCustomerById(id));
+                return Ok(BLLCustomers.GetCustomerByMailAndPassword(mail, password));
             }
             catch (Exception e)
             {
@@ -69,18 +70,18 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpDelete]
-        public IHttpActionResult Delete(int id)
-        {
-            try
-            {
-                return Ok(BLLCustomers.DeleteCustomerById(id));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //[System.Web.Http.HttpDelete]
+        //public IHttpActionResult Delete(int id)
+        //{
+        //    try
+        //    {
+        //        return Ok(BLLCustomers.DeleteCustomerById(id));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
     }
 }

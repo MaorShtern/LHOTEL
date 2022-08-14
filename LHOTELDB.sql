@@ -8,7 +8,6 @@
 SET DATEFORMAT dmy;  
 GO
 
-
 create table Employees_Types
 (
 	Worker_Code int NOT NULL,
@@ -27,14 +26,11 @@ create table Tasks_Types
 )
 go
 
-
 create table Customers_Types
 (
 	Customers_Type int NOT NULL,
 	Description NVARCHAR(30),
 	CONSTRAINT [PK_Customers_Type] PRIMARY KEY (Customers_Type)
-
-
 )
 go
 
@@ -87,10 +83,10 @@ create table Purchase_Of_Goods
 go
 
 
-
 create table Employees
 (
 	Employee_ID int NOT NULL,
+	Employee_Code int identity(1,1),
 	Employee_Name nvarchar(30) NOT NULL,
 	Phone_Number nvarchar(30) ,
     Birth_Date Date,
@@ -102,6 +98,7 @@ create table Employees
   (Worker_Code) REFERENCES Employees_Types (Worker_Code)
 )
 go
+
 
 
 create table Employees_Tasks
@@ -126,18 +123,18 @@ create table Customers
 	Customer_Type int NOT NULL,
 	First_Name nvarchar(30) NOT NULL,
 	Last_Name nvarchar(30),
-	Mail nvarchar(100),
+	Mail nvarchar(100) NOT NULL,
+	Password nvarchar(30) NOT NULL,
 	Phone_Number nvarchar(30) ,
-	Card_Holder_Name  nvarchar(30) NOT NULL,
-	Credit_Card_Date  nvarchar(5) NOT NULL,
-	Three_Digit int NOT NULL,
+	Card_Holder_Name nvarchar(30) ,
+	Credit_Card_Date nvarchar(5) ,
+	Three_Digit int ,
 	CONSTRAINT [PK_Customer_ID] PRIMARY KEY (Customer_ID),
 	CONSTRAINT [Fk_Customer_Type] FOREIGN KEY 
           (Customer_Type) REFERENCES Customers_Types (Customers_Type)
 )
 go
 
---exec GetAllCustomers
 
 create table Bill
 (
@@ -146,7 +143,7 @@ create table Bill
 	Customer_ID int NOT NULL,
 	Credit_Card_Number nvarchar(12) NOT NULL,
 	Purchase_Date Date NOT NULL,
-	Bill_Status nvarchar(30) NOT NULL,
+	--Bill_Status nvarchar(30) NOT NULL,
 	CONSTRAINT [PK_Bill_Number1] PRIMARY KEY (Bill_Number),
 	CONSTRAINT [Fk_Employee_ID2] FOREIGN KEY (Employee_ID) REFERENCES Employees (Employee_ID),
 	CONSTRAINT [Fk_Customer_ID] FOREIGN KEY (Customer_ID) REFERENCES Customers (Customer_ID)
@@ -167,6 +164,18 @@ create table Bill_Details
           (Bill_Number) REFERENCES Bill (Bill_Number),
 )
 go
+--1	2	6	2022-12-12	13:00:00.0000000
+--4	3	6	2022-12-03	16:00:00.0000000
+--3	1	6	2022-12-12	21:00:00.0000000
+--5	1	10	2022-12-12	21:00:00.0000000
+--3	1	3	2022-12-12	21:00:00.0000000
+--3	6	1	2022-12-12	21:00:00.0000000
+--6	5	2	2022-12-12	21:00:00.0000000
+--6	5	2	2022-01-13	21:00:00.0000000
+--9	7	3	2022-11-03	20:23:00.0000000
+--11	11	1	2022-02-01	23:39:00.0000000
+--10	8	5	2022-01-04	14:06:00.0000000
+--10	9	4	2022-01-04	16:15:00.0000000
 
 
 create table Customers_Rooms
@@ -177,6 +186,7 @@ create table Customers_Rooms
 	Entry_Date Date NOT NULL,
 	Exit_Date Date NOT NULL,
 	Amount_Of_People int NOT NULL,
+	Bill_Status nvarchar(30) NOT NULL,
 	CONSTRAINT [PK_Room_Number2] PRIMARY KEY (Room_Number),
 	CONSTRAINT [Fk_Room_Number] FOREIGN KEY (Room_Number) REFERENCES Rooms (Room_Number),
 	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number) REFERENCES Bill (Bill_Number),
@@ -214,6 +224,15 @@ as
 	insert  [dbo].[Employees] values (@id,@name,@phoneNumber,@birthDate,@worker_Code,@hourly_Wage,@address)
 go
 --exec InsertEmployee 111,'aaa','0526211881','23/02/1999',1,40,'aaa'
+--111	aaa	0526211881	1999-02-23	1	40	aaa
+--222	bbb	0502611881	1999-03-23	2	40	bbb
+--333	ccc	0542611881	1999-04-23	3	40	ccc
+--444	ddd	0548937881	1978-03-11	3	41	ddd
+--555	eee	0528057777	1998-05-30	3	41	eee
+--666	fff	0502359678	1972-04-24	1	41	fff
+--777	ggg	0502233344	1997-11-12	3	41	ggg
+--888	hhh	0523491528	1990-10-03	2	41	hhh
+--exec InsertEmployee 999	,'iii',	'0541478954',	'2001-07-08',	2,	41,	'iii'
 
 
 create proc AlterEmployee
@@ -233,12 +252,22 @@ go
 --exec AlterEmployee 111,'aaa','0526211881','23/02/1999',1,40,'bbb'
 
 
-create proc DeleteEmployeeById
+alter proc DeleteEmployeeById
 @id int
 as
-	DELETE FROM [dbo].[Employees] WHERE [Employee_ID] = @id
+	DECLARE @RowCount1 INTEGER
+    DECLARE @RowCount2 INTEGER
+    DECLARE @RowCount3 INTEGER
+
+	DELETE FROM Employees_Tasks WHERE [Employee_ID] = @id
+	SELECT @RowCount1 = @@ROWCOUNT
+	DELETE FROM Bill WHERE [Employee_ID] = @id
+	SELECT @RowCount2 = @@ROWCOUNT
+	DELETE FROM Employees WHERE [Employee_ID] = @id
+	SELECT @RowCount3 = @@ROWCOUNT
+	SELECT @RowCount1 + @RowCount2 + @RowCount3 AS Result
 go
---exec DeleteEmployeeById 111
+--exec DeleteEmployeeById 999
 
 
 
@@ -253,16 +282,29 @@ create proc GetAllCustomers
 as
 	select * from [dbo].[Customers]
 go
+
 --exec GetAllCustomers
--- exec DeleteCustomerById 315201913 
+-- exec DeleteCustomerById 999 
 
 
-create proc GetCustomerById 
-@id int
-as
-	select * from [dbo].[Customers] where [Customer_ID] = @id
-go
+--create proc GetCustomerById 
+--@id int
+--as
+--	select * from [dbo].[Customers] where [Customer_ID] = @id
+--go
 --exec GetCustomerById 111
+
+
+create proc GetCustomerByMailAndPassword
+@Mail nvarchar(100),
+@Password nvarchar(30) 
+as
+	select * from [dbo].[Customers] 
+	where Mail = @Mail and Password = @Password
+go
+
+-- exec GetCustomerByMailAndPassword 'ccc@gmail.com','ccc'
+
 
 
 create proc AddNewCustomer
@@ -271,21 +313,25 @@ create proc AddNewCustomer
 @First_Name nvarchar(30),
 @Last_Name nvarchar(30),
 @Mail nvarchar(100),
+@Password nvarchar(30),
 @Phone_Number nvarchar(30) ,
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int
 as
-	insert [dbo].[Customers] values (@id ,@Customer_Type,@First_Name,@Last_Name,@Mail,@Phone_Number
+	insert [dbo].[Customers] values (@id ,@Customer_Type,@First_Name,@Last_Name,@Mail,@Password,@Phone_Number
 	,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit)
 go
-----exec AddNewCustomer 111,1,'AAA','BBB','CCC','0526211881','AAA','02/28',569
---exec AddNewCustomer 999,1,'mmm','mmm','mmm@gmail.com','0526159848','mmm','12-55',456
---111	1	aaa	aaa	aaa@gmail.com	0526211881	aaa	'02/28'	569
---222	1	bbb	bbb	bbb@gmail.com	0524987762	bbb	'10/26'	788
---333	2	ccc	ccc	ccc@gmail.com	0501264859	ccc	'02/28'	954
---444	2	eee	eee	eee@gmail.com	0541528971	eee	'05/26'	781
---555	3	fff	fff	fff@gmail.com	0526487912	fff	'11/27'	212
+
+--exec AddNewCustomer 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569
+--exec AddNewCustomer 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781
+--exec AddNewCustomer 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569
+--exec AddNewCustomer 444,2,'ddd','ddd','ddd@gmail.com','ddd','0526487912','ddd','02/28',212
+--exec AddNewCustomer 555,1,'eee','eee','eee@gmail.com','eee','0500123889','eee','02/28',954
+--exec AddNewCustomer 666,2,'fff','fff','fff@gmail.com','fff','0531528966','fff','02/28',856
+--exec AddNewCustomer 777,2,'ggg','ggg','ggg@gmail.com','ggg','0531528966','ggg','02/28',569
+--exec AddNewCustomer 888,3,'hhh','hhh','hhh@gmail.com','hhh','0576488918','hhh','02/28',381
+--exec AddNewCustomer 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','','',-1
 
 
 create proc AlterCustomerById
@@ -294,6 +340,7 @@ create proc AlterCustomerById
 @First_Name nvarchar(30),
 @Last_Name nvarchar(30),
 @Mail nvarchar(100),
+@Password nvarchar(30),
 @Phone_Number nvarchar(30) ,
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
@@ -307,17 +354,20 @@ as
 	[Phone_Number] =@Phone_Number, 
 	[Card_Holder_Name] =@Card_Holder_Name, 
 	[Credit_Card_Date]=@Credit_Card_Date,
-	[Three_Digit]=@Three_Digit
+	[Three_Digit]=@Three_Digit,
+	[Password] = @Password 
 	WHERE [Customer_ID] = @id
 go
---exec AlterCustomerById 111,1,'aaa','aaa','aaa@gmail.com','0524987762','aaa','02/28',569
---exec AlterCustomerById 222,2,'bbb','bbb','bbb@gmail.com','0501264859','bbb','02/28',781
---exec AlterCustomerById 333,3,'ccc','ccc','ccc@gmail.com','0541528971','ccc','02/28',569
---exec AlterCustomerById 444,2,'ddd','ddd','ddd@gmail.com','0526487912','ddd','02/28',212
---exec AlterCustomerById 555,1,'eee','eee','eee@gmail.com','0500123889','eee','02/28',954
---exec AlterCustomerById 666,2,'fff','fff','fff@gmail.com','0531528966','fff','02/28',856
---exec AlterCustomerById 777,2,'ggg','ggg','ggg@gmail.com','0531528966','ggg','02/28',569
---exec AlterCustomerById 888,3,'hhh','hhh','hhh@gmail.com','0576488918','hhh','02/28',381
+
+--exec AlterCustomerById 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569
+--exec AlterCustomerById 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781
+--exec AlterCustomerById 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569
+--exec AlterCustomerById 444,2,'ddd','ddd','ddd@gmail.com','ddd','0526487912','ddd','02/28',212
+--exec AlterCustomerById 555,1,'eee','eee','eee@gmail.com','eee','0500123889','eee','02/28',954
+--exec AlterCustomerById 666,2,'fff','fff','fff@gmail.com','fff','0531528966','fff','02/28',856
+--exec AlterCustomerById 777,2,'ggg','ggg','ggg@gmail.com','ggg','0531528966','ggg','02/28',569
+--exec AlterCustomerById 888,3,'hhh','hhh','hhh@gmail.com','hhh','0576488918','hhh','02/28',381
+--exec AlterCustomerById 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','hhhh',null,null
 
 create proc DeleteCustomerById
 @id int
@@ -636,20 +686,21 @@ create proc AddNewCustomerRooms
 @Customer_ID int,
 @Entry_Date date,
 @Exit_Date date,
-@Amount_Of_People int
+@Amount_Of_People int,
+@Bill_Status nvarchar(30)
 as
 	insert [dbo].[Customers_Rooms] 
-	values(@Room_Number,@Bill_Number,@Customer_ID,@Entry_Date,@Exit_Date,@Amount_Of_People)
+	values(@Room_Number,@Bill_Number,@Customer_ID,@Entry_Date,@Exit_Date,@Amount_Of_People,@Bill_Status)
 go
 
---exec AddNewCustomerRooms 1,1,111,'2022-09-09','2022-09-15',1
---exec AddNewCustomerRooms 2,2,222,'2022-09-08','2022-09-14',2
---exec AddNewCustomerRooms 3,3,333,'2022-07-21','2022-07-25',2
---exec AddNewCustomerRooms 8,4,444,'2022-07-14','2022-07-20',8
---exec AddNewCustomerRooms 9,5,555,'2021-07-05','2021-07-08',2
---exec AddNewCustomerRooms 7,6,666,'2021-06-06','2021-06-12',4
---exec AddNewCustomerRooms 6,3,333,'2022-07-21','2022-07-25',3
---exec AddNewCustomerRooms 19,4,333,'2021-12-21','2021-12-25',10
+--exec AddNewCustomerRooms 1,1,111,'2022-09-09','2022-09-15',1,'Available'
+--exec AddNewCustomerRooms 2,2,222,'2022-09-08','2022-09-14',2,'Occupied'
+--exec AddNewCustomerRooms 3,3,333,'2022-07-21','2022-07-25',2,'Reserved'
+--exec AddNewCustomerRooms 8,4,444,'2022-07-14','2022-07-20',8,'Occupied'
+--exec AddNewCustomerRooms 9,5,555,'2021-07-05','2021-07-08',2,'Reserved'
+--exec AddNewCustomerRooms 7,6,666,'2021-06-06','2021-06-12',4,'Occupied'
+--exec AddNewCustomerRooms 6,3,333,'2022-07-21','2022-07-25',3,'Available'
+--exec AddNewCustomerRooms 19,4,333,'2021-12-21','2021-12-25',10,'Available'
 
 
 
@@ -676,23 +727,32 @@ go
 -- exec FindCustomerRoomByKeys 111,1,'2022-09-09'
 
 
-create proc AlterCustomerRoom
-@Customer_ID int,
+alter proc AlterCustomerRoom
 @Room_Number int,
+@Bill_Number int,
+@Customer_ID int,
 @Entry_Date date,
 @Exit_Date date,
 @Amount_Of_People int,
-@Bill_Number int
+@Bill_Status nvarchar(30)
 as
 	UPDATE [dbo].[Customers_Rooms]
-	SET [Room_Number] = @Room_Number,
+	SET 
+	[Entry_Date] = @Entry_Date ,
 	[Exit_Date]=@Exit_Date, 
 	[Amount_Of_People] = @Amount_Of_People,
-	[Bill_Number] = @Bill_Number
-	WHERE [Customer_ID] = @Customer_ID and [Entry_Date] = @Entry_Date 
+	[Bill_Number] = @Bill_Number,[Bill_Status] = @Bill_Status
+	WHERE [Customer_ID] = @Customer_ID and 	[Room_Number] = @Room_Number
 go
-
--- exec AlterCustomerRoom 111,2,'2022-09-08','2022-09-14',1,1
+--exec AlterCustomerRoom 1,1,111,'2022-09-09','2022-09-15',1,'Reserved'
+--exec AlterCustomerRoom 2,2,222,'2022-09-08','2022-09-14',2,'Reserved'
+--exec AlterCustomerRoom 3,3,333,'2022-07-21','2022-07-25',2,'Available'
+--exec AlterCustomerRoom 8,4,444,'2022-07-14','2022-07-20',8,'Available'
+--exec AlterCustomerRoom 9,5,555,'2021-07-05','2021-07-08',2,'Available'
+--exec AlterCustomerRoom 7,6,666,'2021-06-06','2021-06-12',4,'Available'
+--exec AlterCustomerRoom 6,3,333,'2022-07-21','2022-07-25',3,'Available'
+--exec AlterCustomerRoom 19,4,333,'2021-12-21','2021-12-25',10,'Available'
+--exec AlterCustomerRoom 5,2,222,'2022-08-21','2022-08-25',1,'Occupied'
 
 
 --  מביא את החדרים שתאריך היציאה שלהם גדול מהתאריך של היום
@@ -723,9 +783,8 @@ go
 create proc GetAllBill
 as
 	select * from [dbo].[Bill]
-	order by [Bill_Status] desc
 go
---exec GetAllBill
+exec GetAllBill
 
 
 create proc  GetBillByNumber
@@ -741,45 +800,49 @@ create proc AddNewBill
 @Employee_ID int,
 @Customer_ID int,
 @Credit_Card_Number nvarchar(12),
-@Purchase_Date date,
-@Bill_Status nvarchar(30)
+@Purchase_Date date
 as
 	insert [dbo].[Bill] 
-	values(@Employee_ID, @Customer_ID,@Credit_Card_Number,@Purchase_Date,@Bill_Status)
+	values(@Employee_ID, @Customer_ID,@Credit_Card_Number,@Purchase_Date)
 go
 
---exec AddNewBill 111,111,'4580266514789456','01/01/2021','Open'
---exec AddNewBill 222,222,'4580266514789456','01/01/2021','Open'
---exec AddNewBill 333,333,'4580266514789456','01/01/2021','Open'
---exec AddNewBill 444,444,'4580266514789456','01/01/2021','Open'
---exec AddNewBill 555,555,'4580266514789456','12/09/2020','Close'
---exec AddNewBill 666,444,'4580266514789456','23/09/2020','Close'
-
+--exec AddNewBill 111,111,'4580266514789456','01/01/2021'
+--exec AddNewBill 222,222,'4580266514789456','01/01/2021'
+--exec AddNewBill 333,333,'4580266514789456','01/01/2021'
+--exec AddNewBill 444,444,'4580266514789456','01/01/2021'
+--exec AddNewBill 555,555,'4580266514789456','12/09/2020'
+--exec AddNewBill 666,444,'458026651478','23/09/2020'
+--exec AddNewBill 222,666,'458026651478','2022-10-07'
+--exec AddNewBill 111,888,'458026651478','2022-12-05'
+--exec AddNewBill 222,666,'458026651478','2021-10-07'
+--exec AddNewBill 111,888,'458026651478','2022-12-05'
+--exec AddNewBill 999,888,'458026651478','2022-12-05'
 
 
 create proc AlterBill
 @Bill_Number int,
 @Employee_ID int,
 @Customer_ID int,
-@Room_Number int,
 @Credit_Card_Number nvarchar(12),
-@Purchase_Date date,
-@Bill_Status nvarchar(30)
+@Purchase_Date date
 as
 	UPDATE [dbo].[Bill]
 	SET Employee_ID = @Employee_ID,
 	Customer_ID=@Customer_ID, 
-	Room_Number = @Room_Number,
 	Credit_Card_Number = @Credit_Card_Number,
-	Purchase_Date = @Purchase_Date,
-	Bill_Status = @Bill_Status
-	WHERE Bill_Number = @Bill_Number 
+	Purchase_Date = @Purchase_Date
+	where Bill_Number = @Bill_Number 
 go
---exec AlterBill 1,111,111,1,'4580266514789456','01/01/2021','Open'
---exec AlterBill 2,222,222,2,'4580266514789456','01/01/2021','Open'
---exec AlterBill 3,333,333,3,'4580266514789456','01/01/2021','Open'
---exec AlterBill 4,444,444,4,'4580266514789456','01/01/2021','Open'
---exec AlterBill 5,555,555,5,'4580266514789456','12/09/2020','Close'
+--exec AlterBill 111,111,'4580266514789456','01/01/2021'
+--exec AlterBill 222,222,'4580266514789456','01/01/2021'
+--exec AlterBill 333,333,'4580266514789456','01/01/2021'
+--exec AlterBill 444,444,'4580266514789456','01/01/2021'
+--exec AlterBill 555,555,'4580266514789456','12/09/2020'
+--exec AlterBill 666,444,'458026651478','23/09/2020'
+--exec AlterBill 222,666,'458026651478','2022-10-07'
+--exec AlterBill 111,888,'458026651478','2022-12-05'
+--exec AlterBill 222,666,'458026651478','2021-10-07'
+--exec AlterBill 111,888,'458026651478','2022-12-05'
 
 
 create proc DeletBill
@@ -984,11 +1047,22 @@ as
 	SELECT dbo.Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  dbo.Rooms.Details, dbo.Customers_Rooms.Exit_Date
 	FROM dbo.Customers_Rooms INNER JOIN dbo.Rooms 
 	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	WHERE  (dbo.Customers_Rooms.Exit_Date <= GETDATE())
+	WHERE  (dbo.Customers_Rooms.Exit_Date <= GETDATE() and dbo.Customers_Rooms.Bill_Status = 'Available')
 	GROUP BY dbo.Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,dbo.Rooms.Details, dbo.Customers_Rooms.Exit_Date
 	order by dbo.Customers_Rooms.Exit_Date desc
 go
 
 --exec GetAvailableRooms
 
-
+--select * from [dbo].[Bill_Details]
+--select * from [dbo].[Category]
+--select * from [dbo].[Customers]
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Customers_Types]
+--select * from [dbo].[Employees]
+--select * from [dbo].[Employees_Tasks]
+--select * from [dbo].[Employees_Types]
+--select * from [dbo].[Products]
+--select * from [dbo].[Purchase_Of_Goods]
+--select * from [dbo].[Rooms]
+--select * from [dbo].[Tasks_Types]
