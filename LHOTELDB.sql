@@ -1036,12 +1036,12 @@ go
 create proc Room_Resit
 @ID int
 as
-	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Customers_Rooms.Room_Status,
+	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,dbo.Customers_Rooms.Room_Status,
 	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
 	dbo.Customers_Rooms.Amount_Of_People, 
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
-	dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Customers_Rooms.Room_Status
+	dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date
 	FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
 	ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
 	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
