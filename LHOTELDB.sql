@@ -236,6 +236,9 @@ go
 --insert [dbo].[Tasks_Types] values(5,'Check-in Customer')
 --insert [dbo].[Tasks_Types] values(6,'Check-out Customer')
 --insert [dbo].[Tasks_Types] values(7,'Reception desk arrangement')
+=================================================================================================================================================
+                                                                                                               פרוצדורות
+=================================================================================================================================================
 
 -- פרוצדורות עובדים
 create proc GetAllEmployees
@@ -416,12 +419,13 @@ go
 
 
 --drop proc DeleteCustomerById
---create proc DeleteCustomerById
---@id int
---as
---	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
---go
+create proc DeleteCustomerById
+@id int
+as
+	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
+go
 --exec DeleteCustomerById 315201913 
+
 
 
 -- פרוצדורות קטגוריה
@@ -746,12 +750,13 @@ go
 
 
 -- פרוצדורות חשבון ללקוח
-create proc GetAllBill
+
+create proc GetAllBills
 as
 	select * from [dbo].[Bill]
 go
---exec GetAllBill
-
+--exec GetAllBills
+exec GetAllEmployees
 
 create proc  GetBillByNumber
 @Bill_Number int
@@ -781,7 +786,7 @@ go
 --exec AddNewBill 111,888,'458026651478','2022-12-05'
 --exec AddNewBill 222,666,'458026651478','2021-10-07'
 --exec AddNewBill 111,888,'458026651478','2022-12-05'
---exec AddNewBill 555,888,'458026651478','2022-12-05'
+--exec AddNewBill 111,999,'458026651478','2022-12-05'
 
 
 create proc AlterBill
@@ -807,20 +812,19 @@ go
 --exec AlterBill 222,666,'458026651478','2022-10-07'
 --exec AlterBill 111,888,'458026651478','2022-12-05'
 --exec AlterBill 222,666,'458026651478','2021-10-07'
---exec AlterBill 111,888,'458026651478','2022-12-05'
+--exec AlterBill 777,888,'458026651478','2022-12-05'
 
-
-create proc DeletBill
+create proc DeleteBill
 @Bill_Number int,
 @Customer_ID int,
-@Room_Number int
+@Credit_Card_Number int
 as
 	DELETE FROM [dbo].[Bill] 
-	WHERE Bill_Number = @Bill_Number or (Customer_ID = @Customer_ID and Room_Number = @Room_Number)
+	WHERE Bill_Number = @Bill_Number or (Customer_ID = @Customer_ID and Credit_Card_Number = @Credit_Card_Number)
 go
 
 -- exec DeletBill 1,222,1
-
+--exec GetAllBills
 
 
 --  פרוצדורות חדרים שמורים ללקוחות
@@ -935,14 +939,13 @@ as
 go
 -- exec GetAllBill_Details
 
-
 create proc GetBill_DetailsByNumber
 @Bill_Number int
 as
 	select * from [dbo].[Bill_Details]
 	where Bill_Number = @Bill_Number
 go
--- exec GetAllBill_DetailsByNumber 1
+-- exec GetBill_DetailsByNumber 1
 
 
 
@@ -968,7 +971,7 @@ go
 --exec AddNewBill_Detail 6,5,2,'13/01/2022','21:00','Credit'
 
 
-create proc DeletBill_Detail
+create proc DeleteBill_Detail
 @Product_Code int,
 @Amount int,
 @Purchase_Date date,
@@ -979,7 +982,7 @@ as
 	and Purchase_Date = @Purchase_Date and Purchase_Time = @Purchase_Time
 go
 
--- exec DeletBill_Detail 2,6,'12/12/2022','13:00'
+-- exec DeleteBill_Detail 2,6,'12/12/2022','13:00'
 
 
 
@@ -1033,18 +1036,31 @@ go
 create proc Room_Resit
 @ID int
 as
-	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, 
+	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Customers_Rooms.Room_Status,
 	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
 	dbo.Customers_Rooms.Amount_Of_People, 
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
-	dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Bill.Bill_Status
+	dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Customers_Rooms.Room_Status
 	FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
 	ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
 	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
 	WHERE  (dbo.Bill.Customer_ID = @ID)
-	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date, dbo.Bill.Bill_Status
-	order by dbo.Bill.Bill_Status desc
+	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Customers_Rooms.Room_Status
+	order by dbo.Customers_Rooms.Room_Status desc
+
+	--SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, 
+	--dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
+	--(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
+	--dbo.Customers_Rooms.Amount_Of_People, 
+	--(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
+	--dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Bill.Bill_Status
+	--FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
+	--ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
+	--ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
+	--WHERE  (dbo.Bill.Customer_ID = @ID)
+	--GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date, dbo.Bill.Bill_Status
+	--order by dbo.Bill.Bill_Status desc
 go
 
 -- exec Room_Resit 555
@@ -1067,9 +1083,9 @@ go
 -- exec SumPerProduct
 
 
-create proc Number_of_tasks_per_month
+ create proc Number_of_tasks_per_month
 as
-	SELECT Start_Date, count(Start_Date) FROM Employees_Tasks GROUP by Start_Date
+	SELECT Start_Date, count(Start_Date) as Amount FROM Employees_Tasks GROUP by Start_Date
 go
 --exec Number_of_tasks_per_month
 
