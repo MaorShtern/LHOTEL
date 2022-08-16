@@ -418,12 +418,31 @@ go
 --exec AlterCustomerById 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','','',0,''
 
 
---drop proc DeleteCustomerById
-create proc DeleteCustomerById
-@id int
+create proc UpdateCustomerCredit
+@id int,
+@Card_Holder_Name  nvarchar(30),
+@Credit_Card_Date nvarchar(5),
+@Three_Digit int,
+@Credit_Card_Number nvarchar(12)
 as
-	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
+	UPDATE [dbo].[Customers]
+	SET 	
+	[Card_Holder_Name] =@Card_Holder_Name, 
+	[Credit_Card_Date]=@Credit_Card_Date,
+	[Three_Digit]=@Three_Digit,
+	[Credit_Card_Number] = @Credit_Card_Number
+	WHERE [Customer_ID] = @id
 go
+
+--exec UpdateCustomerCredit 999,'mmm','02/28',123,'458081112222'
+
+
+--drop proc DeleteCustomerById
+--create proc DeleteCustomerById
+--@id int
+--as
+--	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
+--go
 --exec DeleteCustomerById 315201913 
 
 
@@ -754,9 +773,10 @@ go
 create proc GetAllBills
 as
 	select * from [dbo].[Bill]
+	order by [Bill_Number] desc
 go
 --exec GetAllBills
-exec GetAllEmployees
+--exec GetAllEmployees
 
 create proc  GetBillByNumber
 @Bill_Number int
@@ -817,13 +837,14 @@ go
 create proc DeleteBill
 @Bill_Number int,
 @Customer_ID int,
-@Credit_Card_Number int
+@Credit_Card_Number nvarchar(12)
 as
 	DELETE FROM [dbo].[Bill] 
-	WHERE Bill_Number = @Bill_Number or (Customer_ID = @Customer_ID and Credit_Card_Number = @Credit_Card_Number)
+	WHERE Bill_Number = @Bill_Number and Customer_ID = @Customer_ID and Credit_Card_Number = @Credit_Card_Number
 go
 
--- exec DeletBill 1,222,1
+ --exec DeleteBill 20,999,458022223333
+ -- exec DeleteBill 21,999,458022223333
 --exec GetAllBills
 
 
@@ -833,7 +854,6 @@ as
 	select * from [dbo].[Customers_Rooms] order by [Entry_Date] DESC
 go
 -- exec GetCustomersRooms
-
 
 
 create proc AddNewCustomerRooms
@@ -860,14 +880,15 @@ go
 
 
 create proc DeleteCustomerRoom
-@Customer_ID int,
 @Room_Number int,
+@Customer_ID int,
 @Entry_Date date
 as
 	DELETE FROM [dbo].[Customers_Rooms] 
 	WHERE [Customer_ID] = @Customer_ID and [Room_Number] = @Room_Number and [Entry_Date] = @Entry_Date
 go
--- exec DeleteCustomerRoom 111,	3,	'2022-09-08'
+--exec GetCustomersRooms
+ --exec DeleteCustomerRoom 4,999,'22/08/2022'
 
 
 create proc FindCustomerRoomByKeys
@@ -895,10 +916,14 @@ as
 	SET 
 	[Entry_Date] = @Entry_Date ,
 	[Exit_Date]=@Exit_Date, 
+	[Customer_ID] = @Customer_ID,
 	[Amount_Of_People] = @Amount_Of_People,
-	[Bill_Number] = @Bill_Number,[Room_Status] = @Room_Status
-	WHERE [Customer_ID] = @Customer_ID and 	[Room_Number] = @Room_Number
+	[Bill_Number] = @Bill_Number,
+	[Room_Status] = @Room_Status
+	WHERE  	[Room_Number] = @Room_Number
 go
+--exec GetCustomersRooms
+--exec AlterCustomerRoom  1, 20,111,'2022-08-22','2022-08-24',5,'Available'
 --exec AlterCustomerRoom 1,1,111,'2022-09-09','2022-09-15',1,'Reserved'
 --exec AlterCustomerRoom 2,2,222,'2022-09-08','2022-09-14',2,'Reserved'
 --exec AlterCustomerRoom 3,3,333,'2022-07-21','2022-07-25',2,'Available'
@@ -908,6 +933,10 @@ go
 --exec AlterCustomerRoom 6,3,333,'2022-07-21','2022-07-25',3,'Available'
 --exec AlterCustomerRoom 19,4,333,'2021-12-21','2021-12-25',10,'Available'
 --exec AlterCustomerRoom 5,2,222,'2022-08-21','2022-08-25',1,'Occupied'
+
+
+
+
 
 
 --  מביא את החדרים שתאריך היציאה שלהם גדול מהתאריך של היום
@@ -920,15 +949,87 @@ go
 -- exec GetTakenRooms
 
 
+
+
 --  תביא לי את כול החדרים הפנויים
---  חדר פנוי  -->  חדר שתאריך היציאה שלו עבר כבר, חדר שלא מופיע ברשימה
-create proc AvailableRooms
+create FUNCTION AvailableRooms()
+returns @Temp TABLE ( Room_Number int ,Room_Type nvarchar(30), Price_Per_Night int, Details nvarchar(100) )                     
 as
-	select * from [dbo].[Customers_Rooms]
-	where [Room_Status] = 'Available'
+	begin
+		insert @Temp SELECT Room_Number,Room_Type, Price_Per_Night, Rooms.Details FROM Rooms
+		WHERE Room_Number NOT IN (SELECT Room_Number FROM Customers_Rooms)
+
+		insert @Temp SELECT Room_Number,Room_Type, Price_Per_Night, Rooms.Details FROM Rooms
+		WHERE Room_Number IN (select Room_Number from [dbo].[Customers_Rooms] where [Room_Status] = 'Available')
+
+		RETURN
+	end
 go
 
--- exec AvailableRooms
+--SELECT * FROM  AvailableRooms() order by Room_Number
+
+
+
+--  פרוצדורה אשר מבצעת את שמירת החדרים ללקוח
+create proc SaveRoomReservation
+@id int,
+@Card_Holder_Name  nvarchar(30),
+@Credit_Card_Date nvarchar(5),
+@Three_Digit int,
+@Credit_Card_Number nvarchar(12),
+@Employee_ID int,
+@Counter_Single int,
+@Counter_Double int,
+@Counter_Suite int,
+@Entry_Date date,
+@Exit_Date date,
+@Amount_Of_People int
+as
+	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
+	DECLARE @date as date = (SELECT FORMAT(CAST( GETDATE() AS Date ),'dd/MM/yyyy' ))
+	DECLARE @if_exist_date as date = (SELECT FORMAT(CAST( (select [Purchase_Date] from [dbo].[Bill] 
+	where [Customer_ID] = @id) AS Date ),'dd/MM/yyyy'))
+
+	if @date != @if_exist_date
+		exec AddNewBill @Employee_ID,@id,@Credit_Card_Number,@date 
+
+	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id)
+	DECLARE @room_number as int
+
+	while @Counter_Single > 0
+		begin
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room')
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		else
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @Counter_Single = @Counter_Single - 1
+		end
+
+	while @Counter_Double > 0
+		begin
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Double room')
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		else
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @Counter_Double = @Counter_Double - 1
+		end
+
+	while @Counter_Suite > 0
+		begin
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Suite')
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		else
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @Counter_Suite = @Counter_Suite - 1
+		end
+go
+
+--exec SaveRoomReservation 999,'mmm','12/29',912,'4580222233334444',111,1,1,1,'22/08/2022','24/08/2022',5
+
+
 
 
 
@@ -936,6 +1037,7 @@ go
 create proc GetAllBill_Details
 as
 	select * from [dbo].[Bill_Details]
+	order by [Purchase_Date] 
 go
 -- exec GetAllBill_Details
 
@@ -985,7 +1087,6 @@ go
 -- exec DeleteBill_Detail 2,6,'12/12/2022','13:00'
 
 
-
 create proc AlterBill_Detail
 @Bill_Number int,
 @Product_Code int,
@@ -996,11 +1097,12 @@ create proc AlterBill_Detail
 as
 	UPDATE [dbo].[Bill_Details]
 	SET Bill_Number = @Bill_Number , Product_Code = @Product_Code, 
-	Amount = @Amount , Purchase_Date = @Purchase_Date , Purchase_Time = @Purchase_Time,
-	[Payment_Method]  = @Payment_Method 
+	Amount = @Amount , [Payment_Method]  = @Payment_Method 
 	WHERE Bill_Number = @Bill_Number and Product_Code = @Product_Code
+	and Purchase_Date = @Purchase_Date and Purchase_Time = @Purchase_Time
 go
--- exec AlterBill_Detail 2,2,6, '12/12/2022','13:00','Credit'
+ --exec AlterBill_Detail 1,2,10,'2021-12-12','13:00','Cash'
+
 
 
 create proc ProductPurchaseByName

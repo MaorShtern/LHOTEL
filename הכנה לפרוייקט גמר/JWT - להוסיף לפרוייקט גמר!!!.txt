@@ -1,0 +1,8 @@
+
+
+Server: Identify users by a unique username and password consisting of valid character sequences
+
+•	Access Control: Granting permissions to the administrator and user of the application
+
+•	Database: Grant access permissions to update data to the administrator
+

@@ -1,0 +1,15 @@
+
+/*
+Use Master
+GO
+Drop Database LHOTEL
+GO
+*/
+
+CREATE DATABASE LHOTEL 
+COLLATE Hebrew_CI_AS
+GO
+
+Use LHOTEL 
+GO
+
