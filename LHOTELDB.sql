@@ -159,15 +159,17 @@ drop table Bill_Details
 create table Bill_Details
 (
 	Bill_Number int NOT NULL,
+	Customer_ID int NOT NULL,
+	Purchase_Date Date NOT NULL,
 	Product_Code int NOT NULL,
 	Amount int NOT NULL,
-	Purchase_Date date,
 	Purchase_Time time,
 	Payment_Method nvarchar(20) NOT NULL,
+	CONSTRAINT [PK_Bill_Number2] PRIMARY KEY (Bill_Number),
 	CONSTRAINT [Fk_Product_Code] FOREIGN KEY 
           (Product_Code) REFERENCES Products (Product_Code),
 	CONSTRAINT Bill_Number FOREIGN KEY 
-          (Bill_Number) REFERENCES Bill (Bill_Number),
+          (Bill_Number,Customer_ID,Purchase_Date) REFERENCES Bill (Bill_Number,Customer_ID,Purchase_Date)
 )
 go
 --6	5	2	2021-01-13	21:00:00.0000000	Credit
@@ -195,16 +197,17 @@ go
 drop table Customers_Rooms
 create table Customers_Rooms
 (
-	Room_Number int NOT NULL,
+    Room_Number int NOT NULL,
 	Bill_Number int ,
 	Customer_ID int NOT NULL,
+	Purchase_Date Date NOT NULL,
 	Entry_Date Date NOT NULL,
 	Exit_Date Date NOT NULL,
 	Amount_Of_People int NOT NULL,
 	Room_Status nvarchar(30) NOT NULL,
 	CONSTRAINT [PK_Room_Number2] PRIMARY KEY (Room_Number),
 	CONSTRAINT [Fk_Room_Number] FOREIGN KEY (Room_Number) REFERENCES Rooms (Room_Number),
-	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number) REFERENCES Bill (Bill_Number),
+	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number,Customer_ID,Purchase_Date) REFERENCES Bill (Bill_Number,Customer_ID,Purchase_Date),
 )
 go
 --2	2	222	2022-09-08	2022-09-14	2	Occupied
