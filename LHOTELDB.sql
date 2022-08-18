@@ -120,12 +120,13 @@ create table Customers
 	Card_Holder_Name nvarchar(30) ,
 	Credit_Card_Date nvarchar(5) ,
 	Three_Digit int ,
-	Credit_Card_Number nvarchar(12),
+	Credit_Card_Number nvarchar(16),
 	CONSTRAINT [PK_Customer_ID] PRIMARY KEY (Customer_ID),
 	CONSTRAINT [Fk_Customer_Type] FOREIGN KEY 
     (Customer_Type) REFERENCES Customers_Types (Customers_Type)
 )
 go
+
 
 
 create table Rooms
@@ -139,39 +140,41 @@ create table Rooms
 go
 
 
-drop table Bill
 create table Bill
 (
 	Bill_Number int identity(1,1) NOT NULL,
 	Customer_ID int NOT NULL,
-	Purchase_Date Date NOT NULL,
+	Bill_Date Date NOT NULL,
 	Employee_ID int NOT NULL,
-	Credit_Card_Number nvarchar(12),
+	Credit_Card_Number nvarchar(16),
 	Bill_Status nvarchar(10) NOT NULL,
-	CONSTRAINT [PK_Bill_Number1] PRIMARY KEY (Bill_Number,Customer_ID,Purchase_Date),
+	CONSTRAINT [PK_Bill_Number1] PRIMARY KEY (Bill_Number,Customer_ID,Bill_Date),
 	CONSTRAINT [Fk_Employee_ID2] FOREIGN KEY (Employee_ID) REFERENCES Employees (Employee_ID),
 	CONSTRAINT [Fk_Customer_ID] FOREIGN KEY (Customer_ID) REFERENCES Customers (Customer_ID)
 )
 go
 
 
-drop table Bill_Details
+
 create table Bill_Details
 (
 	Bill_Number int NOT NULL,
 	Customer_ID int NOT NULL,
+	Bill_Date Date NOT NULL,
 	Purchase_Date Date NOT NULL,
 	Product_Code int NOT NULL,
 	Amount int NOT NULL,
 	Purchase_Time time,
 	Payment_Method nvarchar(20) NOT NULL,
-	CONSTRAINT [PK_Bill_Number2] PRIMARY KEY (Bill_Number),
 	CONSTRAINT [Fk_Product_Code] FOREIGN KEY 
           (Product_Code) REFERENCES Products (Product_Code),
 	CONSTRAINT Bill_Number FOREIGN KEY 
-          (Bill_Number,Customer_ID,Purchase_Date) REFERENCES Bill (Bill_Number,Customer_ID,Purchase_Date)
+          (Bill_Number,Customer_ID,Bill_Date) REFERENCES Bill (Bill_Number,Customer_ID,Bill_Date)
 )
 go
+
+
+
 --6	5	2	2021-01-13	21:00:00.0000000	Credit
 --6	5	2	2021-01-13	21:00:00.0000000	Credit
 --4	3	6	2021-03-12	16:00:00.0000000	Credit
@@ -194,22 +197,24 @@ go
 --go
 
 
-drop table Customers_Rooms
+
 create table Customers_Rooms
 (
     Room_Number int NOT NULL,
 	Bill_Number int ,
 	Customer_ID int NOT NULL,
-	Purchase_Date Date NOT NULL,
+	Bill_Date Date NOT NULL,
 	Entry_Date Date NOT NULL,
 	Exit_Date Date NOT NULL,
 	Amount_Of_People int NOT NULL,
 	Room_Status nvarchar(30) NOT NULL,
 	CONSTRAINT [PK_Room_Number2] PRIMARY KEY (Room_Number),
 	CONSTRAINT [Fk_Room_Number] FOREIGN KEY (Room_Number) REFERENCES Rooms (Room_Number),
-	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number,Customer_ID,Purchase_Date) REFERENCES Bill (Bill_Number,Customer_ID,Purchase_Date),
+	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number,Customer_ID,Bill_Date) REFERENCES Bill (Bill_Number,Customer_ID,Bill_Date),
 )
 go
+
+
 --2	2	222	2022-09-08	2022-09-14	2	Occupied
 --20	NULL	888	2022-08-15	2022-08-17	10	Reserved
 --3	3	333	2022-07-21	2022-07-25	2	Reserved
@@ -445,7 +450,7 @@ create proc UpdateCustomerCredit
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
-@Credit_Card_Number nvarchar(12)
+@Credit_Card_Number nvarchar(16)
 as
 	UPDATE [dbo].[Customers]
 	SET 	
@@ -456,7 +461,7 @@ as
 	WHERE [Customer_ID] = @id
 go
 
---exec UpdateCustomerCredit 999,'mmm','02/28',123,'458081112222'
+--exec UpdateCustomerCredit 999,'mmm','02/28',123,'21312'
 
 
 --drop proc DeleteCustomerById
@@ -830,7 +835,7 @@ go
 create proc GetAllBills
 as
 	select * from [dbo].[Bill]
-	order by [Bill_Number] desc
+	order by [Bill_Status] desc
 go
 --exec GetAllBills
 --exec GetAllEmployees
@@ -847,12 +852,12 @@ go
 create proc AddNewBill
 @Employee_ID int,
 @Customer_ID int,
-@Credit_Card_Number nvarchar(12),
-@Purchase_Date date,
+@Credit_Card_Number nvarchar(16),
+@Bill_Date date,
 @Bill_Status nvarchar(10)
 as
 	insert [dbo].[Bill] 
-	values(@Employee_ID, @Customer_ID,@Credit_Card_Number,@Purchase_Date,@Bill_Status)
+	values( @Customer_ID,@Bill_Date,@Employee_ID,@Credit_Card_Number,@Bill_Status)
 go
 --- 
 --  לפני הוספת שורה לטבלה יש לבצע בדיקת כפיליות 
@@ -860,53 +865,58 @@ go
 --exec AddNewBill 111,111,'4580266514789456','01/01/2021','Close'
 --exec AddNewBill 222,222,'4580266514789456','01/01/2021','Close'
 --exec AddNewBill 333,333,'4580266514789456','01/01/2021','Close'
---exec AddNewBill 444,444,'4580266514789456','01/01/2021','Close'
+--exec AddNewBill 444,444,'4580266514789456','01/01/2021','Open'
 --exec AddNewBill 555,555,'4580266514789456','12/09/2020','Open'
---exec AddNewBill 666,444,'458026651478','23/09/2020','Open'
+--exec AddNewBill 666,444,'458026651478','23/09/2020','Close'
 --exec AddNewBill 222,666,'458026651478','2022-10-08','Open'
 --exec AddNewBill 111,888,'458026651478','2022-12-06','Open'
---exec AddNewBill 222,666,'458026651478','2021-10-07','Open'
---exec AddNewBill 111,888,'458026651478','2022-12-05','Open'
---exec AddNewBill 111,999,'458026651478','2022-12-05','Open'
+--exec AddNewBill 222,666,'458026651478','2021-10-07','Close'
+--exec AddNewBill 111,888,'458026651478','2022-12-05','Close'
+
+
 
 
 create proc AlterBill
-@Bill_Number int,
-@Employee_ID int,
 @Customer_ID int,
-@Credit_Card_Number nvarchar(12),
-@Purchase_Date date
+@Bill_Date date,
+@Employee_ID int,
+@Credit_Card_Number nvarchar(16),
+@Bill_Status nvarchar(12)
 as
 	UPDATE [dbo].[Bill]
 	SET Employee_ID = @Employee_ID,
-	Customer_ID=@Customer_ID, 
 	Credit_Card_Number = @Credit_Card_Number,
-	Purchase_Date = @Purchase_Date
-	where Bill_Number = @Bill_Number 
+	Bill_Status = @Bill_Status
+	where Customer_ID=@Customer_ID and Bill_Date = @Bill_Date
 go
---exec AlterBill 111,111,'4580266514789456','01/01/2021'
---exec AlterBill 222,222,'4580266514789456','01/01/2021'
---exec AlterBill 333,333,'4580266514789456','01/01/2021'
---exec AlterBill 444,444,'4580266514789456','01/01/2021'
---exec AlterBill 555,555,'4580266514789456','12/09/2020'
---exec AlterBill 666,444,'458026651478','23/09/2020'
---exec AlterBill 222,666,'458026651478','2022-10-07'
---exec AlterBill 111,888,'458026651478','2022-12-06'
---exec AlterBill 222,666,'458026651478','2021-10-07'
---exec AlterBill 777,888,'458026651478','2022-12-05'
+--exec GetAllBills
+--exec AlterBill 666,'2021-10-07',222,'458026651478','Close'
+--exec AlterBill 888,'2022-12-05',111,'458026651478','Close'
+--exec AlterBill 999,'2022-12-05',111, '458026651478','Open'
+
+
 
 create proc DeleteBill
 @Bill_Number int,
 @Customer_ID int,
-@Credit_Card_Number nvarchar(12)
+@Bill_Date date,
+@Credit_Card_Number nvarchar(16)
 as
 	DELETE FROM [dbo].[Bill] 
-	WHERE Bill_Number = @Bill_Number and Customer_ID = @Customer_ID and Credit_Card_Number = @Credit_Card_Number
+	WHERE Bill_Number = @Bill_Number and Customer_ID = @Customer_ID 
+	and Credit_Card_Number = @Credit_Card_Number and Bill_Date = @Bill_Date
 go
 
- --exec DeleteBill 20,999,458022223333
- -- exec DeleteBill 21,999,458022223333
---exec GetAllBills
+--exec DeleteBill 14,111,'01/01/2021','4580266514789456'
+--exec DeleteBill 15,222,'01/01/2021','4580266514789456'
+--exec DeleteBill 16,333,'01/01/2021','4580266514789456'
+--exec DeleteBill 17,444,'01/01/2021','4580266514789456'
+--exec DeleteBill 18,555,'12/09/2020','4580266514789456'
+--exec DeleteBill 19,444,'23/09/2020','458026651478'
+--exec DeleteBill 20,666,'2022-10-08','458026651478'
+--exec DeleteBill 21,888,'2022-12-06','458026651478'
+--exec DeleteBill 22,666,'2021-10-07','458026651478'
+--exec DeleteBill 23,888,'2022-12-05','458026651478'
 
 
 --  פרוצדורות חדרים שמורים ללקוחות
@@ -921,21 +931,22 @@ create proc AddNewCustomerRooms
 @Room_Number int,
 @Bill_Number int,
 @Customer_ID int,
+@Bill_Date date,
 @Entry_Date date,
 @Exit_Date date,
 @Amount_Of_People int,
 @Room_Status nvarchar(30)
 as
 	insert [dbo].[Customers_Rooms] 
-	values(@Room_Number,@Bill_Number,@Customer_ID,@Entry_Date,@Exit_Date,@Amount_Of_People,@Room_Status)
+	values(@Room_Number,@Bill_Number,@Customer_ID,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Room_Status)
 go
 
---exec AddNewCustomerRooms 2,2,222,'2022-09-09','2022-09-15',1,'Occupied'
---exec AddNewCustomerRooms 20,null,888,'2022-09-08','2022-09-14',2,'Reserved'
---exec AddNewCustomerRooms 3,3,333,'2022-07-21','2022-07-25',2,'Reserved'
---exec AddNewCustomerRooms 8,4,444,'2022-07-14','2022-07-20',8,'Occupied'
---exec AddNewCustomerRooms 9,5,555,'2021-07-05','2021-07-08',2,'Reserved'
---exec AddNewCustomerRooms 7,6,666,'2021-06-06','2021-06-12',4,'Occupied'
+--exec AddNewCustomerRooms 2,2,222,'2021-01-01','2021-01-01','2021-01-03',1,'Occupied'
+--exec AddNewCustomerRooms 20,null,888,'2022-12-06','2022-12-06','2022-12-12',2,'Reserved'
+--exec AddNewCustomerRooms 3,3,333,'2021-01-01','2021-01-01','2021-01-05',2,'Reserved'
+--exec AddNewCustomerRooms 8,8,888,'2022-12-06','2022-12-06','2022-12-09',8,'Occupied'
+--exec AddNewCustomerRooms 5,5,555,'2020-09-12','2020-09-12','2020-09-16',2,'Reserved'
+--exec AddNewCustomerRooms 7,7,666,'2022-10-08','2022-10-08','2022-10-15',4,'Occupied'
 
 
 
@@ -948,7 +959,7 @@ as
 	WHERE [Customer_ID] = @Customer_ID and [Room_Number] = @Room_Number and [Entry_Date] = @Entry_Date
 go
 --exec GetCustomersRooms
- --exec DeleteCustomerRoom 19,333,'2021-12-21'
+ --exec DeleteCustomerRoom 1,999,'2022-08-22'
 
 
 
@@ -968,6 +979,7 @@ create proc AlterCustomerRoom
 @Room_Number int,
 @Bill_Number int,
 @Customer_ID int,
+@Bill_Date date,
 @Entry_Date date,
 @Exit_Date date,
 @Amount_Of_People int,
@@ -978,17 +990,14 @@ as
 	[Entry_Date] = @Entry_Date ,
 	[Exit_Date]=@Exit_Date, 
 	[Customer_ID] = @Customer_ID,
+	[Bill_Date] =@Bill_Date,
 	[Amount_Of_People] = @Amount_Of_People,
 	[Bill_Number] = @Bill_Number,
 	[Room_Status] = @Room_Status
 	WHERE  	[Room_Number] = @Room_Number
 go
---exec GetAllCustomersRooms
---exec AlterCustomerRoom  1, 20,111,'2022-08-22','2022-08-24',5,'Occupied'
---exec AlterCustomerRoom 1,1,111,'2022-09-09','2022-09-15',1,'Reserved'
---exec AlterCustomerRoom 2,2,222,'2022-09-08','2022-09-14',2,'Reserved'
---exec AlterCustomerRoom 3,3,333,'2022-07-21','2022-07-25',2,'Occupied'
---exec AlterCustomerRoom 5,2,222,'2022-08-21','2022-08-25',1,'Occupied'
+--exec GetCustomersRooms
+--exec AlterCustomerRoom 20,NULL,888,'2022-09-08','2022-09-08','2022-09-15',2	,'Reserved'
 
 
 
@@ -1030,7 +1039,7 @@ create proc SaveRoomReservation
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
-@Credit_Card_Number nvarchar(12),
+@Credit_Card_Number nvarchar(16),
 @Employee_ID int,
 @Counter_Single int,
 @Counter_Double int,
@@ -1040,28 +1049,26 @@ create proc SaveRoomReservation
 @Amount_Of_People int
 as
 	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
-
-
+	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @date as date = (SELECT FORMAT(CAST( GETDATE() AS Date ),'dd/MM/yyyy' ))
-	DECLARE @if_exist_date as date = (SELECT FORMAT(CAST( (select [Purchase_Date] from [dbo].[Bill] 
-	where [Customer_ID] = @id) AS Date ),'dd/MM/yyyy'))
 
-	if @date != @if_exist_date
-		exec AddNewBill @Employee_ID,@id,@Credit_Card_Number,@date ,'Open'
 
-	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id)
+	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')
+		exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
+	else
+		exec AlterBill @id, @Bill_Date ,@Employee_ID, @Credit_Card_Number,'Open'
+
+
+	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @room_number as int
-
-
-
 
 	while @Counter_Single > 0
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room')
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		set @Counter_Single = @Counter_Single - 1
 		end
 
@@ -1069,9 +1076,9 @@ as
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Double room')
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		set @Counter_Double = @Counter_Double - 1
 		end
 
@@ -1079,15 +1086,14 @@ as
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Suite')
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
 		set @Counter_Suite = @Counter_Suite - 1
 		end
 go
-exec GetAllBills
-exec GetCustomersRooms
---exec SaveRoomReservation 999,'mmm','12/29',912,'4580222233334444',111,1,1,1,'22/08/2022','24/08/2022',5
+
+--exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'22/08/2022','24/08/2022',5
 
 
 --  פרוצדורה עבור צאק אין
@@ -1100,19 +1106,7 @@ as
 	[Room_Status] = 'Occupied'
 	WHERE  	[Customer_ID] = @id and [Entry_Date] = @entry_date
 go
---exec CheckIn 999 , '2022-08-22'
-
-
-create proc CheckOut
-@id int,
-@exit_date date
-as
-	DELETE FROM [dbo].[Customers_Rooms] 
-	WHERE  Customer_ID = @id and [Exit_Date] = @exit_date
-go
---exec CheckOut 999 , '2022-08-24'
-select * from [dbo].[Bill]
-select * from [dbo].[Bill_Details]
+--exec CheckIn 666 , '2022-08-22'
 
 
 
@@ -1120,7 +1114,7 @@ select * from [dbo].[Bill_Details]
 create proc GetAllBill_Details
 as
 	select * from [dbo].[Bill_Details]
-	order by [Purchase_Date] 
+	order by Bill_Date 
 go
 -- exec GetAllBill_Details
 
@@ -1136,51 +1130,42 @@ go
 
 
 
-alter proc AddNewBill_Detail
+create proc AddNewBill_Detail
 @id int,
-@Product_Code int,
+@Room_Number int,
+@Product_Dec nvarchar(30),
 @Amount int,
-@Purchase_Date date,
-@Purchase_Time time,
 @Payment_Method nvarchar(20)
 as
-	DECLARE @bill_number as int = (select Bill_Number from [dbo].[Bill] 
-		where [Customer_ID] = @id and [Bill_Status] = 'Open')
-	--if Exists( select [Bill_Status] from Bill 
-	--	where  )
-	--insert [dbo].[Bill_Details]
-	--values (@Bill_Number, @Product_Code, @Amount,@Purchase_Date,@Purchase_Time,@Payment_Method)
+	DECLARE @Purchase_Date as date = (SELECT FORMAT(CAST( GETDATE() AS Date ),'dd/MM/yyyy' ))
+
+	DECLARE @Purchase_Time as time = (select convert(time, getdate(), 108) )
+
+	DECLARE @bill_number as int = (select Bill_Number from  [dbo].[Customers_Rooms] 
+	where [Customer_ID] = @id and Room_Number = @Room_Number)
+
+	DECLARE @bill_date as date = (select Bill_Date from  [dbo].[Customers_Rooms] 
+	where [Customer_ID] = @id and Room_Number = @Room_Number)
+
+	DECLARE @Product_Code as int = (select [Product_Code] from [dbo].[Products] where [Description] = @Product_Dec)
+
+	insert [dbo].[Bill_Details]
+	values (@bill_number,@id, @bill_date, @Purchase_Date, @Product_Code, @Amount,@Purchase_Time,@Payment_Method)
 go
-exec GetAllBills
-exec GetAllBill_Details
-exec GetCustomersRooms
-exec AddNewBill_Detail id,2,6,'12/12/2022','13:00','Cash'
-
-
-select Bill_Number from [dbo].[Bill] 
-		where [Customer_ID] = 888 and [Bill_Status] = 'Open'
-		and [Purchase_Date] = '2022-12-06'
-
---exec AddNewBill_Detail 1,2,6,'12/12/2022','13:00','Cash'
---exec AddNewBill_Detail 4,3,6,'03/12/2022','16:00','Credit'
---exec AddNewBill_Detail 3,1,6,'12/12/2022','21:00','Credit'
---exec AddNewBill_Detail 5,1,10,'12/12/2022','21:00','Credit'
---exec AddNewBill_Detail 6,5,2,'12/12/2022','21:00','Cash'
---exec AddNewBill_Detail 3,1,3,'12/12/2022','21:00','Credit'
---exec AddNewBill_Detail 3,6,1,'12/12/2022','21:00','Cash'
---exec AddNewBill_Detail 6,5,2,'13/01/2022','21:00','Credit'
+--exec AddNewBill_Detail 666,11,'Vodka',6,'Cash'
+--exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
 
 
 
 create proc DeleteBill_Detail
 @Product_Code int,
 @Amount int,
-@Purchase_Date date,
+@Bill_Date date,
 @Purchase_Time time
 as
 	DELETE FROM [dbo].[Bill_Details] 
 	WHERE Product_Code = @Product_Code and @Amount = @Amount 
-	and Purchase_Date = @Purchase_Date and Purchase_Time = @Purchase_Time
+	and Bill_Date = @Bill_Date and Purchase_Time = @Purchase_Time
 go
 
 -- exec DeleteBill_Detail 2,6,'12/12/2022','13:00'
@@ -1243,12 +1228,15 @@ as
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
 	dbo.Customers_Rooms.Amount_Of_People, 
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
-	dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date
+	dbo.Bill.Credit_Card_Number, dbo.Bill.Bill_Date
 	FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
 	ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
 	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	WHERE  (dbo.Bill.Customer_ID = @ID)
-	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Customers_Rooms.Room_Status
+	WHERE  (dbo.Bill.Customer_ID = @ID and Customers_Rooms.Room_Status = 'Occupied')
+	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,
+	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, 
+	dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, 
+	dbo.Bill.Bill_Date,dbo.Customers_Rooms.Room_Status
 	order by dbo.Customers_Rooms.Room_Status desc
 
 	--SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, 
@@ -1265,10 +1253,32 @@ as
 	--order by dbo.Bill.Bill_Status desc
 go
 
--- exec Room_Resit 555
+-- exec Room_Resit 666
 
 --SELECT DATEDIFF(day, '28/06/2022', '07/07/2022') AS DateDiff;
 
+
+--  B_num , Bill_Date, CCN,  type product , desc, price, ENDA, EXDA, NOnights, AOP, 
+create function Get_Receipt(@Customer_ID int)
+returns @receipt TABLE ( Room_Number int ,Room_Type nvarchar(30), Price_Per_Night int, Details nvarchar(100) )                     
+as
+	begin
+
+	end
+go
+exec GetAllBills
+exec GetAllBill_Details
+exec Room_Resit 666
+
+--SELECT dbo.Customers_Rooms.Room_Number, dbo.Customers_Rooms.Bill_Number, dbo.Customers_Rooms.Customer_ID, dbo.Customers_Rooms.Bill_Date, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, 
+--                  dbo.Customers_Rooms.Amount_Of_People, dbo.Customers_Rooms.Room_Status, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Time, 
+--                  dbo.Bill_Details.Payment_Method
+--FROM     dbo.Bill_Details INNER JOIN
+--                  dbo.Customers_Rooms ON dbo.Bill_Details.Bill_Number = dbo.Customers_Rooms.Bill_Number INNER JOIN
+--                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+--GROUP BY dbo.Customers_Rooms.Room_Number, dbo.Customers_Rooms.Bill_Number, dbo.Customers_Rooms.Customer_ID, dbo.Customers_Rooms.Bill_Date, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, 
+--                  dbo.Customers_Rooms.Amount_Of_People, dbo.Customers_Rooms.Room_Status, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Time, 
+--                  dbo.Bill_Details.Payment_Method
 
 
 create proc SumPerProduct
