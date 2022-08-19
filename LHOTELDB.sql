@@ -140,6 +140,7 @@ create table Rooms
 go
 
 
+ 
 create table Bill
 (
 	Bill_Number int identity(1,1) NOT NULL,
@@ -951,12 +952,11 @@ go
 
 
 create proc DeleteCustomerRoom
-@Room_Number int,
 @Customer_ID int,
 @Entry_Date date
 as
 	DELETE FROM [dbo].[Customers_Rooms] 
-	WHERE [Customer_ID] = @Customer_ID and [Room_Number] = @Room_Number and [Entry_Date] = @Entry_Date
+	WHERE [Customer_ID] = @Customer_ID and Bill_Date = @Entry_Date
 go
 --exec GetCustomersRooms
  --exec DeleteCustomerRoom 1,999,'2022-08-22'
@@ -1218,57 +1218,9 @@ go
 --exec Product_Resit 3
 
 
----  לתקן קבלה של החדר
---- פרוצדורה למטרת צאק אווט
-create proc Room_Resit
-@ID int
-as
-	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,dbo.Customers_Rooms.Room_Status,
-	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
-	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
-	dbo.Customers_Rooms.Amount_Of_People, 
-	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
-	dbo.Bill.Credit_Card_Number, dbo.Bill.Bill_Date
-	FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
-	ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
-	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	WHERE  (dbo.Bill.Customer_ID = @ID and Customers_Rooms.Room_Status = 'Occupied')
-	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,
-	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, 
-	dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, 
-	dbo.Bill.Bill_Date,dbo.Customers_Rooms.Room_Status
-	order by dbo.Customers_Rooms.Room_Status desc
-
-	--SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, 
-	--dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
-	--(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
-	--dbo.Customers_Rooms.Amount_Of_People, 
-	--(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
-	--dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date,dbo.Bill.Bill_Status
-	--FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
-	--ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
-	--ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	--WHERE  (dbo.Bill.Customer_ID = @ID)
-	--GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, dbo.Bill.Purchase_Date, dbo.Bill.Bill_Status
-	--order by dbo.Bill.Bill_Status desc
-go
-
--- exec Room_Resit 666
 
 --SELECT DATEDIFF(day, '28/06/2022', '07/07/2022') AS DateDiff;
 
-
---  B_num , Bill_Date, CCN,  type product , desc, price, ENDA, EXDA, NOnights, AOP, 
-create function Get_Receipt(@Customer_ID int)
-returns @receipt TABLE ( Room_Number int ,Room_Type nvarchar(30), Price_Per_Night int, Details nvarchar(100) )                     
-as
-	begin
-
-	end
-go
-exec GetAllBills
-exec GetAllBill_Details
-exec Room_Resit 666
 
 --SELECT dbo.Customers_Rooms.Room_Number, dbo.Customers_Rooms.Bill_Number, dbo.Customers_Rooms.Customer_ID, dbo.Customers_Rooms.Bill_Date, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, 
 --                  dbo.Customers_Rooms.Amount_Of_People, dbo.Customers_Rooms.Room_Status, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Time, 
@@ -1372,6 +1324,105 @@ go
 --select * from [dbo].[Tasks_Types]
 --select * from [dbo].[Bill]
 
+
+
+--- פרוצדורה למטרת צאק אווט
+--drop proc Room_Resit
+--create proc Room_Resit
+--@ID int
+--as
+--	SELECT dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,dbo.Customers_Rooms.Room_Status,
+--	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date,dbo.Customers_Rooms.Exit_Date,
+--	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date)) as Number_Of_Nights,
+--	dbo.Customers_Rooms.Amount_Of_People, 
+--	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date) * dbo.Rooms.Price_Per_Night) as Sum_Total,
+--	dbo.Bill.Credit_Card_Number, dbo.Bill.Bill_Date
+--	FROM dbo.Customers_Rooms INNER JOIN dbo.Bill 
+--	ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number INNER JOIN dbo.Rooms 
+--	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
+--	WHERE  (dbo.Bill.Customer_ID = @ID and Customers_Rooms.Room_Status = 'Occupied')
+--	GROUP BY dbo.Customers_Rooms.Bill_Number, dbo.Bill.Customer_ID, dbo.Customers_Rooms.Room_Number,
+--	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, 
+--	dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Bill.Credit_Card_Number, 
+--	dbo.Bill.Bill_Date,dbo.Customers_Rooms.Room_Status
+--	order by dbo.Customers_Rooms.Room_Status desc
+--go
+-- exec Room_Resit 666
+
+
+
+--drop proc Get_Receipt_Products
+--create proc Get_Receipt_Products
+--@id int
+--as
+--	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill.Credit_Card_Number, dbo.Products.Description, dbo.Bill_Details.Amount, dbo.Products.Price_Per_Unit, 
+--                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Payment_Method
+--FROM     dbo.Bill INNER JOIN
+--                  dbo.Bill_Details ON dbo.Bill.Bill_Number = dbo.Bill_Details.Bill_Number AND dbo.Bill.Customer_ID = dbo.Bill_Details.Customer_ID AND dbo.Bill.Bill_Date = dbo.Bill_Details.Bill_Date INNER JOIN
+--                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+--WHERE  (dbo.Bill.Bill_Status = N'Open' and dbo.Bill_Details.Customer_ID = @id)
+--GROUP BY dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill.Credit_Card_Number, dbo.Bill.Bill_Status, dbo.Products.Description, dbo.Bill_Details.Amount, dbo.Products.Price_Per_Unit, 
+--                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Payment_Method
+--go
+
+--exec Get_Receipt_Products 666 
+
+
+--SELECT dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Bill_Details.Amount, dbo.Customers_Rooms.Entry_Date, 
+--                  dbo.Customers_Rooms.Exit_Date
+--FROM     dbo.Bill INNER JOIN
+--                  dbo.Bill_Details ON dbo.Bill.Bill_Number = dbo.Bill_Details.Bill_Number AND dbo.Bill.Customer_ID = dbo.Bill_Details.Customer_ID AND dbo.Bill.Bill_Date = dbo.Bill_Details.Bill_Date INNER JOIN
+--                  dbo.Customers_Rooms ON dbo.Bill.Bill_Number = dbo.Customers_Rooms.Bill_Number AND dbo.Bill.Customer_ID = dbo.Customers_Rooms.Customer_ID AND dbo.Bill.Bill_Date = dbo.Customers_Rooms.Bill_Date INNER JOIN
+--                  dbo.Rooms ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number INNER JOIN
+--                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+--GROUP BY dbo.Customers_Rooms.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Bill_Details.Amount, dbo.Customers_Rooms.Entry_Date, 
+--                  dbo.Customers_Rooms.Exit_Date
+
+--SELECT dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+--                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill.Credit_Card_Number, dbo.Customers.Credit_Card_Date, dbo.Customers.Three_Digit
+--FROM     dbo.Bill INNER JOIN
+--                  dbo.Bill_Details ON dbo.Bill.Bill_Number = dbo.Bill_Details.Bill_Number AND dbo.Bill.Customer_ID = dbo.Bill_Details.Customer_ID AND dbo.Bill.Bill_Date = dbo.Bill_Details.Bill_Date INNER JOIN
+--                  dbo.Customers_Rooms ON dbo.Bill.Bill_Number = dbo.Customers_Rooms.Bill_Number AND dbo.Bill.Customer_ID = dbo.Customers_Rooms.Customer_ID AND dbo.Bill.Bill_Date = dbo.Customers_Rooms.Bill_Date INNER JOIN
+--                  dbo.Rooms ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number INNER JOIN
+--                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN
+--                  dbo.Customers ON dbo.Bill.Customer_ID = dbo.Customers.Customer_ID
+--WHERE  (dbo.Bill.Customer_ID = 666) AND (dbo.Bill.Bill_Status = N'Open')
+--GROUP BY dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+--                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill.Credit_Card_Number, dbo.Customers.Credit_Card_Date, dbo.Customers.Three_Digit, dbo.Bill.Customer_ID, dbo.Bill.Bill_Status
+
+
+
+create proc Get_Receipt
+@id int
+as
+	SELECT dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill.Credit_Card_Number, dbo.Customers.Credit_Card_Date, dbo.Customers.Three_Digit
+FROM     dbo.Bill INNER JOIN
+                  dbo.Bill_Details ON dbo.Bill.Bill_Number = dbo.Bill_Details.Bill_Number AND dbo.Bill.Customer_ID = dbo.Bill_Details.Customer_ID AND dbo.Bill.Bill_Date = dbo.Bill_Details.Bill_Date INNER JOIN
+                  dbo.Customers_Rooms ON dbo.Bill.Bill_Number = dbo.Customers_Rooms.Bill_Number AND dbo.Bill.Customer_ID = dbo.Customers_Rooms.Customer_ID AND dbo.Bill.Bill_Date = dbo.Customers_Rooms.Bill_Date INNER JOIN
+                  dbo.Rooms ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number INNER JOIN
+                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN
+                  dbo.Customers ON dbo.Bill.Customer_ID = dbo.Customers.Customer_ID
+WHERE  (dbo.Bill.Customer_ID = @id) AND (dbo.Bill.Bill_Status = N'Open')
+GROUP BY dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+                  dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill.Credit_Card_Number, dbo.Customers.Credit_Card_Date, dbo.Customers.Three_Digit, dbo.Bill.Customer_ID, dbo.Bill.Bill_Status
+
+go
+--exec Get_Receipt 666
+
+
+--  פרוצדורת צאק אווט
+create proc CheckOut
+@id int,
+@Bill_Date date
+as
+	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
+	where Customer_ID=666 and Bill_Date = @Bill_Date and Bill_Status = 'Open'
+
+	exec DeleteCustomerRoom @id , @Bill_Date
+go
+
+--exec CheckOut 666, '2022-10-08'
 
 
 
