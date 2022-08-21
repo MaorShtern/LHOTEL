@@ -48,7 +48,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-//  לבדוק למה הסטרינג של הפרוצדורה לא עובד
+
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewEmployee")]
         public IHttpActionResult AddNewEmployee([FromBody]Employees employee)

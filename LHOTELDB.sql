@@ -91,21 +91,27 @@ create table Employees
 go
 
 
-
 create table Employees_Tasks
 (
-	Employee_ID int NOT NULL,
+	Employee_ID int,
 	Task_Number int,
 	Start_Date Date  NOT NULL,
     Start_Time Time  NOT NULL,
 	End_Date Date ,
 	Task_Status nvarchar(30),
-	Description NVARCHAR(30),
+	Description NVARCHAR(100),
 	CONSTRAINT [PK_Employee_ID2] PRIMARY KEY (Employee_ID,Task_Number,Start_Date,Start_Time),
 	CONSTRAINT [Fk_Employee_ID] FOREIGN KEY (Employee_ID) REFERENCES Employees (Employee_ID),
 	CONSTRAINT [Fk_Task_Number] FOREIGN KEY (Task_Number) REFERENCES Tasks_Types (Task_Number)
 )
 go
+--222	7	2022-02-02	13:12:00.0000000	2022-02-03	Open	Clean the counter is filthy
+--222	7	2022-08-17	13:00:00.0000000	2022-03-02	Open	Clean the counter is filthy
+--333	1	2022-02-02	13:10:00.0000000	2022-02-03	Close	Room cleaning 21
+--444	2	2022-02-02	13:05:00.0000000	2022-02-03	Open	Schnitzel, chips and coke for 
+--555	4	2022-02-02	13:07:00.0000000	2022-02-03	Close	Mini bar filling for room 10
+--777	3	2022-02-02	13:08:00.0000000	2022-02-03	Open	Room 15 request dry towels
+--888	6	2022-02-02	13:12:00.0000000	2022-02-03	Close	A customer requests to check o
 
 
 create table Customers
@@ -146,31 +152,12 @@ create table Bill
 	Bill_Number int identity(1,1) NOT NULL,
 	Customer_ID int NOT NULL,
 	Bill_Date Date NOT NULL,
-	Employee_ID int NOT NULL,
+	Employee_ID int,
 	Credit_Card_Number nvarchar(16),
 	Bill_Status nvarchar(10) NOT NULL,
 	CONSTRAINT [PK_Bill_Number1] PRIMARY KEY (Bill_Number,Customer_ID,Bill_Date),
 	CONSTRAINT [Fk_Employee_ID2] FOREIGN KEY (Employee_ID) REFERENCES Employees (Employee_ID),
 	CONSTRAINT [Fk_Customer_ID] FOREIGN KEY (Customer_ID) REFERENCES Customers (Customer_ID)
-)
-go
-
-
-
-create table Bill_Details
-(
-	Bill_Number int NOT NULL,
-	Customer_ID int NOT NULL,
-	Bill_Date Date NOT NULL,
-	Purchase_Date Date NOT NULL,
-	Product_Code int NOT NULL,
-	Amount int NOT NULL,
-	Purchase_Time time,
-	Payment_Method nvarchar(20) NOT NULL,
-	CONSTRAINT [Fk_Product_Code] FOREIGN KEY 
-          (Product_Code) REFERENCES Products (Product_Code),
-	CONSTRAINT Bill_Number FOREIGN KEY 
-          (Bill_Number,Customer_ID,Bill_Date) REFERENCES Bill (Bill_Number,Customer_ID,Bill_Date)
 )
 go
 
@@ -212,6 +199,24 @@ create table Customers_Rooms
 	CONSTRAINT [PK_Room_Number2] PRIMARY KEY (Room_Number),
 	CONSTRAINT [Fk_Room_Number] FOREIGN KEY (Room_Number) REFERENCES Rooms (Room_Number),
 	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number,Customer_ID,Bill_Date) REFERENCES Bill (Bill_Number,Customer_ID,Bill_Date),
+)
+go
+
+
+create table Bill_Details
+(
+	Bill_Number int NOT NULL,
+	Customer_ID int NOT NULL,
+	Bill_Date Date NOT NULL,
+	Room_Number int NOT NULL,
+	Purchase_Date Date NOT NULL,
+	Product_Code int NOT NULL,
+	Amount int NOT NULL,
+	Purchase_Time time,
+	Payment_Method nvarchar(20) NOT NULL,
+	CONSTRAINT [Fk_Product_Code] FOREIGN KEY 
+          (Product_Code) REFERENCES Products (Product_Code),
+	CONSTRAINT Room_Number FOREIGN KEY (Room_Number) REFERENCES Customers_Rooms (Room_Number)
 )
 go
 
@@ -292,16 +297,18 @@ go
 --exec GetEmployeeById 999
 
 
-create proc InsertEmployee 
+alter proc InsertEmployee 
 @id int, 
 @name nvarchar(30),
 @phoneNumber nvarchar(30),
-@birthDate date, 
+@birthDate varchar(10), 
 @worker_Code int, 
 @hourly_Wage int, 
 @address nvarchar(30)
 as
-	insert  [dbo].[Employees] values (@id,@name,@phoneNumber,@birthDate,@worker_Code,@hourly_Wage,@address)
+	declare @dateResult as date 
+	set @dateResult = convert(date, @birthDate, 103) 
+	insert  [dbo].[Employees] values (@id,@name,@phoneNumber,@dateResult,@worker_Code,@hourly_Wage,@address)
 go
 --exec InsertEmployee 111,'aaa','0526211881','1999-02-23',1,40,'aaa'
 --exec InsertEmployee 222,'bbb','0526211881','1999-03-23',2,40,'bbb'
@@ -311,6 +318,8 @@ go
 --exec InsertEmployee 666,'fff','0502359678','1972-04-24',1,41,'fff'
 --exec InsertEmployee 777,'ggg','0502233344','1997-11-12',3,41,'ggg'
 --exec InsertEmployee 888,'hhh','0523491528','1990-10-03',2,41,'hhh'
+--exec InsertEmployee 999,'hhh','0523491528','15/08/2022',2,41,'hhh'
+
 
 
 
@@ -331,24 +340,25 @@ go
 --exec AlterEmployee 111,'aaa','0526211881','23/02/1999',1,40,'bbb'
 
 
---drop proc DeleteEmployeeById
---create proc DeleteEmployeeById
---@id int
---as
---	DECLARE @RowCount1 INTEGER
---    DECLARE @RowCount2 INTEGER
---    DECLARE @RowCount3 INTEGER
+alter proc DeleteEmployeeById
+@id int
+as
+delete FROM [Employees] WHERE [Employee_ID] = @id
+	--DECLARE @RowCount1 INTEGER
+ --   DECLARE @RowCount2 INTEGER
+ --   DECLARE @RowCount3 INTEGER
 
---	DELETE FROM Employees_Tasks WHERE [Employee_ID] = @id
---	SELECT @RowCount1 = @@ROWCOUNT
---	DELETE FROM Bill WHERE [Employee_ID] = @id
---	SELECT @RowCount2 = @@ROWCOUNT
---	DELETE FROM Employees WHERE [Employee_ID] = @id
---	SELECT @RowCount3 = @@ROWCOUNT
---	SELECT @RowCount1 + @RowCount2 + @RowCount3 AS Result
---go
---exec DeleteEmployeeById 999
-
+	--DELETE FROM Employees_Tasks WHERE [Employee_ID] = @id
+	--SELECT @RowCount1 = @@ROWCOUNT
+	--DELETE FROM Bill WHERE [Employee_ID] = @id
+	--SELECT @RowCount2 = @@ROWCOUNT
+	--DELETE FROM Employees WHERE [Employee_ID] = @id
+	--SELECT @RowCount3 = @@ROWCOUNT
+	--SELECT @RowCount1 + @RowCount2 + @RowCount3 AS Result
+go
+exec DeleteEmployeeById 888
+exec GetAllEmployees
+exec GetAllTasks
 
 
 -- פרוצדורות לקוחות
@@ -784,7 +794,7 @@ go
 -- exec GetTaskById 222
 
 
-create proc AddNewTask
+alter proc AddNewTask
 @Employee_ID int, 
 @Task_Number int,
 @Start_Date date,
@@ -794,7 +804,7 @@ create proc AddNewTask
 @Description nvarchar(30)
 as
 	if EXISTS( select [Employee_ID],[Date],[Entrance_Time] from [dbo].[Shifts]
-	where [Employee_ID] = 111 and [Date] = @Start_Date and [Entrance_Time] <= @Start_Time )
+	where [Employee_ID] = @Employee_ID and [Date] = @Start_Date and [Entrance_Time] <= @Start_Time )
 		insert [dbo].[Employees_Tasks]
 		values (@Employee_ID,@Task_Number,@Start_Date,@Start_Time,@End_Date,@Task_Status,@Description)
 go
@@ -806,6 +816,11 @@ go
 -- exec AddNewTask 777,3,'02/02/2022','13:08','03/02/2022','Open','Room 15 request dry towels'
 -- exec AddNewTask 888,6,'02/02/2022','13:12','03/02/2022','Close','A customer requests to check out'
 --exec AddNewTask 222,7,'02/02/2022','13:12','03/02/2022','Open','Clean the counter is filthy'
+--select * from [dbo].[Employees]
+--select * from [dbo].[Shifts]
+
+--create proc Add
+
 
 
 create proc AlterTask
@@ -949,8 +964,16 @@ create proc AddNewCustomerRooms
 @Amount_Of_People int,
 @Room_Status nvarchar(30)
 as
-	insert [dbo].[Customers_Rooms] 
-	values(@Room_Number,@Bill_Number,@Customer_ID,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Room_Status)
+	begin tran
+		insert [dbo].[Customers_Rooms] 
+			values(@Room_Number,@Bill_Number,@Customer_ID,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Room_Status)
+	if(@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+	commit tran
 go
 
 --exec AddNewCustomerRooms 2,2,222,'2021-01-01','2021-01-01','2021-01-03',1,'Occupied'
@@ -1061,7 +1084,7 @@ create proc SaveRoomReservation
 as
 	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
 	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
-	DECLARE @date as date = (SELECT FORMAT(CAST( GETDATE() AS Date ),'dd/MM/yyyy' ))
+	DECLARE @date as date = GETDATE()
 
 
 	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')
@@ -1104,7 +1127,19 @@ as
 		end
 go
 
---exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'22/08/2022','24/08/2022',5
+--exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+
+--drop  trigger AddRoomToDetails
+create trigger AddRoomToDetails
+on [Customers_Rooms] for update
+as
+	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied')
+	begin
+		insert [dbo].[Bill_Details]
+			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,convert(time,getdate()),'Credit'  
+				from inserted
+	end
+go
 
 
 --  פרוצדורה עבור צאק אין
@@ -1117,6 +1152,7 @@ as
 	[Room_Status] = 'Occupied'
 	WHERE  	[Customer_ID] = @id and [Entry_Date] = @entry_date
 go
+
 --exec CheckIn 666 , '2022-08-22'
 
 
@@ -1148,7 +1184,7 @@ create proc AddNewBill_Detail
 @Amount int,
 @Payment_Method nvarchar(20)
 as
-	DECLARE @Purchase_Date as date = (SELECT FORMAT(CAST( GETDATE() AS Date ),'dd/MM/yyyy' ))
+	DECLARE @Purchase_Date as date =  GETDATE()
 
 	DECLARE @Purchase_Time as time = (select convert(time, getdate(), 108) )
 
@@ -1161,7 +1197,7 @@ as
 	DECLARE @Product_Code as int = (select [Product_Code] from [dbo].[Products] where [Description] = @Product_Dec)
 
 	insert [dbo].[Bill_Details]
-	values (@bill_number,@id, @bill_date, @Purchase_Date, @Product_Code, @Amount,@Purchase_Time,@Payment_Method)
+	values (@bill_number,@id, @bill_date,@Room_Number, @Purchase_Date, @Product_Code, @Amount,@Purchase_Time,@Payment_Method)
 go
 --exec AddNewBill_Detail 666,11,'Vodka',6,'Cash'
 --exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
@@ -1211,7 +1247,7 @@ as
 	WHERE  (dbo.Products.Description = @Description)
 	GROUP BY dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage
 go
-exec GetAllProducts
+--exec GetAllProducts
 -- exec ProductPurchaseByName 'Coca cola'
 
 
@@ -1438,6 +1474,16 @@ go
 --exec Get_Receipt 666
 
 
+SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Room_Number, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Bill.Bill_Date, dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+                  dbo.Products.Discount_Percentage, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Bill.Customer_ID
+FROM     dbo.Bill_Details INNER JOIN
+                  dbo.Customers_Rooms ON dbo.Bill_Details.Room_Number = dbo.Customers_Rooms.Room_Number INNER JOIN
+                  dbo.Bill ON dbo.Customers_Rooms.Bill_Number = dbo.Bill.Bill_Number AND dbo.Customers_Rooms.Customer_ID = dbo.Bill.Customer_ID AND dbo.Customers_Rooms.Bill_Date = dbo.Bill.Bill_Date INNER JOIN
+                  dbo.Rooms ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number INNER JOIN
+                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+
+
+
 --  פרוצדורת צאק אווט
 create proc CheckOut
 @id int,
@@ -1450,6 +1496,19 @@ as
 go
 
 --exec CheckOut 666, '2022-10-08'
+
+
+--  קבלה
+--SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, 
+--                  dbo.Customers_Rooms.Amount_Of_People, dbo.Bill_Details.Room_Number
+--FROM     dbo.Customers_Rooms INNER JOIN
+--                  dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
+--                  dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
+--WHERE  (dbo.Bill_Details.Product_Code = 8)
+--union all
+-- שאילתת מוצרים
+--WHERE  (dbo.Bill_Details.Product_Code != 8)
+
 
 
 

@@ -57,16 +57,16 @@ namespace DAL
                 Employees employee = null;
                 while (reader.Read())
                 {
-                    employee = new Employees(
-                        (int)reader["Employee_ID"],
-                        (string)reader["Employee_Name"],
-                        (string)reader["Phone_Number"],
-                        (DateTime)reader["Birth_Date"],
-                        (int)reader["Worker_Code"],
-                        (int)reader["Hourly_Wage"],
-                        (string)reader["Address"],
-                        (int)reader["Employee_Code"]
-                        );
+                    employee = new Employees() {
+                        id =  (int)reader["Employee_ID"],
+                        name = (string)reader["Employee_Name"],
+                        phoneNumber = (string)reader["Phone_Number"],
+                        birthDate = (DateTime)reader["Birth_Date"],
+                        worker_Code = (int)reader["Worker_Code"],
+                        hourly_Wage = (int)reader["Hourly_Wage"],
+                        address = (string)reader["Address"],
+                        employee_Code = (int)reader["Employee_Code"]
+                        };
                 }
                 return employee;
             }

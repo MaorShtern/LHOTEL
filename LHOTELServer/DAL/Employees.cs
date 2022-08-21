@@ -16,6 +16,18 @@ namespace DAL
         public int hourly_Wage { set; get; }
         public string address { set; get; }
         public int employee_Code { set; get; }
+        //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,
+        //    int hourly_Wage , string address, int employee_Code )
+        //{
+        //    this.id = id;
+        //    this.name = name;
+        //    this.phoneNumber = phoneNumber;
+        //    this.birthDate = birthDate;
+        //    this.worker_Code = worker_Code;
+        //    this.hourly_Wage = hourly_Wage;
+        //    this.address = address;
+        //    this.employee_Code = employee_Code;
+        //}
 
         //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,
         //  int hourly_Wage, string address)
@@ -29,18 +41,6 @@ namespace DAL
         //    this.address = address;
         //}
 
-        public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,
-            int hourly_Wage, string address, int employee_Code)
-        {
-            this.id = id;
-            this.name = name;
-            this.phoneNumber = phoneNumber;
-            this.birthDate = birthDate;
-            this.worker_Code = worker_Code;
-            this.hourly_Wage = hourly_Wage;
-            this.address = address;
-            this.employee_Code = employee_Code;
-        }
 
         public override string ToString()
         {
