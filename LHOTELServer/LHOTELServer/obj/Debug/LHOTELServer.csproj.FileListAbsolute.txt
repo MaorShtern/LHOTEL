@@ -175,3 +175,4 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CoreCompileInputs.cache
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete

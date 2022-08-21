@@ -14,7 +14,22 @@ namespace DAL
         //    this.password = password;
         //}
 
-        public Customers(int customerID, int customerType, string firstName, string lastName, string mail,string password, string phoneNumber, string cardHolderName, string creditCardDate, int threeDigit)
+        //public Customers(int customerID, int customerType, string firstName, string lastName, string mail,
+        //   string password, string phoneNumber)
+        //{
+        //    this.customerID = customerID;
+        //    this.customerType = customerType;
+        //    this.firstName = firstName;
+        //    this.lastName = lastName;
+        //    this.mail = mail;
+        //    this.password = password;
+        //    this.phoneNumber = phoneNumber;
+        //}
+
+
+        public Customers(int customerID, int customerType, string firstName, string lastName, string mail,
+            string password, string phoneNumber, 
+            string cardHolderName , string creditCardDate, int threeDigit, string credit_Card_Number)
         {
             this.customerID = customerID;
             this.customerType = customerType;
@@ -26,6 +41,7 @@ namespace DAL
             this.cardHolderName = cardHolderName;
             this.creditCardDate = creditCardDate;
             this.threeDigit = threeDigit;
+            this.credit_Card_Number = credit_Card_Number;
         }
         
     
@@ -41,6 +57,7 @@ namespace DAL
         public string cardHolderName { set; get; }
         public string creditCardDate { set; get; }
         public int threeDigit { set; get; }
+        public string credit_Card_Number { set; get; }
 
         public override string ToString()
         {

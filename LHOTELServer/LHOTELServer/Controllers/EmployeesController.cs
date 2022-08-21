@@ -19,21 +19,24 @@ namespace LHOTELServer.Controllers
 
     public class EmployeesController : ApiController
     {
+        //[System.Web.Http.HttpGet]
+        //public IHttpActionResult Get()
+        //{
+        //    try
+        //    {
+        //        return Ok(BLLEmployees.GetEmployees());
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //}
+
+
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Get()
-        {
-            try
-            {
-                return Ok(BLLEmployees.GetEmployees());
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
-        }
-
-        public IHttpActionResult Get(int id)
+        [System.Web.Http.Route("~/GetEmployeeById")]
+        public IHttpActionResult GetEmployeeById(int id)
         {
             try
             {
@@ -45,8 +48,10 @@ namespace LHOTELServer.Controllers
             }
         }
 
+//  לבדוק למה הסטרינג של הפרוצדורה לא עובד
         [System.Web.Http.HttpPost]
-        public IHttpActionResult Post([FromBody]Employees employee)
+        [System.Web.Http.Route("~/AddNewEmployee")]
+        public IHttpActionResult AddNewEmployee([FromBody]Employees employee)
         {
             try
             {

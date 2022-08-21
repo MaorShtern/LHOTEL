@@ -9,10 +9,10 @@ namespace BLL
 {
     public class BLLEmployees
     {
-        public static List<Employees> GetEmployees()
-        {
-            return DALEmployees.GetAllEmployees();
-        }
+        //public static List<Employees> GetEmployees()
+        //{
+        //    return DALEmployees.GetAllEmployees();
+        //}
 
         public static bool AddNewEmployee(Employees newEmployee)
         {

@@ -9,40 +9,39 @@ namespace DAL
 {
     public class DALEmployees
     {
-        public static List<Employees> GetAllEmployees()
-        {
-            try
-            {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetAllEmployees");
-                if (reader == null || !reader.HasRows)
-                    return null;
+        //public static List<Employees> GetAllEmployees()
+        //{
+        //    try
+        //    {
+        //        SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetAllEmployees");
+        //        if (reader == null || !reader.HasRows)
+        //            return null;
 
-                List<Employees> employees = new List<Employees>();
-                while (reader.Read())
-                {
-                    employees.Add(new Employees(
-                        (int)reader["Employee_ID"],
-                        (string)reader["Employee_Name"],
-                        (string)reader["Phone_Number"],
-                        (DateTime)reader["Birth_Date"],
-                        (int)reader["Worker_Code"],
-                        (int)reader["Hourly_Wage"],
-                        (string)reader["Address"],
-                        (int)reader["Employee_Code"]
-                        ));
-                }
-                return employees;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-            finally
-            {
-                SQLConnection.CloseDB();
-            }
-        }
+        //        List<Employees> employees = new List<Employees>();
+        //        while (reader.Read())
+        //        {
+        //            employees.Add(new Employees(
+        //                (int)reader["Employee_ID"],
+        //                (string)reader["Employee_Name"],
+        //                (string)reader["Phone_Number"],
+        //                (DateTime)reader["Birth_Date"],
+        //                (int)reader["Worker_Code"],
+        //                (int)reader["Hourly_Wage"],
+        //                (string)reader["Address"]
+        //                ));
+        //        }
+        //        return employees;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        SQLConnection.CloseDB();
+        //    }
+        //}
 
         public static Employees GetEmployeesById(int id)
         {

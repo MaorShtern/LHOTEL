@@ -12,27 +12,15 @@ using System.Web.Http;
 using DAL;
 using BLL;
 
+
 namespace LHOTELServer.Controllers
 {
     [System.Web.Http.RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Get()
-        {
-            try
-            {
-                return Ok(BLLCustomers.GetCustomers());
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
-        }
-
-        //[System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
-        public IHttpActionResult Get(string mail, string password)
+        [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
+        public IHttpActionResult GetCustomerByMailAndPassword(string mail, string password)
         {
             try
             {
@@ -42,10 +30,13 @@ namespace LHOTELServer.Controllers
             {
                 return BadRequest(e.Message);
             }
+
         }
 
+
         [System.Web.Http.HttpPost]
-        public IHttpActionResult Post([FromBody] Customers customer)
+        [System.Web.Http.Route("~/AddNewCustomer")]
+        public IHttpActionResult AddNewCustomer([FromBody] Customers customer)
         {
             try
             {
@@ -58,7 +49,23 @@ namespace LHOTELServer.Controllers
         }
 
         [System.Web.Http.HttpPut]
-        public IHttpActionResult Put([FromBody] Customers customer)
+        [System.Web.Http.Route("~/GetCustomerByIDAndMail")]
+        public IHttpActionResult GetCustomerByIDAndMail(int id, string mail)
+        {
+            try
+            {
+                return Ok(BLLCustomers.GetCustomerByIDAndMail(id , mail));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(); 
+            }
+        }
+
+
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/AlterCustomerById")]
+        public IHttpActionResult AlterCustomerById([FromBody] Customers customer)
         {
             try
             {
@@ -70,18 +77,8 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        //[System.Web.Http.HttpDelete]
-        //public IHttpActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLCustomers.DeleteCustomerById(id));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
+
+     
     }
 }

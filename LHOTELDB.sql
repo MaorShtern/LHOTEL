@@ -289,7 +289,7 @@ create proc GetEmployeeById
 as
 select * from [dbo].[Employees] where [Employee_ID] = @id
 go
---exec GetEmployeeById 111
+--exec GetEmployeeById 999
 
 
 create proc InsertEmployee 
@@ -367,7 +367,7 @@ create proc GetCustomerById
 as
 	select * from [dbo].[Customers] where [Customer_ID] = @id
 go
---exec GetCustomerById 111
+--exec GetCustomerById 10
 
 
 create proc GetCustomerByMailAndPassword
@@ -379,6 +379,17 @@ as
 go
 
 -- exec GetCustomerByMailAndPassword 'ccc@gmail.com','ccc'
+
+
+create proc GetCustomerByIDAndMail
+@id int,
+@Mail nvarchar(100)
+as
+	select * from [dbo].[Customers] 
+	where Mail = @Mail and Customer_ID = @id
+go
+--exec GetCustomerByIDAndMail 10 , 'ggggg@gmail.com'
+
 
 
 create proc AddNewCustomer
@@ -1313,6 +1324,22 @@ go
 --select * from [dbo].[Bill_Details]
 --select * from [dbo].[Category]
 --select * from [dbo].[Customers]
+
+
+--exec AddNewCustomer 10,1,'dvsv','sdvsdv','aaadsvv@gmail.com','aaadsvv','0524987762','','','',''
+--  "customerID": 10,
+--        "customerType": 1,
+--        "firstName": "dvsv",
+--        "lastName": "sdvsdv",
+--        "mail": "aaadsvv@gmail.com",
+--        "password": "aaadsvv",
+--        "phoneNumber": "0524987762",
+--        "cardHolderName": null,
+--        "creditCardDate": null,
+--        "threeDigit":null,
+--        "credit_Card_Number":null
+
+
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Customers_Types]
 --select * from [dbo].[Employees]
