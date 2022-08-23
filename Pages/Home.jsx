@@ -1,16 +1,109 @@
-import { Animated,View, Image,StyleSheet,Text,TouchableOpacity} from 'react-native'
+import { Animated,View, Image,StyleSheet,Text,TouchableOpacity,StatusBar,Alert} from 'react-native'
 import React from 'react'
 import hotelback from '../Pic/hotelback.jpg'
 import { BackgroundImage } from '@rneui/base';
 import{ useState, useEffect } from 'react'
 
 import { TextInput,Button } from "react-native-paper";
+import WorkerMenu from './Workers/WorkerMenu';
 
 
 export default function Home({ navigation }) {
   const [openState, setOpenState] = useState(new Animated.Value(100))
   const [closeState, setCloseState] = useState(new Animated.Value(1))
   const [info, setInfo] = useState(false)
+  const [workerCode, setWorkerCode] = useState(1)
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('')
+const user = "aaa"
+const pass = "123"
+
+
+useEffect(() => { setWorkerCode(1) }, []);
+const LogIn = () => {
+
+  if (id === user && password === pass) {
+    setWorkerCode(2)
+  }
+ else  Alert.alert("No such user exists in the system")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const renderCurrentSelection = () => {
+
+    switch (workerCode) {
+        case 1:
+            return ( <View style={styles.loginContainer}>
+              <TextInput
+           label="ID"
+           left={<TextInput.Icon name="account" />}
+           mode="outlined"
+           style={{ margin: 10 , paddingLeft: 3 }}
+           onChangeText={(id) => setId(id)} 
+         />
+        
+     
+         <TextInput
+           label="Password"
+           left={<TextInput.Icon name="lock" />}
+           mode="outlined"
+           style={{ margin: 10 , paddingLeft: 3 }}
+           onChangeText={(password) => setPassword(password)}
+         />
+         <TouchableOpacity style={styles.btn} onPress={LogIn}>
+             <Text style={{fontSize : 20,color:'white',fontWeight:'800'}}>LOGIN</Text>
+           </TouchableOpacity>
+       <TouchableOpacity>
+             <Text style={styles.underLineText} onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}>I'm not a worker</Text>
+           </TouchableOpacity>
+          
+       </View>
+                  );
+        case 2:
+            return  <WorkerMenu/>;
+     
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //   useEffect(() => {
 //     const unsubscribe = navigation.addListener('focus', () => {
 //      doAnimation(closeState,1,500);
@@ -53,7 +146,6 @@ export default function Home({ navigation }) {
 
   <View style={styles.container}>
 
-
 <Animated.View style={{ flex: 2, backgroundColor: 'black' }} >
 
 <BackgroundImage  source ={hotelback}style={{ flex: 2 }}/>
@@ -74,30 +166,65 @@ LHOTEL
 
  <Animated.View style={{flex:closeState,  backgroundColor: info ? 'rgba(0,0,0, 0.1)' : 'white'}}>
   {/* <LinearGradient colors ={['red','blue']} style={{flex:1}}> */}
-{info ?(  <View style={styles.loginContainer}>
-    
-    <TextInput
-      label="ID"
-      left={<TextInput.Icon name="account" />}
-      mode="outlined"
-      style={{ margin: 10 , paddingLeft: 3 }}
-    />
+{info ? renderCurrentSelection()
+// (() => { switch (workerCode) {
+//           case 1:/*Case 0 */
+
+//          <View style={styles.loginContainer}>
+//          <TextInput
+//       label="ID"
+//       left={<TextInput.Icon name="account" />}
+//       mode="outlined"
+//       style={{ margin: 10 , paddingLeft: 3 }}
+//     />
    
 
-    <TextInput
-      label="Password"
-      left={<TextInput.Icon name="lock" />}
-      mode="outlined"
-      style={{ margin: 10 , paddingLeft: 3 }}
-    />
-    <TouchableOpacity style={styles.btn} >
-        <Text style={{fontSize : 20,color:'white',fontWeight:'800'}}>LOGIN</Text>
-      </TouchableOpacity>
-  <TouchableOpacity>
-        <Text style={styles.underLineText} onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}>I'm not a worker</Text>
-      </TouchableOpacity>
+//     <TextInput
+//       label="Password"
+//       left={<TextInput.Icon name="lock" />}
+//       mode="outlined"
+//       style={{ margin: 10 , paddingLeft: 3 }}
+//     />
+//     <TouchableOpacity style={styles.btn} >
+//         <Text style={{fontSize : 20,color:'white',fontWeight:'800'}}>LOGIN</Text>
+//       </TouchableOpacity>
+//   <TouchableOpacity>
+//         <Text style={styles.underLineText} onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}>I'm not a worker</Text>
+//       </TouchableOpacity>
      
-  </View>)
+//   </View>
+             
+//           break;
+//          case 2: /*Case 1 */
+        
+//           <WorkerMenu/>
+        
+//          break;
+         
+//       }
+//    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   :
   (<View style={styles.container}>
    <Text style={{fontSize : 20,color:'black'}}>
@@ -124,6 +251,81 @@ obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam</Tex
 
   )
 }
+
+
+{/* <View style={styles.loginContainer}>
+    
+    <TextInput
+      label="ID"
+      left={<TextInput.Icon name="account" />}
+      mode="outlined"
+      style={{ margin: 10 , paddingLeft: 3 }}
+    />
+   
+
+    <TextInput
+      label="Password"
+      left={<TextInput.Icon name="lock" />}
+      mode="outlined"
+      style={{ margin: 10 , paddingLeft: 3 }}
+    />
+    <TouchableOpacity style={styles.btn} >
+        <Text style={{fontSize : 20,color:'white',fontWeight:'800'}}>LOGIN</Text>
+      </TouchableOpacity>
+  <TouchableOpacity>
+        <Text style={styles.underLineText} onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}>I'm not a worker</Text>
+      </TouchableOpacity>
+     
+  </View> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //  const Temp = () => {
 //   return(
 
