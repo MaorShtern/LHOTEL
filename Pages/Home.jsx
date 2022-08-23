@@ -4,7 +4,7 @@ import hotelback from '../Pic/hotelback.jpg'
 import { BackgroundImage } from '@rneui/base';
 import{ useState, useEffect } from 'react'
 
-
+import { TextInput,Button } from "react-native-paper";
 
 
 export default function Home({ navigation }) {
@@ -25,6 +25,7 @@ export default function Home({ navigation }) {
 // }, [navigation]);
   useEffect(() => {
  doAnimation(closeState,1,250)
+ setInfo(false)
   },[])
   // useEffect(() => {
   //   if()
@@ -41,7 +42,7 @@ export default function Home({ navigation }) {
     ).start();
 
   }
-  console.log(info);
+
   // const [fontsLoaded] = useFonts({
   //   'Arialic Hollow': require('../assets/fonts/Arialic Hollow.ttf'),
   // });
@@ -71,60 +72,139 @@ LHOTEL
 </Text>
 </Animated.View>  
 
- <Animated.View style={{flex:closeState}}>
+ <Animated.View style={{flex:closeState,  backgroundColor: info ? 'rgba(0,0,0, 0.1)' : 'white'}}>
   {/* <LinearGradient colors ={['red','blue']} style={{flex:1}}> */}
+{info ?(  <View style={styles.loginContainer}>
+    
+    <TextInput
+      label="ID"
+      left={<TextInput.Icon name="account" />}
+      mode="outlined"
+      style={{ margin: 10 , paddingLeft: 3 }}
+    />
+   
 
- 
-  <View style={{marginVertical:15}}>
-  <Text style={{
-fontSize : 20,
-color:'black'
-}}>
+    <TextInput
+      label="Password"
+      left={<TextInput.Icon name="lock" />}
+      mode="outlined"
+      style={{ margin: 10 , paddingLeft: 3 }}
+    />
+    <TouchableOpacity style={styles.btn} >
+        <Text style={{fontSize : 20,color:'white',fontWeight:'800'}}>LOGIN</Text>
+      </TouchableOpacity>
+  <TouchableOpacity>
+        <Text style={styles.underLineText} onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}>I'm not a worker</Text>
+      </TouchableOpacity>
+     
+  </View>)
+  :
+  (<View style={styles.container}>
+   <Text style={{fontSize : 20,color:'black'}}>
 DETAILS ABOUT THE HOTEL
 
-obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
-
-
-</Text>
-
-  </View>
-  <View  style={styles.ButtonContainer}>
-  <TouchableOpacity
-      style={styles.button}
-      onPress = {()=> {navigation.navigate('Login'),doAnimation(closeState,1,500)}}
-    >
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam</Text>
+<View  style={styles.ButtonContainer}>
+<TouchableOpacity style={styles.button} onPress = {()=> {navigation.navigate('CustomerHome'),doAnimation(closeState,1,500)}}>
        {/* doAnimation(closeState,1,500) */}
        {/* navigation.navigate('Login') */}
       <Text style={styles.startTextStyle} >Customer</Text>
-
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => doAnimation(closeState,8,500)
-        // if(!info)
-        // {
-        //   doAnimation(closState,8,500)
-        // }else
-        // {
-        //   doAnimation(openState,8,250)
-        // }
-        // setInfo(!info)
-        }
-    >
-      <Text style={styles.startTextStyle}>Worker</Text>
-    </TouchableOpacity>
-
-
-
-  </View>
-
-  </Animated.View>
+</TouchableOpacity>
+<TouchableOpacity
+  style={styles.button}
+  onPress={() => {doAnimation(closeState,8,500),setInfo(true)}}>
+  <Text style={styles.startTextStyle}>Worker</Text>
+  </TouchableOpacity>
+ </View>
+</View> )}
+</Animated.View>
 </View> 
   
 
 
   )
 }
+//  const Temp = () => {
+//   return(
+
+// <View style={styles.container}>
+  
+//   <Text style={{
+// fontSize : 20,
+// color:'black'
+// }}>
+// DETAILS ABOUT THE HOTEL
+
+// obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+
+
+// </Text>
+
+ 
+//   <View  style={styles.ButtonContainer}>
+//   <TouchableOpacity
+//       style={styles.button}
+//       onPress = {()=> {navigation.navigate('Login'),doAnimation(closeState,1,500)}}
+//     >
+//        {/* doAnimation(closeState,1,500) */}
+//        {/* navigation.navigate('Login') */}
+//       <Text style={styles.startTextStyle} >Customer</Text>
+
+//     </TouchableOpacity>
+//     <TouchableOpacity
+//       style={styles.button}
+//       onPress={() => doAnimation(closeState,8,500)
+//         // if(!info)
+//         // {
+//         //   doAnimation(closState,8,500)
+//         // }else
+//         // {
+//         //   doAnimation(openState,8,250)
+//         // }
+//         // setInfo(!info)
+//         }
+//     >
+//       <Text style={styles.startTextStyle}>Worker</Text>
+//     </TouchableOpacity>
+
+
+
+//   </View>
+//  </View>
+
+
+
+
+//   )
+  
+  
+
+//  }
+// const WorkerLoginForm = ()=>{
+//   return(
+//     <View style={styles.loginContainer}>
+    
+//     <TextInput
+//       label="ID"
+//       left={<TextInput.Icon name="account" />}
+//       mode="outlined"
+//       style={{ margin: 10 , paddingLeft: 3 }}
+//     />
+    
+//     <TextInput
+//       label="Password"
+//       left={<TextInput.Icon name="lock" />}
+//       mode="outlined"
+//       style={{ margin: 10 , paddingLeft: 3 }}
+//     />
+//   <TouchableOpacity>
+//         <Text style={styles.underLineText} onPress={()=> setInfo(true)}>I'm not a worker</Text>
+//       </TouchableOpacity>
+//   </View>
+//   )
+// }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -177,6 +257,7 @@ const styles = StyleSheet.create({
       justifyContent: "center"
     }, 
      ButtonContainer: {
+    
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -197,7 +278,7 @@ const styles = StyleSheet.create({
     },button:
     {
         // backgroundColor: 'gray',
-        padding: 10,
+      
     
       marginHorizontal:22,
       
@@ -222,7 +303,55 @@ const styles = StyleSheet.create({
      fontWeight: '700' ,
      letterSpacing: 0.5,
     },
+    loginContainer:{
+     
+      paddingHorizontal: 24,
+      paddingVertical: 70,
+  
+      // alignItems: "center",
+      justifyContent: "center"
+    },
+    underLineText: {
+      marginVertical:25,
+        fontSize: 25,
+        textDecorationLine: 'underline',
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      btn:{
+        height: 45,
+        width:318,
+        borderRadius:10,
+        backgroundColor : "rgba(0,0,0, 0.7)",
+       alignItems:'center',
+      marginHorizontal:10,
+       justifyContent:'center',
+        marginTop :20
+      }
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const FadeInView = (props) => {
 //     const fadeAnim = useRef(new Animated.Value(0)).current  // Initial value for opacity: 0
@@ -259,3 +388,93 @@ const styles = StyleSheet.create({
 //       </View>
 //     )
 //   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// <View style={{marginVertical:15}}>
+// <Text style={{fontSize : 20,color:'black'}}>
+// DETAILS ABOUT THE HOTEL obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam</Text>
+// </View>
+// <View  style={styles.ButtonContainer}>
+// <TouchableOpacity
+//     style={styles.button}
+//     onPress = {()=> {navigation.navigate('Login'),doAnimation(closeState,1,500)}}
+//   >
+//      {/* doAnimation(closeState,1,500) */}
+//      {/* navigation.navigate('Login') */}
+//     <Text style={styles.startTextStyle} >Customer</Text>
+
+// </TouchableOpacity>
+// <TouchableOpacity
+//     style={styles.button}
+//     onPress={() => {doAnimation(closeState,8,500),setInfo(true)}
+//       // if(!info)
+//       // {
+//       //   doAnimation(closState,8,500)
+//       // }else
+//       // {
+//       //   doAnimation(openState,8,250)
+//       // }
+//       // setInfo(!info)
+//       }
+//   >
+//     <Text style={styles.startTextStyle}>Worker</Text>
+// </TouchableOpacity>
+// </View>
+
+{/* <View style={styles.container}>
+  
+  <Text style={{
+fontSize : 20,
+color:'black'
+}}>
+DETAILS ABOUT THE HOTEL
+
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+
+
+</Text>
+
+ 
+  <View  style={styles.ButtonContainer}>
+  <TouchableOpacity
+      style={styles.button}
+      onPress = {()=> {navigation.navigate('Login'),doAnimation(closeState,1,500)}}
+    >
+       {/* doAnimation(closeState,1,500) */}
+       {/* navigation.navigate('Login') */}
+    //   <Text style={styles.startTextStyle} >Customer</Text>
+
+    // </TouchableOpacity>
+    // <TouchableOpacity
+    //   style={styles.button}
+    //   onPress={() => doAnimation(closeState,8,500)
+        // if(!info)
+        // {
+        //   doAnimation(closState,8,500)
+        // }else
+        // {
+        //   doAnimation(openState,8,250)
+        // }
+        // setInfo(!info)
+        // }
+    // >
+    //   <Text style={styles.startTextStyle}>Worker</Text>
+    // </TouchableOpacity>
+
+
+
+//   </View>
+//  </View> */}
