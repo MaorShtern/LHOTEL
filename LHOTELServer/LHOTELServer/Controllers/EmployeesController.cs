@@ -35,12 +35,12 @@ namespace LHOTELServer.Controllers
 
 
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetEmployeeById")]
-        public IHttpActionResult GetEmployeeById(int id)
+        [System.Web.Http.Route("~/GetEmployeeByIdAndCode")]
+        public IHttpActionResult GetEmployeeByIdAndCode(int id, int code)
         {
             try
             {
-                return Ok(BLLEmployees.FindEmployeeById(id));
+                return Ok(BLLEmployees.GetEmployeeByIdAndCode(id, code));
             }
             catch (Exception e)
             {
@@ -64,8 +64,8 @@ namespace LHOTELServer.Controllers
         }
 
         [System.Web.Http.HttpPut]
-       // [System.Web.Http.Route("/")]
-        public IHttpActionResult Put([FromBody] Employees employee)
+        [System.Web.Http.Route("~/AlterEmployeeById")]
+        public IHttpActionResult AlterEmployeeById([FromBody] Employees employee)
         {
             try
             {
@@ -78,11 +78,12 @@ namespace LHOTELServer.Controllers
         }
 
         [System.Web.Http.HttpDelete]
-        public IHttpActionResult Delete(int id)
+        [System.Web.Http.Route("~/DeleteEmployeeByIdAndCode")]
+        public IHttpActionResult DeleteEmployeeByIdAndCode(int id, int code)
         {
             try
             {
-                return Ok(BLLEmployees.DeleteEmployeeById(id));
+                return Ok(BLLEmployees.DeleteEmployeeByIdAndCode(id, code));
             }
             catch (Exception e)
             {

@@ -19,18 +19,18 @@ namespace BLL
             return DALEmployees.AddNewEmployee(newEmployee);
         }
 
-        public static Employees FindEmployeeById(int id)
+        public static Employees GetEmployeeByIdAndCode(int id , int code)
         {
-            return DALEmployees.GetEmployeesById(id);
+            return DALEmployees.GetEmployeeByIdAndCode(id , code);
         }
         public static bool AlterEmployeeById(Employees employee)
         {
-            return DALEmployees.AlterEmployee(employee);
+            return DALEmployees.AlterEmployeeById(employee);
         }
 
-        public static bool DeleteEmployeeById(int id)
+        public static bool DeleteEmployeeByIdAndCode(int id, int code)
         {
-            return DALEmployees.DeleteEmployeeById(id);
+            return DALEmployees.DeleteEmployeeByIdAndCode(id, code);
         }
 
     }

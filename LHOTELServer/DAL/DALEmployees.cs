@@ -43,11 +43,11 @@ namespace DAL
         //    }
         //}
 
-        public static Employees GetEmployeesById(int id)
+        public static Employees GetEmployeeByIdAndCode(int id, int code)
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetEmployeeById {id}");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetEmployeeByIdAndCode {id} , {code}");
 
                 if (reader == null || !reader.HasRows)
                 {
@@ -85,10 +85,10 @@ namespace DAL
         {
             try
             {
-                if (GetEmployeesById(newEmployee.id) == null)
+                if (GetEmployeeByIdAndCode(newEmployee.id , newEmployee.employee_Code) == null)
                 {
                     string str = $@"exec InsertEmployee {newEmployee.id},'{newEmployee.name}','{newEmployee.phoneNumber}',
-'{newEmployee.birthDate.ToShortDateString()}',{newEmployee.worker_Code},{newEmployee.hourly_Wage},
+'{newEmployee.birthDate.ToString("yyyy - MM - dd")}',{newEmployee.worker_Code},{newEmployee.hourly_Wage},
 '{newEmployee.address}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
@@ -102,19 +102,23 @@ namespace DAL
                 Console.WriteLine(e.Message);
                 return false;
             }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
         }
 
-        public static bool AlterEmployee(Employees employee)
+        public static bool AlterEmployeeById(Employees employee)
         {
             try
             {
-                Employees findEmployee = GetEmployeesById(employee.id);
+                Employees findEmployee = GetEmployeeByIdAndCode(employee.id, employee.employee_Code);
                 if (findEmployee == null)
                 {
                     return false;
                 }
                 string str = $@"exec AlterEmployee {employee.id},'{employee.name}','{employee.phoneNumber}',
-'{employee.birthDate.ToShortDateString()}',{employee.worker_Code},{employee.hourly_Wage},'{employee.address}'";
+'{employee.birthDate.ToString("yyyy - MM - dd")}',{employee.worker_Code},{employee.hourly_Wage},'{employee.address}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)
@@ -126,13 +130,17 @@ namespace DAL
                 Console.WriteLine(e.Message);
                 return true;
             }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
         }
 
-        public static bool DeleteEmployeeById(int id)
+        public static bool DeleteEmployeeByIdAndCode(int id, int code)
         {
             try
             {
-                Employees findEmployee = GetEmployeesById(id);
+                Employees findEmployee = GetEmployeeByIdAndCode(id, code);
                 if (findEmployee == null)
                 {
                     return false;
@@ -147,6 +155,10 @@ namespace DAL
             {
                 Console.WriteLine(e.Message);
                 return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
             }
         }
 

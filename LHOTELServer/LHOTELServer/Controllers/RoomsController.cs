@@ -18,47 +18,10 @@ namespace LHOTELServer.Controllers
 
     public class RoomsController : ApiController
     {
+        
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Get()
-        {
-            try
-            {
-                return Ok(BLLRooms.GetRooms());
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
-        }
-
-        public IHttpActionResult Get(int id)
-        {
-            try
-            {
-                return Ok(BLLRooms.GetRoomById(id));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        //[System.Web.Http.HttpPost]
-        //public IHttpActionResult Post([FromBody] Rooms room)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLRooms.AddNewRoom(room));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
-
-        [System.Web.Http.HttpPost]
-        public IHttpActionResult Post()
+        [System.Web.Http.Route("~/GetAvailableRooms")]
+        public IHttpActionResult GetAvailableRooms()
         {
             try
             {
@@ -70,43 +33,45 @@ namespace LHOTELServer.Controllers
             }
         }
 
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/SaveRoomReservation")]
+        public IHttpActionResult SaveRoomReservation(RoomReservation roomReservation)
+        {
+            try
+            {
+                return Ok(BLLRooms.SaveRoomReservation(roomReservation));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [System.Web.Http.HttpPut]
-        public IHttpActionResult Put([FromBody] Rooms room)
+        [System.Web.Http.Route("~/CheckIn")]
+        public IHttpActionResult CheckIn(RoomReservation roomReservation)
         {
             try
             {
-                return Ok(BLLRooms.AlterRoomById(room));
+                return Ok(BLLRooms.CheckIn(roomReservation));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-
-        [System.Web.Http.HttpDelete]
-        public IHttpActionResult Delete(int id)
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/CheckOut")]
+        public IHttpActionResult CheckOut(RoomReservation roomReservation)
         {
             try
             {
-                return Ok(BLLRooms.DeleteRoomById(id));
+                return Ok(BLLRooms.CheckOut(roomReservation));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-
-        //[System.Web.Http.HttpHead]
-        //public IHttpActionResult GetAvailableRooms()
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLRooms.GetAvailableRooms());
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
     }
 }

@@ -48,7 +48,8 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpPut]
+
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetCustomerByIDAndMail")]
         public IHttpActionResult GetCustomerByIDAndMail(int id, string mail)
         {
@@ -58,7 +59,7 @@ namespace LHOTELServer.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(); 
+                return BadRequest(e.Message); 
             }
         }
 
@@ -73,7 +74,7 @@ namespace LHOTELServer.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
