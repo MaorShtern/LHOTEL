@@ -8,34 +8,11 @@ namespace DAL
 {
     public class Rooms
     {
-        public Rooms(string roomType, int pricePerNight)
-        {
-            this.roomType = roomType;
-            this.pricePerNight = pricePerNight;
-        }
-
-        public Rooms(int roomNumber,string roomType, int pricePerNight, string details)
-        {
-            this.roomNumber = roomNumber;
-            this.roomType = roomType;
-            this.pricePerNight = pricePerNight;
-            this.details = details;
-        }
-
-        public Rooms(int roomNumber, string roomType, int pricePerNight, string details, DateTime exitDate)
-        {
-            this.roomNumber = roomNumber;
-            this.roomType = roomType;
-            this.pricePerNight = pricePerNight;
-            this.details = details;
-            this.exitDate = exitDate;
-        }
 
         public int roomNumber { set; get; }
         public string roomType { set; get; }
         public int pricePerNight { set; get; }
         public string details { set; get; }
-
         public DateTime exitDate { set; get; }
 
 

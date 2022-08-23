@@ -9,13 +9,16 @@ namespace DAL
     public class Employees
     {
         public int id { set; get; }
+        public int employee_Code { set; get; }
+
         public string name { set; get; }
         public string phoneNumber { set; get; }
         public DateTime birthDate { set; get; }
         public int worker_Code { set; get; }
         public int hourly_Wage { set; get; }
         public string address { set; get; }
-        public int employee_Code { set; get; }
+
+
         //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,
         //    int hourly_Wage , string address, int employee_Code )
         //{

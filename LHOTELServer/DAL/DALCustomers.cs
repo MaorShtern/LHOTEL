@@ -57,19 +57,19 @@ namespace DAL
                 Customers customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers(
-                        (int)reader["Customer_ID"],
-                        (int)reader["Customer_Type"],
-                        (string)reader["First_Name"],
-                        (string)reader["Last_Name"],
-                        (string)reader["Mail"],
-                        (string)reader["Password"],
-                        (string)reader["Phone_Number"],
-                        (string)reader["Card_Holder_Name"],
-                        (string)reader["Credit_Card_Date"],
-                        (int)reader["Three_Digit"],
-                        (string)reader["Credit_Card_Number"]
-                        );
+                    customer = new Customers(){
+                        customerID = (int)reader["Customer_ID"],
+                        customerType = (int)reader["Customer_Type"],
+                        firstName = (string)reader["First_Name"],
+                        lastName = (string)reader["Last_Name"],
+                        mail = (string)reader["Mail"],
+                        password = (string)reader["Password"],
+                        phoneNumber = (string)reader["Phone_Number"],
+                        cardHolderName = (string)reader["Card_Holder_Name"],
+                        creditCardDate = (string)reader["Credit_Card_Date"],
+                        threeDigit = (int)reader["Three_Digit"],
+                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                    };
                 }
                 return customer;
             }
@@ -96,19 +96,20 @@ namespace DAL
                 Customers customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers(
-                        (int)reader["Customer_ID"],
-                        (int)reader["Customer_Type"],
-                        (string)reader["First_Name"],
-                        (string)reader["Last_Name"],
-                        (string)reader["Mail"],
-                        (string)reader["Password"],
-                        (string)reader["Phone_Number"],
-                        (string)reader["Card_Holder_Name"],
-                        (string)reader["Credit_Card_Date"],
-                        (int)reader["Three_Digit"],
-                        (string)reader["Credit_Card_Number"]
-                        );
+                    customer = new Customers()
+                    {
+                        customerID = (int)reader["Customer_ID"],
+                        customerType = (int)reader["Customer_Type"],
+                        firstName = (string)reader["First_Name"],
+                        lastName = (string)reader["Last_Name"],
+                        mail = (string)reader["Mail"],
+                        password = (string)reader["Password"],
+                        phoneNumber = (string)reader["Phone_Number"],
+                        cardHolderName = (string)reader["Card_Holder_Name"],
+                        creditCardDate = (string)reader["Credit_Card_Date"],
+                        threeDigit = (int)reader["Three_Digit"],
+                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                    };
                 }
                 return customer;
             }
@@ -163,19 +164,20 @@ namespace DAL
                 Customers customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers(
-                        (int)reader["Customer_ID"],
-                        (int)reader["Customer_Type"],
-                        (string)reader["First_Name"],
-                        (string)reader["Last_Name"],
-                        (string)reader["Mail"],
-                        (string)reader["Password"],
-                        (string)reader["Phone_Number"],
-                        (string)reader["Card_Holder_Name"],
-                        (string)reader["Credit_Card_Date"],
-                        (int)reader["Three_Digit"],
-                        (string)reader["Credit_Card_Number"]
-                        );
+                    customer = new Customers()
+                    {
+                        customerID = (int)reader["Customer_ID"],
+                        customerType = (int)reader["Customer_Type"],
+                        firstName = (string)reader["First_Name"],
+                        lastName = (string)reader["Last_Name"],
+                        mail = (string)reader["Mail"],
+                        password = (string)reader["Password"],
+                        phoneNumber = (string)reader["Phone_Number"],
+                        cardHolderName = (string)reader["Card_Holder_Name"],
+                        creditCardDate = (string)reader["Credit_Card_Date"],
+                        threeDigit = (int)reader["Three_Digit"],
+                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                    };
                 }
                 return customer;
             }

@@ -299,12 +299,14 @@ go
 
 
 
-create proc GetEmployeeById
-@id int
+create proc GetEmployeeByIdAndCode
+@id int,
+@code int
 as
 begin tran
-	select * from [dbo].[Employees] where [Employee_ID] = @id
-if (@@error !=0)
+	select * from [dbo].[Employees] 
+	where [Employee_ID] = @id and [Employee_Code] = @code
+	if (@@error !=0)
 	begin
 		rollback tran
 		print 'error'
@@ -312,8 +314,7 @@ if (@@error !=0)
 	end
 commit tran
 go
---exec GetEmployeeById 999
-
+--exec GetEmployeeByIdAndCode 888 , 8
 
 
 create proc InsertEmployee 
@@ -372,10 +373,14 @@ begin tran
 	end
 commit tran
 go
---exec AlterEmployee 111,'aaa','0526211881','23/02/1999',1,40,'bbb'
+--exec AlterEmployee 999,'ccc','0563211948','2022 - 08 - 15',3,40,'dgdbbd'
+--select * from [dbo].[Employees]
 
 
--------------------------------------------
+
+
+---------------------------------------------------------
+---  יהיה צורך למחוק אות מהטבלה "משמרות ו"משימות" ף
 create proc DeleteEmployeeById
 @id int
 as
@@ -448,7 +453,7 @@ create proc GetCustomerByMailAndPassword
 @Password nvarchar(30) 
 as
 begin tran
-select * from [dbo].[Customers] 
+		select * from [dbo].[Customers] 
 		where Mail = @Mail and Password = @Password
 		if (@@error !=0)
 	begin
@@ -996,7 +1001,7 @@ create proc AddShift
 @Employee_ID int
 as
 begin tran
-DECLARE @Employee_Code int=(select Employee_Code  from Employees 
+	DECLARE @Employee_Code int=(select Employee_Code  from Employees 
 	where Employee_ID = @Employee_ID)
 	DECLARE @Worker_Code int =(select Worker_Code from Employees 
 	where Employee_ID = @Employee_ID)
@@ -1035,7 +1040,7 @@ begin tran
 	end
 commit tran
 go
---exec DeleteShift 111,'2022-08-17 02:16:12.000'
+--exec DeleteShift 111,'2022-08-23 02:16:12.000'
 
 
 create proc End_Shift
@@ -1044,7 +1049,7 @@ as
 begin tran
 	update [dbo].[Shifts]
 	set [Leaving_Time] = (SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
-	where Employee_ID = @Employee_ID
+	where Employee_ID = @Employee_ID and [Leaving_Time] IS NULL
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1054,8 +1059,7 @@ begin tran
 commit tran
 go
 --exec End_Shift 111 
---select * from Shifts
-
+-- select * from [dbo].[Shifts]
 
 
 
@@ -1103,20 +1107,20 @@ go
 -- exec GetTaskById 222
 
 
-create proc AddNewTask
+alter proc AddNewTask
 @Employee_ID int, 
 @Task_Number int,
-@Start_Date date,
-@Start_Time time(7) ,
-@End_Date date,
-@Task_Status nvarchar(30),
 @Description nvarchar(30)
 as
 begin tran
+	declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+
 	if EXISTS( select [Employee_ID],[Date],[Entrance_Time] from [dbo].[Shifts]
-	where [Employee_ID] = @Employee_ID and [Date] = @Start_Date and [Entrance_Time] <= @Start_Time )
+	where [Employee_ID] = @Employee_ID and [Date] = @Date and [Leaving_Time] is null )
 		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@Task_Number,@Start_Date,@Start_Time,@End_Date,@Task_Status,@Description)
+		values (@Employee_ID,@Task_Number,@Date,(SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+		,@Date,'Open',@Description)
+
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1126,17 +1130,13 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 222,7,'2022-08-17','13:00','03/02/2022','Open','Clean the counter is filthy'
--- exec AddNewTask 333,1,'02/02/2022','13:10','03/02/2022','Close','Room cleaning 21'
--- exec AddNewTask 444,2,'02/02/2022','13:05','03/02/2022','Open','Schnitzel, chips and coke for room 23'
--- exec AddNewTask 555,4,'02/02/2022','13:07','03/02/2022','Close','Mini bar filling for room 10'
--- exec AddNewTask 777,3,'02/02/2022','13:08','03/02/2022','Open','Room 15 request dry towels'
--- exec AddNewTask 888,6,'02/02/2022','13:12','03/02/2022','Close','A customer requests to check out'
---exec AddNewTask 222,7,'02/02/2022','13:12','03/02/2022','Open','Clean the counter is filthy'
---select * from [dbo].[Employees]
---select * from [dbo].[Shifts]
-
---create proc Add
+--exec AddNewTask 111,1, 'Room cleaning 21'
+-- exec AddNewTask 333,1,'Room cleaning 21'
+-- exec AddNewTask 444,2, 'chips and coke for room 23'
+-- exec AddNewTask 555,4,'Mini bar filling for room 10'
+-- exec AddNewTask 777,3,'Room 15 request dry towels'
+-- exec AddNewTask 888,6,'A customer requests to check out'
+--exec AddNewTask 222,7,'Clean the counter is filthy'
 
 
 
@@ -1185,9 +1185,35 @@ begin tran
 	end
 commit tran
 go
+--select * from [Employees_Tasks]
+ --exec DeleteTask 222,7,'2022-08-23','07:00:10.0000000'
+ --exec DeleteTask 222,7,'2022-08-23','06:55:10.0000000'
+ --exec DeleteTask 222,7,'2022-08-23','06:57:00.0000000'
 
--- exec DeleteTask 222,7,'02/02/2022','13:00'
 
+create proc CloseTask
+@Employee_ID int, 
+@Task_Number int,
+@Start_Date date,
+@Start_Time time(7)
+as
+begin tran
+	UPDATE [dbo].[Employees_Tasks]
+	SET 
+	[Task_Status]='Close'
+	WHERE [Employee_ID] = @Employee_ID and [Task_Number]=@Task_Number and [Start_Date]=@Start_Date 
+	and [Start_Time]=@Start_Time
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec CloseTask 222, 7 ,'2022-08-23','07:03:33.0000000'
+--select * from [dbo].[Employees_Tasks]
 
 
 -- פרוצדורות חשבון ללקוח
@@ -1245,16 +1271,7 @@ begin tran
 	end
 commit tran
 go
---exec AddNewBill 111,111,'4580266514789456','01/01/2021','Close'
---exec AddNewBill 222,222,'4580266514789456','01/01/2021','Close'
---exec AddNewBill 333,333,'4580266514789456','01/01/2021','Close'
---exec AddNewBill 444,444,'4580266514789456','01/01/2021','Open'
---exec AddNewBill 555,555,'4580266514789456','12/09/2020','Open'
---exec AddNewBill 666,444,'458026651478','23/09/2020','Close'
---exec AddNewBill 222,666,'458026651478','2022-10-08','Open'
---exec AddNewBill 111,888,'458026651478','2022-12-06','Open'
---exec AddNewBill 222,666,'458026651478','2021-10-07','Close'
---exec AddNewBill 111,888,'458026651478','2022-12-05','Close'
+--exec AddNewBill 111,'2022-08-22',111,'4580266514789456','Open'
 
 
 
@@ -1263,7 +1280,7 @@ create proc AlterBill
 @Bill_Date date,
 @Employee_ID int,
 @Credit_Card_Number nvarchar(16),
-@Bill_Status nvarchar(12)
+@Bill_Status nvarchar(10)
 as
 begin tran	
 	UPDATE [dbo].[Bill]
@@ -1280,9 +1297,8 @@ begin tran
 commit tran
 go
 --exec GetAllBills
---exec AlterBill 666,'2021-10-07',222,'458026651478','Close'
---exec AlterBill 888,'2022-12-05',111,'458026651478','Close'
---exec AlterBill 999,'2022-12-05',111, '458026651478','Open'
+-- exec AlterBill 444,'2021-01-01',444,'4580266514789456','Open'
+
 
 
 -----------------------------------------------
@@ -1465,12 +1481,8 @@ create FUNCTION AvailableRooms()
 returns @Temp TABLE ( Room_Number int ,Room_Type nvarchar(30), Price_Per_Night int, Details nvarchar(100) )                     
 as
 	begin
-		insert @Temp SELECT Room_Number,Room_Type, Price_Per_Night, Rooms.Details FROM Rooms
+		insert @Temp SELECT Room_Number,Room_Type, Price_Per_Night, Details FROM Rooms
 		WHERE Room_Number NOT IN (SELECT Room_Number FROM Customers_Rooms)
-
-		--insert @Temp SELECT Room_Number,Room_Type, Price_Per_Night, Rooms.Details FROM Rooms
-		--WHERE Room_Number IN (select Room_Number from [dbo].[Customers_Rooms] where [Room_Status] = 'Available')
-
 		RETURN
 	end
 go
@@ -1499,15 +1511,16 @@ begin tran
 	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @date as date = GETDATE()
 
-
 	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')
 		exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
 	else
 		exec AlterBill @id, @Bill_Date ,@Employee_ID, @Credit_Card_Number,'Open'
 
 
+	set @Bill_Date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @room_number as int
+
 
 	while @Counter_Single > 0
 		begin
@@ -1549,8 +1562,22 @@ commit tran
 go
 
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+    --"id": 666,
+    --"Card_Holder_Name": "mmm",
+    --"Card_Date": "12/29",
+    --"Three_Digit": 912,
+    --"Credit_Card_Number": "4580111133335555",
+    --"Employee_ID": 111,
+    --"Counter_Single" :1,
+    --"Counter_Double": 1,
+    --"Counter_Suite": 1,
+    --"Entry_Date": "2022-08-22",
+    --"exitDate": "2022-08-24",
+    --"Amount_Of_People": 5 
 
---drop  trigger AddRoomToDetails
+
 create trigger AddRoomToDetails
 on [Customers_Rooms] for update
 as
@@ -1583,6 +1610,31 @@ commit tran
 go
 
 --exec CheckIn 666 , '2022-08-22'
+    --"id": 666,
+    --"Entry_Date": "2022-08-22"
+
+
+
+
+--  פרוצדורת צאק אווט
+create proc CheckOut
+@id int,
+@Bill_Date date
+as
+begin tran		
+	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
+	where Customer_ID=@id and Bill_Date = @Bill_Date and Bill_Status = 'Open'
+	exec DeleteBill_Detail @id,@Bill_Date
+	exec DeleteCustomerRoom @id , @Bill_Date
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+--exec CheckOut 666, '2022-08-23'
 
 
 
@@ -1850,25 +1902,7 @@ go
 --exec Calu_Products_Income
 
 
---  פרוצדורת צאק אווט
-create proc CheckOut
-@id int,
-@Bill_Date date
-as
-begin tran		
-	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
-	where Customer_ID=@id and Bill_Date = @Bill_Date and Bill_Status = 'Open'
-	exec DeleteBill_Detail @id,@Bill_Date
-	exec DeleteCustomerRoom @id , @Bill_Date
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
---exec CheckOut 666, '2022-08-21'
+
 
 
 
@@ -1907,30 +1941,5 @@ FROM     dbo.Bill_Details INNER JOIN
 commit tran
 go
 --exec Room_Resit 666
-
-
-
-
---  קבלה של החדרים 
---SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
---dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
---dbo.Customers_Rooms.Amount_Of_People,
---(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
---dbo.Bill_Details.Payment_Method
---FROM     dbo.Customers_Rooms INNER JOIN
---                  dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
---                  dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
---WHERE  (dbo.Bill_Details.Product_Code = 8)
---union all
---SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
---dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
---dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method
---FROM     dbo.Bill_Details INNER JOIN
---                  dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
---                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
---				  WHERE  (dbo.Bill_Details.Product_Code != 8)
-
-
-
 
 
