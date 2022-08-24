@@ -15,17 +15,48 @@ export default function Home({ navigation }) {
   const [workerCode, setWorkerCode] = useState(1)
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-const user = "aaa"
+  const [workerCardsArr, SetWorkerCardsArr] = useState([{code:1,title:'Exit shift',pic: require("../Pic/logout.png")},
+  {code:1,title:'Enter shift ',pic: require("../Pic/login.png")},
+  {code:1,title:'Tasks',pic: require("../Pic/taskboard.png")},
+  {code:1,title:'Add charge',pic: require("../Pic/creditcardpay.png")},
+  {code:2,title:'Reports',pic: require("../Pic/graphreport.png")},
+  {code:2,title:'Workers management',pic: require("../Pic/managementworkers.png")}
+ 
+])
+
+const user1 = '1'
+const user2 = '2'
+const user3 = '3'
 const pass = "123"
 
 
 useEffect(() => { setWorkerCode(1) }, []);
 const LogIn = () => {
-
-  if (id === user && password === pass) {
+// const t = workerCardsArr.filter((workerCard) => workerCard.code === 1)
+if(password === pass){
+  switch(id) {
+    case '1':
+      // workerCardsArr =  workerCardsArr.filter((workerCard) => workerCard.code === 1)
+      SetWorkerCardsArr(workerCardsArr.filter((workerCard) => workerCard.code === 1))
+      // console.log(t.toString());
+      break;   
+    case '2':
+      SetWorkerCardsArr(workerCardsArr.filter((workerCard) => workerCard.code === 1||  workerCard.code === 2))
+      break;
+    case '3':
+      SetWorkerCardsArr([])
+      break;
+    case '4':
+      this.FOUR();
+      break;
+    default:
+      Alert.alert("error");
+    }
     setWorkerCode(2)
-  }
- else  Alert.alert("No such user exists in the system")
+      console.log(workerCardsArr.toString());
+}
+
+else  Alert.alert("No such user exists in the system")
 }
 
 
@@ -75,7 +106,7 @@ const LogIn = () => {
        </View>
                   );
         case 2:
-            return  <WorkerMenu/>;
+            return  <WorkerMenu workerCardsArr = {workerCardsArr} navigation ={navigation }/>;
      
     }
 };
@@ -143,9 +174,11 @@ const LogIn = () => {
   //   return null;
   // }
   return (
+   
+
 
   <View style={styles.container}>
-
+    <StatusBar  style="light" />
 <Animated.View style={{ flex: 2, backgroundColor: 'black' }} >
 
 <BackgroundImage  source ={hotelback}style={{ flex: 2 }}/>

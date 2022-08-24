@@ -1,17 +1,7 @@
-import { View, Text, StyleSheet, Image, FlatList, Linking, TouchableOpacity, Alert ,Dimensions  } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert ,Dimensions  } from 'react-native'
 import React from 'react'
 
 
-
-
-
-
-
-
-
-
-
-// {txt:'Exit shift',pic: require("../Pic/logout.png")},{txt:'Enter shift ',pic: require("../Pic/login.png")}
 
 
 const numColumns =2
@@ -19,37 +9,44 @@ const WIDTH =Dimensions.get('window').width
 
 
 
-export default function WorkerMenu() {
-    const arr = [{txt:'Exit shift',pic: require("../../Pic/logout.png")},{txt:'Enter shift ',pic: require("../../Pic/login.png")},{txt:'dfgdfgdfgfgd'},{txt:'dfgdfgdfgfgd'},{txt:'dfgdfgdfgfgd'},{txt:'dfgdfgdfgfgd'}]
+export default function WorkerMenu({workerCardsArr, navigation }) {
+   
+   
+   
+   
+   
+   
     const GetItem =({item,index})=>{
+
+
+
+
+
         return (
     
-            <View style={styles.item} key ={index}>
-           <Image style={{width:50,height:50}} source={item.pic} />
-             <Text style={styles.itemText} onPress={()=>  Alert.alert('error')}>{item.txt}</Text>
+          
+                
+    <TouchableOpacity style={styles.item} key ={index}  onPress={()=>  navigation.navigate('CustomerHome')}>
+    <Image style={{width:60,height:60}} source={item.pic} />
+             <Text style={styles.itemText} >{item.title}</Text>
+    </TouchableOpacity>
+         
              
     
-            </View>
+          
           
         )
     }
         
   return (
     <View style={styles.container}> 
-   
     <FlatList   
-       data={arr} 
+       data={workerCardsArr} 
        renderItem = {GetItem}
        keyExtarctor = {(item,index)=> index.toString()}
        numColumns = {numColumns}
        />
-    
-     
-    
- 
-
-
-     </View>
+      </View>
   )
 }
 
