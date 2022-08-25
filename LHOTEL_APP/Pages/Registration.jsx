@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, Touchable
 import React, { useState } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import User from './Class/User'
+import {User} from './Class/User'
 
 
 export default function Registration({ navigation }) {

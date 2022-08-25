@@ -1,9 +1,9 @@
 import { Animated,View, Image,StyleSheet,Text,TouchableOpacity,StatusBar,Alert} from 'react-native'
 import React from 'react'
-import hotelback from '../Pic/hotelback.jpg'
+
 import { BackgroundImage } from '@rneui/base';
 import{ useState, useEffect } from 'react'
-
+import { images } from "../images";
 import { TextInput,Button } from "react-native-paper";
 import WorkerMenu from './Workers/WorkerMenu';
 
@@ -15,12 +15,13 @@ export default function Home({ navigation }) {
   const [workerCode, setWorkerCode] = useState(1)
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-  const [workerCardsArr, SetWorkerCardsArr] = useState([{code:1,title:'Exit shift',pic: require("../Pic/logout.png")},
-  {code:1,title:'Enter shift ',pic: require("../Pic/login.png")},
-  {code:1,title:'Tasks',pic: require("../Pic/taskboard.png")},
-  {code:1,title:'Add charge',pic: require("../Pic/creditcardpay.png")},
-  {code:2,title:'Reports',pic: require("../Pic/graphreport.png")},
-  {code:2,title:'Workers management',pic: require("../Pic/managementworkers.png")}
+  const [workerCardsArr, SetWorkerCardsArr] = useState([
+    {code:1,title:'Exit shift',pic:images.exit_shift},
+  {code:1,title:'Enter shift ',pic: images.enter_shift},
+  {code:1,title:'Tasks',pic: images.tasks},
+  {code:1,title:'Add charge',pic: images.add_charge},
+  {code:2,title:'Reports',pic:images.reports},
+  {code:2,title:'Workers management',pic: images.workers_management}
  
 ])
 
@@ -28,23 +29,30 @@ const user1 = '1'
 const user2 = '2'
 const user3 = '3'
 const pass = "123"
-
-
-useEffect(() => { setWorkerCode(1) }, []);
+const [currentUserArr, SetCurrentUserArr] = useState([])
+  
+useEffect(() => {
+  const focus = navigation.addListener('focus', () => {
+    setWorkerCode(1);
+  });
+  return focus;
+}, [navigation]);
+// useEffect(() => { setWorkerCode(1) }, []);
 const LogIn = () => {
 // const t = workerCardsArr.filter((workerCard) => workerCard.code === 1)
 if(password === pass){
   switch(id) {
     case '1':
       // workerCardsArr =  workerCardsArr.filter((workerCard) => workerCard.code === 1)
-      SetWorkerCardsArr(workerCardsArr.filter((workerCard) => workerCard.code === 1))
+      SetCurrentUserArr(workerCardsArr.filter((workerCard) => workerCard.code === 1))
       // console.log(t.toString());
       break;   
     case '2':
-      SetWorkerCardsArr(workerCardsArr.filter((workerCard) => workerCard.code === 1||  workerCard.code === 2))
+      console.log('id',id);
+      SetCurrentUserArr(workerCardsArr.filter((workerCard) => workerCard.code === 1||  workerCard.code === 2))
       break;
     case '3':
-      SetWorkerCardsArr([])
+      SetCurrentUserArr([])
       break;
     case '4':
       this.FOUR();
@@ -106,7 +114,9 @@ else  Alert.alert("No such user exists in the system")
        </View>
                   );
         case 2:
-            return  <WorkerMenu workerCardsArr = {workerCardsArr} navigation ={navigation }/>;
+          // navigation.navigate('WorkerMenu',{workerCardsArr:workerCardsArr})
+          // doAnimation(closeState,1,250),setInfo(false)
+            return  <WorkerMenu currentUserArr = {currentUserArr} setWorkerCode={setWorkerCode} navigation ={navigation }/>;
      
     }
 };
@@ -181,7 +191,7 @@ else  Alert.alert("No such user exists in the system")
     <StatusBar  style="light" />
 <Animated.View style={{ flex: 2, backgroundColor: 'black' }} >
 
-<BackgroundImage  source ={hotelback}style={{ flex: 2 }}/>
+<BackgroundImage  source ={images.hotelback}style={{ flex: 2 }}/>
 
 <Text style={{
 fontSize : 55,

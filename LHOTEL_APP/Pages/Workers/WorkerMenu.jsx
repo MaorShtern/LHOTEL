@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert ,Dimensions  } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert ,Dimensions,Animated  } from 'react-native'
 import React from 'react'
 
-
+import Icon from 'react-native-vector-icons/Octicons';
 
 
 const numColumns =2
@@ -9,12 +9,11 @@ const WIDTH =Dimensions.get('window').width
 
 
 
-export default function WorkerMenu({workerCardsArr, navigation }) {
+export default function WorkerMenu({ currentUserArr, navigation, setWorkerCode}) {
    
+    // let {workerCardsArr } = route.params
    
-   
-   
-   
+    
    
     const GetItem =({item,index})=>{
 
@@ -37,11 +36,14 @@ export default function WorkerMenu({workerCardsArr, navigation }) {
           
         )
     }
-        
+        //onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}
   return (
     <View style={styles.container}> 
+      <TouchableOpacity onPress={()=> {setWorkerCode(1)}}>
+             <Text style={styles.Text} >Exit</Text>
+           </TouchableOpacity>
     <FlatList   
-       data={workerCardsArr} 
+       data={currentUserArr} 
        renderItem = {GetItem}
        keyExtarctor = {(item,index)=> index.toString()}
        numColumns = {numColumns}
@@ -82,12 +84,12 @@ const styles = StyleSheet.create({
         padding: 5
     },
     Text: {
-        backgroundColor: 'black',
-        color: 'white',
-        fontWeight: "bold",
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: 20,
+        paddingLeft:30,
+        fontSize: 20,
+        textDecorationLine: 'underline',
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'right'
     },
     ButtonContainer: {
         flex: 1,

@@ -9,42 +9,17 @@ import Registration from './Registration';
 // import SaveRoom from './SaveRoom';
 
 import { useState, useEffect } from "react";
-// import Navbar from './Navbar'
-import CarouselImages from './CarouselImages'
- import Bar from '../Pic/bar.jpg';
- import Events from '../Pic/events.jpg';
-import Spa from '../Pic/spa.jpg'
-import Lobi from '../Pic/lobi.jpg'
-// import Back from '../Pic/backround.jpg'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import Navbar from './Navbar'
+import CarouselImages from './CarouselImages';
+import { images } from "../images";
 
 function HomeScreen({ navigation }) {
+
   const fullAddress = "חדרה"
   const url = Platform.select({
       ios: `maps:0,0?q=${fullAddress}`,
       android: `geo:0,0?q=${fullAddress}`,
   })
-
-
   
   return (
     <ScrollView><StatusBar style="light" backgroundColor="#000000" />
@@ -77,16 +52,16 @@ function HomeScreen({ navigation }) {
             <Text style={styles.Text}>ACTIVITES</Text>
 
             <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between', paddingTop: 10 }}>
-                <Image style={styles.Image} source={Bar} />
-                <Image style={styles.Image} source={Events} />
+                <Image style={styles.Image} source={images.bar} />
+                <Image style={styles.Image} source={images.events} />
             </View> 
             <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between' }}>
                 <Text style={{ paddingRight: 75 }}>BAR</Text>
                 <Text style={{ paddingLeft: 75 }}>EVENTS</Text>
             </View>
             <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between', paddingTop: 10 }}>
-                <Image style={styles.Image} source={Spa} />
-                <Image style={styles.Image} source={Lobi} />
+                <Image style={styles.Image} source={images.spa} /> 
+                <Image style={styles.Image} source={images.lobi} />
             </View>
             <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between' }}>
                 <Text style={{ paddingRight: 75 }}>SPA</Text>
@@ -116,8 +91,16 @@ export default function CustomerHome() {
          
       }}} />
       
-        <Drawer.Screen name="Login" component={Login} options={{headerTitle:' '}} />
-        <Drawer.Screen name="Registration" component={Registration} options={{headerTitle:' '}}/>
+        <Drawer.Screen name="Login" component={Login}  options={{headerTitle:' ',headerTintColor: 'white',
+      headerStyle: {
+         backgroundColor: '#000',
+         
+      }}} />
+        <Drawer.Screen name="Registration" component={Registration} options={{headerTitle:' ',headerTintColor: 'white',
+      headerStyle: {
+         backgroundColor: '#000',
+         
+      }}}/>
     
       </Drawer.Navigator>
     </NavigationContainer>

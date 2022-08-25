@@ -1,13 +1,12 @@
 {
-  "name": "lhotel",
+  "name": "lhotel_app",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -22,6 +21,7 @@
     "@rneui/themed": "^4.0.0-rc.6",
     "date-fns": "^2.29.1",
     "expo": "~45.0.0",
+    "expo-asset": "~8.5.0",
     "expo-font": "~10.1.0",
     "expo-linear-gradient": "~11.3.0",
     "expo-status-bar": "~1.3.0",
@@ -32,7 +32,7 @@
     "react-native-animate": "^1.5.0",
     "react-native-cards": "^1.1.4",
     "react-native-counters": "^1.2.0",
-    "react-native-credit-card-input": "^0.4.1",
+    "react-native-credit-card-input": "^0.3.1",
     "react-native-credit-card-input-view": "^0.0.7",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.2.1",
