@@ -15,22 +15,22 @@ namespace BLL
             return DALTasks.GetAllTasks();
         }
 
-        public static Task GetTaskById(int id, int taskNum, DateTime date)
+        public static Task GetTaskById(int id)
         {
-            return DALTasks.GetTaskById(id, taskNum, date);
+            return DALTasks.GetTaskById(id);
         }
 
         public static bool AddNewTask(Task task)
         {
             return DALTasks.AddNewTask(task);
         }
-        public static bool AlterTask(Task task)
-        {
-            return DALTasks.AlterTask(task);
-        }
-        public static bool DeleteTask(int id, int taskNum, DateTime date)
-        {
-            return DALTasks.DeleteTask(id, taskNum, date);
-        }
+        //public static bool AlterTask(Task task)
+        //{
+        //    return DALTasks.AlterTask(task);
+        //}
+        //public static bool DeleteTask(int id, int taskNum, DateTime date)
+        //{
+        //    return DALTasks.DeleteTask(id, taskNum, date);
+        //}
     }
 }

@@ -8,15 +8,14 @@ namespace DAL
 {
     public class Employees
     {
-        public int id { set; get; }
-        public int employee_Code { set; get; }
-
-        public string name { set; get; }
-        public string phoneNumber { set; get; }
-        public DateTime birthDate { set; get; }
-        public int worker_Code { set; get; }
-        public int hourly_Wage { set; get; }
-        public string address { set; get; }
+        public int Employee_ID { set; get; }
+        public string Description { set; get; }
+        public string Employee_Name { set; get; }
+        public string Phone_Number { set; get; }
+        public DateTime Birth_Date { set; get; }
+        public int Hourly_Wage { set; get; }
+        public string Address { set; get; }
+        public int Employee_Code { set; get; }
 
 
         //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,
@@ -44,10 +43,5 @@ namespace DAL
         //    this.address = address;
         //}
 
-
-        public override string ToString()
-        {
-            return $"ID:{id}, Name:{name}, Phone Number:{phoneNumber}, worker Code:{worker_Code}, hourly Wage:{hourly_Wage}, address:{address}";
-        }
     }
 }

@@ -19,7 +19,8 @@ namespace LHOTELServer.Controllers
     public class TasksController : ApiController
     {
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Get()
+        [System.Web.Http.Route("~/GetAllTaske")]
+        public IHttpActionResult GetAllTaske()
         {
             try
             {
@@ -32,11 +33,13 @@ namespace LHOTELServer.Controllers
 
         }
 
-        public IHttpActionResult Get([FromBody] int id, [FromBody] int taskNum, [FromBody] DateTime date)
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/GetTaskById")]
+        public IHttpActionResult GetTaskById( int id)
         {
             try
             {
-                return Ok(BLLTasks.GetTaskById(id,taskNum,date));
+                return Ok(BLLTasks.GetTaskById(id));
             }
             catch (Exception e)
             {
@@ -45,7 +48,8 @@ namespace LHOTELServer.Controllers
         }
 
         [System.Web.Http.HttpPost]
-        public IHttpActionResult Post([FromBody] Task task)
+        [System.Web.Http.Route("~/AddNewTask")]
+        public IHttpActionResult AddNewTask([FromBody] Task task)
         {
             try
             {
@@ -57,32 +61,32 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpPut]
-        public IHttpActionResult Put([FromBody] Task task)
-        {
-            try
-            {
-                return Ok(BLLTasks.AlterTask(task));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //[System.Web.Http.HttpPut]
+        //public IHttpActionResult Put([FromBody] Task task)
+        //{
+        //    try
+        //    {
+        //        return Ok(BLLTasks.AlterTask(task));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
-        [System.Web.Http.HttpDelete]
-        public IHttpActionResult Delete([FromBody] int id, [FromBody] int taskNum, [FromBody] DateTime date)
-        {
-            try
-            {
-                return Ok(BLLTasks.DeleteTask(id,taskNum,date));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //[System.Web.Http.HttpDelete]
+        //public IHttpActionResult Delete([FromBody] int id, [FromBody] int taskNum, [FromBody] DateTime date)
+        //{
+        //    try
+        //    {
+        //        return Ok(BLLTasks.DeleteTask(id,taskNum,date));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
-        
+
     }
 }

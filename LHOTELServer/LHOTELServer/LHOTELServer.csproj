@@ -158,10 +158,10 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -223,6 +223,7 @@
     <Folder Include="Models\" />
     <Folder Include="Views\Customers\" />
     <Folder Include="Views\Employees\" />
+    <Folder Include="Views\Manager\" />
     <Folder Include="Views\Products\" />
     <Folder Include="Views\Rooms\" />
     <Folder Include="Views\Tasks\" />

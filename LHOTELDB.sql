@@ -221,6 +221,7 @@ create table Shifts
 go
 
 
+
 create table Employees_Tasks
 (
 	Employee_ID int,
@@ -299,13 +300,21 @@ go
 
 
 
-create proc GetEmployeeByIdAndCode
+create proc GetEmployeeByIdAndRole
 @id int,
-@code int
+@role nvarchar(30)
 as
 begin tran
-	select * from [dbo].[Employees] 
-	where [Employee_ID] = @id and [Employee_Code] = @code
+
+declare @worker_Code as int = (select [Worker_Code] from [dbo].[Employees_Types]
+	where [Description] = @role)
+
+SELECT dbo.Employees.Employee_ID, dbo.Employees_Types.Description, dbo.Employees.Employee_Name, dbo.Employees.Phone_Number, dbo.Employees.Birth_Date, dbo.Employees.Worker_Code, dbo.Employees.Hourly_Wage, 
+                  dbo.Employees.Address, dbo.Employees.Employee_Code
+FROM     dbo.Employees_Types INNER JOIN
+                  dbo.Employees ON dbo.Employees_Types.Worker_Code = dbo.Employees.Worker_Code
+				  where dbo.Employees.Employee_ID = @id and dbo.Employees.Worker_Code = @worker_Code
+
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -314,21 +323,24 @@ begin tran
 	end
 commit tran
 go
---exec GetEmployeeByIdAndCode 888 , 8
+--exec GetEmployeeByIdAndRole 888 , 'Receptionist'
+
+
 
 
 create proc InsertEmployee 
 @id int, 
 @name nvarchar(30),
 @phoneNumber nvarchar(30),
-@birthDate varchar(10), 
-@worker_Code int, 
+@birthDate Date, 
+@role nvarchar(30), 
 @hourly_Wage int, 
 @address nvarchar(30)
 as
 begin tran
-	declare @dateResult as date 
-	set @dateResult = convert(date, @birthDate, 103) 
+	declare @dateResult as date  = convert(date, @birthDate, 103) 
+	declare @worker_Code as int = (select [Worker_Code] from [dbo].[Employees_Types]
+	where [Description] = @role)
 	insert  [dbo].[Employees] values (@id,@name,@phoneNumber,@dateResult,@worker_Code,@hourly_Wage,@address)
 	if (@@error !=0)
 	begin
@@ -338,29 +350,26 @@ begin tran
 	end
 commit tran
 go
---exec InsertEmployee 111,'aaa','0526211881','1999-02-23',1,40,'aaa'
---exec InsertEmployee 222,'bbb','0526211881','1999-03-23',2,40,'bbb'
---exec InsertEmployee 333,'ccc','0542611881','1999-04-23',3,40,'ccc'
---exec InsertEmployee 444,'ddd','0548937881','1978-03-11',3,41,'ddd'
---exec InsertEmployee 555,'eee','0528057777','1998-05-30',3,41,'eee'
---exec InsertEmployee 666,'fff','0502359678','1972-04-24',1,41,'fff'
---exec InsertEmployee 777,'ggg','0502233344','1997-11-12',3,41,'ggg'
---exec InsertEmployee 888,'hhh','0523491528','1990-10-03',2,41,'hhh'
---exec InsertEmployee 999,'hhh','0523491528','15/08/2022',2,41,'hhh'
-
+--exec InsertEmployee 999,'aaa','0526211881','2022-08-15','Manager',40,'aaa'
+exec GetAllEmployees
 
 
 -----------------------------------------------------
+
+
 create proc AlterEmployee
 @id int, 
 @name nvarchar(30),
 @phoneNumber nvarchar(30),
 @birthDate date, 
-@worker_Code int, 
+@role nvarchar(30), 
 @hourly_Wage int, 
 @address nvarchar(30)
 as
 begin tran
+
+	declare @worker_Code as int = (select [Worker_Code] from [dbo].[Employees_Types]
+	where [Description] = @role)
 	UPDATE [dbo].[Employees]
 	SET [Employee_Name] = @name ,[Phone_Number]= @phoneNumber,[Birth_Date]=@birthDate
 	,[Worker_Code]=@worker_Code,[Hourly_Wage]=@hourly_Wage,[Address]=@address
@@ -373,8 +382,8 @@ begin tran
 	end
 commit tran
 go
---exec AlterEmployee 999,'ccc','0563211948','2022 - 08 - 15',3,40,'dgdbbd'
---select * from [dbo].[Employees]
+
+--exec AlterEmployee 999,'ccc','0563211948','2022 - 08 - 15','Manager',40,'dgdbbd'
 
 
 
@@ -405,7 +414,7 @@ commit tran
 	--SELECT @RowCount3 = @@ROWCOUNT
 	--SELECT @RowCount1 + @RowCount2 + @RowCount3 AS Result
 go
---exec DeleteEmployeeById 888
+--exec DeleteEmployeeById 999
 --exec GetAllEmployees
 --exec GetAllTasks
 
@@ -982,10 +991,14 @@ go
 
 
 ---  פרוצדורות טבלת משמרות
-create proc GetShifts
+create proc GetAllShifts
 as
 begin tran
-	select * from [dbo].[Shifts]
+	SELECT dbo.Shifts.Employee_ID, dbo.Shifts.Employee_Code, dbo.Employees_Types.Description,
+	dbo.Shifts.Date, CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time,
+	CONVERT(VARCHAR(5), dbo.Shifts.Leaving_Time, 108) AS Leaving_Time
+	FROM  dbo.Shifts INNER JOIN dbo.Employees_Types 
+	ON dbo.Shifts.Worker_Code = dbo.Employees_Types.Worker_Code
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -994,10 +1007,36 @@ begin tran
 	end
 commit tran
 go
---exec GetShifts
+--exec GetAllShifts
+ --CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time 
 
 
-create proc AddShift
+
+
+create proc GetWorkersOnShift
+as
+begin tran
+	SELECT dbo.Shifts.Employee_ID, dbo.Shifts.Employee_Code, dbo.Employees_Types.Description,
+	dbo.Shifts.Date, CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time,
+	CONVERT(VARCHAR(5), dbo.Shifts.Leaving_Time, 108) AS Leaving_Time
+	FROM  dbo.Shifts INNER JOIN dbo.Employees_Types 
+	ON dbo.Shifts.Worker_Code = dbo.Employees_Types.Worker_Code
+	where dbo.Shifts.Date =	 FORMAT(getdate(), 'yyyy-MM-dd') and  dbo.Shifts.Leaving_Time is null
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec GetWorkersOnShift
+
+
+
+ 
+create proc ClockIn
 @Employee_ID int
 as
 begin tran
@@ -1015,14 +1054,16 @@ begin tran
 	end
 commit tran
 go
---exec AddShift 111
---exec AddShift 222
---exec AddShift 333
---exec AddShift 444
---exec AddShift 555
---exec AddShift 666
---exec AddShift 777
---exec AddShift 888
+exec GetShifts
+--exec ClockIn 111
+--exec ClockIn 222
+--exec ClockIn 333
+--exec ClockIn 444
+--exec ClockIn 555
+--exec ClockIn 666
+--exec ClockIn 777
+--exec ClockIn 888
+
 
 
 create proc DeleteShift
@@ -1043,7 +1084,9 @@ go
 --exec DeleteShift 111,'2022-08-23 02:16:12.000'
 
 
-create proc End_Shift
+
+
+create proc ClockOut
 @Employee_ID int
 as
 begin tran
@@ -1058,10 +1101,8 @@ begin tran
 	end
 commit tran
 go
---exec End_Shift 111 
+--exec ClockOut 111 
 -- select * from [dbo].[Shifts]
-
-
 
 
 
@@ -1069,14 +1110,12 @@ go
 create proc GetAllTasks
 as
 begin tran
-	SELECT dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Start_Date, 
-	dbo.Employees_Tasks.Start_Time, dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status, 
-	dbo.Employees_Tasks.Description
-	FROM dbo.Tasks_Types INNER JOIN dbo.Employees_Tasks 
-	ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
-	GROUP BY dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Start_Date, 
-	dbo.Employees_Tasks.Start_Time, dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status, 
-    dbo.Employees_Tasks.Description
+	SELECT dbo.Employees_Tasks.Employee_ID,dbo.Employees_Tasks.Task_Number,
+	dbo.Tasks_Types.Task_Name,dbo.Employees_Tasks.Start_Date, 
+	CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) as Start_Time, 
+	dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status,dbo.Employees_Tasks.Description
+	FROM dbo.Employees_Tasks INNER JOIN dbo.Tasks_Types 
+	ON dbo.Employees_Tasks.Task_Number = dbo.Tasks_Types.Task_Number
 	order by dbo.Employees_Tasks.Task_Status desc
 	if (@@error !=0)
 	begin
@@ -1089,13 +1128,20 @@ go
 -- exec GetAllTasks
 
 
+
+
 create proc GetTaskById
 @id int
 as
 begin tran
-	select * from [dbo].[Employees_Tasks] 
-	where [Employee_ID] = @id  
-	order by [Task_Status] desc
+	SELECT dbo.Employees_Tasks.Employee_ID,dbo.Employees_Tasks.Task_Number,
+	dbo.Tasks_Types.Task_Name,dbo.Employees_Tasks.Start_Date, 
+	CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) as Start_Time, 
+	dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status,dbo.Employees_Tasks.Description
+	FROM dbo.Employees_Tasks INNER JOIN dbo.Tasks_Types 
+	ON dbo.Employees_Tasks.Task_Number = dbo.Tasks_Types.Task_Number
+	where dbo.Employees_Tasks.Employee_ID = @id  
+	order by dbo.Employees_Tasks.Task_Status desc
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1107,20 +1153,21 @@ go
 -- exec GetTaskById 222
 
 
-alter proc AddNewTask
+create proc AddNewTask
 @Employee_ID int, 
-@Task_Number int,
+@Task_Name nvarchar(30),
 @Description nvarchar(30)
 as
 begin tran
 	declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
-
+	declare @number int = (select [Task_Number] from [dbo].[Tasks_Types]where [Task_Name] = @Task_Name)
 	if EXISTS( select [Employee_ID],[Date],[Entrance_Time] from [dbo].[Shifts]
 	where [Employee_ID] = @Employee_ID and [Date] = @Date and [Leaving_Time] is null )
+	begin
 		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@Task_Number,@Date,(SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
-		,@Date,'Open',@Description)
-
+		values (@Employee_ID,@number,@Date,(SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+		,@Date,'Open', @Description)
+	end
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1129,14 +1176,7 @@ begin tran
 	end
 commit tran
 go
-
---exec AddNewTask 111,1, 'Room cleaning 21'
--- exec AddNewTask 333,1,'Room cleaning 21'
--- exec AddNewTask 444,2, 'chips and coke for room 23'
--- exec AddNewTask 555,4,'Mini bar filling for room 10'
--- exec AddNewTask 777,3,'Room 15 request dry towels'
--- exec AddNewTask 888,6,'A customer requests to check out'
---exec AddNewTask 222,7,'Clean the counter is filthy'
+ --exec AddNewTask 444,'Room Cleaning', 'chips and coke for room 23'
 
 
 
@@ -1941,5 +1981,3 @@ FROM     dbo.Bill_Details INNER JOIN
 commit tran
 go
 --exec Room_Resit 666
-
-
