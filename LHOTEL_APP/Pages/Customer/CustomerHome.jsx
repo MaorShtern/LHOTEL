@@ -1,27 +1,9 @@
-
 import * as React from 'react';
-import { Button, View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, Alert, StatusBar } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import Login from './Login';
-// // import Payment from './Payment';
-import Registration from './Registration';
-// import SaveRoom from './SaveRoom';
-
-import { useState, useEffect } from "react";
-import Navbar from './Navbar'
+import {  View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, StatusBar } from 'react-native';
 import CarouselImages from './CarouselImages';
 import { images } from "../../images";
-
-
-// function NotificationsScreen({ navigation }) {
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Button onPress={() => navigation.goBack()} title="Go back home" />
-//     </View>
-//   );
-// }
-// headerTitle: "LHOTEL"
+import { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const fullAddress = "חדרה"
@@ -32,16 +14,43 @@ const url = Platform.select({
 
 
 
-export default function CustomerHome() {
+export default function CustomerHome({navigation}) {
+
+    const [user, SetUser] = useState([])
+
+
+    // useEffect(() => { GetConnectedUser(); }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+         GetConnectedUser();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
 
     
+    const GetConnectedUser = async() =>{
+        try{
+            const value = await AsyncStorage.getItem('@user');
+            if(value !== null){
+                SetUser(JSON.parse(value))
+            }
+        }
+        catch(e) {
+            alert(e)
+        }
+    }
+
+    // console.log(user);
+
     return (
         <ScrollView><StatusBar style="light" backgroundColor="#000000" />
             <View>
-                {/* <Navbar navigation={navigation} /> */}
+            <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text>
+                <View style={{ height: 10 }}></View>
             </View>
-            {/* <Image source={Back} /> */}
-            {/* <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text> */}
+            <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text>
             <View style={styles.ButtonContainer}>
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:maor100maor@example.com')}

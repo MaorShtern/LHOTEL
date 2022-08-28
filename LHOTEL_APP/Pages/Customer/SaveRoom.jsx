@@ -19,18 +19,18 @@ export default function SaveRoom({ route, navigation }) {
 
 
   // const FetchData = async () => {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' }
-  //   };
-  //   let result = await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions);
-  //   let rooms = await result.json();
-  //   if (rooms !== null) {
-  //     BilldData(rooms)
-  //     SetLoading(true)
-  //     return
-  //   }
-  //   FetchData()
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' }
+    // };
+    // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions);
+    // let rooms = await result.json();
+    // if (rooms !== null) {
+    //   BilldData(rooms)
+    //   SetLoading(true)
+    //   return
+    // }
+    // FetchData()
 
   // }
 

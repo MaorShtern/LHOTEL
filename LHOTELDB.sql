@@ -224,16 +224,20 @@ go
 
 create table Employees_Tasks
 (
+	Task_Code int identity(1,1) NOT NULL,
 	Employee_ID int,
 	Task_Number int,
+	Room_Number int,
 	Start_Date Date  NOT NULL,
     Start_Time Time  NOT NULL,
-	End_Date Date ,
+	End_Time Time ,
 	Task_Status nvarchar(30),
 	Description NVARCHAR(100),
 	CONSTRAINT [PK_Employee_ID2] PRIMARY KEY (Employee_ID,Task_Number,Start_Date,Start_Time),
 	CONSTRAINT [Fk_Employee_ID] FOREIGN KEY (Employee_ID,Start_Date) REFERENCES Shifts (Employee_ID,Date),
-	CONSTRAINT [Fk_Task_Number] FOREIGN KEY (Task_Number) REFERENCES Tasks_Types (Task_Number)
+	CONSTRAINT [Fk_Task_Number] FOREIGN KEY (Task_Number) REFERENCES Tasks_Types (Task_Number),
+	CONSTRAINT [Fk_Employees_Tasks_Room_Number] FOREIGN KEY (Room_Number)
+	REFERENCES Rooms ([Room_Number])
 )
 go
 --222	7	2022-02-02	13:12:00.0000000	2022-02-03	Open	Clean the counter is filthy
@@ -351,7 +355,18 @@ begin tran
 commit tran
 go
 --exec InsertEmployee 999,'aaa','0526211881','2022-08-15','Manager',40,'aaa'
-exec GetAllEmployees
+--exec InsertEmployee -1,'','','','General',-1,''
+
+--111	Manager	aaa	0526211881	2022-08-15	40	aaa	1
+--222	Receptionist	bbb	0526211881	2022-08-15	40	bbb	2
+--333	Room service	ccc	0542611881	2022-08-15	40	ccc	3
+--444	Room service	ddd	0548937881	2022-08-15	41	ddd	4
+--555	Room service	eee	0528057777	2022-08-15	41	eee	5
+--666	Manager	fff	0502359678	2022-08-15	41	fff	6
+--777	Room service	ggg	0502233344	2022-08-15	41	ggg	7
+--888	Receptionist	hhh	0523491528	2022-08-15	41	hhh	8
+--999	Manager	cccc	05266666666	2022-08-15	40	hbhjbkjbjk	18
+--exec GetAllEmployees
 
 
 -----------------------------------------------------
@@ -1063,7 +1078,7 @@ exec GetShifts
 --exec ClockIn 666
 --exec ClockIn 777
 --exec ClockIn 888
-
+--exec ClockIn -1
 
 
 create proc DeleteShift
@@ -1110,12 +1125,12 @@ go
 create proc GetAllTasks
 as
 begin tran
-	SELECT dbo.Employees_Tasks.Employee_ID,dbo.Employees_Tasks.Task_Number,
-	dbo.Tasks_Types.Task_Name,dbo.Employees_Tasks.Start_Date, 
-	CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) as Start_Time, 
-	dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status,dbo.Employees_Tasks.Description
-	FROM dbo.Employees_Tasks INNER JOIN dbo.Tasks_Types 
-	ON dbo.Employees_Tasks.Task_Number = dbo.Tasks_Types.Task_Number
+SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+FROM     dbo.Tasks_Types INNER JOIN
+                  dbo.Employees_Tasks ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
+GROUP BY dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
 	order by dbo.Employees_Tasks.Task_Status desc
 	if (@@error !=0)
 	begin
@@ -1129,19 +1144,19 @@ go
 
 
 
-
-create proc GetTaskById
-@id int
+create proc GetTask_ByCode
+@code int
 as
 begin tran
-	SELECT dbo.Employees_Tasks.Employee_ID,dbo.Employees_Tasks.Task_Number,
-	dbo.Tasks_Types.Task_Name,dbo.Employees_Tasks.Start_Date, 
-	CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) as Start_Time, 
-	dbo.Employees_Tasks.End_Date, dbo.Employees_Tasks.Task_Status,dbo.Employees_Tasks.Description
-	FROM dbo.Employees_Tasks INNER JOIN dbo.Tasks_Types 
-	ON dbo.Employees_Tasks.Task_Number = dbo.Tasks_Types.Task_Number
-	where dbo.Employees_Tasks.Employee_ID = @id  
-	order by dbo.Employees_Tasks.Task_Status desc
+	SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+FROM     dbo.Tasks_Types INNER JOIN
+                  dbo.Employees_Tasks ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
+
+where dbo.Employees_Tasks.Task_Code = @code
+
+GROUP BY dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1150,12 +1165,42 @@ begin tran
 	end
 commit tran
 go
--- exec GetTaskById 222
+--exec GetAllTasks
+-- exec GetTask_ByCode 2
+
+
+
+
+create proc GetTask_ById
+@id int
+as
+begin tran
+	SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+FROM     dbo.Tasks_Types INNER JOIN
+                  dbo.Employees_Tasks ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
+
+where  dbo.Employees_Tasks.Employee_ID = @id
+
+GROUP BY dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+--exec GetAllTasks
+-- exec GetTask_ById -1
+
 
 
 create proc AddNewTask
 @Employee_ID int, 
 @Task_Name nvarchar(30),
+@Room_Number int,
 @Description nvarchar(30)
 as
 begin tran
@@ -1165,8 +1210,8 @@ begin tran
 	where [Employee_ID] = @Employee_ID and [Date] = @Date and [Leaving_Time] is null )
 	begin
 		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@number,@Date,(SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
-		,@Date,'Open', @Description)
+		values (@Employee_ID,@number,@Room_Number , (select getdate()),
+		(SELECT CONVERT(VARCHAR(8), GETDATE(), 108)),null,'Open', 'dfbdbd')
 	end
 	if (@@error !=0)
 	begin
@@ -1176,7 +1221,17 @@ begin tran
 	end
 commit tran
 go
- --exec AddNewTask 444,'Room Cleaning', 'chips and coke for room 23'
+ --exec AddNewTask -1,'Room Cleaning',23, 'chips and coke for room 23'
+ -- exec AddNewTask -1,'Room Cleaning',23, 'chips and coke for room 23'
+-- -1	4	Refill mini bar	2022-08-28	03:15:50.0000000	NULL	Open	dfbdbd
+--444	4	Refill mini bar	2022-08-26	03:08:23.0000000	NULL	Open	dfbdbd
+--444	4	Refill mini bar	2022-08-26	03:08:51.0000000	NULL	Open	dfbdbd
+
+--exec GetAllTasks
+-- select * from [dbo].[Shifts]
+--insert [dbo].[Employees_Tasks]
+--		values (-1,4,'2022-08-28',(SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+--		,null,'Open', 'dfbdbd')
 
 
 
@@ -1185,14 +1240,14 @@ create proc AlterTask
 @Task_Number int,
 @Start_Date date,
 @Start_Time time(7) ,
-@End_Date date,
+@End_Date time(7),
 @Task_Status nvarchar(30),
 @Description nvarchar(30)
 as
 begin tran
 	UPDATE [dbo].[Employees_Tasks]
 	SET 
-	[End_Date]=@End_Date,[Task_Status]=@Task_Status,[Description]=@Description
+	[End_Time]=@End_Date,[Task_Status]=@Task_Status,[Description]=@Description
 	WHERE [Employee_ID] = @Employee_ID and [Task_Number]=@Task_Number and [Start_Date]=@Start_Date 
 	and [Start_Time]=@Start_Time
 	if (@@error !=0)
@@ -1981,3 +2036,8 @@ FROM     dbo.Bill_Details INNER JOIN
 commit tran
 go
 --exec Room_Resit 666
+
+
+select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Employees_Tasks]
+--select * from [dbo].[Bill_Details]

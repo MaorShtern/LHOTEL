@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DAL;
 using BLL;
+using Newtonsoft.Json.Linq;
 
 
 namespace LHOTELServer.Controllers
@@ -18,12 +19,15 @@ namespace LHOTELServer.Controllers
     [System.Web.Http.RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
-        [System.Web.Http.HttpGet]
+
+        [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
-        public IHttpActionResult GetCustomerByMailAndPassword(string mail, string password)
+        public IHttpActionResult GetCustomerByMailAndPassword([FromBody] JObject data)
         {
             try
             {
+                string mail = data["mail"].ToObject<string>();
+                string password = data["password"].ToObject<string>();
                 return Ok(BLLCustomers.GetCustomerByMailAndPassword(mail, password));
             }
             catch (Exception e)

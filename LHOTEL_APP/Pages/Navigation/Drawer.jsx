@@ -8,7 +8,7 @@ import Booking from '../Customer/Booking'
 import SaveRoom from '../Customer/SaveRoom'
 import Payment from '../Customer/Payment'
 import ConfirmationPage from '../Customer/ConfirmationPage'
-
+import RoomService from '../Customer/RoomService';
 
 
 const drawer = createDrawerNavigator();
@@ -40,6 +40,13 @@ export default function Drawer() {
                     }
                 }} />
                 <drawer.Screen name="Booking" component={Booking} options={{
+                    headerTitle: ' ', headerTintColor: 'white',
+                    headerStyle: {
+                        backgroundColor: '#000',
+                    }
+                }} />
+
+                <drawer.Screen name="RoomService" component={RoomService} options={{
                     headerTitle: ' ', headerTintColor: 'white',
                     headerStyle: {
                         backgroundColor: '#000',

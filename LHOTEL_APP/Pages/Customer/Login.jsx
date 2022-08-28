@@ -5,33 +5,56 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Login({ navigation }) {
 
-  const [arrUsers, setArrUsers] = useState([])
+  // const [arrUsers, setArrUsers] = useState([])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
 
-  useEffect(() => { readData(); }, []);
+  // useEffect(() => { readData(); }, []);
+
+  // useEffect(() => { FetchUserFromDB() }, []);
 
 
-  const readData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key_0');
+  const FetchUserFromDB = async () => {
 
-      if (value !== null) {
-        let new_Array = [value]
-        setArrUsers(JSON.parse(new_Array))
-      }
-    } catch (e) {
-      alert('Failed to fetch the input from storage');
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        "mail": email,
+        "password": password
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch
+      ('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
+    let user = await result.json();
+    // console.log(user);
+    if (user !== null) {
+      // console.log(user);
+      saveUser(user)
+      return
     }
-  };
+    FetchData()
+  }
+
+  // const readData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('@storage_Key_0');
+
+  //     if (value !== null) {
+  //       let new_Array = [value]
+  //       setArrUsers(JSON.parse(new_Array))
+  //     }
+  //   } catch (e) {
+  //     alert('Failed to fetch the input from storage');
+  //   }
+  // };
 
 
   const saveUser = async (value) => {
     try {
-   
-      await AsyncStorage.setItem('@ConUser', JSON.stringify(value), () => {
-      navigation.navigate('Homepage')
+      await AsyncStorage.setItem('@user', JSON.stringify(value), () => {
+        navigation.navigate('Home')
       });
 
     }
@@ -45,19 +68,19 @@ export default function Login({ navigation }) {
 
     if (email.length != 0 && password.length != 0) {
 
-      let find_user = arrUsers.filter((per) => per['email'] === email && per['password'] === password)
-      find_user = find_user[0]
 
-      if (find_user !== undefined) {
-        saveUser(email)
-      
-      }
-      else
-        Alert.alert("No such user exists in the system")
+      FetchUserFromDB()
+      // let find_user = arrUsers.filter((per) => per['email'] === email && per['password'] === password)
+      // find_user = find_user[0]
+
+      // if (find_user !== undefined) {
+      //   saveUser(email)
+
     }
     else {
-      Alert.alert("The fields are not complete")
+      Alert.alert("No such user exists in the system")
     }
+
   }
 
 
@@ -67,7 +90,7 @@ export default function Login({ navigation }) {
     setPassword('')
   }
 
-  
+
 
   return (
     <View>
@@ -88,7 +111,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity>
           <Text style={styles.button} onPress={LogIn} >SUBMIT</Text>
         </TouchableOpacity>
-       
+
       </View>
 
 
@@ -104,7 +127,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-   
+
 
   },
   label: {
