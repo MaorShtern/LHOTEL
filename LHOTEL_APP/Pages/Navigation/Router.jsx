@@ -13,7 +13,7 @@ const stack = createNativeStackNavigator();
 export default function Router() {
     return (
         <NavigationContainer independent={true}>
-        <stack.Navigator initialRouteName="Tasks">
+        <stack.Navigator initialRouteName="Home">
           <stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <stack.Screen name="Drawer" component={Drawer} options={{ headerShown: false }} />
           <stack.Screen name="WorkerMenu" component={WorkerMenu} options={{ headerShown: false }} />

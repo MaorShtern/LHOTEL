@@ -20,21 +20,21 @@ export default function Home({ navigation }) {
   const [password, setPassword] = useState('')
   const [workerCardsArr, SetWorkerCardsArr] = useState([
     { code: 999, role: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: 'Home' },
-    { code: 999, role: 'General', title: 'Enter shift ', pic: images.enter_shift, routeNavigation: '' },
+    { code: 999, role: 'General', title: 'Enter shift ', pic: images.enter_shift, routeNavigation: 'Tasks' },
     // { code: 3, role: 'General', title: 'Tasks', pic: images.tasks },
 
 
     // { code: 1, role: 'Manager', title: 'Add charge', pic: images.add_charge },
     { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
-    { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: 'Home' },
-    { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: 'Home' },
+    { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
+    { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
 
 
-    { code: 2, role: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: 'Home' },
-    { code: 2, role: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: 'Home' },
-    { code: 2, role: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: 'Home' },
+    { code: 2, role: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
+    { code: 2, role: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
+    { code: 2, role: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
 
-    { code: 3, role: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Home' },
+    { code: 3, role: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: '' },
 
 
   ])
@@ -77,7 +77,10 @@ export default function Home({ navigation }) {
     else Alert.alert("No such user exists in the system")
   }
 
-
+  const HandelNavigation = (route) => {
+    // console.log(route);
+    navigation.navigate(route)
+  }
 
   const renderCurrentSelection = () => {
 
@@ -109,7 +112,7 @@ export default function Home({ navigation }) {
         </View>
         );
       case 2:
-        return <WorkerMenu currentUserArr={currentUserArr} setWorkerCode={setWorkerCode} navigation={navigation}/>;
+        return <WorkerMenu currentUserArr={currentUserArr} setWorkerCode={setWorkerCode} HandelNavigation={HandelNavigation} />;
     }
   };
 

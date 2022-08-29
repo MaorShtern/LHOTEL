@@ -13,15 +13,19 @@ export default function WorkerMenu(props) {
 
 
 
-    let { setWorkerCode,currentUserArr,navigation} = props
+    let { setWorkerCode,currentUserArr} = props
 
+    const HandelNavigation = (route)=>{
+        // console.log(route);
+        props.HandelNavigation(route)
+    }
 
     const GetItem = ({ item, index }) => {
         // console.log(item.routeNavigation);
         return (
             <TouchableOpacity style={styles.item} key={index}
                 onPress={() => item.routeNavigation === '' ? alert(item.title) :
-                    () => navigation.navigate(item.routeNavigation)}>
+                    HandelNavigation(item.routeNavigation)}>
 
                 <Image style={{ width: 60, height: 60 }} source={item.pic} />
                 <Text style={styles.itemText} >{item.title}</Text>
