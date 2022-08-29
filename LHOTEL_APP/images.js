@@ -13,6 +13,10 @@ export const images = {
   add_charge: require("./assets/images/creditcardpay.png"),
   reports: require("./assets/images/graphreport.png"),
   lobi: require("./assets/images/lobi.jpg"),
-  workers_management: require("./assets/images/managementworkers.png")
+  workers_management: require("./assets/images/managementworkers.png"),
+  shift: require("./assets/images/Shift.jpg"),
+  checkIn: require("./assets/images/CheckIn.jpg"),
+  checkOut: require("./assets/images/CheckOut.jpg"),
+  plus: require("./assets/images/Plus.png")
 
 }

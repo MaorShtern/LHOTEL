@@ -25,7 +25,7 @@ const Rooms = [
 ]
 
 
-export default function RoomService() {
+export default function RoomService({ navigation }) {
 
     const [dropdown, setDropdown] = useState(null);
     const [request, SetRequest] = useState('')
@@ -59,17 +59,34 @@ export default function RoomService() {
     };
 
     const handleTime = (time) => {
-        let stringTime = time.getHours() + ':' + time.getMinutes()
+        let stringTime = '0'
+        if (time.getHours() <= 9)
+            stringTime += time.getHours()
+        else
+            stringTime = time.getHours()
+
+        stringTime += ':'
+
+        if (time.getMinutes() <= 9)
+            stringTime += '0' + time.getMinutes()
+        else
+            stringTime += time.getMinutes()
+
         setTime(stringTime)
-        hideDate()
+        hideTime()
     };
+
+    const SaveOrder = async () => {
+        alert('date: ' + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate())
+        alert('time: ' + time)
+        navigation.navigate("Home")
+    }
 
 
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>LHotel Room Service Order Form</Text>
             <View style={styles.label}>
-
                 <View style={styles.container}>
                     <Dropdown
                         style={styles.dropdown}
@@ -87,7 +104,6 @@ export default function RoomService() {
                         <Text style={styles.alerts}>*Must select room* </Text>)
                         : null}
                 </View>
-
                 <View style={styles.container}>
                     <Dropdown
                         style={styles.dropdown}
@@ -105,15 +121,10 @@ export default function RoomService() {
                         <Text style={styles.alerts}>*Must select request type* </Text>)
                         : null}
                 </View>
-
-
-
                 <View style={{ height: 20 }}></View>
-
-
                 <View>
                     <TouchableOpacity style={styles.button} onPress={showDate} >
-                        <Text>{"Date: " + date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()}</Text>
+                        <Text>{"Date: " + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
                         isVisible={flagDate}
@@ -152,7 +163,7 @@ export default function RoomService() {
 
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity>
-                    <Text style={styles.button}  >ORDER</Text>
+                    <Text style={styles.button} onPress={SaveOrder} >ORDER</Text>
                 </TouchableOpacity>
 
             </View>

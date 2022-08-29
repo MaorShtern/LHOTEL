@@ -1,55 +1,50 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert ,Dimensions,Animated  } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated } from 'react-native'
 import React from 'react'
 
-import Icon from 'react-native-vector-icons/Octicons';
+// import Icon from 'react-native-vector-icons/Octicons';
 
 
-const numColumns =2
-const WIDTH =Dimensions.get('window').width
-
-
-
-export default function WorkerMenu({ currentUserArr, navigation, setWorkerCode}) {
-   
-    // let {workerCardsArr } = route.params
-   
-    
-   
-    const GetItem =({item,index})=>{
+const numColumns = 2
+const WIDTH = Dimensions.get('window').width
 
 
 
+export default function WorkerMenu(props) {
 
 
+
+    let { setWorkerCode,currentUserArr,navigation} = props
+
+
+    const GetItem = ({ item, index }) => {
+        // console.log(item.routeNavigation);
         return (
-    
-          
-                
-    <TouchableOpacity style={styles.item} key ={index}  onPress={()=>  navigation.navigate('CustomerHome')}>
-    <Image style={{width:60,height:60}} source={item.pic} />
-             <Text style={styles.itemText} >{item.title}</Text>
-    </TouchableOpacity>
-         
-             
-    
-          
-          
+            <TouchableOpacity style={styles.item} key={index}
+                onPress={() => item.routeNavigation === '' ? alert(item.title) :
+                    () => navigation.navigate(item.routeNavigation)}>
+
+                <Image style={{ width: 60, height: 60 }} source={item.pic} />
+                <Text style={styles.itemText} >{item.title}</Text>
+                {/* <Text>{item.toString()}</Text> */}
+            </TouchableOpacity>
         )
     }
-        //onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}
-  return (
-    <View style={styles.container}> 
-      <TouchableOpacity onPress={()=> {setWorkerCode(1)}}>
-             <Text style={styles.Text} >Exit</Text>
-           </TouchableOpacity>
-    <FlatList   
-       data={currentUserArr} 
-       renderItem = {GetItem}
-       keyExtarctor = {(item,index)=> index.toString()}
-       numColumns = {numColumns}
-       />
-      </View>
-  )
+
+
+    //onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
+                <Text style={styles.Text} >Exit</Text>
+            </TouchableOpacity>
+            <FlatList
+                data={currentUserArr}
+                renderItem={GetItem}
+                keyExtarctor={(item, index) => index.toString()}
+                numColumns={numColumns}
+            />
+        </View>
+    )
 }
 
 
@@ -57,25 +52,25 @@ export default function WorkerMenu({ currentUserArr, navigation, setWorkerCode})
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop:20
-       },
-   
-       item: {
-  
-       backgroundColor: 'rgba(35,100,168, 0.2)',
-       alignItems: "center",
-       justifyContent: "center",
-       
-        height:WIDTH/numColumns,
+        paddingTop: 20
+    },
+
+    item: {
+
+        backgroundColor: 'rgba(35,100,168, 0.2)',
+        alignItems: "center",
+        justifyContent: "center",
+
+        height: WIDTH / numColumns,
         flex: 1,
-        margin:10
-       },
-       itemText: {
-  
-       color:'black',
-          fontSize:20,
-      
-        },
+        margin: 10
+    },
+    itemText: {
+
+        color: 'black',
+        fontSize: 20,
+
+    },
     Image: {
         flex: 1,
         width: 100,
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     Text: {
-        paddingLeft:30,
+        paddingLeft: 30,
         fontSize: 20,
         textDecorationLine: 'underline',
         color: 'black',
@@ -100,15 +95,15 @@ const styles = StyleSheet.create({
     },
     button:
     {
-      
-        padding:10, 
-       
-    
+
+        padding: 10,
+
+
     },
-    buttonText:{
-        fontSize:20,
+    buttonText: {
+        fontSize: 20,
         textShadowColor: 'rgba(0, 0, 0, 0.4)',
-        textShadowOffset: {width: -1, height: 1},
+        textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 10
 
     },
