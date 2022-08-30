@@ -1,7 +1,19 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { images } from '../../images'
 
-// import Icon from 'react-native-vector-icons/Octicons';
+
+const workerCardsArr = [
+  { code: 999, role: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: '' },
+  { code: 999, role: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: '' },
+  { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
+  { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
+  { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
+  { code: 2, role: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
+  { code: 2, role: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
+  { code: 2, role: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
+  { code: 3, role: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
+]
 
 
 const numColumns = 2
@@ -9,9 +21,41 @@ const WIDTH = Dimensions.get('window').width
 
 
 
-export default function WorkerMenu({ route }) {
+export default function WorkerMenu({ route, navigation }) {
 
-  let { currentUserArr, setWorkerCode, navigation } = route.params
+  let { id } = route.params
+
+  // console.log(id);
+  const [currentUserArr, SetCurrentUserArr] = useState([])
+
+  useEffect(() => {
+    GetCardsByRole()
+  }, []);
+
+
+  const GetCardsByRole = () => {
+    let arrayTempCards = []
+    switch (id) {
+      case '1':
+        arrayTempCards = workerCardsArr.filter((workerCard) =>
+          workerCard.code === 999 || workerCard.code === 1 ||
+          workerCard.code === 2 || workerCard.code === 3)
+        break;
+      case '2':
+        arrayTempCards = workerCardsArr.filter((workerCard) =>
+          workerCard.code === 999 || workerCard.code === 2)
+        break;
+      case '3':
+        arrayTempCards = workerCardsArr.filter((workerCard) =>
+          workerCard.code === 999 || workerCard.code === 3)
+
+        break;
+      default:
+        Alert.alert("error");
+    }
+    SetCurrentUserArr(arrayTempCards);
+  }
+  // let { currentUserArr, setWorkerCode, navigation } = route.params
 
   // let { setWorkerCode,currentUserArr,navigation} = props
 
@@ -44,18 +88,35 @@ export default function WorkerMenu({ route }) {
 
 
   //onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}
+
+  // console.log(currentUserArr);
+
+
   return (
-    <View style={styles.container}>
-      {/* <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
-                <Text style={styles.Text} >Exit</Text>
-            </TouchableOpacity> */}
-      <FlatList
-        data={currentUserArr}
-        renderItem={GetItem}
-        keyExtarctor={(item, index) => index.toString()}
-        numColumns={numColumns}
-      />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
+          <Text style={styles.Text} >Exit</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={currentUserArr}
+          renderItem={GetItem}
+          keyExtarctor={(item, index) => index.toString()}
+          numColumns={numColumns}
+        />
+      </View>
+    </ScrollView>
+    // <View style={styles.container}>
+    //   {/* <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
+    //             <Text style={styles.Text} >Exit</Text>
+    //         </TouchableOpacity> */}
+    //   <FlatList
+    //     data={currentUserArr}
+    //     renderItem={GetItem}
+    //     keyExtarctor={(item, index) => index.toString()}
+    //     numColumns={numColumns}
+    //   />
+    // </View>
   )
 }
 

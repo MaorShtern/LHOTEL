@@ -4,7 +4,6 @@ import { TextInput } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment';
-import { useEffect } from 'react';
 
 
 
