@@ -25,6 +25,7 @@ export default function TasksCard(props) {
             <View style={styles.Details}>
                 <Text>Employee_ID: {Employee_ID}</Text>
 
+                <Text>Task_Code: {Task_Code}</Text>
             </View>
 
             <View style={styles.containerTaskDedtails}>
