@@ -17,6 +17,10 @@ export const images = {
   shift: require("./assets/images/Shift.jpg"),
   checkIn: require("./assets/images/CheckIn.jpg"),
   checkOut: require("./assets/images/CheckOut.jpg"),
-  plus: require("./assets/images/Plus.png")
+  plus: require("./assets/images/Plus.png"),
+  save:require("./assets/images/Save.png"),
+  edit:require("./assets/images/Edit.png"),
+  trashCan:require("./assets/images/Trashcan.jpg"),
+  check:require("./assets/images/Check.png")
 
 }

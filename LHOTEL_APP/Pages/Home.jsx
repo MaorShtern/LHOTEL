@@ -18,7 +18,7 @@ export default function Home({ navigation }) {
   const [workerCode, setWorkerCode] = useState(1)
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-  const [currentUserArr, SetCurrentUserArr] = useState([])
+
   const [workerCardsArr, SetWorkerCardsArr] = useState([
     { code: 999, role: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: '' },
     { code: 999, role: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: '' },
@@ -26,7 +26,7 @@ export default function Home({ navigation }) {
 
 
     // { code: 1, role: 'Manager', title: 'Add charge', pic: images.add_charge },
-    { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: '' },
+    { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
     { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
     { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
 
@@ -42,32 +42,28 @@ export default function Home({ navigation }) {
 
 
   const pass = "123"
-
+  const [currentUserArr, SetCurrentUserArr] = useState([])
 
   useEffect(() => {
-    setWorkerCode(1);
     const focus = navigation.addListener('focus', () => {
-      setId("");
-      setPassword("");
-      SetCurrentUserArr([])
+      setWorkerCode(1);
     });
     return focus;
   }, [navigation]);
 
 
-  // useEffect(() => {
-  //     setWorkerCode(1);
-   
-  // }, []);
 
   const LogIn = () => {
+    
     if (password === pass) {
       switch (id) {
         case '1':
-          // SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
-          //   workerCard.code === 999 || workerCard.code === 1 ||
-          //   workerCard.code === 2 || workerCard.code === 3))
-          SetCurrentUserArr(workerCardsArr)
+
+          SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
+            workerCard.code === 999 || workerCard.code === 1 ||
+            workerCard.code === 2 || workerCard.code === 3))
+          // SetCurrentUserArr(workerCardsArr)
+          // console.log(JSON.stringify(currentUserArr));
           break;
         case '2':
           SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
@@ -76,22 +72,23 @@ export default function Home({ navigation }) {
         case '3':
           SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
             workerCard.code === 999 || workerCard.code === 3))
+
           break;
         default:
           Alert.alert("error");
       }
-      // onPress={() => { navigation.navigate('Drawer')
-   navigation.navigate('WorkerMenu',{currentUserArr:currentUserArr,setWorkerCode:setWorkerCode, navigation:navigation})
+
+      navigation.navigate('WorkerMenu', { currentUserArr: currentUserArr, setWorkerCode: setWorkerCode, navigation: navigation })
       // setWorkerCode(2)
-      // console.log(workerCardsArr.toString());
+      // console.log(JSON.stringify(workerCardsArr));
     }
     else Alert.alert("No such user exists in the system")
   }
 
-  // const HandelNavigation = (route) => {
-  //   // console.log(route);
-  //   navigation.navigate(route)
-  // }
+  const HandelNavigation = (route) => {
+    // console.log(route);
+    navigation.navigate(route)
+  }
 
   const renderCurrentSelection = () => {
 
@@ -123,7 +120,7 @@ export default function Home({ navigation }) {
         </View>
         );
       case 2:
-        return <WorkerMenu currentUserArr={currentUserArr} setWorkerCode={setWorkerCode} navigation={navigation} />;
+        return <WorkerMenu currentUserArr={currentUserArr} setWorkerCode={setWorkerCode} HandelNavigation={HandelNavigation} />;
     }
   };
 
