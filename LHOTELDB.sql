@@ -9,6 +9,7 @@ SET DATEFORMAT dmy;
 GO
 
 
+
 create table Employees_Types
 (
 	Worker_Code int NOT NULL,
