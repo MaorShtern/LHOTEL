@@ -6,19 +6,31 @@ import { useState, useEffect } from "react";
 
 import Counter from "react-native-counters";
 
-export default function Produts() {
+export default function Produts({SetRequest}) {
   // useEffect(() => { SetCount(0) }, []);
 
   const [totalSum, SetTotalSum] = useState(0);
+  const [start, SetStart] = useState(0);
+  
   const [goodsCount, SetGoodsCount] = useState(0);
 
   useEffect(() => {
- 
-      SetTotalSum(0);
-      SetGoodsCount(0);
-  
-  },[]);
+    SetTotalSum(0);
+    SetGoodsCount(0);
 
+  }, []);
+
+
+
+  const func = () => {
+    for (let i = 0; i < data.length; i++) {
+      data[i].amountTaken = 0;
+    }
+  
+    SetTotalSum(0);
+    SetGoodsCount(0);
+    SetStart(0)
+  };
   const Calculate_Final_Amount = () => {
     let sum = 0;
     let goodsCounter = 0;
@@ -68,7 +80,7 @@ export default function Produts() {
 
         <View style={counterStyle}>
           <Counter
-            start={0}
+            start={start}
             max={5}
             style={styles.counterStyle}
             onChange={(counet) => {
@@ -84,7 +96,16 @@ export default function Produts() {
 
   return (
     <View>
-      <Header />
+       <View style={styles.headerStyle}>
+       <TouchableOpacity   onPress={() => {SetRequest(""),SetTotalSum(0),SetGoodsCount(0), SetStart(0)}}>
+         <Icon name="ios-close" size={35} color="#a8a9ad" />
+        
+          </TouchableOpacity>
+      
+      <Text style={{ fontSize: 18 }}>Mini Bar</Text>
+      <Text onPress={func}>Empty</Text>
+    </View>
+      {/* <Header  func={func}/> */}
       <FlatList
         data={data}
         renderItem={GetItem}
@@ -137,15 +158,19 @@ const Footer = ({ totalSum, goodsCount }) => {
   );
 };
 
-const Header = () => {
-  return (
-    <View style={styles.headerStyle}>
-      <Icon name="ios-close" size={35} color="#a8a9ad" />
-      <Text style={{ fontSize: 18 }}>Mini Bar</Text>
-      <Text>Empty</Text>
-    </View>
-  );
-};
+// const Header = ({func}) => {
+//   return (
+//     <View style={styles.headerStyle}>
+//        <TouchableOpacity   onPress={() => console.log("dgdfgdgfdfg")}>
+//          <Icon name="ios-close" size={35} color="#a8a9ad" />
+        
+//           </TouchableOpacity>
+      
+//       <Text style={{ fontSize: 18 }}>Mini Bar</Text>
+//       <Text onPress={func}>Empty</Text>
+//     </View>
+//   );
+// };
 
 const data = [
   {
@@ -232,8 +257,8 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 17,
+    paddingRight: 17,
     borderBottomWidth: 1,
     borderColor: "#e2e2e2",
   },

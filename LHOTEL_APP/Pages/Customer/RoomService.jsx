@@ -7,7 +7,7 @@ import {
   Button,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -62,6 +62,18 @@ export default function RoomService({ navigation }) {
   // const [time, setTime] = useState(date.getHours() + ':' + date.getMinutes())
   const [selectedDate, setSelectedDate] = useState("");
   const [time, setTime] = useState("");
+
+
+
+  useEffect(() => { SetRequest("") }, []);
+
+
+
+
+
+
+
+
   const hideDate = () => {
     setFlagDate(false);
   };
@@ -134,7 +146,16 @@ export default function RoomService({ navigation }) {
             <Text style={styles.alerts}>*Must select room* </Text>
           ) : null}
         </View>
-        <View style={styles.container}>
+       
+        {/* <View>
+          {request === "" ? (
+            <Text style={styles.alerts}>*Must select request type* </Text>
+          ) : null}
+        </View> */}
+       <View style={styles.ProdutsStyle}>
+        {request==="Product purchase"? (<View><Produts SetRequest={SetRequest}/></View>):(     
+    <View>
+       <View style={styles.container}>
           <Dropdown
             style={styles.dropdown}
             data={RequestType}
@@ -149,14 +170,11 @@ export default function RoomService({ navigation }) {
             }}
           />
         </View>
-        <View>
+      <View>
           {request === "" ? (
             <Text style={styles.alerts}>*Must select request type* </Text>
           ) : null}
         </View>
-       <View style={styles.ProdutsStyle}>
-        {request==="Product purchase"? (<Produts/>):(     
-    <View>
           <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
             <View style={styles.ButtonContainer}>
             <Text style={styles.text}>
@@ -310,7 +328,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   ProdutsStyle:{
-    paddingTop:27,
+    // paddingTop:17,
   }
 });
  {/* <View>
