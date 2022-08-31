@@ -307,22 +307,18 @@ go
 --exec GetAllEmployees
 
 
-
-create proc GetEmployeeByIdAndRole
+create proc GetEmployeeByIdAndCode
 @id int,
-@role nvarchar(30)
+@code int
 as
 begin tran
 
-declare @worker_Code as int = (select [Worker_Code] from [dbo].[Employees_Types]
-	where [Description] = @role)
-
-SELECT dbo.Employees.Employee_ID, dbo.Employees_Types.Description, dbo.Employees.Employee_Name, dbo.Employees.Phone_Number, dbo.Employees.Birth_Date, dbo.Employees.Worker_Code, dbo.Employees.Hourly_Wage, 
-                  dbo.Employees.Address, dbo.Employees.Employee_Code
-FROM     dbo.Employees_Types INNER JOIN
-                  dbo.Employees ON dbo.Employees_Types.Worker_Code = dbo.Employees.Worker_Code
-				  where dbo.Employees.Employee_ID = @id and dbo.Employees.Worker_Code = @worker_Code
-
+SELECT dbo.Employees.Employee_ID, dbo.Employees.Employee_Code, dbo.Employees.Employee_Name, 
+dbo.Employees.Phone_Number, dbo.Employees.Birth_Date, dbo.Employees.Worker_Code, 
+dbo.Employees_Types.Description as Role, dbo.Employees.Hourly_Wage, dbo.Employees.Address
+FROM     dbo.Employees INNER JOIN
+                  dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
+				  where dbo.Employees.Employee_ID = @id and dbo.Employees.Employee_Code = @code
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -331,8 +327,8 @@ FROM     dbo.Employees_Types INNER JOIN
 	end
 commit tran
 go
---exec GetEmployeeByIdAndRole 888 , 'Receptionist'
-
+--exec GetEmployeeByIdAndCode 888 , 8
+--select * from Employees
 
 
 

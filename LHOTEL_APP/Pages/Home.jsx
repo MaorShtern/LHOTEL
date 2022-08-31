@@ -6,7 +6,24 @@ import { images } from "../images";
 import { TextInput } from "react-native-paper";
 import WorkerMenu from './Workers/WorkerMenu';
 
-
+const Users = [
+  {
+    Employee_ID: -1, Employee_Code: null, Employee_Name: "", Phone_Number: null, Birth_Date: null,
+    Worker_Code: null, Role: "General", Hourly_Wage: null, Address: null
+  },
+  {
+    Employee_ID: 111, Employee_Code: 1, Employee_Name: "", Phone_Number: null, Birth_Date: null,
+    Worker_Code: null, Role: "Manager", Hourly_Wage: null, Address: null
+  },
+  {
+    Employee_ID: 222, Employee_Code: 2, Employee_Name: "", Phone_Number: null, Birth_Date: null,
+    Worker_Code: null, Role: "Receptionist", Hourly_Wage: null, Address: null
+  },
+  {
+    Employee_ID: 333, Employee_Code: 3, Employee_Name: "", Phone_Number: null, Birth_Date: null,
+    Worker_Code: null, Role: "Room service", Hourly_Wage: null, Address: null
+  },
+]
 
 
 export default function Home({ navigation }) {
@@ -19,7 +36,7 @@ export default function Home({ navigation }) {
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
 
-  const pass = "123"
+  // const pass = "123"
 
   useEffect(() => {
     const focus = navigation.addListener('focus', () => {
@@ -32,8 +49,11 @@ export default function Home({ navigation }) {
 
   const LogIn = () => {
 
-    if (password === pass) {
-      navigation.navigate('WorkerMenu', { id: id ,setWorkerCode: setWorkerCode})
+    let user = Users.filter((per) => per.Employee_ID == id && per.Employee_Code == password)[0]
+  
+    if (user !== undefined) {
+      let role = user.Role
+      navigation.navigate('WorkerMenu', { id: user.Employee_Code,role:role })
     }
     else Alert.alert("No such user exists in the system")
   }
@@ -49,7 +69,7 @@ export default function Home({ navigation }) {
       case 1:
         return (<View style={styles.loginContainer}>
           <TextInput
-            label="ID"
+            label="Employee ID"
             left={<TextInput.Icon name="account" />}
             mode="outlined"
             style={{ margin: 10, paddingLeft: 3 }}
@@ -57,11 +77,11 @@ export default function Home({ navigation }) {
           />
 
           <TextInput
-            label="Password"
+            label="Employee Code"
             left={<TextInput.Icon name="lock" />}
             mode="outlined"
             style={{ margin: 10, paddingLeft: 3 }}
-            onChangeText={(password) => setPassword(password)}
+            onChangeText={(code) => setPassword(code)}
           />
           <TouchableOpacity style={styles.btn} onPress={LogIn}>
             <Text style={{ fontSize: 20, color: 'white', fontWeight: '800' }}>LOGIN</Text>

@@ -65,7 +65,7 @@ namespace LHOTELServer.Controllers
         }
 
 
-
+        //  צריך לשנות את זה
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetEmployeeByIdAndRole")]
         public IHttpActionResult GetEmployeeByIdAndRole(int id, string role)

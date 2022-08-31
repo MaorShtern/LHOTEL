@@ -4,15 +4,15 @@ import { images } from '../../images'
 
 
 const workerCardsArr = [
-  { code: 999, role: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: '' },
-  { code: 999, role: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: '' },
-  { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
-  { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
-  { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
-  { code: 2, role: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
-  { code: 2, role: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
-  { code: 2, role: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
-  { code: 3, role: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
+  { code: 999, Description: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: '' },
+  { code: 999, Description: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: '' },
+  { code: 1, Description: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
+  { code: 1, Description: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
+  { code: 1, Description: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
+  { code: 2, Description: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
+  { code: 2, Description: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
+  { code: 2, Description: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
+  { code: 3, Description: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
 ]
 
 
@@ -23,9 +23,9 @@ const WIDTH = Dimensions.get('window').width
 
 export default function WorkerMenu({ route, navigation }) {
 
-  let { id } = route.params
+  const { id, role } = route.params
 
-  // console.log(id);
+
   const [currentUserArr, SetCurrentUserArr] = useState([])
 
   useEffect(() => {
@@ -33,22 +33,23 @@ export default function WorkerMenu({ route, navigation }) {
   }, []);
 
 
+
   const GetCardsByRole = () => {
     let arrayTempCards = []
     switch (id) {
-      case '1':
-        arrayTempCards = workerCardsArr.filter((workerCard) =>
-          workerCard.code === 999 || workerCard.code === 1 ||
-          workerCard.code === 2 || workerCard.code === 3)
+      case 1:
+        arrayTempCards = workerCardsArr
+        // arrayTempCards = workerCardsArr.filter((workerCard) =>
+        //   workerCard.code === 999 || workerCard.code === 1 ||
+        //   workerCard.code === 2 || workerCard.code === 3)
         break;
-      case '2':
+      case 2:
         arrayTempCards = workerCardsArr.filter((workerCard) =>
-          workerCard.code === 999 || workerCard.code === 2)
+          workerCard.Description === 'Receptionist' || workerCard.Description === 'General')
         break;
-      case '3':
+      case 3:
         arrayTempCards = workerCardsArr.filter((workerCard) =>
-          workerCard.code === 999 || workerCard.code === 3)
-
+          workerCard.Description === 'Room service' || workerCard.Description === 'General')
         break;
       default:
         Alert.alert("error");
@@ -77,7 +78,8 @@ export default function WorkerMenu({ route, navigation }) {
     // console.log(item.routeNavigation);
     return (
       <TouchableOpacity style={styles.item} key={index}
-        onPress={() => item.routeNavigation === '' ? HandelCardClick(item.title) : navigation.navigate(item.routeNavigation)}>
+        onPress={() => item.routeNavigation === '' ? HandelCardClick(item.title) :
+          navigation.navigate(item.routeNavigation, { id: id })}>
 
         <Image style={{ width: 60, height: 60 }} source={item.pic} />
         <Text style={styles.itemText} >{item.title}</Text>
@@ -93,22 +95,8 @@ export default function WorkerMenu({ route, navigation }) {
 
 
   return (
-    // <ScrollView>
-    //   <View style={styles.container}>
-    //     <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
-    //       <Text style={styles.Text} >Exit</Text>
-    //     </TouchableOpacity>
-    //     <FlatList
-    //       data={currentUserArr}
-    //       renderItem={GetItem}
-    //       keyExtarctor={(item, index) => index.toString()}
-    //       numColumns={numColumns}
-    //       scrollEnabled={false}
-    //     />
-    //   </View>
-    // </ScrollView>
     <View style={styles.container}>
-    <FlatList
+      <FlatList
         data={currentUserArr}
         renderItem={GetItem}
         keyExtarctor={(item, index) => index.toString()}

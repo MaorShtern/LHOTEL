@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown';
 import { images } from '../../images';
 import TasksCard from './TasksCard';
+import moment from 'moment';
 
 
 const RequestType = [
+    { label: "All Task", value: "All Task" },
     { label: "Today's tasks", value: "Today's tasks" },
     { label: 'Open Tasks', value: 'Open Tasks' },
-    { label: 'Search for a task by employee', value: 'Search for a task by employee' },
-    { label: 'Search for a task by number', value: 'Search for a task by number' },
     { label: 'Add New Task', value: 'Add New Task' },
 ];
 
@@ -25,7 +25,7 @@ const tasksArray = [
     },
     {
         Task_Code: 3, Employee_ID: 222, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-        Start_Date: '2022-08-08', End_Time: "23:20", Task_Status: 'Open', Description: 'ggggg'
+        Start_Date: '2022-08-31', End_Time: "23:20", Task_Status: 'Open', Description: 'ggggg'
     },
     {
         Task_Code: 4, Employee_ID: 333, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
@@ -34,49 +34,67 @@ const tasksArray = [
 ]
 
 
-export default function Tasks({ navigation }) {
+export default function Tasks({ route, navigation }) {
 
-    // let{role} = props
+    let { id } = route.params
 
     const [dropdown, setDropdown] = useState(null);
-    const [RequestTask, SetRequestTask] = useState('')
-
+    // const [RequestTask, SetRequestTask] = useState('')
     const [tasks, SetTasks] = useState(tasksArray)
 
+    const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([])
+
     const Edite_Task_Details = (task_code) => {
-        // console.log(task_code);
-        // console.log(task_code);
+
         let taskDetails = tasks.filter((per) => per.Task_Code === task_code)[0]
-        // console.log(taskDetails[0]);
-        // taskDetails= null
-        navigation.navigate('EditTasks',{taskDetails:taskDetails})
+        navigation.navigate('EditTasks', { taskDetails: taskDetails })
     }
 
 
-    let tasksList = tasks.map((per) => <TasksCard  key={per.Task_Code} Task_Code={per.Task_Code}
-        Employee_ID={per.Employee_ID} Task_Name={per.Task_Name} Room_Number={per.Room_Number}
-        Start_Date={per.Start_Date} Start_Time={per.Start_Time} End_Time={per.End_Time}
-        Task_Status={per.Task_Status} Description={per.Description} Edite_Task_Details={Edite_Task_Details}/>)
-
-
-   
 
     const HandelRequest = (request) => {
-        if (request === 'Add New Task')
-            navigation.navigate('EditTasks')
-        else
-            alert(request)
-
-        // switch (request) {
-        //     case value:
-
-        //         break;
-
-        //     default:
-        //         break;
-        // }
+        let listTemp = null
+        switch (request) {
+            case "All Task":
+                listTemp = tasksArray
+                break;
+            case "Today's tasks":
+                listTemp = tasksArray.filter((per) => per.Start_Date === moment(new Date()).format('YYYY-MM-DD'))
+                break;
+            case "Open Tasks":
+                listTemp = tasksArray.filter((per) => per.Task_Status === 'Open')
+                break;
+            case "Add New Task":
+                navigation.navigate('EditTasks')
+                return;
+            default:
+                return;
+        }
+        // console.log(JSON.stringify(listTemp));
+        SetTasks(listTemp)
     }
 
+    const MarkTaskAsDone = (task_Code) => {
+        let newArrayTasks = tasks.filter((per) => per.Task_Code === task_Code)
+        let temp = [...taskToMarkAsDone, newArrayTasks]
+        console.log(JSON.stringify(temp));
+        SetTaskToMarkAsDone(temp)
+    }
+
+    const RemoveFromCheck = (Task_Code) => {
+        console.log("Task_Code to remove: " + Task_Code);
+
+    }
+
+    let tasksList = tasks.map((per) => <TasksCard key={per.Task_Code} Task_Code={per.Task_Code}
+        Employee_ID={per.Employee_ID} Task_Name={per.Task_Name} Room_Number={per.Room_Number}
+        Start_Date={per.Start_Date} Start_Time={per.Start_Time} End_Time={per.End_Time}
+        Task_Status={per.Task_Status} Description={per.Description} Edite_Task_Details={Edite_Task_Details}
+        MarkTaskAsDone={MarkTaskAsDone} RemoveFromCheck={RemoveFromCheck} />)
+
+
+
+    // console.log(JSON.stringify(tasks));
 
     let role = 'Manager'
 
@@ -84,9 +102,6 @@ export default function Tasks({ navigation }) {
         return (
             <ScrollView>
                 <Text style={styles.HeadLine}>All Tasks</Text>
-
-                {/* <View style={styles.Options}> */}
-                {/* <Image style={styles.Plus} source={images.plus} /> */}
                 <View style={styles.container}>
                     <Dropdown
                         style={styles.dropdown}
@@ -100,14 +115,9 @@ export default function Tasks({ navigation }) {
                 </View>
                 <View style={styles.SaveContainer}>
                     <TouchableOpacity style={styles.Save}>
-                        <Text>Save</Text>
+                        <Text>Save the tasks marked as "Done"</Text>
                     </TouchableOpacity>
                 </View>
-                {/* </View> */}
-
-                {/* <View style={{ padding: 20 }}>
-                    <Image style={styles.Plus} source={images.plus} />
-                </View> */}
                 <View>
                     {tasksList}
                 </View>
@@ -158,7 +168,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         padding: 15,
         borderRadius: 15,
-        width: 150,
         alignItems: 'center',
+        borderWidth: 2,
+
     }
 })

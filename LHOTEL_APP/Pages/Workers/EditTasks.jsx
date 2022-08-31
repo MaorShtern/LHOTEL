@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from "react-native-paper";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -6,7 +6,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
 import moment from 'moment';
 import { useEffect } from 'react';
-
+import { images } from '../../images';
 
 
 const RequestType = [
@@ -21,36 +21,15 @@ const RequestType = [
 ];
 
 
-
 export default function EditTasks({ route, navigation }) {
 
 
-    // console.log(route.params);
-
-    // const GetTime = (date) => {
-    //     let stringTime = "0";
-    //     if (date.getHours() <= 9) stringTime += date.getHours();
-    //     else stringTime = date.getHours();
-
-    //     stringTime += ":";
-
-    //     if (date.getMinutes() <= 9) stringTime += "0" + date.getMinutes();
-    //     else stringTime += date.getMinutes();
-
-    //     return stringTime
-    // }
-
-
-    // const [taskNumber, SetTaskNumber] = useState(null)
-    // const [roomNumber, SetRoomNumber] = useState(0)
-    // const [RequestTask, SetRequestTask] = useState('')
-    // const [flagTime, setFlagTime] = useState(false);
-    // const [taskStatus, SetTaskStatus] = useState(false);
-    // const [taskDescription, SetTaskDescription] = useState('')
-
     const [dropdown, setDropdown] = useState(null);
-    // const [taskName, SetTaskName] = useState('')
-    const [flagTime, setFlagTime] = useState(false);
+    const [flagStartTime, setFlagStartTime] = useState(false);
+    const [flagEndTime, setFlagEndTime] = useState(false);
+
+
+
     const [taskStatus, SetTaskStatus] = useState(false);
     const [task, SetTask] = useState({
         Task_Code: null, Employee_ID: null, Task_Name: '', Room_Number: 0, Start_Time: moment(new Date()).format('HH:MM'),
@@ -61,19 +40,26 @@ export default function EditTasks({ route, navigation }) {
     useEffect(() => {
         if (route.params !== undefined) {
             SetTask(route.params.taskDetails)
+            SetTaskStatus(route.params.taskDetails.Task_Status === 'Open' ? true : false)
         }
     }, [])
-    // const[flagTaskStatus, SetflagTaskStatus] = useState(false);
-
-    // console.log("task: " + JSON.stringify(task));
 
 
-    const hideTime = () => {
-        setFlagTime(false);
+
+    const hideStartTime = () => {
+        setFlagStartTime(false);
     };
 
-    const showTime = () => {
-        setFlagTime(true);
+    const showStartTime = () => {
+        setFlagStartTime(true);
+    };
+
+    const hideEndTime = () => {
+        setFlagEndTime(false);
+    };
+
+    const showEndTime = () => {
+        setFlagEndTime(true);
     };
 
 
@@ -87,40 +73,49 @@ export default function EditTasks({ route, navigation }) {
         if (time.getMinutes() <= 9) stringTime += "0" + time.getMinutes();
         else stringTime += time.getMinutes();
 
-        task.Start_Time = stringTime
-        // setTime(stringTime);
-        hideTime();
+        return stringTime
+        // task.Start_Time = stringTime
+        // hideStartTime()
     };
 
+    const handelTimeStart = (time) => {
+        let stringTime = handleTime(time)
+        task.Start_Time = stringTime
+        hideStartTime()
+    }
 
-    // const entry = moment(entryDate).format('YYYY-MM-DD')
-    // const exit = moment(exitDate).format('YYYY-MM-DD')
+    const handelTimeEnd = (time) => {
+        let stringTime = handleTime(time)
+        task.End_Time = stringTime
+        hideEndTime()
+    }
+
 
 
     const HandelRequest = (request) => {
         task.Task_Name = request
-        // console.log( task.Task_Name);
-        // SetRequestTask(request)
     }
 
     const HandelTaskStatus = () => {
-
+        SetTaskStatus(!taskStatus)
+        if (taskStatus !== true)
+            task.Task_Status = 'Open'
+        else
+            task.Task_Status = 'Close'
     }
 
-    // if (route.params !== undefined) {
-    //     let { taskDetails } = route.params
+    const SaveTask = () => {
+        // console.log(JSON.stringify(task));
+        alert('The task was successfully saved')
+        navigation.navigate('Tasks')
+    }
 
-    //     // SetTaskStatus(taskDetails.Task_Status)
-    //     console.log(taskDetails);
 
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Tasks</Text>
-            {/* <Text style={styles.SumHeadLine}>Task number: {taskDetails.Task_Code}</Text> */}
             <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text>
-
             <View style={styles.DetailsContainer}>
-
                 <Text style={{ paddingLeft: 15 }}>Employee ID:</Text>
                 <TextInput
                     label={JSON.stringify(task.Employee_ID)}
@@ -129,7 +124,7 @@ export default function EditTasks({ route, navigation }) {
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
-                // onChangeText={(id) => console.log(id)}
+                    onChangeText={(id) => task.Employee_ID = id}
                 />
 
                 <Text style={{ paddingLeft: 15 }}>Room Number:</Text>
@@ -140,15 +135,8 @@ export default function EditTasks({ route, navigation }) {
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
-                // onChangeText={(id) => console.log(id)}
+                    onChangeText={(room) => task.Room_Number = room}
                 />
-                {/* <TextInput
-                    label="Start_Date"
-                    left={<TextInput.Icon />}
-                    mode="outlined"
-                    style={{ margin: 10, paddingLeft: 3 }}
-                // onChangeText={(id) => console.log(id)}
-                /> */}
 
                 <View style={styles.container}>
                     <Dropdown
@@ -163,104 +151,61 @@ export default function EditTasks({ route, navigation }) {
                 </View>
 
                 <View >
-                    <TouchableOpacity style={styles.button} onPress={showTime}>
-                        <Text>{"Time: " + task.Start_Time}</Text>
+                    <TouchableOpacity style={styles.button} onPress={showStartTime}>
+                        <Text>{"Start at: " + task.Start_Time}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
-                        isVisible={flagTime}
+                        isVisible={flagStartTime}
                         mode="time"
-                        onConfirm={handleTime}
-                        onCancel={hideTime}
+                        onConfirm={handelTimeStart}
+                        onCancel={hideStartTime}
                     />
-                    <View style={{ height: 20 }}></View>
+                    <TouchableOpacity style={styles.button} onPress={showEndTime}>
+                        <Text>{"To Do By: " + task.End_Time}</Text>
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                        isVisible={flagEndTime}
+                        mode="time"
+                        onConfirm={handelTimeEnd}
+                        onCancel={hideEndTime}
+                    />
+                    {/* <View style={{ height: 20 }}></View> */}
                 </View>
 
 
                 <View style={styles.CheckboxContainer}>
 
                     <View style={styles.Checkbox}>
-                        <Checkbox label="Item" status={task.Task_Status === 'Open' ? 'checked' : 'unchecked'} />
-                        <Text>Open</Text>
+                        <Checkbox label="Item" status={taskStatus === true ? 'checked' : 'unchecked'}
+                            onPress={HandelTaskStatus} />
+                        <Text>Should the task be performed?</Text>
 
                     </View>
-                    <View style={styles.Checkbox}>
-                        <Checkbox label="Item" status={task.Task_Status === 'Close' ? 'checked' : 'unchecked'} />
-                        <Text>Close</Text>
-                    </View>
-
-                    {/* <View style={styles.Checkbox}>
-                        <Checkbox label="Item" status={taskStatus ? 'checked' : 'unchecked'} onPress={() => { SetTaskStatus(!taskStatus) }} />
-                        <Text>Open</Text>
-                    </View>
-                    <View style={styles.Checkbox}>
-                        <Checkbox label="Item" status={taskStatus ? 'checked' : 'unchecked'} onPress={() => { SetTaskStatus(!taskStatus) }} />
-                        <Text>Close</Text>
-                    </View> */}
-
+                </View>
+                <View>
+                    <TextInput
+                        label={task.Description}
+                        left={<TextInput.Icon />}
+                        mode="outlined"
+                        style={{ margin: 10, paddingLeft: 3 }}
+                        onChangeText={(description) => task.Description = description}
+                    />
                 </View>
 
-
-
-                <TextInput
-                    label="Description"
-                    left={<TextInput.Icon />}
-                    mode="outlined"
-                    style={{ margin: 10, paddingLeft: 3 }}
-                // onChangeText={(id) => console.log(id)}
-                />
+                <View style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}>
+                    <TouchableOpacity style={styles.button} onPress={SaveTask}>
+                        <Image style={styles.save} source={images.save} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </ScrollView>
     )
-    // }
-
-    // else {
-    //     return (
-    //         <ScrollView>
-    //             <Text style={styles.HeadLine}>Tasks</Text>
-    //             {/* <Text style={styles.SumHeadLine}>Task number: {taskDetails.Task_Code}</Text>
-    //             <View style={styles.DetailsContainer}>
-
-    //                 <TextInput
-    //                     label="Employee_Name"
-    //                     left={<TextInput.Icon name="account" />}
-    //                     mode="outlined"
-    //                     style={{ margin: 10, paddingLeft: 3 }}
-    //                 onChangeText={(id) => console.log(id)}
-    //                 />
-    //                 <TextInput
-    //                     label="Room_Number"
-    //                     left={<TextInput.Icon name="" />}
-    //                     mode="outlined"
-    //                     keyboardType='numeric'
-    //                     style={{ margin: 10, paddingLeft: 3 }}
-    //                 onChangeText={(id) => console.log(id)}
-    //                 />
-    //                 <TextInput
-    //                 label="Start_Date"
-    //                 left={<TextInput.Icon />}
-    //                 mode="outlined"
-    //                 style={{ margin: 10, paddingLeft: 3 }}
-    //             onChangeText={(id) => console.log(id)}
-    //             />
-    //                 <Text>Task_Name : DropDown</Text>
-
-    //                 <Text>Start_Date : DatePiker</Text>
-    //                 <Text>Start_Time : TimePiker</Text>
-    //                 <Text>End_Date : DatePiker</Text>
-    //                 <Text>Task_Status : DropDown / CheckBox</Text>
-
-    //                 <TextInput
-    //                     label="Description"
-    //                     left={<TextInput.Icon />}
-    //                     mode="outlined"
-    //                     style={{ margin: 10, paddingLeft: 3 }}
-    //                 onChangeText={(id) => console.log(id)}
-    //                 />
-    //             </View> */}
-    //         </ScrollView>
-    //     )
-    // }
 }
+
 
 const styles = StyleSheet.create({
     HeadLine: {
@@ -283,7 +228,6 @@ const styles = StyleSheet.create({
     },
     DetailsContainer: {
         paddingHorizontal: 24,
-        // paddingVertical: 70,
         justifyContent: "center",
         paddingTop: 10
 
@@ -311,5 +255,9 @@ const styles = StyleSheet.create({
     },
     CheckboxContainer: {
         margin: 5
+    },
+    save: {
+        width: 30,
+        height: 30
     },
 })

@@ -15,9 +15,19 @@ export default function TasksCard(props) {
     const [flag, SetFlag] = useState(false)
 
     const Edite_Task_Details = (Task_Code) =>{
-        // console.log(props);
-        // console.log(Task_Code);
         props.Edite_Task_Details(Task_Code)
+    }
+
+    // console.log(flag);
+
+
+    const MarkTaskAsDone = () =>{
+        SetFlag(!flag)
+        // console.log(flag);
+        if(!flag === true)
+            props.MarkTaskAsDone(Task_Code)
+        else
+            props.RemoveFromCheck(Task_Code)
     }
 
     return (
@@ -53,7 +63,7 @@ export default function TasksCard(props) {
                     <View style={styles.Checkbox}>
                         {Task_Status === "Open" ?
                             <Checkbox label="Item" status={flag ? 'checked' : 'unchecked'}
-                                onPress={() => { SetFlag(!flag) }} />
+                                onPress={MarkTaskAsDone} />
                             : null}
                     </View>
                     <TouchableOpacity>
