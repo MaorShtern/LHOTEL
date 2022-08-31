@@ -23,25 +23,25 @@ export default function TasksCard(props) {
     return (
         <View style={styles.container}>
             <View style={styles.Details}>
-                <Text>Employee_ID: {Employee_ID}</Text>
+                <Text>Employee ID: {Employee_ID}</Text>
 
-                <Text>Task_Code: {Task_Code}</Text>
+                <Text>Task Code: {Task_Code}</Text>
             </View>
 
             <View style={styles.containerTaskDedtails}>
                 <View style={styles.Details}>
-                    <Text style={{ padding: 5 }}>Room_Number: {Room_Number}</Text>
-                    <Text>Start_Date: {Task_Name}</Text>
+                    <Text style={{ padding: 5 }}>Room Number: {Room_Number}</Text>
+                    <Text>Start Date: {Task_Name}</Text>
                 </View>
 
                 <View style={styles.Details}>
-                    <Text>Start_Date: {Start_Date}</Text>
-                    <Text>Start_Time: {Start_Time}</Text>
+                    <Text>Start Date: {Start_Date}</Text>
+                    <Text>Start Time: {Start_Time}</Text>
                 </View>
 
                 <View style={styles.Details}>
-                    {End_Time === null ? <Text>End_Time: null</Text> : <Text>End_Time: {End_Time}</Text>}
-                    <Text>Task_Status: {Task_Status}</Text>
+                    {End_Time === null ? <Text>End Time: null</Text> : <Text>End Time: {End_Time}</Text>}
+                    <Text>Task Status: {Task_Status}</Text>
                 </View>
                 <Text style={{ padding: 5 }}>Description: {Description}</Text>
 

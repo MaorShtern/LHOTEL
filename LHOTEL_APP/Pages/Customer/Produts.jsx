@@ -3,15 +3,53 @@ import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
 import { useState, useEffect } from "react";
-
 import Counter from "react-native-counters";
 
-export default function Produts({SetRequest}) {
+
+const data = [
+  {
+    id: 1,
+    image: images.waterbottle,
+    name: "Water bottle",
+    price: 10,
+    amountTaken: 0,
+  },
+  {
+    id: 2,
+    image: images.whisky,
+    name: "Whiskey",
+    price: 5,
+    amountTaken: 0,
+  },
+  {
+    id: 3,
+    image: images.choclatebar,
+    name: "Chocolate bar",
+    price: 16,
+    amountTaken: 0,
+  },
+  {
+    id: 4,
+    image: images.alcoholWine,
+    name: "White wine",
+    price: 3,
+    amountTaken: 0,
+  },
+  {
+    id: 5,
+    image: images.cocacola,
+    name: "Coca Cola bottle",
+    price: 20,
+    amountTaken: 0,
+  },
+];
+
+export default function Produts({ SetRequest }) {
   // useEffect(() => { SetCount(0) }, []);
 
   const [totalSum, SetTotalSum] = useState(0);
   const [start, SetStart] = useState(0);
-  
+
   const [goodsCount, SetGoodsCount] = useState(0);
 
   useEffect(() => {
@@ -20,17 +58,26 @@ export default function Produts({SetRequest}) {
 
   }, []);
 
+  const Cansel = () => {
+    SetRequest("")
+    SetTotalSum(0)
+    SetGoodsCount(0)
+    SetStart(0)
+    RestCount()
+  }
 
-
-  const func = () => {
+  const RestCount = () => {
     for (let i = 0; i < data.length; i++) {
       data[i].amountTaken = 0;
     }
-  
-    SetTotalSum(0);
-    SetGoodsCount(0);
-    SetStart(0)
+
+    // SetTotalSum(0);
+    // SetGoodsCount(0);
+    // SetStart(0)
   };
+
+  // console.log(start);
+
   const Calculate_Final_Amount = () => {
     let sum = 0;
     let goodsCounter = 0;
@@ -56,6 +103,8 @@ export default function Produts({SetRequest}) {
       priceStyle,
     } = styles;
 
+
+
     return (
       <View style={index + 1 === data.length ? lastItemStyle : containerStyle}>
         <Image source={item.image} style={imageStyle} />
@@ -80,14 +129,17 @@ export default function Produts({SetRequest}) {
 
         <View style={counterStyle}>
           <Counter
+            initial={start}
             start={start}
             max={5}
             style={styles.counterStyle}
-            onChange={(counet) => {
-              (item.amountTaken = counet),
-                console.log(counet),
+            // onChange={(count) => {SetCount.bind(this)}} 
+            onChange={(count) => {
+              (item.amountTaken = count),
+                console.log(count),
                 Calculate_Final_Amount();
             }}
+
           />
         </View>
       </View>
@@ -96,15 +148,16 @@ export default function Produts({SetRequest}) {
 
   return (
     <View>
-       <View style={styles.headerStyle}>
-       <TouchableOpacity   onPress={() => {SetRequest(""),SetTotalSum(0),SetGoodsCount(0), SetStart(0)}}>
-         <Icon name="ios-close" size={35} color="#a8a9ad" />
-        
-          </TouchableOpacity>
-      
-      <Text style={{ fontSize: 18 }}>Mini Bar</Text>
-      <Text onPress={func}>Empty</Text>
-    </View>
+      <View style={styles.headerStyle}>
+        {/* <TouchableOpacity onPress={() => { SetRequest(""), SetTotalSum(0), SetGoodsCount(0), SetStart(0) }}> */}
+        <TouchableOpacity onPress={Cansel}>
+          <Icon name="ios-close" size={35} color="#a8a9ad" />
+
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 18 }}>Mini Bar</Text>
+        <Text onPress={RestCount}>Empty</Text>
+      </View>
       {/* <Header  func={func}/> */}
       <FlatList
         data={data}
@@ -163,52 +216,16 @@ const Footer = ({ totalSum, goodsCount }) => {
 //     <View style={styles.headerStyle}>
 //        <TouchableOpacity   onPress={() => console.log("dgdfgdgfdfg")}>
 //          <Icon name="ios-close" size={35} color="#a8a9ad" />
-        
+
 //           </TouchableOpacity>
-      
+
 //       <Text style={{ fontSize: 18 }}>Mini Bar</Text>
 //       <Text onPress={func}>Empty</Text>
 //     </View>
 //   );
 // };
 
-const data = [
-  {
-    id: 1,
-    image: images.waterbottle,
-    name: "Water bottle",
-    price: 10,
-    amountTaken: 0,
-  },
-  {
-    id: 2,
-    image: images.whisky,
-    name: "Whiskey",
-    price: 5,
-    amountTaken: 0,
-  },
-  {
-    id: 3,
-    image: images.choclatebar,
-    name: "Chocolate bar",
-    price: 16,
-    amountTaken: 0,
-  },
-  {
-    id: 4,
-    image: images.alcoholWine,
-    name: "White wine",
-    price: 3,
-    amountTaken: 0,
-  },
-  {
-    id: 5,
-    image: images.cocacola,
-    name: "Coca Cola bottle",
-    price: 20,
-    amountTaken: 0,
-  },
-];
+
 
 const styles = {
   containerStyle: {

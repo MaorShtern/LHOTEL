@@ -19,30 +19,7 @@ export default function Home({ navigation }) {
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
 
-  // const [workerCardsArr, SetWorkerCardsArr] = useState([
-  //   { code: 999, role: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: '' },
-  //   { code: 999, role: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: '' },
-  //   // { code: 3, role: 'General', title: 'Tasks', pic: images.tasks },
-
-
-  //   // { code: 1, role: 'Manager', title: 'Add charge', pic: images.add_charge },
-  //   { code: 1, role: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
-  //   { code: 1, role: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: '' },
-  //   { code: 1, role: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
-
-
-  //   { code: 2, role: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
-  //   { code: 2, role: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
-  //   { code: 2, role: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
-
-  //   { code: 3, role: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
-
-
-  // ])
-
-
   const pass = "123"
-  // const [currentUserArr, SetCurrentUserArr] = useState([])
 
   useEffect(() => {
     const focus = navigation.addListener('focus', () => {
@@ -56,34 +33,7 @@ export default function Home({ navigation }) {
   const LogIn = () => {
 
     if (password === pass) {
-      // switch (id) {
-      //   case '1':
-
-      //     SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
-      //       workerCard.code === 999 || workerCard.code === 1 ||
-      //       workerCard.code === 2 || workerCard.code === 3))
-      //     // SetCurrentUserArr(workerCardsArr)
-      //     // console.log(JSON.stringify(currentUserArr));
-      //     break;
-      //   case '2':
-      //     SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
-      //       workerCard.code === 999 || workerCard.code === 2))
-      //     break;
-      //   case '3':
-      //     SetCurrentUserArr(workerCardsArr.filter((workerCard) =>
-      //       workerCard.code === 999 || workerCard.code === 3))
-
-      //     break;
-      //   default:
-      //     Alert.alert("error");
-      // }
-
       navigation.navigate('WorkerMenu', { id: id ,setWorkerCode: setWorkerCode})
-
-
-      // navigation.navigate('WorkerMenu', { currentUserArr: currentUserArr, setWorkerCode: setWorkerCode, navigation: navigation })
-      // setWorkerCode(2)
-      // console.log(JSON.stringify(workerCardsArr));
     }
     else Alert.alert("No such user exists in the system")
   }
