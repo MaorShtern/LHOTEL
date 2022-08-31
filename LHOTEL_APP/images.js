@@ -21,6 +21,15 @@ export const images = {
   save:require("./assets/images/Save.png"),
   edit:require("./assets/images/Edit.png"),
   trashCan:require("./assets/images/Trashcan.jpg"),
-  check:require("./assets/images/Check.png")
+  check:require("./assets/images/Check.png"),
+  calendar:require("./assets/images/calendar.png"),
+  clock:require("./assets/images/clock.png"),
+
+
+  waterbottle:require("./assets/images/waterbottle.png"),
+  whisky:require("./assets/images/whisky.png"),
+  cocacola:require("./assets/images/cocacola.png"),
+  choclatebar:require("./assets/images/choclatebar.png"),
+  alcoholWine:require("./assets/images/alcoholWine.png"),
 
 }

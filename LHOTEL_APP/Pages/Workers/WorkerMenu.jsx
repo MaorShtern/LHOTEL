@@ -93,30 +93,28 @@ export default function WorkerMenu({ route, navigation }) {
 
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
-          <Text style={styles.Text} >Exit</Text>
-        </TouchableOpacity>
-        <FlatList
-          data={currentUserArr}
-          renderItem={GetItem}
-          keyExtarctor={(item, index) => index.toString()}
-          numColumns={numColumns}
-        />
-      </View>
-    </ScrollView>
-    // <View style={styles.container}>
-    //   {/* <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
-    //             <Text style={styles.Text} >Exit</Text>
-    //         </TouchableOpacity> */}
-    //   <FlatList
-    //     data={currentUserArr}
-    //     renderItem={GetItem}
-    //     keyExtarctor={(item, index) => index.toString()}
-    //     numColumns={numColumns}
-    //   />
-    // </View>
+    // <ScrollView>
+    //   <View style={styles.container}>
+    //     <TouchableOpacity onPress={() => { setWorkerCode(1) }}>
+    //       <Text style={styles.Text} >Exit</Text>
+    //     </TouchableOpacity>
+    //     <FlatList
+    //       data={currentUserArr}
+    //       renderItem={GetItem}
+    //       keyExtarctor={(item, index) => index.toString()}
+    //       numColumns={numColumns}
+    //       scrollEnabled={false}
+    //     />
+    //   </View>
+    // </ScrollView>
+    <View style={styles.container}>
+    <FlatList
+        data={currentUserArr}
+        renderItem={GetItem}
+        keyExtarctor={(item, index) => index.toString()}
+        numColumns={numColumns}
+      />
+    </View>
   )
 }
 

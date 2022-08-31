@@ -63,7 +63,7 @@ export default function Drawer() {
         /> */}
 
         <drawer.Screen
-          name="RoomService"
+          name="Room Service"
           component={RoomService}
           options={{
             headerTitle: " ",
