@@ -4,23 +4,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import CustomerHome from "../Customer/CustomerHome";
 import Login from "../Customer/Login";
 import Registration from "../Customer/Registration";
-// import Booking from "../Customer/Booking";
-// import SaveRoom from "../Customer/SaveRoom";
-// import Payment from "../Customer/Payment";
-// import ConfirmationPage from "../Customer/ConfirmationPage";
+import Booking from "../Customer/Booking";
+import SaveRoom from "../Customer/SaveRoom";
+import Payment from "../Customer/Payment";
+import ConfirmationPage from "../Customer/ConfirmationPage";
 import RoomService from "../Customer/RoomService";
 import Bill from "../Customer/Bill";
-
-
-
-
 
 
 const drawer = createDrawerNavigator();
 
 export default function Drawer() {
 
- 
+
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -59,16 +55,28 @@ export default function Drawer() {
           }}
         />
         {/* <drawer.Screen
-          name="Booking"
-          component={Booking}
+          name="LogOut"
           options={{
-            headerTitle: " ",
+            headerTitle: "",
             headerTintColor: "white",
+            headerMode: 'none',
             headerStyle: {
               backgroundColor: "#000",
             },
           }}
         /> */}
+        <drawer.Screen
+          name="Booking"
+          component={Booking}
+          options={{
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+          }}
+        />
 
         <drawer.Screen
           name="Room Service"
@@ -81,10 +89,9 @@ export default function Drawer() {
             },
           }}
         />
-    <drawer.Screen
+        <drawer.Screen
           name="Bill"
           component={Bill}
-        
           options={{
             headerTitle: " ",
             headerTintColor: "white",
@@ -93,11 +100,17 @@ export default function Drawer() {
             },
           }}
         />
-        {/* <drawer.Screen
+        <drawer.Screen
           name="SaveRoom"
           component={SaveRoom}
           options={{
             drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
           }}
         />
         <drawer.Screen
@@ -105,6 +118,12 @@ export default function Drawer() {
           component={Payment}
           options={{
             drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
           }}
         />
         <drawer.Screen
@@ -112,8 +131,14 @@ export default function Drawer() {
           component={ConfirmationPage}
           options={{
             drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
           }}
-        /> */}
+        />
       </drawer.Navigator>
     </NavigationContainer>
   );

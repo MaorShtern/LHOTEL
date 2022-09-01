@@ -9,35 +9,45 @@ export default function SaveRoom({ route, navigation }) {
   let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate } = route.params 
 
 
+
+  // console.log("rooms_flags :" + rooms_flags); 
+  // console.log("number_Of_Nights :" + number_Of_Nights); 
+  // console.log("breakfast :" + breakfast); 
+  // console.log("entryDate :" + entryDate); 
+  // console.log("exitDate :" + exitDate); 
+
+
+
   const [single, SetSingle] = useState(0)
   const [double, SetDouble] = useState(0)
   const [suite, SetSuite] = useState(0)
   const [loading, SetLoading] = useState(false)
   const [arrRoomsData, SetArrRoomsData] = useState([])
 
-  // useEffect(() => { FetchData() }, []);
+  useEffect(() => { FetchData() }, []);
 
 
-  // const FetchData = async () => {
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' }
-    // };
-    // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Rooms', requestOptions);
-    // let rooms = await result.json();
-    // if (rooms !== null) {
-    //   BilldData(rooms)
-    //   SetLoading(true)
-    //   return
-    // }
-    // FetchData()
+  const FetchData = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetAvailableRooms', requestOptions);
+    let rooms = await result.json();
+    if (rooms !== null) {
+      // console.log("rooms: " + JSON.stringify(rooms));
+      BilldData(rooms)
+      SetLoading(true)
+      return
+    }
+    FetchData()
 
-  // }
+  }
 
 
 
   const BilldData = (rooms) => {
-  
+
     let temp = []
     rooms.map((per) =>
       temp.push(
@@ -48,12 +58,12 @@ export default function SaveRoom({ route, navigation }) {
           pricePerNight: per.pricePerNight
         }))
 
-       
+    //  console.log("temp: " + JSON.stringify(temp));
     let list = temp.filter((ele, ind) => ind === temp.findIndex(
       elem => elem.type === ele.type && elem.type === ele.type))
-      
+
     let array = []
-    console.log("list"+ JSON.stringify(arrRoomsData));
+    // console.log("list" + JSON.stringify(arrRoomsData));
     for (const [key, value] of Object.entries(rooms_flags)) {
       if (value) {
         let room = list.filter((per) => per.type === key)
@@ -74,7 +84,7 @@ export default function SaveRoom({ route, navigation }) {
       'Double room': double,
       'Suite': suite
     }
-    console.log( JSON.stringify(arrRoomsData))  
+    // console.log(JSON.stringify(arrRoomsData))
     let the_data = []
     for (const [key, value] of Object.entries(rooms_amounts)) {
       for (let i = 0; i < arrRoomsData.length; i++) {
@@ -94,11 +104,11 @@ export default function SaveRoom({ route, navigation }) {
       }
     }
 
- 
-    console.log("the_data:" + JSON.stringify(the_data));
-  
+
+    // console.log("the_data:" + JSON.stringify(the_data));
+
     navigation.navigate('Payment', {
-      the_data: the_data, number_Of_Nights: number_Of_Nights, 
+      the_data: the_data, number_Of_Nights: number_Of_Nights,
       breakfast: breakfast, entryDate: entryDate, exitDate: exitDate
     })
   }
@@ -125,19 +135,19 @@ export default function SaveRoom({ route, navigation }) {
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Choose a room</Text>
-      {/* <View>
+      <View>
         {loading ? roomsList : <Spinner />}
-      </View> */}
+      </View>
       <View style={styles.save}>
-        {/* {loading ?
+        {loading ?
           <TouchableOpacity style={styles.button} onPress={GoToPayment} >
             <Text>Save</Text>
-          </TouchableOpacity> : null} */}
+          </TouchableOpacity> : null}
 
-          <TouchableOpacity style={styles.button} onPress={() =>  navigation.navigate('Payment')} >
-            <Text>Save</Text>
-          </TouchableOpacity>
-       
+        {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Payment')} >
+          <Text>Save</Text>
+        </TouchableOpacity> */}
+
       </View>
     </ScrollView>
   )

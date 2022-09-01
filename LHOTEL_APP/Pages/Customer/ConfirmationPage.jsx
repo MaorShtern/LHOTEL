@@ -7,37 +7,37 @@ export default function ConfirmationPage({ route, navigation }) {
 
 
 
-    // let {  id,the_data, number_Of_Nights, breakfast,
-    //     entryDate, exitDate, total, Name, CardNum } = route.params
+    let { id, the_data, number_Of_Nights, breakfast,
+        entryDate, exitDate, total, Name, CardNum } = route.params
 
 
-    const Delete =  async() => {
+    const Delete = async () => {
         const requestOptions = {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
-          };
-          let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
-          let deleteResult = await result.json();
-          if(deleteResult){
+        };
+        let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
+        let deleteResult = await result.json();
+        if (deleteResult) {
             alert("The order has been removed")
             navigation.navigate('Homepage')
-          }
-          else{
+        }
+        else {
             alert("ERROR")
-          }
-         
+        }
+
     }
 
 
-    // let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
-    //     pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
+    let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
+        pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
 
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
             <Text style={styles.SubHeadLine}>Your order has been successfully saved! looking forward to see you!!!</Text>
-            {/* {listCards}
-           
+            {listCards}
+
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
@@ -48,7 +48,7 @@ export default function ConfirmationPage({ route, navigation }) {
                     <Text>Number Of Nights : {number_Of_Nights}</Text>
                 </View>
             </View>
- */}
+
 
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity style={styles.button} onPress={Delete}>
@@ -58,7 +58,7 @@ export default function ConfirmationPage({ route, navigation }) {
                     <Text>Home Page</Text>
                 </TouchableOpacity>
             </View>
-             <View style={{ height: 30 }}></View>
+            <View style={{ height: 30 }}></View>
 
         </ScrollView>
     )
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     SubHeadLine: {
         fontSize: 21,
         fontWeight: "bold",
-        paddingTop: 20,
         paddingBottom: 20,
         alignItems: "center",
         textAlign: "center",
@@ -90,7 +89,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 30,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingTop: 5
     },
     appButtonContainer: {
         elevation: 8,

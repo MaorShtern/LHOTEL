@@ -90,18 +90,18 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
   
+    // navigation.navigate('SaveRoom')
     if (CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights ===0) {
       Alert.alert('Error selecting dates')
       return;
 
     }
     if (ChaeckRoomsMarks()) {
-      rooms_flags = {
+      let rooms_flags = {
         'Single room': singleFlag,
         'Double room': doubleFlag,
         'Suite': suiteFlag
       }
-
       navigation.navigate('SaveRoom', {
         rooms_flags: rooms_flags, number_Of_Nights: number_Of_Nights, breakfast: breakfast,
         entryDate: entry, exitDate: exit
@@ -183,7 +183,7 @@ export default function Booking({ navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('SaveRoom')} >
+          <TouchableOpacity style={styles.button} onPress={ChaeckAll} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>

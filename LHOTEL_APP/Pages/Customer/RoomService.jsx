@@ -69,11 +69,6 @@ export default function RoomService({ navigation }) {
 
 
 
-
-
-
-
-
   const hideDate = () => {
     setFlagDate(false);
   };

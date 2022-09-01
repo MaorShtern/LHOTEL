@@ -15,3 +15,4 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Debug\BLL.csproj.CopyComplete

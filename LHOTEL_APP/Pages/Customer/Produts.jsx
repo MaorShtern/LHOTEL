@@ -146,7 +146,7 @@ export default function Produts({ SetRequest,navigation }) {
             // onChange={(count) => {SetCount.bind(this)}}
             onChange={(count) => {
               (item.amountTaken = count),
-                console.log(count),
+                // console.log(count),
                 Calculate_Final_Amount();
             }}
           />

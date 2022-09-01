@@ -150,10 +150,10 @@ namespace DAL
                 {
                     rooms.Add(new Rooms()
                     {
-                        roomNumber = (int)reader["Room_Number"],
-                        roomType = (string)reader["Room_Type"],
-                        pricePerNight = (int)reader["Price_Per_Night"],
-                        details = (string)reader["Details"]
+                        RoomNumber = (int)reader["Room_Number"],
+                        RoomType = (string)reader["Room_Type"],
+                        PricePerNight = (int)reader["Price_Per_Night"],
+                        Details = (string)reader["Details"]
                     });
                 }
                 return rooms;
