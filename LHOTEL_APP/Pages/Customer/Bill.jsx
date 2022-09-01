@@ -24,7 +24,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
 import { useState, useEffect } from "react";
 export default function Bill({ route, navigation }) {
-  let { data,totalSum } = route.params || [];
+  let { data, totalSum } = route.params || [];
 
   const GetItem = ({ item, index }) => {
     //     <TouchableOpacity  style={styles.listItem}>
@@ -66,7 +66,7 @@ export default function Bill({ route, navigation }) {
       </View>
     );
   };
-console.log(data);
+  console.log(data);
   return (
     <ScrollView>
       {/* <View style={styles.headerStyle}>
@@ -79,16 +79,16 @@ console.log(data);
   
     </View> */}
       <Text style={styles.HeadLine}>My Bill</Text>
-      {data === undefined || data.length === 0 ? null: <View style={styles.footer}>
-      <Text style={styles.footerText}>Total : {totalSum}$</Text>
-    </View>}
+      {data === undefined || data.length === 0 ? null : <View style={styles.footer}>
+        <Text style={styles.footerText}>Total : {totalSum}$</Text>
+      </View>}
       <FlatList
         data={data}
         renderItem={GetItem}
         keyExtractor={(item, index) => index.toString()}
         scrollEnabled={false}
       />
-        
+
       {/* <View style={styles.footerContainerStyle}>
       <TotalComponent totalSum={totalSum} goodsCount={goodsCount} />
       <View style={styles.buttonContainerStyle}>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     backgroundColor: "#fff",
-  },  HeadLine: {
+  }, HeadLine: {
     fontSize: 40,
     fontWeight: "bold",
     paddingTop: 20,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#888',
     fontSize: 26,
-    paddingLeft:20,
+    paddingLeft: 20,
     textAlign: 'right',
   }
 });

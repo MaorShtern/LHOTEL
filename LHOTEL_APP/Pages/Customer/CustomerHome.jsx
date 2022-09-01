@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, StatusBar } from 'react-native';
 import CarouselImages from './CarouselImages';
 import { images } from "../../images";
 import { useState, useEffect } from "react";
@@ -14,10 +14,10 @@ const url = Platform.select({
 
 
 
-export default function CustomerHome({route,navigation}) {
+export default function CustomerHome({ route, navigation }) {
 
-//     let { data } = route.params
-//  console.log("data"+data);
+    //     let { data } = route.params
+    //  console.log("data"+data);
     const [user, SetUser] = useState([])
 
 
@@ -25,21 +25,21 @@ export default function CustomerHome({route,navigation}) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-         GetConnectedUser();
+            GetConnectedUser();
         });
         return unsubscribe;
     }, [navigation]);
 
 
-    
-    const GetConnectedUser = async() =>{
-        try{
+
+    const GetConnectedUser = async () => {
+        try {
             const value = await AsyncStorage.getItem('@user');
-            if(value !== null){
+            if (value !== null) {
                 SetUser(JSON.parse(value))
             }
         }
-        catch(e) {
+        catch (e) {
             alert(e)
         }
     }
@@ -48,8 +48,14 @@ export default function CustomerHome({route,navigation}) {
 
     return (
         <ScrollView><StatusBar style="light" backgroundColor="#000000" />
-            <View>
-            <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text>
+            <View >
+                <TouchableOpacity>
+
+                </TouchableOpacity>
+                <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text>
+                <TouchableOpacity>
+
+                </TouchableOpacity>
                 <View style={{ height: 10 }}></View>
             </View>
             <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text>
