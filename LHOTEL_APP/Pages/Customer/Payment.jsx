@@ -7,7 +7,9 @@ import Customer from '../Class/Customer'
 
 export default function Payment({ route, navigation }) {
 
-  // let { the_data, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
+  let { the_data, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
+
+  // console.log("the_data: " + JSON.stringify(the_data));
 
 
   const [totalSum, SetTotalSum] = useState(0)
@@ -21,28 +23,29 @@ export default function Payment({ route, navigation }) {
 
 
 
-//   useEffect(() => {
-//     const unsubscribe = navigation.addListener('focus', () => {
-//       readData();
-//     });
-//     return unsubscribe;
-// }, [navigation]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      readData();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
 
 
   const Calculate_Final_Amount = () => {
     let sum = 0
-
+    // console.log("sum: "+sum);
+    // console.log("the_data: " + the_data);
     for (let i = 0; i < the_data.length; i++) {
       let pricePerNight = the_data[i].pricePerNight;
       let count = the_data[i].count;
       let tempToatal = pricePerNight * count
-   
+
       sum += tempToatal;
     }
     SetTotalSum(sum)
   }
- 
+
   const Delete = () => {
     setName('')
     setCardNum('')
@@ -79,17 +82,23 @@ export default function Payment({ route, navigation }) {
 
   const readData = async () => {
     try {
-      const user = await AsyncStorage.getItem('@ConUser');
-      const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
-      if (arrUsers !== null && user !== null) {
-        let email = JSON.parse(user)
-        let arr = JSON.parse(arrUsers)
-        let userDetails = arr.filter((per) => per.email === email)
-        id = userDetails[0].id
-        cheackForUser(id)
-        SetUser(userDetails[0])
+      const user = await AsyncStorage.getItem('@user');
+      // const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
+      // console.log("user: " + user !== null);
+
+      if (user !== null) {
+        // console.log("user: " + user);
+        SetUser(JSON.parse(user))
+        Calculate_Final_Amount()
       }
-      Calculate_Final_Amount()
+      //   let email = JSON.parse(user)
+      //   let arr = JSON.parse(arrUsers)
+      //   let userDetails = arr.filter((per) => per.email === email)
+      //   id = userDetails[0].id
+      //   cheackForUser(id)
+      //   SetUser(userDetails[0])
+      // }
+      // Calculate_Final_Amount()
     } catch (e) {
       alert('Failed to fetch the input from storage');
     }
@@ -103,7 +112,7 @@ export default function Payment({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
     let customerResult = await result.json();
- 
+
     if (customerResult)
       navigation.navigate('ConfirmationPage', {
         id: value.customerID, the_data: the_data,
@@ -116,21 +125,20 @@ export default function Payment({ route, navigation }) {
   }
 
   const cheackForUser = async (value) => {
-   
+
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
     let deleteResult = await result.json();
- 
+
     if (deleteResult !== null) {
- 
+
       SetUserDB(deleteResult)
       return
     }
-    else
-    {
+    else {
       cheackForUser(value)
     }
   }
@@ -163,34 +171,39 @@ export default function Payment({ route, navigation }) {
       let newCustomer = {
         calssName: Customer,
         fields: {
-          customerID: user.id,
+          customerID: user.customerID,
           customerType: 1,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          mail: user.email,
-          phoneNumber: user.phone,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          mail: user.mail,
+          phoneNumber: user.phoneNumber,
           cardHolderName: name,
           creditCardDate: cardDate,
           threeDigit: cardCVC
         }
       }
 
+      // console.log(newCustomer);
+      navigation.navigate('ConfirmationPage', {
+        id: newCustomer.customerID, the_data: the_data,
+        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+        total: totalSum, Name: name, CardNum: cardNum
+      })
 
-     
-      if(userDB !== null && userDB.length !== 0)
-      {
-        AlterCustomer(newCustomer.fields)
-      }
-      else{
-        CustomerToDataBS(newCustomer.fields)
-      }
-      
+      //   if(userDB !== null && userDB.length !== 0)
+      //   {
+      //     AlterCustomer(newCustomer.fields)
+      //   }
+      //   else{
+      //     CustomerToDataBS(newCustomer.fields)
+      //   }
+
     }
     else
       Alert.alert("The card details are incorrect")
   }
 
-  console.log(userDB);
+  // console.log(user.customerID);
 
 
   return (
@@ -218,7 +231,7 @@ export default function Payment({ route, navigation }) {
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('ConfirmationPage')} >
+          <TouchableOpacity style={styles.button} onPress={ConfirmInformation} >
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>

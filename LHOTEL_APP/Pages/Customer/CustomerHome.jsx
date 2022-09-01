@@ -16,12 +16,9 @@ const url = Platform.select({
 
 export default function CustomerHome({ route, navigation }) {
 
-    //     let { data } = route.params
-    //  console.log("data"+data);
+
     const [user, SetUser] = useState([])
 
-
-    // useEffect(() => { GetConnectedUser(); }, []);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -44,20 +41,31 @@ export default function CustomerHome({ route, navigation }) {
         }
     }
 
-    // console.log(user);
+    const LogOutUser = async () => {
+        try {
+            SetUser([])
+            await AsyncStorage.setItem('@user', JSON.stringify([]), () => {
+            });
+        }
+        catch (error) {
+            Alert.alert(error)
+        }
+    }
+
 
     return (
         <ScrollView><StatusBar style="light" backgroundColor="#000000" />
-            <View >
-                <TouchableOpacity>
+            {user.length === undefined ?
+                (<View style={styles.userContainer}>
+                    <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
+                        <Text style={{ color: 'white' }}>Log out</Text>
+                    </TouchableOpacity>
+                    <Text style={{ color: 'white' }} >Username: {user.firstName} {user.lastName}</Text>
+                    {/* <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text> */}
 
-                </TouchableOpacity>
-                <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text>
-                <TouchableOpacity>
+                </View>)
+                : null}
 
-                </TouchableOpacity>
-                <View style={{ height: 10 }}></View>
-            </View>
             <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text>
             <View style={styles.ButtonContainer}>
 
@@ -152,5 +160,20 @@ const styles = StyleSheet.create({
     innerText: {
         color: 'white',
         padding: 5
-    }
+    },
+    userContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 20,
+        justifyContent: 'space-between',
+        color: 'white',
+        backgroundColor: 'black',
+    },
+    LogoutBtn: {
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 5
+    },
 });  

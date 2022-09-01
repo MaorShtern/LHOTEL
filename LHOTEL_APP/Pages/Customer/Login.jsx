@@ -25,8 +25,7 @@ export default function Login({ navigation }) {
       }),
       headers: { 'Content-Type': 'application/json' }
     };
-    let result = await fetch
-      ('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
+    let result = await fetch ('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
     let user = await result.json();
     // console.log(user);
     if (user !== null) {

@@ -1,30 +1,11 @@
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  Alert,
-  ScrollView
-} from "react-native";
-import {
-  Card,
-  CardTitle,
-  CardContent,
-  CardAction,
-  CardButton,
-  CardImage,
-} from "react-native-material-cards";
-
+import {Text,View,FlatList,Image,TouchableOpacity,StyleSheet,Button,Alert,ScrollView} from "react-native";
+import { Card,CardTitle,CardContent,CardAction,CardButton,CardImage,} from "react-native-material-cards";
 import React from "react";
-
 import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
 import { useState, useEffect } from "react";
 export default function Bill({ route, navigation }) {
-  let { data, totalSum } = route.params || [];
+  let { Products, totalSum } = route.params || [];
 
   const GetItem = ({ item, index }) => {
     //     <TouchableOpacity  style={styles.listItem}>
@@ -66,7 +47,7 @@ export default function Bill({ route, navigation }) {
       </View>
     );
   };
-  console.log(data);
+  console.log(Products);
   return (
     <ScrollView>
       {/* <View style={styles.headerStyle}>
@@ -79,11 +60,11 @@ export default function Bill({ route, navigation }) {
   
     </View> */}
       <Text style={styles.HeadLine}>My Bill</Text>
-      {data === undefined || data.length === 0 ? null : <View style={styles.footer}>
+      {Products === undefined || Products.length === 0 ? null : <View style={styles.footer}>
         <Text style={styles.footerText}>Total : {totalSum}$</Text>
       </View>}
       <FlatList
-        data={data}
+        data={Products}
         renderItem={GetItem}
         keyExtractor={(item, index) => index.toString()}
         scrollEnabled={false}

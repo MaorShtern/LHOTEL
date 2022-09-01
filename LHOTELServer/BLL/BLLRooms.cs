@@ -27,5 +27,10 @@ namespace BLL
             return DALRooms.CheckOut(roomReservation);
 
         }
+        public static bool CheckIn_At_The_Counter(RoomReservation roomReservation)
+        {
+            return DALRooms.CheckIn_At_The_Counter(roomReservation);
+
+        }
     }
 }

@@ -1659,6 +1659,7 @@ go
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
     --"id": 666,
     --"Card_Holder_Name": "mmm",
     --"Card_Date": "12/29",
@@ -1710,6 +1711,37 @@ go
 
 
 
+create proc CheckIn_At_The_Counter
+@id int,
+@Card_Holder_Name  nvarchar(30),
+@Credit_Card_Date nvarchar(5),
+@Three_Digit int,
+@Credit_Card_Number nvarchar(16),
+@Employee_ID int,
+@Counter_Single int,
+@Counter_Double int,
+@Counter_Suite int,
+@Entry_Date date,
+@Exit_Date date,
+@Amount_Of_People int
+as
+	begin tran	
+		exec SaveRoomReservation @id ,@Card_Holder_Name ,@Credit_Card_Date ,@Three_Digit ,@Credit_Card_Number ,@Employee_ID ,@Counter_Single ,@Counter_Double ,@Counter_Suite ,@Entry_Date ,@Exit_Date ,@Amount_Of_People 
+		exec CheckIn @id , @Entry_Date
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+--exec CheckIn_At_The_Counter 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+
+
 
 --  פרוצדורת צאק אווט
 create proc CheckOut
@@ -1729,7 +1761,7 @@ begin tran
 	end
 commit tran
 go
---exec CheckOut 666, '2022-08-23'
+--exec CheckOut 666, '2022-09-01'
 
 
 

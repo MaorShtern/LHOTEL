@@ -9,17 +9,17 @@ namespace DAL
     public class Rooms
     {
 
-        public int roomNumber { set; get; }
-        public string roomType { set; get; }
-        public int pricePerNight { set; get; }
-        public string details { set; get; }
-        public DateTime exitDate { set; get; }
+        public int RoomNumber { set; get; }
+        public string RoomType { set; get; }
+        public int PricePerNight { set; get; }
+        public string Details { set; get; }
+        public DateTime ExitDate { set; get; }
 
 
-        public override string ToString()
-        {
-            return $"Room Number:{roomNumber}, Room Type:{roomType}, Price Per Night:{pricePerNight}";
-        }
+        //public override string ToString()
+        //{
+        //    return $"Room Number:{roomNumber}, Room Type:{roomType}, Price Per Night:{pricePerNight}";
+        //}
 
     }
 }
