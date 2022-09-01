@@ -1,247 +1,156 @@
-import React,{useState} from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
-
-import { SearchBar } from 'react-native-elements';
 
 
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 
+import { SearchBar } from "react-native-elements";
+import { Divider, Text } from "react-native-paper";
 
 const Users = [
-    {
-      Employee_ID: -1, Employee_Code: null, Employee_Name: "John", Phone_Number: null, Birth_Date: null,
-      Worker_Code: null, Role: "General", Hourly_Wage: null, Address: null
-    },
-    {
-      Employee_ID: 111, Employee_Code: 1, Employee_Name: "Miri", Phone_Number: null, Birth_Date: null,
-      Worker_Code: null, Role: "Manager", Hourly_Wage: null, Address: null
-    },
-    {
-      Employee_ID: 222, Employee_Code: 2, Employee_Name: "Alon", Phone_Number: null, Birth_Date: null,
-      Worker_Code: null, Role: "Receptionist", Hourly_Wage: null, Address: null
-    },
-    {
-      Employee_ID: 333, Employee_Code: 3, Employee_Name: "Tamar", Phone_Number: null, Birth_Date: null,
-      Worker_Code: null, Role: "Room service", Hourly_Wage: null, Address: null
-    },
-  ]
-  
-export default function Employees() {
-    const [emp, setEmep] = useState();
-    const [empItems, setEmpItems] = useState([]);
-    const [search, setSearch] = useState('');
-    
-    // style={styles.itemText}
-const GetItem = ({ item}) => {
+  {Employee_ID: -1,Employee_Code: null,Employee_Name: "John",Phone_Number: null,Birth_Date: null,
+  Worker_Code: null,Role: "General",Hourly_Wage: null,Address: null,Entry: "09:00",Exit: "18:00"},
+  {Employee_ID: 111,Employee_Code: 1,Employee_Name: "Miri",Phone_Number: null,Birth_Date: null,
+  Worker_Code: null,Role: "Manager",Hourly_Wage: null,Address: null,Entry: "10:00",Exit: "15:00"},
+  {Employee_ID: 222,Employee_Code: 2,Employee_Name: "Alon",Phone_Number: null,Birth_Date: null,
+  Worker_Code: null,Role: "Receptionist",Hourly_Wage: null,Address: null,Entry: "08:00",Exit: "17:00"},
+  {Employee_ID: 333,Employee_Code: 3,Employee_Name: "Tamar",Phone_Number: null,Birth_Date: null,
+  Worker_Code: null,Role: "Room service",Hourly_Wage: null,Address: null,Entry: "09:00",Exit: "16:00"},
+];
 
+export default function Employees() {
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
+  useEffect(() => {
+    setFilteredDataSource(Users);
+    setMasterDataSource(Users);
+  }, []);
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource.filter(function (item) {
+        const itemData = item.Employee_Name
+          ? item.Employee_Name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
+
+  const GetItem = ({ item }) => {
     return (
       <View style={styles.item}>
-           {/* <Text >{item.Role}</Text>
-           <Text >{item.Employee_ID}</Text>
-           <Text >{item.Employee_ID}</Text> */}
         <View style={styles.itemLeft}>
-        <Text >{item.Role}</Text>
-          {/* <View style={styles.square}></View> */}
-          {/* <Text style={styles.itemText}>{item.Employee_ID}</Text> */}
-          {/* <Text
-            style={{
-              color: "#2e2f30",
-              fontSize: 15,
-              paddingLeft: 5,
-              paddingTop: 35,
-            }}
-          >
-        {item.Role}
-          </Text> */}
+          <Text>{item.Role}</Text>
         </View>
-        {/* <Text >{item.Role}</Text> */}
-        <Text >{item.Employee_Name}</Text>
-      
+        <View></View>
+        <View>
+          <Text>{item.Entry} </Text>
+          <Divider />
+          <Text>{item.Exit} </Text>
+          <Divider />
+        </View>
+        <View style={styles.verticleLine}></View>
+        <View>
+          <Text>Entry :</Text>
+          <Divider />
+          <Text>Exit :</Text>
+          <Divider />
+        </View>
+        <Text>{item.Employee_Name + "   "} </Text>
       </View>
-    )
-  }
-    const handleAddTask = () => {
-      Keyboard.dismiss();
-      setEmpItems([...empItems, emp])
-      setEmep(null);
-    }
-  
-    const completeTask = (index) => {
-      let itemsCopy = [...empItems];
-      itemsCopy.splice(index, 1);
-      setEmpItems(itemsCopy)
-    }
-    
-//     const updateSearch = (search) => {
-//     this.setState({ search });
-//   };
+    );
+  };
 
-    return (
-        <View style={styles.container}>
-        
+  return (
+    <View style={styles.container}>
+      <View style={styles.tasksWrapper}>
+        <Text style={styles.sectionTitle}>Today's shift</Text>
+
+        <SearchBar
+          style={{ paddingHorizontal: 15 }}
+          onChangeText={(text) => searchFilterFunction(text)}
+          onClear={() => searchFilterFunction("")}
+          round={true}
+          lightTheme={true}
+          placeholder="search worker..."
+          value={search}
+        />
         {/* Added this scroll view to enable scrolling when list gets longer than the page */}
         <ScrollView
           contentContainerStyle={{
-            flexGrow: 1
+            flexGrow: 1,
           }}
-          keyboardShouldPersistTaps='handled'
+          keyboardShouldPersistTaps="handled"
         >
-  
-        {/* Today's Tasks */}
-       
-        <View style={styles.tasksWrapper}>
-       
-          <Text style={styles.sectionTitle}>Workers</Text>
-          <SearchBar 
-          round  ={true}
-          lightTheme ={true}
-        placeholder="search worker..."
-        onChangeText={setSearch}
-        value={search}
-      />
-        
           <View style={styles.items}>
-       
             {/* This is where the tasks will go! */}
-            {
-              Users.map((item, index) => {
-                return (
-                  <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
-                    <GetItem item={item} /> 
-                  </TouchableOpacity>
-                )
-              })
-            }
+
+            {filteredDataSource.map((item, index) => {
+              return (
+                <View key={index}>
+                  <GetItem item={item} />
+                </View>
+              );
+            })}
           </View>
-        </View>
-          
+          {/* </View> */}
         </ScrollView>
-  
-        
       </View>
-      )
+    </View>
+  );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#E8EAED",
+  },
+  tasksWrapper: {
+    paddingTop: 80,
+    paddingHorizontal: 20,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    paddingBottom: 35,
+    alignSelf: "flex-end",
+  },
+  items: {
+    marginTop: 30,
+  },
 
+  item: {
+    backgroundColor: "#FFF",
+    padding: 25,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  itemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-  
-  const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#E8EAED',
-      },
-      tasksWrapper: {
-        paddingTop: 80,
-    
-      },
-      sectionTitle: {
-        paddingHorizontal: 23,
-        paddingBottom:13,
-        fontSize: 24,
-        fontWeight: 'bold'
-      },
-      items: {
-        marginTop: 30,
-        paddingHorizontal: 20,
-      },
-      writeTaskWrapper: {
-        position: 'absolute',
-        
-        bottom: 60,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center'
-      },
-      input: {
-        paddingVertical: 15,
-        paddingHorizontal: 15,
-        backgroundColor: '#FFF',
-        borderRadius: 60,
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-        width: 250,
-      },
-      addWrapper: {
-        width: 60,
-        height: 60,
-        backgroundColor: '#FFF',
-        borderRadius: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-      },
-      addText: {},
-    item: {
-      backgroundColor: '#FFF',
-      padding: 25,
-      borderRadius: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 20,
-    },
-    itemLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flexWrap: 'wrap'
-    },
-    square: {
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.4,
-      borderRadius: 5,
-      marginRight: 15,
-    },
-    itemText: {
-      maxWidth: '80%',
-    },
-    circular: {
-      width: 12,
-      height: 12,
-      borderColor: '#55BCF6',
-      borderWidth: 2,
-      borderRadius: 5,
-    },
-  });
+  verticleLine: {
+    height: "100%",
+    width: 1,
+    backgroundColor: "#909090",
+  },
+});
