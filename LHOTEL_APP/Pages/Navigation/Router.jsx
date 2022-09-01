@@ -12,6 +12,7 @@ import WorkerMenu from '../Workers/WorkerMenu'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EditTasks from '../Workers/EditTasks';
+import Employees from '../Workers/Employees';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +32,7 @@ export default function Router() {
       <Stack.Screen name="SaveRoom" component={SaveRoom}options={{title : " "}} />
       <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} options={{title : " "}}/>
       <Stack.Screen name="EditTasks" component={EditTasks} options={{ headerShown: false }} />
-
+      <Stack.Screen name="Employees" component={Employees} options={{ headerShown: false }} />
       </Stack.Navigator>
       </NavigationContainer>
       

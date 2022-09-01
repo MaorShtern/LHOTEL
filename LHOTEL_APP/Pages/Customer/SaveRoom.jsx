@@ -6,7 +6,7 @@ import CardRoom from './CardRoom'
 
 export default function SaveRoom({ route, navigation }) {
 
-  // let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate } = route.params 
+  let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate } = route.params 
 
 
   const [single, SetSingle] = useState(0)
