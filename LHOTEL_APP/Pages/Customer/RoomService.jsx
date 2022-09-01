@@ -1,13 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  Image,
-} from "react-native";
-import React, { useState,useEffect } from "react";
+import {View,Text,StyleSheet,TextInput,TouchableOpacity,Button,Image,} from "react-native";
+import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -15,8 +7,8 @@ import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import { images } from "../../images";
 import Produts from "./Produts";
-//  אנוחנו נירצה לעבור על הטבלה "פירטי רכישה" על מנת להביא את כול הפרטים שהלקוח
-// צריך על מנת לבצא את הבקשה לשירות חדרים
+
+
 
 const RequestType = [
   { label: "Room Cleaning", value: "Room Cleaning" },
@@ -107,11 +99,11 @@ export default function RoomService({ navigation }) {
   const SaveOrder = async () => {
     alert(
       "date: " +
-        date.getFullYear() +
-        "-" +
-        (date.getMonth() + 1) +
-        "-" +
-        date.getDate()
+      date.getFullYear() +
+      "-" +
+      (date.getMonth() + 1) +
+      "-" +
+      date.getDate()
     );
     alert("time: " + time);
     navigation.navigate("Home");
@@ -141,110 +133,105 @@ export default function RoomService({ navigation }) {
             <Text style={styles.alerts}>*Must select room* </Text>
           ) : null}
         </View>
-       
+
         {/* <View>
           {request === "" ? (
             <Text style={styles.alerts}>*Must select request type* </Text>
           ) : null}
         </View> */}
-       <View style={styles.ProdutsStyle}>
-        {request==="Product purchase"? (<View><Produts navigation ={navigation} SetRequest={SetRequest}/></View>):(     
-    <View>
-       <View style={styles.container}>
-          <Dropdown
-            style={styles.dropdown}
-            data={RequestType}
-            // search
-            searchPlaceholder="Search"
-            labelField="label"
-            valueField="value"
-            placeholder="Request type"
-            value={dropdown}
-            onChange={(request) => {
-              SetRequest(request.value);
-            }}
-          />
-        </View>
-      <View>
-          {request === "" ? (
-            <Text style={styles.alerts}>*Must select request type* </Text>
-          ) : null}
-        </View>
-          <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
-            <View style={styles.ButtonContainer}>
-            <Text style={styles.text}>
-                {selectedDate === ""
-                  ? "select date"
-                  : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
-              </Text>
-              <Image style={styles.icon} source={images.calendar} />
-             
+        <View style={styles.ProdutsStyle}>
+          {request === "Product purchase" ? (<View><Produts navigation={navigation} SetRequest={SetRequest} /></View>) : (
+            <View>
+              <View style={styles.container}>
+                <Dropdown
+                  style={styles.dropdown}
+                  data={RequestType}
+                  // search
+                  searchPlaceholder="Search"
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Request type"
+                  value={dropdown}
+                  onChange={(request) => {
+                    SetRequest(request.value);
+                  }}
+                />
+              </View>
+              <View>
+                {request === "" ? (
+                  <Text style={styles.alerts}>*Must select request type* </Text>
+                ) : null}
+              </View>
+              <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+                <View style={styles.ButtonContainer}>
+                  <Text style={styles.text}>
+                    {selectedDate === ""
+                      ? "select date"
+                      : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
+                  </Text>
+                  <Image style={styles.icon} source={images.calendar} />
+
+                </View>
+              </TouchableOpacity>
+
+              {isDisplayDate && (
+                <DatePicker
+                  options={{
+                    backgroundColor: "rgb(202, 232, 228)",
+                    mainColor: "#000",
+                  }}
+                  mode="calendar"
+                  minuteInterval={30}
+                  style={{ borderRadius: 10 }}
+                  current={moment(date).format("YYYY-MM-DD").toString()}
+                  minimumDate={moment().weekday(-7).format("YYYY-MM-DD").toString()}
+                  maximumDate={moment().weekday(7).format("YYYY-MM-DD").toString()}
+                  onSelectedChange={(date) => {
+                    setSelectedDate(date), setShow(!isDisplayDate);
+                  }}
+                />
+              )}
+
+              <View>
+                <TouchableOpacity style={styles.button} onPress={showTime}>
+                  <Text>{"Time: " + time}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={flagTime}
+                  mode="time"
+                  onConfirm={handleTime}
+                  onCancel={hideTime}
+                />
+                <View style={{ height: 20 }}></View>
+              </View>
+
+              <Text style={styles.Text}>Description </Text>
+              <View style={styles.textAreaContainer}>
+                <TextInput
+                  style={styles.textArea}
+                  underlineColorAndroid="transparent"
+                  placeholder="Type something"
+                  placeholderTextColor="grey"
+                  numberOfLines={10}
+                  multiline={true}
+                />
+              </View>
+              <View style={styles.ButtonContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.button} onPress={SaveOrder}>
+                    ORDER
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-
-          {isDisplayDate && (
-            <DatePicker
-              options={{
-                backgroundColor: "rgb(202, 232, 228)",
-                //     textHeaderColor: "#000",
-                //     textDefaultColor: "#000",
-                //     selectedTextColor: "#fff",
-                mainColor: "#000",
-                //     textSecondaryColor: "#000",
-                //     borderColor: "rgba(122, 146, 165, 0.1)",
-              }}
-              mode="calendar"
-              minuteInterval={30}
-              style={{ borderRadius: 10 }}
-              current={moment(date).format("YYYY-MM-DD").toString()}
-              minimumDate={moment().weekday(-7).format("YYYY-MM-DD").toString()}
-              maximumDate={moment().weekday(7).format("YYYY-MM-DD").toString()}
-              onSelectedChange={(date) => {
-                setSelectedDate(date), setShow(!isDisplayDate);
-              }}
-            />
           )}
-       
-        <View>
-          <TouchableOpacity style={styles.button} onPress={showTime}>
-            <Text>{"Time: " + time}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={flagTime}
-            mode="time"
-            onConfirm={handleTime}
-            onCancel={hideTime}
-          />
-          <View style={{ height: 20 }}></View>
         </View>
 
-        <Text style={styles.Text}>Description </Text>
-        <View style={styles.textAreaContainer}>
-          <TextInput
-            style={styles.textArea}
-            underlineColorAndroid="transparent"
-            placeholder="Type something"
-            placeholderTextColor="grey"
-            numberOfLines={10}
-            multiline={true}
-          />
-        </View>
-        <View style={styles.ButtonContainer}>
-        <TouchableOpacity>
-          <Text style={styles.button} onPress={SaveOrder}>
-            ORDER
-          </Text>
-        </TouchableOpacity>
-      </View>
-      </View>
-)}
-       </View>
 
-      
       </View>
 
-    
-     
+
+
     </ScrollView>
   );
 }
@@ -290,7 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     // padding: 10,
     // borderRadius: 10,
-    
+
     padding: 10,
     paddingRight: 60,
     paddingLeft: 60,
@@ -306,12 +293,12 @@ const styles = StyleSheet.create({
     height: 30,
 
     padding: 20,
- 
+
   },
   text: {
 
     height: 50,
-   
+
     // margin: 3,
     paddingTop: 17,
     paddingLeft: 10,
@@ -323,11 +310,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 10,
   },
-  ProdutsStyle:{
+  ProdutsStyle: {
     // paddingTop:17,
   }
 });
- {/* <View>
+{/* <View>
                 <TouchableOpacity style={styles.button} onPress={showDate} >
                     <Text>{"Date: " + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()}</Text>
                 </TouchableOpacity>
@@ -338,8 +325,8 @@ const styles = StyleSheet.create({
                     onCancel={hideDate} />
                 <View style={{ height: 20 }}></View>
             </View> */}
-      
-          {/* <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+
+{/* <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
             <Text style={styles.text}>
             {selectedDate===""? "select date":moment(new Date(selectedDate)).format("DD/MM/YYYY")}
             {"  "}

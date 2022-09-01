@@ -5,7 +5,7 @@ import { images } from "../../images";
 import { useState, useEffect } from "react";
 import Counter from "react-native-counters";
 
-const data = [
+const Products = [
   {id: 1,image: images.waterbottle,name: "Water bottle", price: 10,amountTaken: 0},
   {id: 2, image: images.whisky,name: "Whiskey",price: 5,amountTaken: 0},
   {id: 3,image: images.choclatebar, name: "Chocolate bar",price: 16,amountTaken: 0 },
@@ -45,7 +45,7 @@ export default function Produts({ SetRequest,navigation }) {
             setShowBox(false);
          
             let temp = []
-            data.map((item) =>
+            Products.map((item) =>
               temp.push(
                 {
                   id: item.id,
@@ -56,11 +56,11 @@ export default function Produts({ SetRequest,navigation }) {
                   
                 }))
         
-                let selectedItems = data.filter((selectedItem) =>
+                let selectedItems = Products.filter((selectedItem) =>
             selectedItem.amountTaken !== 0 )
          
                
-            navigation.navigate("Bill",{data:selectedItems,totalSum:totalSum});
+            navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
             cancel()
             // getSelectedProducts()
           },
@@ -82,8 +82,8 @@ export default function Produts({ SetRequest,navigation }) {
   // };
 
   const RestCount = () => {
-    for (let i = 0; i < data.length; i++) {
-      data[i].amountTaken = 0;
+    for (let i = 0; i < Products.length; i++) {
+      Products[i].amountTaken = 0;
     }
 
     // SetTotalSum(0);
@@ -96,9 +96,9 @@ export default function Produts({ SetRequest,navigation }) {
   const Calculate_Final_Amount = () => {
     let sum = 0;
     let goodsCounter = 0;
-    for (let i = 0; i < data.length; i++) {
-      let price = data[i].price;
-      let amountTaken = data[i].amountTaken;
+    for (let i = 0; i < Products.length; i++) {
+      let price = Products[i].price;
+      let amountTaken = Products[i].amountTaken;
       let tempToatal = amountTaken * price;
       goodsCounter += amountTaken;
       sum += tempToatal;
@@ -112,7 +112,7 @@ export default function Produts({ SetRequest,navigation }) {
     return (
       <View
         style={
-          index + 1 === data.length
+          index + 1 === Products.length
             ? styles.lastItemStyle
             : styles.containerStyle
         }
@@ -168,7 +168,7 @@ export default function Produts({ SetRequest,navigation }) {
       </View>
       {/* <Header  func={func}/> */}
       <FlatList
-        data={data}
+        data={Products}
         renderItem={GetItem}
         keyExtractor={(item, index) => index.toString()}
         scrollEnabled={false}

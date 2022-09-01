@@ -9,7 +9,7 @@ const workerCardsArr = [
   { code: 1, Description: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'Home' },
   { code: 1, Description: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: 'Shift' },
   { code: 1, Description: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
-  { code: 2, Description: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
+  { code: 2, Description: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: 'AddCharge' },
   { code: 2, Description: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: '' },
   { code: 2, Description: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
   { code: 3, Description: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
