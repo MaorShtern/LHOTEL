@@ -9,10 +9,18 @@ import Registration from "../Customer/Registration";
 // import Payment from "../Customer/Payment";
 // import ConfirmationPage from "../Customer/ConfirmationPage";
 import RoomService from "../Customer/RoomService";
+import Bill from "../Customer/Bill";
+
+
+
+
+
 
 const drawer = createDrawerNavigator();
 
 export default function Drawer() {
+
+ 
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -73,7 +81,18 @@ export default function Drawer() {
             },
           }}
         />
-
+    <drawer.Screen
+          name="Bill"
+          component={Bill}
+        
+          options={{
+            headerTitle: " ",
+            headerTintColor: "white",
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+          }}
+        />
         {/* <drawer.Screen
           name="SaveRoom"
           component={SaveRoom}

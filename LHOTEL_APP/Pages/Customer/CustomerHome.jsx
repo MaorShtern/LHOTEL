@@ -14,8 +14,10 @@ const url = Platform.select({
 
 
 
-export default function CustomerHome({navigation}) {
+export default function CustomerHome({route,navigation}) {
 
+//     let { data } = route.params
+//  console.log("data"+data);
     const [user, SetUser] = useState([])
 
 
