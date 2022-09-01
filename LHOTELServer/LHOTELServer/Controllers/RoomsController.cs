@@ -60,6 +60,8 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/CheckOut")]
         public IHttpActionResult CheckOut(RoomReservation roomReservation)
@@ -67,6 +69,20 @@ namespace LHOTELServer.Controllers
             try
             {
                 return Ok(BLLRooms.CheckOut(roomReservation));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/CheckIn_At_The_Counter")]
+        public IHttpActionResult CheckIn_At_The_Counter(RoomReservation roomReservation)
+        {
+            try
+            {
+                return Ok(BLLRooms.CheckIn_At_The_Counter(roomReservation));
             }
             catch (Exception e)
             {

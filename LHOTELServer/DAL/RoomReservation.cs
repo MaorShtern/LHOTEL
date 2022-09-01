@@ -8,7 +8,7 @@ namespace DAL
 {
     public class RoomReservation
     {
-        public int id { set; get; }
+        public int Id { set; get; }
         public string Card_Holder_Name { set; get; }
         public string Card_Date { set; get; }
         public int Three_Digit { set; get; }
@@ -18,7 +18,7 @@ namespace DAL
         public int Counter_Double { set; get; }
         public int Counter_Suite { set; get; }
         public DateTime Entry_Date { set; get; }
-        public DateTime exitDate { set; get; }
+        public DateTime ExitDate { set; get; }
         public int Amount_Of_People { set; get; }
         public DateTime Bill_Date { set; get; }
 
