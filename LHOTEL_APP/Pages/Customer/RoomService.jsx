@@ -1,6 +1,6 @@
 import {View,Text,StyleSheet,TextInput,TouchableOpacity,Button,Image,} from "react-native";
 import React, { useState, useEffect } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from 'react-native-virtualized-view';
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DatePicker from "react-native-modern-datepicker";

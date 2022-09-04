@@ -190,13 +190,13 @@ export default function Payment({ route, navigation }) {
         total: totalSum, Name: name, CardNum: cardNum
       })
 
-      //   if(userDB !== null && userDB.length !== 0)
-      //   {
-      //     AlterCustomer(newCustomer.fields)
-      //   }
-      //   else{
-      //     CustomerToDataBS(newCustomer.fields)
-      //   }
+        if(userDB !== null && userDB.length !== 0)
+        {
+          AlterCustomer(newCustomer.fields)
+        }
+        else{
+          CustomerToDataBS(newCustomer.fields)
+        }
 
     }
     else

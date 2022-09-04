@@ -112,7 +112,7 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar  translucent={true} backgroundColor={'transparent'}  />
       <Animated.View style={{ flex: 2, backgroundColor: 'black' }} >
         <BackgroundImage source={images.hotelback} style={{ flex: 2 }} />
 

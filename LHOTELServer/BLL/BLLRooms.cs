@@ -18,10 +18,18 @@ namespace BLL
             return DALRooms.SaveRoomReservation(roomReservation);
         }
 
-        public static bool CheckIn(RoomReservation roomReservation)
+        //public static bool CheckIn(RoomReservation roomReservation)
+        //{
+        //    return DALRooms.CheckIn(roomReservation);
+        //}
+        public static bool CheckIn(string id,string entryDate )
         {
-            return DALRooms.CheckIn(roomReservation);
+            return DALRooms.CheckIn(id,entryDate);
         }
+        //public static bool CheckIn(RoomReservation roomReservation)
+        //{
+        //    return DALRooms.CheckIn(roomReservation);
+        //}
         public static bool CheckOut(RoomReservation roomReservation)
         {
             return DALRooms.CheckOut(roomReservation);

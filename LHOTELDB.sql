@@ -1493,7 +1493,7 @@ commit tran
 go
 --exec GetCustomersRooms
  --exec DeleteCustomerRoom 1,999,'2022-08-22'
-
+ --exec DeleteCustomerRoom 888,'2022-09-08'
 
 
 create proc FindCustomerRoomByKeys
@@ -1546,7 +1546,7 @@ begin tran
 commit tran
 go
 --exec GetCustomersRooms
---exec AlterCustomerRoom 20,NULL,888,'2022-09-08','2022-09-08','2022-09-15',2	,'Reserved'
+--exec AlterCustomerRoom 8,8,888,'2022-12-06','2022-12-09','2022-09-15',2	,'Reserved'
 
 
 
@@ -1655,8 +1655,17 @@ begin tran
 	end
 commit tran
 go
+	--exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
+	--	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+
+	--	@id int,
+
+
+
+
 
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
@@ -1687,6 +1696,7 @@ go
 
 
 --  פרוצדורה עבור צאק אין
+--לעדכן פרוצדורה שתבדוק אם התאריך  כניסה שווה לתאריך שבו נעשה הצאק אין 
 create proc CheckIn
 @id int,
 @entry_date date
@@ -2010,7 +2020,7 @@ commit tran
 go
 
 --exec Calu_Rooms_Income
-
+select * from dbo.Customers
 
 create proc Calu_Products_Income
 as
@@ -2067,9 +2077,35 @@ FROM     dbo.Bill_Details INNER JOIN
 	end
 commit tran
 go
---exec Room_Resit 666
 
 
-select * from [dbo].[Customers_Rooms]
+
+
+--exec Room_Resit 888
+--exec AddNewCustomer 7878,1,'John','Doe','John@gmail.com','gdgd','0549999999','','',-1,''
+--exec AlterCustomerById 7878,1,'John','Doe','John@gmail.com','gdgd','0549999999','','',-1,''
+
+--select * from dbo.Customers
+--exec SaveRoomReservation  7878,'Momo','12/29',912,'4580111133335555',NULL,1,2,NULL,'2022-09-05','2022-09-10',3
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+--exec DeleteCustomerRoom 7878,'2022-09-03'
+--exec DeleteBill 37,7878,'2022-09-03','4580111133335555'
+--exec AlterCustomerRoom 8,8,888,'2022-12-06','2022-12-09','2022-09-15',2	,'Reserved'
+--select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Employees_Tasks]
 --select * from [dbo].[Bill_Details]
+--exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+--DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = 7878
+--DELETE FROM [dbo].[Customers_Rooms] WHERE [Customer_ID] = 7878
+--DELETE  from [dbo].[Bill_Details] WHERE [Customer_ID] = 7878
+ --exec DeleteCustomerRoom 888,'2022-09-08'
+
+ --exec CheckIn 888 , '2022-12-09'
+ --exec CheckIn 7878,'2022-09-03'
+    --"id": 666,
+    --"Entry_Date": "2022-08-22"
+

@@ -27,13 +27,16 @@ export default function Login({ navigation }) {
     };
     let result = await fetch ('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
     let user = await result.json();
-    // console.log(user);
+
+    console.log(user);
+    console.log(email);
+    console.log(password);
     if (user !== null) {
-      // console.log(user);
+      console.log(user);
       saveUser(user)
       return
     }
-    FetchData()
+    // FetchData()
   }
 
   // const readData = async () => {

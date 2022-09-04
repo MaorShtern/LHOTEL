@@ -1,91 +1,63 @@
-import {Text,View,FlatList,Image,TouchableOpacity,StyleSheet,Button,Alert,ScrollView} from "react-native";
-import { Card,CardTitle,CardContent,CardAction,CardButton,CardImage,} from "react-native-material-cards";
 import React from "react";
-import Icon from "react-native-vector-icons/Ionicons";
-import { images } from "../../images";
+import { Text,View,FlatList, StyleSheet} from "react-native";
+// import {
+//   Card,
+//   CardTitle,
+//   CardContent,
+//   CardAction,
+//   CardButton,
+//   CardImage,
+// } from "react-native-material-cards";
+// import { ScrollView } from "react-native-virtualized-view";
+
+
+
 import { useState, useEffect } from "react";
 export default function Bill({ route, navigation }) {
+  
   let { Products, totalSum } = route.params || [];
 
-  const GetItem = ({ item, index }) => {
-    //     <TouchableOpacity  style={styles.listItem}>
-    //     <View style={styles.listView}>
-    //         <Text style={styles.listText}>{item.text}</Text>
-    //         <Icon name="ios-close" size={35} color="#a8a9ad" />
-    //       </View>
-    //   </TouchableOpacity>
-
+  const GetItem = ({item}) => {
     return (
-      <View>
-        <Card>
-          <CardTitle
-            title={item.name}
-            subtitle={"amount : " + item.amountTaken}
-          />
-          {/* <CardContent text="Your device will reboot in few seconds once successful, be patient meanwhile" /> */}
-          <CardAction separator={false} inColumn={false}>
-            <Text style={{ paddingBottom: 10, paddingRight: 20 }}>price :{item.price} $
-            </Text>
-          </CardAction>
-        </Card>
-
-        {/*     
-            <View style={styles.counterStyle}>
-              <Counter
-                initial={start}
-                start={start}
-                max={5}
-                style={styles.counterStyle}
-                // onChange={(count) => {SetCount.bind(this)}}
-                onChange={(count) => {
-                  (item.amountTaken = count),
-                    console.log(count)
-                    // Calculate_Final_Amount();
-                }}
-              />
-            </View> */}
+      <View style={styles.item}>
+        <View style={styles.itemLeft}>
+          <Text >$ {item.price*item.amountTaken}</Text>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, paddingVertical: 10 }}>{item.name}</Text>
+          <Text style={{ color: "#888", paddingBottom: 5 }}>
+            {"amount : " + item.amountTaken}
+          </Text>
+        </View>
       </View>
     );
   };
-  console.log(Products);
-  return (
-    <ScrollView>
-      {/* <View style={styles.headerStyle}>
    
-      <TouchableOpacity onPress={Cansel}>
-        <Icon name="ios-close" size={35} color="#a8a9ad" />
-      </TouchableOpacity>
-
-      <Text style={{ fontSize: 20 }}>Mini Bar</Text>
-  
-    </View> */}
+  return (
+    <View style={styles.container}>
       <Text style={styles.HeadLine}>My Bill</Text>
-      {Products === undefined || Products.length === 0 ? null : <View style={styles.footer}>
-        <Text style={styles.footerText}>Total : {totalSum}$</Text>
-      </View>}
+      {Products === undefined || Products.length === 0 ? null : (
+        <View>
+          <Text style={styles.footerText}>Total : {totalSum}$</Text>
+        </View>
+      )}
       <FlatList
         data={Products}
         renderItem={GetItem}
         keyExtractor={(item, index) => index.toString()}
-        scrollEnabled={false}
       />
 
-      {/* <View style={styles.footerContainerStyle}>
-      <TotalComponent totalSum={totalSum} goodsCount={goodsCount} />
-      <View style={styles.buttonContainerStyle}>
-        <TouchableOpacity
-          style={styles.checkoutButtonStyle}
-          onPress={() => showConfirmDialog()}
-        >
-          <Text style={{ color: "#fff",textAlign:'center' }}>ORDER</Text>
-        </TouchableOpacity>
-      </View>
-    </View> */}
-    </ScrollView>
+    
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 10,
+  },
   containerStyle: {
     flexDirection: "row",
     flex: 1,
@@ -94,7 +66,8 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     backgroundColor: "#fff",
-  }, HeadLine: {
+  },
+  HeadLine: {
     fontSize: 40,
     fontWeight: "bold",
     paddingTop: 20,
@@ -161,20 +134,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 15,
   },
-  // closeButtonStyle: {
-  //   backgroundColor: "#7f8c8d",
-  //   padding: 10,
-  //   paddingRight: 30,
-  //   paddingLeft: 30,
-  //   borderRadius: 3,
-  // },
+ 
   checkoutButtonStyle: {
     backgroundColor: "#f39c12",
     padding: 10,
-    // textAlign:'center',
-    // paddingRight: 60,
-    // paddingLeft: 60,
-    // justifyContent: "center",
+   
     borderRadius: 3,
   },
   totalContainerStyle: {
@@ -203,20 +167,48 @@ const styles = StyleSheet.create({
   },
   listText: {
     fontSize: 16,
-  }, footer: {
-    width: '100%',
-    height: 100,
-
-    bottom: 10,
-    justifyContent: 'center',
-    // backgroundColor: 'skyblue',
   },
+ 
   footerText: {
-    color: '#888',
-    fontSize: 26,
-    paddingLeft: 20,
-    textAlign: 'right',
-  }
+    color: "#888",
+    fontSize: 20,
+    paddingRight: 16,
+    paddingVertical:15,
+    textAlign: "left",
+  },
+
+  item: {
+    backgroundColor: "#FFF",
+    padding: 15,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  itemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  square: {
+    width: 24,
+    height: 24,
+    backgroundColor: "#55BCF6",
+    opacity: 0.4,
+    borderRadius: 5,
+    marginRight: 15,
+  },
+  itemText: {
+    // maxWidth: "80%",
+  },
+  circular: {
+    width: 12,
+    height: 12,
+    borderColor: "#55BCF6",
+    borderWidth: 2,
+    borderRadius: 5,
+  },
 });
 
 // const Item = ({item, deleteItem}) => {

@@ -67,12 +67,13 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-        public static bool CheckIn(RoomReservation roomReservation)
+        public static bool CheckIn(string id, string entryDate)
         {
             try
-            {
-                string str = $@"exec CheckIn {roomReservation.Id},
-                '{roomReservation.Entry_Date.ToString("yyyy - MM - dd")}'";
+            { 
+                
+               
+                string str = $@"exec CheckIn {id},'{entryDate}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result >= 1)
@@ -88,6 +89,27 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
+        //public static bool CheckIn(RoomReservation roomReservation)
+        //{
+        //    try
+        //    {
+        //        string str = $@"exec CheckIn {roomReservation.Id},
+        //        '{roomReservation.Entry_Date.ToString("yyyy - MM - dd")}'";
+        //        str = str.Replace("\r\n", string.Empty);
+        //        int result = SQLConnection.ExeNonQuery(str);
+        //        if (result >= 1)
+        //            return true;
+        //        return false;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return false;
+        //    }
+        //    finally
+        //    {
+        //        SQLConnection.CloseDB();
+        //    }
+        //}
         public static bool CheckOut(RoomReservation roomReservation)
         {
             try

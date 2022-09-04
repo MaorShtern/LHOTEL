@@ -54,7 +54,7 @@ export default function CustomerHome({ route, navigation }) {
 
 
     return (
-        <ScrollView><StatusBar style="light" backgroundColor="#000000" />
+        <ScrollView><StatusBar  translucent={true} backgroundColor={'transparent'}  />
             {user.length === undefined ?
                 (<View style={styles.userContainer}>
                     <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
@@ -66,7 +66,7 @@ export default function CustomerHome({ route, navigation }) {
                 </View>)
                 : null}
 
-            <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text>
+            {/* <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text> */}
             <View style={styles.ButtonContainer}>
 
                 <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:maor100maor@example.com')}

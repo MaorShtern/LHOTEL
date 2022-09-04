@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView ,StatusBar} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../images'
 
@@ -10,7 +10,7 @@ const workerCardsArr = [
   { code: 1, Description: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: 'Employees' },
   { code: 1, Description: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
   { code: 2, Description: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: '' },
-  { code: 2, Description: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: 'CheckIn' },
+  { code: 2, Description: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: 'ManualCheckIn' },
   { code: 2, Description: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: '' },
   { code: 3, Description: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
 ]
@@ -93,9 +93,10 @@ export default function WorkerMenu({ route, navigation }) {
 
   // console.log(currentUserArr);
 
-
+  // barStyle="dark-content" backgroundColor="#fff"
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000"/>
       <FlatList
         data={currentUserArr}
         renderItem={GetItem}
@@ -112,7 +113,7 @@ export default function WorkerMenu({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+    paddingTop: 50,
   },
 
   item: {

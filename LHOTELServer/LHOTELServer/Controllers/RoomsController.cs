@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DAL;
 using BLL;
+using Newtonsoft.Json.Linq;
 
 namespace LHOTELServer.Controllers
 {
@@ -49,17 +50,30 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/CheckIn")]
-        public IHttpActionResult CheckIn(RoomReservation roomReservation)
+        public IHttpActionResult CheckIn([FromBody] JObject roomReservation)
         {
             try
             {
-                return Ok(BLLRooms.CheckIn(roomReservation));
+                string id = roomReservation["mail"].ToObject<string>();
+                string entryDate = roomReservation["Entry_Date"].ToObject<string>();
+                return Ok(BLLRooms.CheckIn(id, entryDate));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
+        //public IHttpActionResult CheckIn(RoomReservation roomReservation)
+        //{
+        //    try
+        //    {
+        //        return Ok(BLLRooms.CheckIn(roomReservation));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
 
         [System.Web.Http.HttpPut]
