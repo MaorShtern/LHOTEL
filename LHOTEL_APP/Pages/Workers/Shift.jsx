@@ -1,75 +1,75 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
-
+import { Divider } from "react-native-paper";
 import { SearchBar } from 'react-native-elements';
 
 
 
-
-const Users = [
+const Employees = [
   {
     Employee_ID: -1, Employee_Code: null, Employee_Name: "John", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "General", Hourly_Wage: null, Address: null
+    Worker_Code: null, Role: "General", Hourly_Wage: null, Address: null, Entry: "09:00", Exit: "18:00"
   },
   {
     Employee_ID: 111, Employee_Code: 1, Employee_Name: "Miri", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Manager", Hourly_Wage: null, Address: null
+    Worker_Code: null, Role: "Manager", Hourly_Wage: null, Address: null, Entry: "10:00", Exit: "15:00"
   },
   {
     Employee_ID: 222, Employee_Code: 2, Employee_Name: "Alon", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Receptionist", Hourly_Wage: null, Address: null
+    Worker_Code: null, Role: "Receptionist", Hourly_Wage: null, Address: null, Entry: "08:00", Exit: "17:00"
   },
   {
     Employee_ID: 333, Employee_Code: 3, Employee_Name: "Tamar", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Room service", Hourly_Wage: null, Address: null
+    Worker_Code: null, Role: "Room service", Hourly_Wage: null, Address: null, Entry: "09:00", Exit: null
   },
-]
+];
 
 export default function Shift() {
-  const [emp, setEmep] = useState();
-  const [empItems, setEmpItems] = useState([]);
+
+  const [empItems, setEmpItems] = useState(Employees);
   const [search, setSearch] = useState('');
 
-  // style={styles.itemText}
-  const GetItem = ({ item }) => {
 
+  const GetEmployeeCard = ({ item }) => {
     return (
       <View style={styles.item}>
-        {/* <Text >{item.Role}</Text>
-           <Text >{item.Employee_ID}</Text>
-           <Text >{item.Employee_ID}</Text> */}
+        <Text >{item.Role}</Text>
         <View style={styles.itemLeft}>
-          <Text >{item.Role}</Text>
-          {/* <View style={styles.square}></View> */}
-          {/* <Text style={styles.itemText}>{item.Employee_ID}</Text> */}
-          {/* <Text
-            style={{
-              color: "#2e2f30",
-              fontSize: 15,
-              paddingLeft: 5,
-              paddingTop: 35,
-            }}
-          >
-        {item.Role}
-          </Text> */}
+          <Text>Entry: {item.Entry} </Text>
+          <View style={{ height: 5 }}></View>
+          <Text>Exit: {item.Exit} </Text>
         </View>
-        {/* <Text >{item.Role}</Text> */}
         <Text >{item.Employee_Name}</Text>
-
       </View>
     )
   }
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    setEmpItems([...empItems, emp])
-    setEmep(null);
+
+  const SerchEmployee = (value) => {
+    setSearch(value)
+    let employee = Employees.filter((per) => per.Employee_Name === value)
+    // console.log(employee.length > 0);
+    if (employee.length > 0) {
+      setEmpItems(employee)
+    }
+    else {
+      setEmpItems(Employees)
+    }
   }
 
-  const completeTask = (index) => {
-    let itemsCopy = [...empItems];
-    itemsCopy.splice(index, 1);
-    setEmpItems(itemsCopy)
-  }
+  // const handleAddTask = () => {
+  //   Keyboard.dismiss();
+  //   setEmpItems([...empItems, emp])
+  //   setEmep(null);
+  // }
+
+  // const completeTask = (index) => {
+  //   let itemsCopy = [...empItems];
+  //   itemsCopy.splice(index, 1);
+  //   setEmpItems(itemsCopy)
+  // }
+
+
+  let listEmployees = empItems.map((item) => <GetEmployeeCard key={item.Employee_ID} item={item} />)
 
   //     const updateSearch = (search) => {
   //     this.setState({ search });
@@ -83,34 +83,31 @@ export default function Shift() {
         contentContainerStyle={{
           flexGrow: 1
         }}
-        keyboardShouldPersistTaps='handled'
-      >
-
-        {/* Today's Tasks */}
+        keyboardShouldPersistTaps='handled'>
 
         <View style={styles.tasksWrapper}>
-
           <Text style={styles.sectionTitle}>Workers</Text>
           <SearchBar
             round={true}
             lightTheme={true}
             placeholder="search worker..."
-            onChangeText={setSearch}
+            onChangeText={SerchEmployee}
             value={search}
           />
 
           <View style={styles.items}>
 
+            {listEmployees}
             {/* This is where the tasks will go! */}
-            {
-              Users.map((item, index) => {
+            {/* {
+              Employees.map((item, index) => {
                 return (
                   <TouchableOpacity key={index} onPress={() => completeTask(index)}>
                     <GetItem item={item} />
                   </TouchableOpacity>
                 )
               })
-            }
+            } */}
           </View>
         </View>
 
@@ -182,9 +179,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   itemLeft: {
-    flexDirection: 'row',
+    flex: 1,
+    flexDirection: "column",
     alignItems: 'center',
-    flexWrap: 'wrap'
+    // alignSelf:"center",
+    // flexWrap: 'wrap',
   },
   square: {
     width: 24,
