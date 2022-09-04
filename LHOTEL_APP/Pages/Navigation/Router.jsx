@@ -14,7 +14,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EditTasks from '../Workers/EditTasks';
 import Employees from '../Workers/Employees';
  import ManualCheckIn from '../Workers/ManualCheckIn';
-
+ import CheckOut from '../Workers/CheckOut';
+ 
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,8 @@ export default function Router() {
       <Stack.Screen name="Drawer" component={Drawer} options={{ headerShown: false }} />
       <Stack.Screen name="Tasks" component={Tasks} options={{ headerShown: false }} />
       <Stack.Screen name="WorkerMenu" component={WorkerMenu} options={{ headerShown: false}} />
+      <Stack.Screen name="CheckOut" component={CheckOut} options={{ headerShown: false}} />
+      
       {/* <Stack.Screen name="Booking" component={Booking} options={{title : " "}}/> */}
       {/* <Stack.Screen name="Payment" component={Payment}options={{title : " "}} /> */}
       <Stack.Screen name="CustomerHome" component={CustomerHome}options={{title : " "}} />
