@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DAL;
 using BLL;
-
+using Newtonsoft.Json.Linq;
 
 namespace LHOTELServer.Controllers
 {
@@ -21,10 +21,11 @@ namespace LHOTELServer.Controllers
     {
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/ClockIn")]
-        public IHttpActionResult ClockIn(int id)
+        public IHttpActionResult ClockIn([FromBody] JObject data)
         {
             try
             {
+                int id = data["id"].ToObject<int>();
                 return Ok(BLLEmployees.ClockIn(id));
             }
             catch (Exception)
@@ -35,10 +36,11 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/ClockOut")]
-        public IHttpActionResult ClockOut(int id)
+        public IHttpActionResult ClockOut([FromBody] JObject data)
         {
             try
             {
+                int id = data["id"].ToObject<int>();
                 return Ok(BLLEmployees.ClockOut(id));
             }
             catch (Exception)

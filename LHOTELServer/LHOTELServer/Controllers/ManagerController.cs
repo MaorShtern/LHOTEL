@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DAL;
 using BLL;
-
+using Newtonsoft.Json.Linq;
 
 namespace LHOTELServer.Controllers
 {
@@ -67,12 +67,13 @@ namespace LHOTELServer.Controllers
 
         //  צריך לשנות את זה
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetEmployeeByIdAndRole")]
-        public IHttpActionResult GetEmployeeByIdAndRole(int id, string role)
+        [System.Web.Http.Route("~/GetEmployeeById")]
+        public IHttpActionResult GetEmployeeById([FromBody] JObject data)
         {
             try
             {
-                return Ok(BLLEmployees.GetEmployeeByIdAndRole(id, role));
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLEmployees.GetEmployeeById(id));
             }
             catch (Exception e)
             {

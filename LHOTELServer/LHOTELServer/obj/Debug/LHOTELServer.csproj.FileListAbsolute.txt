@@ -175,7 +175,6 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CoreCompileInputs.cache
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.pdb
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\LHOTELServer.dll.config
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\LHOTELServer.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\LHOTELServer.pdb
@@ -265,3 +264,4 @@ C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELSe
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete

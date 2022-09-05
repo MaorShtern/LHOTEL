@@ -60,6 +60,7 @@ create table Products
 go
 
 
+
 create table Purchase_Of_Goods
 (
 	Product_Code int not null,
@@ -307,18 +308,19 @@ go
 --exec GetAllEmployees
 
 
-create proc GetEmployeeByIdAndCode
-@id int,
-@code int
+
+alter proc GetEmployeeById
+@id int
 as
 begin tran
 
-SELECT dbo.Employees.Employee_ID, dbo.Employees.Employee_Code, dbo.Employees.Employee_Name, 
+SELECT dbo.Employees.Employee_ID, dbo.Employees.Employee_Code, dbo.Employees_Types.Description,
+dbo.Employees.Employee_Name, 
 dbo.Employees.Phone_Number, dbo.Employees.Birth_Date, dbo.Employees.Worker_Code, 
 dbo.Employees_Types.Description as Role, dbo.Employees.Hourly_Wage, dbo.Employees.Address
 FROM     dbo.Employees INNER JOIN
                   dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
-				  where dbo.Employees.Employee_ID = @id and dbo.Employees.Employee_Code = @code
+				  where dbo.Employees.Employee_ID = @id 
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -327,7 +329,7 @@ FROM     dbo.Employees INNER JOIN
 	end
 commit tran
 go
---exec GetEmployeeByIdAndCode 888 , 8
+--exec GetEmployeeById 222
 --select * from Employees
 
 
@@ -534,6 +536,7 @@ begin tran
 	end
 commit tran
 go
+
 --exec AddNewCustomer 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569,'4580111122223333'
 --exec AddNewCustomer 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781,'4580211122223333'
 --exec AddNewCustomer 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569,'4580311122223333'
@@ -733,13 +736,15 @@ begin tran
 	end
 commit tran
 go
---exec AddNewProduct 1,'Coca cola',15,0
---exec AddNewProduct 2,'Vodka',35,0
---exec AddNewProduct 3,'Doritos',20,0
---exec AddNewProduct 3,'Doritos',20,50
---exec AddNewProduct 1,'Sprite',15,15
---exec AddNewProduct 2,'Whiskey',45,0
---exec AddNewProduct 3,'Doritos',20,0
+
+--1	1	Coca cola	15.00	0.00
+--2	2	Vodka	35.00	0.00
+--3	3	Bamba	20.00	0.00
+--4	3	Doritos	20.00	50.00
+--5	1	Sprite	15.00	15.00
+--6	2	Whiskey	45.00	0.00
+--7	3	Chips	20.00	0.00
+--8	4	Room	0.00	0.00
 
 ----------------------------------------------
 create proc AlterProductById
@@ -1069,16 +1074,9 @@ begin tran
 	end
 commit tran
 go
-exec GetShifts
+--exec GetAllShifts
 --exec ClockIn 111
---exec ClockIn 222
---exec ClockIn 333
---exec ClockIn 444
---exec ClockIn 555
---exec ClockIn 666
---exec ClockIn 777
---exec ClockIn 888
---exec ClockIn -1
+
 
 
 create proc DeleteShift
@@ -1097,7 +1095,6 @@ begin tran
 commit tran
 go
 --exec DeleteShift 111,'2022-08-23 02:16:12.000'
-
 
 
 
@@ -1125,12 +1122,16 @@ go
 create proc GetAllTasks
 as
 begin tran
-SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
-                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
-FROM     dbo.Tasks_Types INNER JOIN
-                  dbo.Employees_Tasks ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
-GROUP BY dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
-                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, 
+dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, 
+CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) AS Start_Time,
+CONVERT(VARCHAR(5), dbo.Employees_Tasks.End_Time, 108) AS End_Time,
+ dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+FROM dbo.Tasks_Types INNER JOIN dbo.Employees_Tasks 
+ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
+GROUP BY dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name,
+dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
+dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
 	order by dbo.Employees_Tasks.Task_Status desc
 	if (@@error !=0)
 	begin
@@ -1175,8 +1176,11 @@ create proc GetTask_ById
 @id int
 as
 begin tran
-	SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name, dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date, dbo.Employees_Tasks.Start_Time, 
-                  dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
+	SELECT dbo.Employees_Tasks.Task_Code, dbo.Employees_Tasks.Employee_ID, dbo.Tasks_Types.Task_Name,
+	dbo.Employees_Tasks.Room_Number, dbo.Employees_Tasks.Start_Date,
+	CONVERT(VARCHAR(5), dbo.Employees_Tasks.Start_Time, 108) AS Start_Time,
+	CONVERT(VARCHAR(5), dbo.Employees_Tasks.End_Time, 108) AS End_Time,
+	dbo.Employees_Tasks.Task_Status, dbo.Employees_Tasks.Description
 FROM     dbo.Tasks_Types INNER JOIN
                   dbo.Employees_Tasks ON dbo.Tasks_Types.Task_Number = dbo.Employees_Tasks.Task_Number
 
@@ -1194,6 +1198,8 @@ commit tran
 go
 --exec GetAllTasks
 -- exec GetTask_ById -1
+
+
 
 
 
@@ -1477,12 +1483,12 @@ go
 
 
 create proc DeleteCustomerRoom
-@Customer_ID int,
-@Entry_Date date
+@id int,
+@bill_Number int
 as
 begin tran	
 	DELETE FROM [dbo].[Customers_Rooms] 
-	WHERE [Customer_ID] = @Customer_ID and Bill_Date = @Entry_Date
+	WHERE [Customer_ID] = @id and Bill_Number = @bill_Number
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1663,7 +1669,6 @@ go
 
 
 
-
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
 
 --select * from Bill
@@ -1721,7 +1726,7 @@ go
 
 
 
-create proc CheckIn_At_The_Counter
+create proc CheckIn_With_Existing_User
 @id int,
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
@@ -1746,23 +1751,41 @@ as
 	end
 commit tran
 go
---exec CheckIn_At_The_Counter 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--select * from Customers
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
+--exec GetAllBill_Details
 
 
-
---  פרוצדורת צאק אווט
-create proc CheckOut
+create proc CheckIn_Without_Existing_User
 @id int,
-@Bill_Date date
+@First_Name nvarchar(30),
+@Last_Name nvarchar(30),
+@Mail nvarchar(100),
+@Phone_Number nvarchar(30) ,
+@Card_Holder_Name  nvarchar(30),
+@Credit_Card_Date nvarchar(5),
+@Three_Digit int,
+@Credit_Card_Number nvarchar(12),
+@Employee_ID int,
+@Counter_Single int,
+@Counter_Double int,
+@Counter_Suite int,
+@Entry_Date date,
+@Exit_Date date,
+@Amount_Of_People int
 as
-begin tran		
-	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
-	where Customer_ID=@id and Bill_Date = @Bill_Date and Bill_Status = 'Open'
-	exec DeleteBill_Detail @id,@Bill_Date
-	exec DeleteCustomerRoom @id , @Bill_Date
+begin tran	
+		exec AddNewCustomer @id,1,@First_Name,@Last_Name,@Mail,@id,@Phone_Number,@Card_Holder_Name,
+		@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
+
+		exec SaveRoomReservation @id ,@Card_Holder_Name ,@Credit_Card_Date ,@Three_Digit 
+		,@Credit_Card_Number ,@Employee_ID ,@Counter_Single ,@Counter_Double ,@Counter_Suite ,@Entry_Date
+		,@Exit_Date ,@Amount_Of_People 
+
+		exec CheckIn @id , @Entry_Date
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1771,7 +1794,56 @@ begin tran
 	end
 commit tran
 go
---exec CheckOut 666, '2022-09-01'
+--exec CheckIn_Without_Existing_User 315201913,'maor','shtern','maor@gmail.com','0524987762','aaa','02/28'
+--,569,'4580111122223333',111,1,1,1,'2022-08-22','2022-08-24',5
+
+   --"CustomerID": 666,
+   -- "CustomerType":1,
+   -- "FirstName":"firstName",
+   -- "LastName":"lastName",
+   --  "Mail":"firstName",
+   -- "Password":"lastName",
+   -- "PhoneNumber":"0526211881",
+   -- "CardHolderName": "mmm",
+   -- "CreditCardDate": "12/29",
+   -- "ThreeDigit": 912,
+   -- "Credit_Card_Number": "4580111133335555",
+   -- "Employee_ID": 111,
+   -- "Counter_Single" :1,
+   -- "Counter_Double": 1,
+   -- "Counter_Suite": 1,
+   -- "Entry_Date": "2022-08-22",
+   -- "exitDate": "2022-08-24",
+   -- "Amount_Of_People": 5 
+
+
+
+--  פרוצדורת צאק אווט
+create proc CheckOut
+@id int,
+@Exit_Date date
+as
+begin tran		
+	
+	 DECLARE @bill_Number AS int = (select Bill_Number from [dbo].[Customers_Rooms]
+	 where [Customer_ID] = @id and Exit_Date = @Exit_Date GROUP BY Bill_Number)
+
+	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
+	where Customer_ID=@id and Bill_Number = @bill_Number and Bill_Status = 'Open'
+	exec DeleteBill_Detail @id,@bill_Number
+	exec DeleteCustomerRoom @id , @bill_Number
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+--exec GetAllBilles
+--exec GetAllBill_Details
+--exec GetCustomersRooms
+--exec CheckOut 315201913, '2022-08-24'
 
 
 
@@ -1849,11 +1921,11 @@ go
 
 create proc DeleteBill_Detail
 @id int,
-@Bill_Date date
+@bill_Number int
 as
 begin tran		
 	DELETE FROM [dbo].[Bill_Details] 
-	WHERE [Customer_ID] = @id and Bill_Date = @Bill_Date 
+	WHERE [Customer_ID] = @id and Bill_Number = @bill_Number 
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1862,7 +1934,8 @@ begin tran
 	end
 commit tran
 go
--- exec DeleteBill_Detail 666,'2022-08-21'
+--exec GetAllBill_Details
+-- exec DeleteBill_Detail 41,315201913
 
 
 create proc AlterBill_Detail

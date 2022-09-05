@@ -58,17 +58,17 @@ namespace DAL
                 while (reader.Read())
                 {
                     customer = new Customers(){
-                        customerID = (int)reader["Customer_ID"],
-                        customerType = (int)reader["Customer_Type"],
-                        firstName = (string)reader["First_Name"],
-                        lastName = (string)reader["Last_Name"],
-                        mail = (string)reader["Mail"],
-                        password = (string)reader["Password"],
-                        phoneNumber = (string)reader["Phone_Number"],
-                        cardHolderName = (string)reader["Card_Holder_Name"],
-                        creditCardDate = (string)reader["Credit_Card_Date"],
-                        threeDigit = (int)reader["Three_Digit"],
-                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customer_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        Password = (string)reader["Password"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardDate = (string)reader["Credit_Card_Date"],
+                        ThreeDigit = (int)reader["Three_Digit"],
+                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
                     };
                 }
                 return customer;
@@ -98,17 +98,17 @@ namespace DAL
                 {
                     customer = new Customers()
                     {
-                        customerID = (int)reader["Customer_ID"],
-                        customerType = (int)reader["Customer_Type"],
-                        firstName = (string)reader["First_Name"],
-                        lastName = (string)reader["Last_Name"],
-                        mail = (string)reader["Mail"],
-                        password = (string)reader["Password"],
-                        phoneNumber = (string)reader["Phone_Number"],
-                        cardHolderName = (string)reader["Card_Holder_Name"],
-                        creditCardDate = (string)reader["Credit_Card_Date"],
-                        threeDigit = (int)reader["Three_Digit"],
-                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customer_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        Password = (string)reader["Password"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardDate = (string)reader["Credit_Card_Date"],
+                        ThreeDigit = (int)reader["Three_Digit"],
+                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
                     };
                 }
                 return customer;
@@ -128,12 +128,12 @@ namespace DAL
         {
             try
             {
-                if (GetCustomerByMailAndPassword(customer.mail , customer.password) == null)
+                if (GetCustomerByMailAndPassword(customer.Mail , customer.Password) == null)
                 {
-                    string str = $@"exec AddNewCustomer {customer.customerID},{customer.customerType},
-'{customer.firstName}','{customer.lastName}','{customer.mail}','{customer.password}',
-'{customer.phoneNumber}','{customer.cardHolderName}',
-'{customer.creditCardDate}',{customer.threeDigit},'{customer.credit_Card_Number}'";
+                    string str = $@"exec AddNewCustomer {customer.CustomerID},
+{customer.CustomerType},'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
+'{customer.Password}','{customer.PhoneNumber}','{customer.CardHolderName}',
+'{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected == 1)
@@ -166,17 +166,17 @@ namespace DAL
                 {
                     customer = new Customers()
                     {
-                        customerID = (int)reader["Customer_ID"],
-                        customerType = (int)reader["Customer_Type"],
-                        firstName = (string)reader["First_Name"],
-                        lastName = (string)reader["Last_Name"],
-                        mail = (string)reader["Mail"],
-                        password = (string)reader["Password"],
-                        phoneNumber = (string)reader["Phone_Number"],
-                        cardHolderName = (string)reader["Card_Holder_Name"],
-                        creditCardDate = (string)reader["Credit_Card_Date"],
-                        threeDigit = (int)reader["Three_Digit"],
-                        credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customer_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        Password = (string)reader["Password"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardDate = (string)reader["Credit_Card_Date"],
+                        ThreeDigit = (int)reader["Three_Digit"],
+                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
                     };
                 }
                 return customer;
@@ -196,15 +196,15 @@ namespace DAL
         {
             try
             {
-                Customers findCustomer = GetCustomerById(customer.customerID);
+                Customers findCustomer = GetCustomerById(customer.CustomerID);
                 if (findCustomer == null)
                 {
                     return false;
                 }
-                string str = $@"exec AlterCustomerById {customer.customerID},{customer.customerType},
-        '{customer.firstName}','{customer.lastName}','{customer.mail}','{customer.password}',
-        '{customer.phoneNumber}','{customer.cardHolderName}','{customer.creditCardDate}'
-        ,{customer.threeDigit},'{customer.credit_Card_Number}'";
+                string str = $@"exec AlterCustomerById {customer.CustomerID},{customer.CustomerType},
+        '{customer.FirstName}','{customer.LastName}','{customer.Mail}','{customer.Password}',
+        '{customer.PhoneNumber}','{customer.CardHolderName}','{customer.CreditCardDate}'
+        ,{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

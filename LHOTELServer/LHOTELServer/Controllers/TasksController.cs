@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Web.Http;
 using DAL;
 using BLL;
+using Newtonsoft.Json.Linq;
 
 namespace LHOTELServer.Controllers
 {
@@ -35,10 +36,11 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetTaskById")]
-        public IHttpActionResult GetTaskById( int id)
+        public IHttpActionResult GetTaskById([FromBody] JObject data)
         {
             try
             {
+                int id = data["id"].ToObject<int>();
                 return Ok(BLLTasks.GetTaskById(id));
             }
             catch (Exception e)
@@ -46,6 +48,22 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/GetTaskByCode")]
+        public IHttpActionResult GetTaskByCode([FromBody] JObject data)
+        {
+            try
+            {
+                int code = data["code"].ToObject<int>();
+                return Ok(BLLTasks.GetTaskByCode(code));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewTask")]

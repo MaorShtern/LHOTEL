@@ -88,11 +88,11 @@ namespace DAL
             }
         }
 
-        public static Employees GetEmployeeByIdAndRole(int id, string role)
+        public static Employees GetEmployeeById(int id)
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetEmployeeByIdAndRole {id} , '{role}'");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetEmployeeById {id} ");
 
                 if (reader == null || !reader.HasRows)
                 {
@@ -131,7 +131,7 @@ namespace DAL
         {
             try
             {
-                if (GetEmployeeByIdAndRole(newEmployee.Employee_ID, newEmployee.Description) == null)
+                if (GetEmployeeById(newEmployee.Employee_ID) == null)
                 {
                     string str = $@"exec InsertEmployee {newEmployee.Employee_ID},'{newEmployee.Employee_Name}',
 '{newEmployee.Phone_Number}','{newEmployee.Birth_Date.ToString("yyyy - MM - dd")}',
@@ -158,7 +158,7 @@ namespace DAL
         {
             try
             {
-                Employees findEmployee = GetEmployeeByIdAndRole(employee.Employee_ID, employee.Description);
+                Employees findEmployee = GetEmployeeById(employee.Employee_ID);
                 if (findEmployee == null)
                 {
                     return false;

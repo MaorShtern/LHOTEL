@@ -30,14 +30,19 @@ namespace BLL
         //{
         //    return DALRooms.CheckIn(roomReservation);
         //}
-        public static bool CheckOut(RoomReservation roomReservation)
+        public static bool CheckOut(string id, string exitDate)
         {
-            return DALRooms.CheckOut(roomReservation);
+            return DALRooms.CheckOut( id,  exitDate);
 
         }
-        public static bool CheckIn_At_The_Counter(RoomReservation roomReservation)
+        public static bool CheckIn_With_Existing_User(RoomReservation roomReservation)
         {
-            return DALRooms.CheckIn_At_The_Counter(roomReservation);
+            return DALRooms.CheckIn_With_Existing_User(roomReservation);
+
+        }
+        public static bool CheckIn_Without_Existing_User(RoomReservationUser roomReservationUser)
+        {
+            return DALRooms.CheckIn_Without_Existing_User(roomReservationUser);
 
         }
     }

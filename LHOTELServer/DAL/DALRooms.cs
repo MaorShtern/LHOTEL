@@ -70,9 +70,7 @@ namespace DAL
         public static bool CheckIn(string id, string entryDate)
         {
             try
-            { 
-                
-               
+            {
                 string str = $@"exec CheckIn {id},'{entryDate}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
@@ -110,12 +108,11 @@ namespace DAL
         //        SQLConnection.CloseDB();
         //    }
         //}
-        public static bool CheckOut(RoomReservation roomReservation)
+        public static bool CheckOut(string id, string exitDate)
         {
             try
             {
-                string str = $@"exec CheckOut {roomReservation.Id},
-                '{roomReservation.Bill_Date.ToString("yyyy - MM - dd")}'";
+                string str = $@"exec CheckOut {id},'{exitDate}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result >= 1)
@@ -132,11 +129,11 @@ namespace DAL
             }
         }
 
-        public static bool CheckIn_At_The_Counter(RoomReservation roomReservation)
+        public static bool CheckIn_With_Existing_User(RoomReservation roomReservation)
         {
             try
             {
-                string str = $@"exec CheckIn_At_The_Counter {roomReservation.Id},'{roomReservation.Card_Holder_Name}'
+                string str = $@"exec CheckIn_With_Existing_User {roomReservation.Id},'{roomReservation.Card_Holder_Name}'
 ,'{roomReservation.Card_Date}',{roomReservation.Three_Digit},'{roomReservation.Credit_Card_Number}'
 ,{roomReservation.Employee_ID},{roomReservation.Counter_Single},{roomReservation.Counter_Double},
 {roomReservation.Counter_Suite},'{roomReservation.Entry_Date.ToString("yyyy - MM - dd")}'
@@ -157,5 +154,34 @@ namespace DAL
             }
         }
 
+
+        public static bool CheckIn_Without_Existing_User(RoomReservationUser roomReservationUser)
+        {
+            try
+            {
+                string str = $@"exec CheckIn_Without_Existing_User {roomReservationUser.CustomerID},
+'{roomReservationUser.FirstName}','{roomReservationUser.LastName}','{roomReservationUser.Mail}',
+'{roomReservationUser.PhoneNumber}','{roomReservationUser.CardHolderName}',
+'{roomReservationUser.CreditCardDate}',{roomReservationUser.ThreeDigit},
+'{roomReservationUser.Credit_Card_Number}',{roomReservationUser.Employee_ID},
+{roomReservationUser.Counter_Single},{roomReservationUser.Counter_Double},
+{roomReservationUser.Counter_Single},
+'{roomReservationUser.Entry_Date.ToString("yyyy - MM - dd")}',
+'{roomReservationUser.ExitDate.ToString("yyyy - MM - dd")}',{roomReservationUser.Amount_Of_People}";
+                str = str.Replace("\r\n", string.Empty);
+                int result = SQLConnection.ExeNonQuery(str);
+                if (result >= 1)
+                    return true;
+                return false;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
     }
 }
