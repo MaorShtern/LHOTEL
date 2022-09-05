@@ -46,7 +46,7 @@ export default function UpdateDetails({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        console.log(employee);
+                        // console.log(employee);
                         navigation.goBack()
                         // let newArray = employees.filter((per) => per.Employee_ID !== value)
                         // SetEmployees(newArray)

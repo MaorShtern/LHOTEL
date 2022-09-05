@@ -12,6 +12,7 @@ import EditTasks from '../Workers/EditTasks';
 import Shift from '../Workers/Shift';
 import AddCharge from '../Workers/AddCharge'
 import ManualCheckIn from '../Workers/ManualCheckIn';
+import CheckOut from '../Workers/CheckOut';
 import EmployeesManagement from '../Workers/EmployeesManagement';
 import UpdateDetails from '../Workers/UpdateDetails';
 
@@ -33,6 +34,7 @@ export default function Router() {
         <Stack.Screen name="Shift" component={Shift} options={{ headerShown: false }} />
         <Stack.Screen name="AddCharge" component={AddCharge} options={{ title: " " }} />
         <Stack.Screen name="ManualCheckIn" component={ManualCheckIn} options={{ title: " " }} />
+        <Stack.Screen name="CheckOut" component={CheckOut} options={{ title: " " }} />
         <Stack.Screen name="EmployeesManagement" component={EmployeesManagement} options={{ title: " " }} />
         <Stack.Screen name="UpdateDetails" component={UpdateDetails} options={{ title: " " }} />
 

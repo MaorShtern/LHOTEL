@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
-
 import { TextInput } from "react-native-paper";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-  Animated,
-  ScrollView,
-  StatusBar,
-  Switch,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, Switch, } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { images } from "../../images";
 import { Checkbox } from "react-native-paper";
 import moment from "moment";
 export default function ManualCheckIn({ route, navigation }) {
-  let { id } = route.params;
+
+
+  // let { id } = route.params;
   const [text, setText] = useState("");
   const [totalSum, SetTotalSum] = useState(0);
   const [name, setName] = useState("");
@@ -351,15 +339,15 @@ export default function ManualCheckIn({ route, navigation }) {
         />
         <View>
           {CheackDates(entryDate) ||
-          CheackDates(exitDate) ||
-          number_Of_Nights === 0 ? (
+            CheackDates(exitDate) ||
+            number_Of_Nights === 0 ? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>
           ) : null}
         </View>
         <View>
           {CheackDates(entryDate) ||
-          CheackDates(exitDate) ||
-          number_Of_Nights === 0 ? null : (
+            CheackDates(exitDate) ||
+            number_Of_Nights === 0 ? null : (
             <Text> Number of nights: {number_Of_Nights} </Text>
           )}
         </View>
@@ -466,13 +454,13 @@ export default function ManualCheckIn({ route, navigation }) {
           />
           <TextInput
             style={styles.input}
-            placeholder={"Card's Date " || cardDate }
+            placeholder={"Card's Date " || cardDate}
             autoCapitalize="none"
             keyboardType="numeric"
 
             onChangeText={(text) => {
               fixCardDate(text);
-            }}/>
+            }} />
           <View>
             {!CheackDate() ? (
               <Text style={styles.alerts}>*The card DATE is incorrect*</Text>
@@ -518,7 +506,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 20,
     marginVertical: 20,
-    paddingTop: 80,
+    paddingTop: 10,
   },
   sectionTitle: {
     fontSize: 24,
@@ -661,18 +649,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 10,
   },
-  footerStyle:{
-  
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      paddingTop: 15,
+  footerStyle: {
+
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: 15,
   },
-  footerButton:{
+  footerButton: {
     backgroundColor: 'rgb(132, 160, 191)',
     padding: 10,
-    paddingHorizontal:40,
-    paddingVertical:10,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
     borderRadius: 10,
-    
+
   }
 });
