@@ -52,6 +52,7 @@
     <Compile Include="Products.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomReservation.cs" />
+    <Compile Include="RoomReservationUser.cs" />
     <Compile Include="Rooms.cs" />
     <Compile Include="Shift.cs" />
     <Compile Include="SQLConnection.cs" />

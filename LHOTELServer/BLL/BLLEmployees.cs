@@ -27,9 +27,9 @@ namespace BLL
             return DALEmployees.AddNewEmployee(newEmployee);
         }
 
-        public static Employees GetEmployeeByIdAndRole(int id, string role)
+        public static Employees GetEmployeeById(int id)
         {
-            return DALEmployees.GetEmployeeByIdAndRole(id, role);
+            return DALEmployees.GetEmployeeById(id);
         }
         public static bool AlterEmployeeById(Employees employee)
         {

@@ -23,15 +23,16 @@ namespace DAL
                 {
                     tasks.Add(new Task()
                     {
+                        Task_Code = (int)reader["Task_Code"],
                         Employee_ID = (int)reader["Employee_ID"],
-                        Task_Number = (int)reader["Task_Number"],
                         Task_Name = (string)reader["Task_Name"],
+                        Room_Number = (int)reader["Room_Number"],
                         Start_Date = (DateTime)reader["Start_Date"],
                         Start_Time = (string)reader["Start_Time"],
-                        End_Date = (DateTime)reader["End_Date"],
+                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        ? (string)reader["End_Time"] : null,
                         Task_Status = (string)reader["Task_Status"],
                         Description = (string)reader["Description"]
-
                     });
                 }
                 return tasks;
@@ -43,11 +44,11 @@ namespace DAL
             }
         }
 
-        public static Task GetTaskById(int id)
+        public static List<Task> GetTaskById(int id)
         {
             try
             {
-                string str = $@"exec GetTaskById {id}";
+                string str = $@"exec GetTask_ById {id}";
                 str = str.Replace("\r\n", string.Empty);
                 SqlDataReader reader = SQLConnection.ExcNQReturnReder(str);
                 if (reader == null && !reader.HasRows)
@@ -55,21 +56,26 @@ namespace DAL
                     Console.WriteLine("There is no such employee in the system");
                     return null;
                 }
-                Task task = null;
+                List<Task> tasks = new List<Task>();
                 while (reader.Read())
                 {
-                    task = new Task() {
+                    tasks.Add(new Task()
+                    {
+                        Task_Code = (int)reader["Task_Code"],
                         Employee_ID = (int)reader["Employee_ID"],
-                        Task_Number = (int)reader["Task_Number"],
                         Task_Name = (string)reader["Task_Name"],
+                        Room_Number = (int)reader["Room_Number"],
                         Start_Date = (DateTime)reader["Start_Date"],
                         Start_Time = (string)reader["Start_Time"],
-                        End_Date = (DateTime)reader["End_Date"],
+
+                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        ? (string)reader["End_Time"] : null,
+
                         Task_Status = (string)reader["Task_Status"],
                         Description = (string)reader["Description"]
-                    };
+                    });
                 }
-                return task;
+                return tasks;
 
             }
             catch (Exception e)
@@ -78,6 +84,49 @@ namespace DAL
                 return null;
             }
         }
+
+        public static List<Task> GetTaskByCode(int code)
+        {
+            try
+            {
+                string str = $@"exec GetTask_ByCode {code}";
+                str = str.Replace("\r\n", string.Empty);
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder(str);
+                if (reader == null && !reader.HasRows)
+                {
+                    Console.WriteLine("There is no such employee in the system");
+                    return null;
+                }
+                List<Task> tasks = new List<Task>();
+                while (reader.Read())
+                {
+                    tasks.Add(new Task()
+                    {
+                        Task_Code = (int)reader["Task_Code"],
+                        Employee_ID = (int)reader["Employee_ID"],
+                        Task_Name = (string)reader["Task_Name"],
+                        Room_Number = (int)reader["Room_Number"],
+                        Start_Date = (DateTime)reader["Start_Date"],
+                        Start_Time = (string)reader["Start_Time"],
+
+                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        ? (string)reader["End_Time"] : null,
+
+                        Task_Status = (string)reader["Task_Status"],
+                        Description = (string)reader["Description"]
+                    });
+                }
+                return tasks;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+
 
         public static bool AddNewTask(Task task)
         {
@@ -97,29 +146,29 @@ namespace DAL
             }
         }
 
-        //        public static bool AlterTask(Task task)
+        //public static bool AlterTask(Task task)
+        //{
+        //    try
+        //    {
+        //        Task findTask = GetTaskById(task.Task_Code, task.Room_Number, task.startDate);
+        //        if (findTask == null)
         //        {
-        //            try
-        //            {
-        //                Task findTask = GetTaskById(task.id, task.number, task.startDate);
-        //                if (findTask == null)
-        //                {
-        //                    return false;
-        //                }
-        //                string str = $@"exec AlterTask {task.id},{task.number},'{task.startDate}','{task.startTime}','{task.endDate}'
-        //,'{task.taskStatus}','{task.description}'";
-        //                str = str.Replace("\r\n", string.Empty);
-        //                int result = SQLConnection.ExeNonQuery(str);
-        //                if (result == 1)
-        //                    return true;
-        //                return false;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                Console.WriteLine(e.Message);
-        //                return false;
-        //            }
+        //            return false;
         //        }
+        //        string str = $@"exec AlterTask {task.id},{task.number},'{task.startDate}','{task.startTime}','{task.endDate}'
+        //,'{task.taskStatus}','{task.description}'";
+        //        str = str.Replace("\r\n", string.Empty);
+        //        int result = SQLConnection.ExeNonQuery(str);
+        //        if (result == 1)
+        //            return true;
+        //        return false;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //}
         //        public static bool DeleteTask(int id, int taskNum, DateTime date)
         //        {
         //            try

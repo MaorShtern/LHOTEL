@@ -15,9 +15,14 @@ namespace BLL
             return DALTasks.GetAllTasks();
         }
 
-        public static Task GetTaskById(int id)
+        public static List<Task> GetTaskById(int id)
         {
             return DALTasks.GetTaskById(id);
+        }
+
+        public static List<Task> GetTaskByCode(int code)
+        {
+            return DALTasks.GetTaskByCode(code);
         }
 
         public static bool AddNewTask(Task task)

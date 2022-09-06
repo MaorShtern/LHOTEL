@@ -20,7 +20,7 @@ namespace LHOTELServer.Controllers
     public class CustomersController : ApiController
     {
 
-        [System.Web.Http.HttpPost]
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
         public IHttpActionResult GetCustomerByMailAndPassword([FromBody] JObject data)
         {
@@ -35,6 +35,22 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
 
+        }
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/GetCustomerByIDAndMail")]
+        public IHttpActionResult GetCustomerByIDAndMail([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["customerID"].ToObject<int>();
+                string mail = data["mail"].ToObject<string>();
+                return Ok(BLLCustomers.GetCustomerByIDAndMail(id, mail));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 
@@ -53,19 +69,7 @@ namespace LHOTELServer.Controllers
         }
 
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetCustomerByIDAndMail")]
-        public IHttpActionResult GetCustomerByIDAndMail(int id, string mail)
-        {
-            try
-            {
-                return Ok(BLLCustomers.GetCustomerByIDAndMail(id , mail));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message); 
-            }
-        }
+        
 
 
         [System.Web.Http.HttpPut]

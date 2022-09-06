@@ -36,7 +36,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/SaveRoomReservation")]
-        public IHttpActionResult SaveRoomReservation(RoomReservation roomReservation)
+        public IHttpActionResult SaveRoomReservation([FromBody] RoomReservation roomReservation)
         {
             try
             {
@@ -48,14 +48,43 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpPut]
-        [System.Web.Http.Route("~/CheckIn")]
-        public IHttpActionResult CheckIn([FromBody] JObject roomReservation)
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/CheckIn_With_Existing_User")]
+        public IHttpActionResult CheckIn_With_Existing_User([FromBody] RoomReservation roomReservation)
         {
             try
             {
-                string id = roomReservation["mail"].ToObject<string>();
-                string entryDate = roomReservation["Entry_Date"].ToObject<string>();
+                return Ok(BLLRooms.CheckIn_With_Existing_User(roomReservation));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/CheckIn_Without_Existing_User")]
+        public IHttpActionResult CheckIn_Without_Existing_User([FromBody] RoomReservationUser roomReservationUser)
+        {
+            try
+            {
+                return Ok(BLLRooms.CheckIn_Without_Existing_User(roomReservationUser));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/CheckIn")]
+        public IHttpActionResult CheckIn([FromBody] JObject data)
+        {
+            try
+            {
+                string id = data["mail"].ToObject<string>();
+                string entryDate = data["Entry_Date"].ToObject<string>();
                 return Ok(BLLRooms.CheckIn(id, entryDate));
             }
             catch (Exception e)
@@ -63,26 +92,18 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
-        //public IHttpActionResult CheckIn(RoomReservation roomReservation)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLRooms.CheckIn(roomReservation));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+ 
 
 
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/CheckOut")]
-        public IHttpActionResult CheckOut(RoomReservation roomReservation)
+        public IHttpActionResult CheckOut([FromBody] JObject data)
         {
             try
             {
-                return Ok(BLLRooms.CheckOut(roomReservation));
+                string id = data["id"].ToObject<string>();
+                string exitDate = data["Exit_Date"].ToObject<string>();
+                return Ok(BLLRooms.CheckOut(id , exitDate));
             }
             catch (Exception e)
             {
@@ -90,18 +111,8 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpPut]
-        [System.Web.Http.Route("~/CheckIn_At_The_Counter")]
-        public IHttpActionResult CheckIn_At_The_Counter(RoomReservation roomReservation)
-        {
-            try
-            {
-                return Ok(BLLRooms.CheckIn_At_The_Counter(roomReservation));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+
+
+       
     }
 }
