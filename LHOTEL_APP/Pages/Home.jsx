@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
 import WorkerMenu from './Workers/WorkerMenu';
-
+import { LinearGradient } from "expo-linear-gradient";
 const Users = [
   {
     Employee_ID: -1, Employee_Code: null, Employee_Name: "", Phone_Number: null, Birth_Date: null,
@@ -126,12 +126,85 @@ export default function Home({ navigation }) {
               obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam</Text>
 
             <View style={styles.ButtonContainer}>
-              <TouchableOpacity onPress={() => { navigation.navigate('Drawer'), doAnimation(closeState, 1, 500) }}>
+            <TouchableOpacity
+           onPress={() => { navigation.navigate('Drawer'), doAnimation(closeState, 1, 500) }}
+            style={{
+              // width: "80%",
+              height: 60,
+              marginHorizontal: 10,
+              marginVertical: 20,
+              alignSelf: "center",
+            }}
+          >
+            <LinearGradient
+              style={[
+                {
+                  // flex: 1,
+                  shadowColor: 'grey',
+                  color: 'white',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 5,
+                  elevation: 5,
+                  // backgroundColor: 'orange',
+                  width: 150,
+                  padding: 20,
+                  textAlign: "center",
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 50,
+                },
+              ]}
+              colors={["#926F34", "#DFBD69"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <Text style={{fontSize:18,fontWeight:'bold'}}>Customer</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+              {/* <TouchableOpacity onPress={() => { navigation.navigate('Drawer'), doAnimation(closeState, 1, 500) }}>
                 <Text style={styles.button}>Customer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { doAnimation(closeState, 8, 500), setInfo(true) }}>
+              </TouchableOpacity> */}
+               <TouchableOpacity
+          onPress={() => { doAnimation(closeState, 8, 500), setInfo(true) }}
+            style={{
+              // width: "80%",
+              height: 60,
+              marginHorizontal: 10,
+              marginVertical: 20,
+              alignSelf: "center",
+            }}
+          >
+            <LinearGradient
+              style={[
+                {
+                  shadowColor: 'grey',
+                  color: 'white',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 5,
+                  elevation: 5,
+                  // backgroundColor: 'orange',
+                  width: 150,
+                  padding: 20,
+                  textAlign: "center",
+                  borderRadius: 30,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 50,
+                },
+              ]}
+              colors={["#926F34", "#DFBD69"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+                <Text style ={{fontSize:18,fontWeight:'bold'}}>Worker</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+              {/* <TouchableOpacity onPress={() => { doAnimation(closeState, 8, 500), setInfo(true) }}>
                 <Text style={styles.button}>Worker</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>)}
       </Animated.View>
@@ -202,9 +275,9 @@ const styles = StyleSheet.create({
   ButtonContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20
+    alignItems: 'flex-start',
+    justifyContent: 'space-around',
+    
   },
   orangeButtonStyle: {
     backgroundColor: 'orange',
@@ -225,7 +298,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
-    backgroundColor: 'orange',
+    // backgroundColor: 'orange',
     width: 150,
     padding: 20,
     textAlign: "center",

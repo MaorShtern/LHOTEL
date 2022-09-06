@@ -133,7 +133,7 @@ export default function ShortCheckIn({ route, navigation }) {
       {/* Header */}
       <View style={{ flex: 2 }}>
         <Image
-          source={images.hotelloby}
+          source={images.hotelback}
           resizeMode="cover"
           style={{
             width: "100%",

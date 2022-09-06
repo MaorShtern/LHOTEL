@@ -15,7 +15,7 @@ import {
   Switch,
   ImageBackground,
 } from "react-native";
-import CheckInForm from "./CheckInForm";
+
 import { LinearGradient } from "expo-linear-gradient";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { images } from "../../images";
@@ -29,7 +29,7 @@ export default function CheckIn({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={images.hotelloby}
+        source={images.hotelback}
         resizeMode="cover"
         style={{
           flex: 2,

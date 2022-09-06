@@ -87,7 +87,7 @@ const ReservationCheck = ()=> {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={images.hotelloby}
+        source={images.hotelback}
         resizeMode="cover"
         style={{
           flex: 2,
@@ -134,10 +134,10 @@ const ReservationCheck = ()=> {
                   flex: 1,
                   alignItems: "center",
                   justifyContent: "center",
-                  borderRadius: 25,
+                  borderRadius: 10,
                 },
               ]}
-              colors={["#f1a101", "#c0592b"]}
+              colors={["#926F34", "#DFBD69"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
@@ -146,6 +146,7 @@ const ReservationCheck = ()=> {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
+          
         </View>
       </View>
     </View>

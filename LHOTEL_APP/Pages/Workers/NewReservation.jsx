@@ -391,7 +391,7 @@ export default function NewReservation({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={images.hotelloby}
+        source={images.hotelback}
         resizeMode="cover"
         style={{
           flex: 2,

@@ -17,7 +17,6 @@ import EmployeesManagement from '../Workers/EmployeesManagement';
 import UpdateDetails from '../Workers/UpdateDetails';
 import ExistingReservation from '../Workers/ExistingReservartion';
 
-import CheckInForm from '../Workers/CheckInForm';
 import ShortCheckIn from '../Workers/ShortCheckIn';
 import NewReservation from '../Workers/NewReservation';
 const Stack = createNativeStackNavigator();
@@ -42,7 +41,6 @@ export default function Router() {
         <Stack.Screen name="EmployeesManagement" component={EmployeesManagement} options={{ title: " " }} />
         <Stack.Screen name="UpdateDetails" component={UpdateDetails} options={{ title: " " }} />
         <Stack.Screen name="NewReservation" component={NewReservation} options={{ headerShown: false }}/>
-        <Stack.Screen name="CheckInForm" component={CheckInForm} options={{ headerShown: false }}/>
         <Stack.Screen name="ShortCheckIn" component={ShortCheckIn} options={{ headerShown: false }}/>
         <Stack.Screen name="ExistingReservation" component={ExistingReservation} options={{ headerShown: false }}/>
       </Stack.Navigator>
