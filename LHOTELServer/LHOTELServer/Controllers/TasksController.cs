@@ -79,31 +79,34 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        //[System.Web.Http.HttpPut]
-        //public IHttpActionResult Put([FromBody] Task task)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLTasks.AlterTask(task));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/AlterTask")]
+        public IHttpActionResult AlterTask([FromBody] Task task)
+        {
+            try
+            {
+                return Ok(BLLTasks.AlterTask(task));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-        //[System.Web.Http.HttpDelete]
-        //public IHttpActionResult Delete([FromBody] int id, [FromBody] int taskNum, [FromBody] DateTime date)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLTasks.DeleteTask(id,taskNum,date));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("~/DeleteTask")]
+        public IHttpActionResult DeleteTask([FromBody] JObject data)
+        {
+            try
+            {
+                int code = data["task_code"].ToObject<int>();
+                return Ok(BLLTasks.DeleteTask(code));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
 
     }
