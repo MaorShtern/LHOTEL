@@ -29,13 +29,13 @@ namespace BLL
         {
             return DALTasks.AddNewTask(task);
         }
-        //public static bool AlterTask(Task task)
-        //{
-        //    return DALTasks.AlterTask(task);
-        //}
-        //public static bool DeleteTask(int id, int taskNum, DateTime date)
-        //{
-        //    return DALTasks.DeleteTask(id, taskNum, date);
-        //}
+        public static bool AlterTask(Task task)
+        {
+            return DALTasks.AlterTask(task);
+        }
+        public static bool DeleteTask(int code)
+        {
+            return DALTasks.DeleteTask(code);
+        }
     }
 }
