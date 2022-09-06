@@ -13,7 +13,7 @@ import { Checkbox } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
-
+import { Searchbar } from "react-native-paper";
 const Occupiedreservations = [
   // { Room_Number: 2, Bill_Number:2,	Customer_ID:222,	Bill_Date:'2021-01-01'	,Entry_Date:'2021-01-01',
   // Exit_Date:'2021-01-03',	Amount_Of_People:1,	Room_Status:'Occupied'},
@@ -116,43 +116,57 @@ const Occupiedreservations = [
 ];
 
 const numColumns = 2;
-const WIDTH = Dimensions.get("window").width;
+
 
 export default function CheckOut() {
+  
+  const [reservationItems, setReservationItems] = useState(Occupiedreservations);
+  const [search, setSearch] = useState("");
+ 
+
+  const SerchReservation = (value) => {
+    console.log(value);
+    setSearch(value);
+    let occupiedReservation = Occupiedreservations.filter(
+      (reservation) => reservation.Customer_ID == value
+    );
+
+    if (occupiedReservation.length > 0) {
+      setReservationItems(occupiedReservation);
+    } else {
+      setReservationItems(Occupiedreservations);
+    }
+  };
+
   const CheckOutCard = ({ item, index }) => {
     return (
-      
       <View style={styles.container}>
-         <View style={styles.Details}>
-           <Text style ={{fontSize:16}}>{moment(new Date(item.Bill_Date)).format("DD.MM.YYYY")}</Text>
-          <Text style ={{fontSize:16}} >No : {item.Bill_Number}</Text>
-
-         
-      </View>
+        <View style={styles.Details}>
+          <Text style={{ fontSize: 16 }}>
+            {moment(new Date(item.Bill_Date)).format("DD.MM.YYYY")}
+          </Text>
+          <Text style={{ fontSize: 16 }}>No : {item.Bill_Number}</Text>
+        </View>
         <View style={styles.containerTaskDedtails}>
-      
-            <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18}}>ID : {item.Customer_ID}</Text>
-      
-       
-          
-            {/* <Text>{moment(item.Exit_Date).diff(moment(item.Entry_Date), "days")}
-          {" "}nights</Text> */}
-          <Text style={{paddingRight:55,paddingBottom:5,fontSize:18}}>
-           
-              {" " +
-                item.Entry_Date.split("-")[2] +
-                "-" +
-                moment(new Date(item.Exit_Date)).format("DD.MM.YYYY")}
-            </Text>
-   
-            <Icon name="person"  size={18} style={{padding:4}}> {item.Amount_Of_People}</Icon>
-         
+          <Text
+            style={{ paddingHorizontal: 5, paddingVertical: 5, fontSize: 18 }}
+          >
+            ID : {item.Customer_ID}
+          </Text>
+
+          <Text style={{ paddingRight: 55, paddingBottom: 5, fontSize: 18 }}>
+            {" " +
+              item.Entry_Date.split("-")[2] +
+              "-" +
+              moment(new Date(item.Exit_Date)).format("DD.MM.YYYY")}
+          </Text>
+
+          <Icon name="person" size={18} style={{ padding: 4 }}>
+            {" "}
+            {item.Amount_Of_People}
+          </Icon>
 
           <View style={styles.BTNContainer}>
-            {/* <TouchableOpacity>
-              <Image style={styles.BTNImages} source={images.edit} />
-            </TouchableOpacity> */}
-
             <TouchableOpacity>
               <Image style={styles.BTNImages} source={images.exit_shift} />
             </TouchableOpacity>
@@ -164,9 +178,17 @@ export default function CheckOut() {
 
   return (
     <View style={styles.container}>
-      {/* <StatusBar barStyle="light-content" backgroundColor="#000"/> */}
+      <View style={styles.SearchbarContainer}>
+        <Text style={styles.HeadLine}>CHECK OUT</Text>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={SerchReservation}
+          value={search}
+        />
+      </View>
+
       <FlatList
-        data={Occupiedreservations}
+        data={reservationItems}
         renderItem={CheckOutCard}
         keyExtarctor={(item, index) => index.toString()}
         numColumns={numColumns}
@@ -176,17 +198,12 @@ export default function CheckOut() {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   paddingTop: 50,
-  // },
-
   item: {
     backgroundColor: "rgba(35,100,168, 0.2)",
     alignItems: "center",
     justifyContent: "center",
 
-    height:numColumns,
+    height: numColumns,
     flex: 1,
     margin: 10,
   },
@@ -244,10 +261,9 @@ const styles = StyleSheet.create({
     // backgroundColor: "green",
     borderBottomColor: "black",
     borderRadius: 5,
-    marginTop:20,
-  flex:1
-  ,
-  margin:2
+    paddingTop: 20,
+    flex: 1,
+    margin: 2,
   },
   containerTaskDedtails: {
     borderColor: "black",
@@ -278,8 +294,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
-    height: WIDTH / numColumns,
+    height:  numColumns,
     flex: 1,
     margin: 10,
+  },
+  SearchbarContainer: {
+    paddingHorizontal: 3,
+    paddingTop: 10,
+    paddingBottom: 20,
+  },
+  HeadLine: {
+    fontSize: 30,
+    fontWeight: "bold",
+    paddingTop: 40,
+    paddingBottom: 40,
+    alignItems: "center",
+    textAlign: "center",
+    justifyContent: "center",
   },
 });

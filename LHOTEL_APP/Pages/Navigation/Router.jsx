@@ -11,11 +11,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EditTasks from '../Workers/EditTasks';
 import Shift from '../Workers/Shift';
 import AddCharge from '../Workers/AddCharge'
-import ManualCheckIn from '../Workers/ManualCheckIn';
+import CheckIn from '../Workers/CheckIn';
 import CheckOut from '../Workers/CheckOut';
 import EmployeesManagement from '../Workers/EmployeesManagement';
 import UpdateDetails from '../Workers/UpdateDetails';
+import ExistingReservation from '../Workers/ExistingReservartion';
 
+import CheckInForm from '../Workers/CheckInForm';
+import ShortCheckIn from '../Workers/ShortCheckIn';
+import NewReservation from '../Workers/NewReservation';
 const Stack = createNativeStackNavigator();
 
 
@@ -33,11 +37,14 @@ export default function Router() {
         <Stack.Screen name="EditTasks" component={EditTasks} options={{ headerShown: false }} />
         <Stack.Screen name="Shift" component={Shift} options={{ headerShown: false }} />
         <Stack.Screen name="AddCharge" component={AddCharge} options={{ title: " " }} />
-        <Stack.Screen name="ManualCheckIn" component={ManualCheckIn} options={{ title: " " }} />
-        <Stack.Screen name="CheckOut" component={CheckOut} options={{ title: " " }} />
+        <Stack.Screen name="CheckIn" component={CheckIn}  options={{ headerShown: false }} />
+        <Stack.Screen name="CheckOut" component={CheckOut}  options={{ headerShown: false }}  />
         <Stack.Screen name="EmployeesManagement" component={EmployeesManagement} options={{ title: " " }} />
         <Stack.Screen name="UpdateDetails" component={UpdateDetails} options={{ title: " " }} />
-
+        <Stack.Screen name="NewReservation" component={NewReservation} options={{ headerShown: false }}/>
+        <Stack.Screen name="CheckInForm" component={CheckInForm} options={{ headerShown: false }}/>
+        <Stack.Screen name="ShortCheckIn" component={ShortCheckIn} options={{ headerShown: false }}/>
+        <Stack.Screen name="ExistingReservation" component={ExistingReservation} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
 

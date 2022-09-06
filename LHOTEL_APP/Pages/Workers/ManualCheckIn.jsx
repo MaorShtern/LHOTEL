@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, Switch, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+  Animated,
+  ScrollView,
+  StatusBar,
+  Switch,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { images } from "../../images";
 import { Checkbox } from "react-native-paper";
 import moment from "moment";
 export default function ManualCheckIn({ route, navigation }) {
-
-
   // let { id } = route.params;
+
+  const [isNewReservation, setIsNewReservation] = useState(false);
+
+
+
+
   const [text, setText] = useState("");
   const [totalSum, SetTotalSum] = useState(0);
   const [name, setName] = useState("");
@@ -164,11 +182,9 @@ export default function ManualCheckIn({ route, navigation }) {
       return true;
     } else return false;
   };
-  // !CheackDate() 
+  // !CheackDate()
   const isValidCardDetails = () => {
-    return cardNum.length !== 16 || cardCVC.length !== 3
-      ? false
-      : true;
+    return cardNum.length !== 16 || cardCVC.length !== 3 ? false : true;
   };
 
   // const readData = async () => {
@@ -302,17 +318,108 @@ export default function ManualCheckIn({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Check In </Text>
-
       <ScrollView>
-        <TouchableOpacity style={styles.input} onPress={showDatePickerEntry}>
+        <Text style={ isNewReservation ? styles.sectionTitle : styles.sectionTitleV1}>Check In </Text>
+        <TouchableOpacity  onPress={() =>setIsNewReservation(true)}
+          style={{
+            width: "80%",
+            height: 60,
+            marginHorizontal: 10,
+            marginVertical: 20,
+            alignSelf: "center",
+          }}
+        >
+          <LinearGradient
+            style={[
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 10,
+              },
+            ]}
+            colors={["#5884ff", "#d3dfff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Text style={{ color: "#000", fontSize:20,fontWeight:'bold'  }}>New reservation</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            width: "80%",
+            height: 60,
+            marginHorizontal: 10,
+            marginVertical: 20,
+            alignSelf: "center",
+          }}
+        >
+          <LinearGradient
+            style={[
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 10,
+              },
+            ]}
+            colors={["#5884ff", "#d3dfff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            
+          >
+            <Text style={{ color: "#000" , fontSize:20,fontWeight:'bold' }}>Existing reservation</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        {/* 
+        <LinearGradient
+          style={[{ height: 70, width: "100%", borderRadius: 15 }]}
+          colors={["#edf0fc", "#d6dfff"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        >
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                flex: 1,
+                marginHorizontal: 10,
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ fontSize: 30 }}>$1000</Text>
+            </View>
+
+            <TouchableOpacity
+              style={{ width: 130, height: "80%", marginHorizontal: 10 }}
+            
+            >
+              <LinearGradient
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 10,
+                  },
+                ]}
+                colors={["#46aeff", "#5884ff"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+              >
+                <Text style={{ color: "#fff" }} >CHECK IN NOW</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+
+
+
+ */}
+
+        {/* <TouchableOpacity style={styles.input} onPress={showDatePickerEntry}>
           <View style={styles.ButtonContainer}>
             <Text style={styles.text}>{"Entry date: " + entry}</Text>
-            {/* <Text style={styles.text}>
-                    {selectedDate === ""
-                      ? "select date"
-                      : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
-                  </Text> */}
+
             <Image style={styles.icon} source={images.calendar} />
           </View>
         </TouchableOpacity>
@@ -339,15 +446,15 @@ export default function ManualCheckIn({ route, navigation }) {
         />
         <View>
           {CheackDates(entryDate) ||
-            CheackDates(exitDate) ||
-            number_Of_Nights === 0 ? (
+          CheackDates(exitDate) ||
+          number_Of_Nights === 0 ? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>
           ) : null}
         </View>
         <View>
           {CheackDates(entryDate) ||
-            CheackDates(exitDate) ||
-            number_Of_Nights === 0 ? null : (
+          CheackDates(exitDate) ||
+          number_Of_Nights === 0 ? null : (
             <Text> Number of nights: {number_Of_Nights} </Text>
           )}
         </View>
@@ -457,10 +564,10 @@ export default function ManualCheckIn({ route, navigation }) {
             placeholder={"Card's Date " || cardDate}
             autoCapitalize="none"
             keyboardType="numeric"
-
             onChangeText={(text) => {
               fixCardDate(text);
-            }} />
+            }}
+          />
           <View>
             {!CheackDate() ? (
               <Text style={styles.alerts}>*The card DATE is incorrect*</Text>
@@ -485,7 +592,7 @@ export default function ManualCheckIn({ route, navigation }) {
               <Text>SUBMIT</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
@@ -513,6 +620,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 35,
     alignSelf: "flex-end",
+  },
+  sectionTitleV1: {
+   paddingTop:30,
+   paddingBottom:40,
+    alignItems: "center",
+    textAlign: "center",
+    justifyContent: "center",
+    fontSize: 30,
+    fontWeight: "bold",
+  
+   
   },
   HeadLine: {
     fontSize: 30,
@@ -650,17 +768,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   footerStyle: {
-
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingTop: 15,
   },
   footerButton: {
-    backgroundColor: 'rgb(132, 160, 191)',
+    backgroundColor: "rgb(132, 160, 191)",
     padding: 10,
     paddingHorizontal: 40,
     paddingVertical: 10,
     borderRadius: 10,
-
-  }
+  },
 });
