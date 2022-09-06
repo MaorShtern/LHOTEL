@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView ,StatusBar} from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../images'
 
@@ -39,9 +39,6 @@ export default function WorkerMenu({ route, navigation }) {
     switch (id) {
       case 1:
         arrayTempCards = workerCardsArr
-        // arrayTempCards = workerCardsArr.filter((workerCard) =>
-        //   workerCard.code === 999 || workerCard.code === 1 ||
-        //   workerCard.code === 2 || workerCard.code === 3)
         break;
       case 2:
         arrayTempCards = workerCardsArr.filter((workerCard) =>
@@ -96,7 +93,7 @@ export default function WorkerMenu({ route, navigation }) {
   // barStyle="dark-content" backgroundColor="#fff"
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#000"/>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
       <FlatList
         data={currentUserArr}
         renderItem={GetItem}

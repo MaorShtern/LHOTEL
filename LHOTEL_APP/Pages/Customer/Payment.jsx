@@ -91,14 +91,6 @@ export default function Payment({ route, navigation }) {
         SetUser(JSON.parse(user))
         Calculate_Final_Amount()
       }
-      //   let email = JSON.parse(user)
-      //   let arr = JSON.parse(arrUsers)
-      //   let userDetails = arr.filter((per) => per.email === email)
-      //   id = userDetails[0].id
-      //   cheackForUser(id)
-      //   SetUser(userDetails[0])
-      // }
-      // Calculate_Final_Amount()
     } catch (e) {
       alert('Failed to fetch the input from storage');
     }
@@ -204,6 +196,7 @@ export default function Payment({ route, navigation }) {
   }
 
   // console.log(user.customerID);
+
 
 
   return (

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using static BCrypt.Net.BCrypt;
 
 
 namespace DAL
@@ -130,10 +131,12 @@ namespace DAL
             {
                 if (GetCustomerByMailAndPassword(customer.Mail , customer.Password) == null)
                 {
+
+
                     string str = $@"exec AddNewCustomer {customer.CustomerID},
 {customer.CustomerType},'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
-'{customer.Password}','{customer.PhoneNumber}','{customer.CardHolderName}',
-'{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
+'{HashPassword(customer.Password)}','{customer.PhoneNumber}','{customer.CardHolderName}',
+'{customer.CreditCardDate}',{customer.ThreeDigit},'{HashPassword(customer.Credit_Card_Number)}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected == 1)

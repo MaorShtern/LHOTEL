@@ -4,8 +4,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from 'react-native-paper';
 import moment from 'moment';
 
-
-
 export default function Booking({ navigation }) {
 
 
@@ -86,11 +84,10 @@ export default function Booking({ navigation }) {
 
   }
 
- 
+
 
   const ChaeckAll = () => {
-  
-    // navigation.navigate('SaveRoom')
+
     if (CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights ===0) {
       Alert.alert('Error selecting dates')
       return;
@@ -170,7 +167,7 @@ export default function Booking({ navigation }) {
           </View>
 
         </View>
-       
+
         <View style={{ height: 10 }}></View>
 
         <View style={styles.switchContainer}>

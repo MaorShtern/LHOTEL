@@ -562,6 +562,9 @@ go
 
 
 
+
+
+
 create proc AlterCustomerById
 @id int,
 @Customer_Type int,
