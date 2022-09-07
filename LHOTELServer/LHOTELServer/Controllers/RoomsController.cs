@@ -34,6 +34,22 @@ namespace LHOTELServer.Controllers
             }
         }
 
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/FindCustomerRoomByID")]
+        public IHttpActionResult FindCustomerRoomByID([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLRooms.FindCustomerRoomByID(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/SaveRoomReservation")]
         public IHttpActionResult SaveRoomReservation([FromBody] RoomReservation roomReservation)

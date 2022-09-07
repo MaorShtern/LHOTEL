@@ -42,6 +42,32 @@ namespace DAL
             }
         }
 
+        public static List<int> FindCustomerRoomByID(int id)
+        {
+            try
+            {
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec FindCustomerRoomByID {id}");
+                if (reader == null && !reader.HasRows)
+                {
+                    return null;
+                }
+                List<int> rooms = new List<int>();
+                while (reader.Read())
+                {
+                    rooms.Add((int)reader["Room_Number"]);
+                }
+                return rooms;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
         public static bool SaveRoomReservation(RoomReservation roomReservation)
         {
             try
@@ -87,27 +113,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-        //public static bool CheckIn(RoomReservation roomReservation)
-        //{
-        //    try
-        //    {
-        //        string str = $@"exec CheckIn {roomReservation.Id},
-        //        '{roomReservation.Entry_Date.ToString("yyyy - MM - dd")}'";
-        //        str = str.Replace("\r\n", string.Empty);
-        //        int result = SQLConnection.ExeNonQuery(str);
-        //        if (result >= 1)
-        //            return true;
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //    finally
-        //    {
-        //        SQLConnection.CloseDB();
-        //    }
-        //}
+      
         public static bool CheckOut(string id, string exitDate)
         {
             try

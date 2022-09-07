@@ -5,46 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using static BCrypt.Net.BCrypt;
+//using static BCrypt.Net.BCrypt;
 
 
 namespace DAL
 {
     public class DALCustomers
     {
-        //public static List<Customers> GetAllCustomers()
-        //{
-        //    try
-        //    {
-        //        SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"GetAllCustomers");
-        //        if (reader == null && !reader.HasRows)
-        //        {
-        //            return null;
-        //        }
-        //        List<Customers> customers = new List<Customers>();
-        //        while (reader.Read())
-        //        {
-        //            customers.Add(new Customers(
-        //                (int)reader["Customer_ID"],
-        //                (int)reader["Customer_Type"],
-        //                (string)reader["First_Name"],
-        //                (string)reader["Last_Name"],
-        //                (string)reader["Mail"],
-        //                (string)reader["Password"],
-        //                (string)reader["Phone_Number"],
-        //                (string)reader["Card_Holder_Name"],
-        //                (string)reader["Credit_Card_Date"],
-        //                (int)reader["Three_Digit"]
-        //                ));
-        //        }
-        //        return customers;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //        return null;
-        //    }
-        //}
 
         public static Customers GetCustomerById(int id)
         {
@@ -135,8 +102,8 @@ namespace DAL
 
                     string str = $@"exec AddNewCustomer {customer.CustomerID},
 {customer.CustomerType},'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
-'{HashPassword(customer.Password)}','{customer.PhoneNumber}','{customer.CardHolderName}',
-'{customer.CreditCardDate}',{customer.ThreeDigit},'{HashPassword(customer.Credit_Card_Number)}'";
+'{customer.Password}','{customer.PhoneNumber}','{customer.CardHolderName}',
+'{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected == 1)

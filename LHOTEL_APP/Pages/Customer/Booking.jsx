@@ -19,6 +19,10 @@ export default function Booking({ navigation }) {
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
   const [breakfast, setreakfast] = useState(false);
 
+  const [amount_Of_People, SetAmount_Of_People] = useState(0)
+
+
+
   const showDatePickerEntry = () => {
     setFlagEntry(true);
   };
@@ -42,8 +46,8 @@ export default function Booking({ navigation }) {
     hideDatePickerExit()
   };
 
-  const entry = moment(entryDate).format('DD/MM/YYYY')
-  const exit = moment(exitDate).format('DD/MM/YYYY')
+  const entry = moment(entryDate).format('YYYY-MM-DD')
+  const exit = moment(exitDate).format('YYYY-MM-DD')
 
 
   useEffect(() => {
@@ -88,7 +92,7 @@ export default function Booking({ navigation }) {
 
   const ChaeckAll = () => {
 
-    if (CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights ===0) {
+    if (CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights === 0) {
       Alert.alert('Error selecting dates')
       return;
 
@@ -99,9 +103,10 @@ export default function Booking({ navigation }) {
         'Double room': doubleFlag,
         'Suite': suiteFlag
       }
+
       navigation.navigate('SaveRoom', {
         rooms_flags: rooms_flags, number_Of_Nights: number_Of_Nights, breakfast: breakfast,
-        entryDate: entry, exitDate: exit
+        entryDate: entry, exitDate: exit,amount_Of_People:amount_Of_People
       })
     }
     else
@@ -144,6 +149,10 @@ export default function Booking({ navigation }) {
           {CheackDates(entryDate) || CheackDates(exitDate) || number_Of_Nights === 0 ? null : <Text > Number of nights: {number_Of_Nights} </Text>}
         </View>
         <View style={{ height: 10 }}></View>
+        <View>
+        <TextInput keyboardType='numeric' placeholder="Card's Number" style={styles.TextInput} onChangeText={(number) => SetAmount_Of_People(number)}>{amount_Of_People}</TextInput>
+          <View style={{ height: 10 }}></View>
+        </View>
         <View>
           <Text style={styles.Text}>Room Type</Text>
           <View style={styles.RadioCheckbox}>

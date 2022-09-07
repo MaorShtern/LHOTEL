@@ -2,15 +2,15 @@ import { View, ScrollView, Text, StyleSheet, TextInput, TouchableOpacity, Alert 
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Customer from '../Class/Customer'
+import moment from 'moment';
 
 
 
 export default function Payment({ route, navigation }) {
 
-  let { the_data, number_Of_Nights, breakfast, entryDate, exitDate } = route.params
+  let { the_data, number_Of_Nights, breakfast, entryDate, exitDate, amount_Of_People } = route.params
 
   // console.log("the_data: " + JSON.stringify(the_data));
-
 
   const [totalSum, SetTotalSum] = useState(0)
   const [name, setName] = useState('')
@@ -19,7 +19,7 @@ export default function Payment({ route, navigation }) {
   const [cardCVC, SetCardCVC] = useState('')
 
   const [user, SetUser] = useState([])
-  const [userDB, SetUserDB] = useState([])
+  // const [userDB, SetUserDB] = useState([])
 
 
 
@@ -34,8 +34,6 @@ export default function Payment({ route, navigation }) {
 
   const Calculate_Final_Amount = () => {
     let sum = 0
-    // console.log("sum: "+sum);
-    // console.log("the_data: " + the_data);
     for (let i = 0; i < the_data.length; i++) {
       let pricePerNight = the_data[i].pricePerNight;
       let count = the_data[i].count;
@@ -83,9 +81,6 @@ export default function Payment({ route, navigation }) {
   const readData = async () => {
     try {
       const user = await AsyncStorage.getItem('@user');
-      // const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
-      // console.log("user: " + user !== null);
-
       if (user !== null) {
         // console.log("user: " + user);
         SetUser(JSON.parse(user))
@@ -96,63 +91,68 @@ export default function Payment({ route, navigation }) {
     }
   };
 
-  const CustomerToDataBS = async (value) => {
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(value),
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
-    let customerResult = await result.json();
 
-    if (customerResult)
-      navigation.navigate('ConfirmationPage', {
-        id: value.customerID, the_data: the_data,
-        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-        total: totalSum, Name: name, CardNum: cardNum
-      })
-    else
-      alert("CustomerToDataBS")
 
-  }
+  // const CustomerToDataBS = async (value) => {
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     body: JSON.stringify(value),
+  //     headers: { 'Content-Type': 'application/json' }
+  //   };
+  //   let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
+  //   let customerResult = await result.json();
 
-  const cheackForUser = async (value) => {
+  //   if (customerResult)
+  //     navigation.navigate('ConfirmationPage', {
+  //       id: value.customerID, the_data: the_data,
+  //       number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+  //       total: totalSum, Name: name, CardNum: cardNum
+  //     })
+  //   else
+  //     alert("CustomerToDataBS")
 
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
-    let deleteResult = await result.json();
+  // }
 
-    if (deleteResult !== null) {
+  // const cheackForUser = async (value) => {
+  //   console.log(value);
+  //   // const requestOptions = {
+  //   //   method: 'GET',
+  //   //   headers: { 'Content-Type': 'application/json' }
+  //   // };
+  //   // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
+  //   // let deleteResult = await result.json();
 
-      SetUserDB(deleteResult)
-      return
+  //   // if (deleteResult !== null) {
+
+  //   //   SetUserDB(deleteResult)
+  //   //   return
+  //   // }
+  //   // else {
+  //   //   cheackForUser(value)
+  //   // }
+  // }
+
+
+  const SaveRoomReservation = async (value) => {
+    // console.log(JSON.stringify(value));
+    try {
+      const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(value),
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/SaveRoomReservation', requestOptions);
+      let customerResult = await result.json();
+      if (customerResult)
+        // console.log(customerResult);
+        navigation.navigate('ConfirmationPage', {
+          id: value.Id, the_data: the_data,
+          number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+          total: totalSum, Name: name, CardNum: cardNum
+        })
+    } catch (error) {
+      alert(error)
     }
-    else {
-      cheackForUser(value)
-    }
-  }
-
-
-  const AlterCustomer = async (value) => {
-
-    const requestOptions = {
-      method: 'PUT',
-      body: JSON.stringify(value),
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
-    let customerResult = await result.json();
-    if (customerResult)
-      navigation.navigate('ConfirmationPage', {
-        id: value.customerID, the_data: the_data,
-        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-        total: totalSum, Name: name, CardNum: cardNum
-      })
-    else
-      alert("AlterCustomer")
 
   }
 
@@ -160,36 +160,39 @@ export default function Payment({ route, navigation }) {
 
     if (name.length > 1 && isValidCardDetails()) {
       // console.log(user);
-      let newCustomer = {
+      let customer = {
         calssName: Customer,
         fields: {
-          customerID: user.customerID,
+          Id: user.customerID,
           customerType: 1,
           firstName: user.firstName,
           lastName: user.lastName,
           mail: user.mail,
+          password: user.password,
           phoneNumber: user.phoneNumber,
-          cardHolderName: name,
-          creditCardDate: cardDate,
-          threeDigit: cardCVC
+          Card_Holder_Name: name,
+          Card_Date: cardDate,
+          Three_Digit: cardCVC,
+          Credit_Card_Number: cardNum,
+          Employee_ID: -1,
+          Counter_Single: the_data.filter((per) => per.type === "Single room")[0].count,
+          Counter_Double: the_data.filter((per) => per.type === "Double room")[0].count,
+          Counter_Suite: the_data.filter((per) => per.type === "Suite")[0].count,
+          Entry_Date: entryDate,
+          ExitDate: exitDate,
+          Amount_Of_People: amount_Of_People
         }
       }
 
-      // console.log(newCustomer);
-      navigation.navigate('ConfirmationPage', {
-        id: newCustomer.customerID, the_data: the_data,
-        number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-        total: totalSum, Name: name, CardNum: cardNum
-      })
+      // console.log(customer);
+      // navigation.navigate('ConfirmationPage', {
+      //   id: newCustomer.customerID, the_data: the_data,
+      //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
+      //   total: totalSum, Name: name, CardNum: cardNum
+      // })
 
-        if(userDB !== null && userDB.length !== 0)
-        {
-          AlterCustomer(newCustomer.fields)
-        }
-        else{
-          CustomerToDataBS(newCustomer.fields)
-        }
-
+      // if (userDB !== null && userDB.length !== 0) {
+      SaveRoomReservation(customer.fields)
     }
     else
       Alert.alert("The card details are incorrect")

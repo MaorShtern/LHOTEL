@@ -6,7 +6,7 @@ import CardRoom from './CardRoom'
 
 export default function SaveRoom({ route, navigation }) {
 
-  let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate } = route.params 
+  let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate,amount_Of_People } = route.params 
 
 
 
@@ -52,10 +52,10 @@ export default function SaveRoom({ route, navigation }) {
     rooms.map((per) =>
       temp.push(
         {
-          type: per.roomType,
-          count: rooms.filter((room) => room.roomType === per.roomType).length,
-          details: per.details,
-          pricePerNight: per.pricePerNight
+          type: per.RoomType,
+          count: rooms.filter((room) => room.RoomType === per.RoomType).length,
+          details: per.Details,
+          pricePerNight: per.PricePerNight
         }))
 
     //  console.log("temp: " + JSON.stringify(temp));
@@ -109,7 +109,7 @@ export default function SaveRoom({ route, navigation }) {
 
     navigation.navigate('Payment', {
       the_data: the_data, number_Of_Nights: number_Of_Nights,
-      breakfast: breakfast, entryDate: entryDate, exitDate: exitDate
+      breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,amount_Of_People:amount_Of_People
     })
   }
 

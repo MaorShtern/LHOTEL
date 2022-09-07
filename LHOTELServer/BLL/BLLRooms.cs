@@ -17,7 +17,11 @@ namespace BLL
         {
             return DALRooms.SaveRoomReservation(roomReservation);
         }
+        public static List<int> FindCustomerRoomByID(int id)
+        {
+            return DALRooms.FindCustomerRoomByID(id);
 
+        }
         //public static bool CheckIn(RoomReservation roomReservation)
         //{
         //    return DALRooms.CheckIn(roomReservation);

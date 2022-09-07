@@ -124,7 +124,7 @@ create table Rooms
 go
 
 
- 
+
 create table Bill
 (
 	Bill_Number int identity(1,1) NOT NULL,
@@ -140,7 +140,7 @@ create table Bill
 go
 
 
---select * from [dbo].[Employees_Types]
+--select * from [dbo].[Employees]
 
 --6	5	2	2021-01-13	21:00:00.0000000	Credit
 --6	5	2	2021-01-13	21:00:00.0000000	Credit
@@ -179,6 +179,7 @@ create table Customers_Rooms
 	CONSTRAINT [Fk_Bill_Number3] FOREIGN KEY (Bill_Number,Customer_ID,Bill_Date) REFERENCES Bill (Bill_Number,Customer_ID,Bill_Date),
 )
 go
+
 
 
 create table Bill_Details
@@ -536,7 +537,7 @@ create proc AddNewCustomer
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
-@Credit_Card_Number nvarchar(12)
+@Credit_Card_Number nvarchar(16)
 as
 begin tran
 	insert [dbo].[Customers] values (@id ,@Customer_Type,@First_Name,@Last_Name,@Mail,@Password,@Phone_Number
@@ -576,7 +577,7 @@ create proc AlterCustomerById
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
-@Credit_Card_Number nvarchar(12)
+@Credit_Card_Number nvarchar(16)
 as
 begin tran
 	UPDATE [dbo].[Customers]
@@ -601,14 +602,7 @@ commit tran
 go
 
 --exec AlterCustomerById 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569
---exec AlterCustomerById 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781
---exec AlterCustomerById 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569
---exec AlterCustomerById 444,2,'ddd','ddd','ddd@gmail.com','ddd','0526487912','ddd','02/28',212
---exec AlterCustomerById 555,1,'eee','eee','eee@gmail.com','eee','0500123889','eee','02/28',954
---exec AlterCustomerById 666,2,'fff','fff','fff@gmail.com','fff','0531528966','fff','02/28',856
---exec AlterCustomerById 777,2,'ggg','ggg','ggg@gmail.com','ggg','0531528966','ggg','02/28',569
---exec AlterCustomerById 888,3,'hhh','hhh','hhh@gmail.com','hhh','0576488918','hhh','02/28',381
---exec AlterCustomerById 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','','',0,''
+
 
 
 create proc UpdateCustomerCredit
@@ -1533,14 +1527,13 @@ go
  --exec DeleteCustomerRoom 888,'2022-09-08'
 
 
-create proc FindCustomerRoomByKeys
-@Customer_ID int,
-@Room_Number int,
-@Entry_Date date
+
+create proc FindCustomerRoomByID
+@Customer_ID int
 as
 begin tran	
-	select * from [dbo].[Customers_Rooms]
-	where [Customer_ID] = @Customer_ID and [Room_Number] = @Room_Number and [Entry_Date] = @Entry_Date
+	select [Room_Number] from [dbo].[Customers_Rooms]
+	where [Customer_ID] = @Customer_ID 
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1549,8 +1542,8 @@ begin tran
 	end
 commit tran
 go
-
--- exec FindCustomerRoomByKeys 111,1,'2022-09-09'
+--select * from [Customers_Rooms]
+-- exec FindCustomerRoomByID 222
 
 
 create proc AlterCustomerRoom
@@ -1692,16 +1685,8 @@ begin tran
 	end
 commit tran
 go
-	--exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
-	--	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
-
-	--	@id int,
-
-
-
-
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
-
+--exec SaveRoomReservation 222,'חגחגגיי','12/31',458,'4580111122223333',-1,1,2,3,'2022 - 09 - 14','2022 - 09 - 28',5
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
@@ -1784,10 +1769,10 @@ commit tran
 go
 --exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
 --select * from Customers
---select * from Bill
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Bill_Details]
---exec GetAllBill_Details
+select * from Bill
+select * from [dbo].[Customers_Rooms]
+select * from [dbo].[Bill_Details]
+exec GetAllBill_Details
 
 
 create proc CheckIn_Without_Existing_User
@@ -1847,6 +1832,43 @@ go
    -- "exitDate": "2022-08-24",
    -- "Amount_Of_People": 5 
 
+
+
+create proc Room_Resit      
+@id int
+as
+begin tran		
+
+  declare @bill_number as int = (select [Bill_Number] from Bill 
+  where Customer_ID = @id and Bill_Status = 'Open')
+
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
+	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
+	dbo.Customers_Rooms.Amount_Of_People,
+	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
+	dbo.Bill_Details.Payment_Method
+	FROM     dbo.Customers_Rooms INNER JOIN
+                  dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
+                  dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
+	WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
+	union all
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
+	dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
+	dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method
+	FROM     dbo.Bill_Details INNER JOIN
+   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
+   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+	WHERE  (dbo.Bill_Details.Product_Code != 8 and dbo.Bill_Details.Bill_Number = @bill_number)
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec Room_Resit 888
 
 
 --  פרוצדורת צאק אווט
@@ -1945,6 +1967,7 @@ begin tran
 	end
 commit tran
 go
+select * from Bill
 --exec AddNewBill_Detail 666,11,'Vodka',6,'Cash'
 --exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
 
@@ -1993,6 +2016,21 @@ commit tran
 go
  --exec AlterBill_Detail 1,2,10,'2021-12-12','13:00','Cash'
 
+
+
+create proc AddRoomServiceRequest
+@id int,
+@room_Number int,
+@Task_Name nvarchar(30),
+@date date,
+@time nvarchar(5),
+@description nvarchar(250)
+as
+	
+go
+
+exec GetAllTasks
+exec GetAllBill_Details
 
 
 
@@ -2074,6 +2112,7 @@ begin tran
 	end
 commit tran
 go
+exec GetCustomersRooms
 --exec Number_of_tasks_per_month
 
 
@@ -2089,6 +2128,7 @@ begin tran
 	end
 commit tran
 go
+exec AddNewCustomerRooms
 --exec Month_with_the_most_reservation
 
 
@@ -2146,70 +2186,4 @@ go
 
 
 
-
-create proc Room_Resit
-@id int
-as
-begin tran		
-
-  declare @bill_number as int = (select [Bill_Number] from Bill 
-  where Customer_ID = @id and Bill_Status = 'Open')
-
-
-SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
-dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
-dbo.Customers_Rooms.Amount_Of_People,
-(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
-dbo.Bill_Details.Payment_Method
-FROM     dbo.Customers_Rooms INNER JOIN
-                  dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
-                  dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
-WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
-union all
-SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
-dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
-dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method
-FROM     dbo.Bill_Details INNER JOIN
-   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
-   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
-	WHERE  (dbo.Bill_Details.Product_Code != 8 and dbo.Bill_Details.Bill_Number = @bill_number)
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
-
-
-
-
---exec Room_Resit 888
---exec AddNewCustomer 7878,1,'John','Doe','John@gmail.com','gdgd','0549999999','','',-1,''
---exec AlterCustomerById 7878,1,'John','Doe','John@gmail.com','gdgd','0549999999','','',-1,''
-
---select * from dbo.Customers
---exec SaveRoomReservation  7878,'Momo','12/29',912,'4580111133335555',NULL,1,2,NULL,'2022-09-05','2022-09-10',3
---select * from Bill
---select * from [dbo].[Customers_Rooms]
---exec DeleteCustomerRoom 7878,'2022-09-03'
---exec DeleteBill 37,7878,'2022-09-03','4580111133335555'
---exec AlterCustomerRoom 8,8,888,'2022-12-06','2022-12-09','2022-09-15',2	,'Reserved'
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Employees_Tasks]
---select * from [dbo].[Bill_Details]
---exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
---select * from Bill
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Bill_Details]
---DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = 7878
---DELETE FROM [dbo].[Customers_Rooms] WHERE [Customer_ID] = 7878
---DELETE  from [dbo].[Bill_Details] WHERE [Customer_ID] = 7878
- --exec DeleteCustomerRoom 888,'2022-09-08'
-
- --exec CheckIn 888 , '2022-12-09'
- --exec CheckIn 7878,'2022-09-03'
-    --"id": 666,
-    --"Entry_Date": "2022-08-22"
 

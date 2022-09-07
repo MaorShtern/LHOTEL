@@ -20,7 +20,7 @@ namespace DAL
         public DateTime Entry_Date { set; get; }
         public DateTime ExitDate { set; get; }
         public int Amount_Of_People { set; get; }
-        public DateTime Bill_Date { set; get; }
+        //public DateTime Bill_Date { set; get; }
 
     }
 }

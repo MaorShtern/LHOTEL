@@ -1,4 +1,4 @@
-import {Text, View, FlatList, Image, TouchableOpacity,StyleSheet, Button, Alert } from "react-native";
+import { Text, View, FlatList, Image, TouchableOpacity, StyleSheet, Button, Alert } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
@@ -6,15 +6,17 @@ import { useState, useEffect } from "react";
 import Counter from "react-native-counters";
 
 const Products = [
-  {id: 1,image: images.waterbottle,name: "Water bottle", price: 10,amountTaken: 0},
-  {id: 2, image: images.whisky,name: "Whiskey",price: 5,amountTaken: 0},
-  {id: 3,image: images.choclatebar, name: "Chocolate bar",price: 16,amountTaken: 0 },
-  {id: 4,image: images.alcoholWine, name: "White wine",price: 3, amountTaken: 0 },
-  { id: 5,image: images.cocacola,name: "Coca Cola bottle", price: 20, amountTaken: 0},
+  { id: 1, image: images.waterbottle, name: "Water bottle", price: 10, amountTaken: 0 },
+  { id: 2, image: images.whisky, name: "Whiskey", price: 5, amountTaken: 0 },
+  { id: 3, image: images.choclatebar, name: "Chocolate bar", price: 16, amountTaken: 0 },
+  { id: 4, image: images.alcoholWine, name: "White wine", price: 3, amountTaken: 0 },
+  { id: 5, image: images.cocacola, name: "Coca Cola bottle", price: 20, amountTaken: 0 },
 ];
 
-export default function Produts({ SetRequest,navigation }) {
+export default function Produts({ route, navigation }) {
   // useEffect(() => { SetCount(0) }, []);
+
+  let { product_Code, category_Number, description, price_Per_Unit, discount_Percentage } = route.params
 
   const [totalSum, SetTotalSum] = useState(0);
   const [start, SetStart] = useState(0);
@@ -43,24 +45,24 @@ export default function Produts({ SetRequest,navigation }) {
           text: "Yes",
           onPress: () => {
             setShowBox(false);
-         
+
             let temp = []
             Products.map((item) =>
               temp.push(
                 {
                   id: item.id,
                   image: item.image,
-                  name: item.name, 
+                  name: item.name,
                   price: item.price,
-                  amountTaken:  item.amountTaken
-                  
+                  amountTaken: item.amountTaken
+
                 }))
-        
-                let selectedItems = Products.filter((selectedItem) =>
-            selectedItem.amountTaken !== 0 )
-         
-               
-            navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
+
+            let selectedItems = Products.filter((selectedItem) =>
+              selectedItem.amountTaken !== 0)
+
+
+            navigation.navigate("Bill", { Products: selectedItems, totalSum: totalSum });
             cancel()
             // getSelectedProducts()
           },
@@ -78,7 +80,7 @@ export default function Produts({ SetRequest,navigation }) {
   //     data[i].amountTaken = 0;
   //   }
 
-    
+
   // };
 
   const RestCount = () => {
@@ -180,7 +182,7 @@ export default function Produts({ SetRequest,navigation }) {
             style={styles.checkoutButtonStyle}
             onPress={() => showConfirmDialog()}
           >
-            <Text style={{ color: "#fff",textAlign:'center' }}>ORDER</Text>
+            <Text style={{ color: "#fff", textAlign: 'center' }}>ORDER</Text>
           </TouchableOpacity>
         </View>
       </View>
