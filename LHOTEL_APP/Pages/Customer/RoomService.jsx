@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, Image, } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, } from "react-native";
 import React, { useState, useEffect } from "react";
 import { ScrollView } from 'react-native-virtualized-view';
 import { Dropdown } from "react-native-element-dropdown";
@@ -8,7 +8,9 @@ import moment from "moment";
 import { images } from "../../images";
 import Produts from "./Produts";
 
-
+const imagesArray = [
+  {name:"" , image:images.choclatebar}
+]
 
 const RequestType = [
   { label: "Room Cleaning", value: "Room Cleaning" },
@@ -28,13 +30,9 @@ const Rooms = [
 export default function RoomService({ navigation }) {
   const [date, setDate] = useState(new Date());
 
-  // const [mydate, setDate] = useState(new Date());
   const [displaymode, setMode] = useState("date");
   const [isDisplayDate, setShow] = useState(false);
-  //     const changeSelectedDate = (event, selectedDate) => {
-  //     const currentDate = selectedDate || date;
-  //     setDate(currentDate);
-  //  };
+
   const showMode = (currentMode) => {
     setShow(!isDisplayDate);
     setMode(currentMode);
@@ -46,21 +44,17 @@ export default function RoomService({ navigation }) {
   const [dropdown, setDropdown] = useState(null);
   const [request, SetRequest] = useState("");
   const [room, SetRoom] = useState("");
+
   const [flagDate, setFlagDate] = useState(false);
   const [flagTime, setFlagTime] = useState(false);
 
-  const [minDate, setMinDate] = useState(new Date());
-  const [maxDate, setMaxDate] = useState(new Date());
-  // const [time, setTime] = useState(date.getHours() + ':' + date.getMinutes())
   const [selectedDate, setSelectedDate] = useState("");
   const [time, setTime] = useState("");
   const [products, SetProducts] = useState([])
 
 
+  useEffect(() => { getDBProducts() }, []);
 
-  useEffect(() => {
-    getDBProducts()
-  }, []);
 
   const getDBProducts = async () => {
     try {
@@ -71,7 +65,8 @@ export default function RoomService({ navigation }) {
       let result = await fetch('http://proj13.ruppin-tech.co.il/GetProducts', requestOptions);
       let temp = await result.json();
       if (temp !== null) {
-        SetProducts(temp)
+        let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
+        SetProducts(arrayTemp)
         return
       }
       else
@@ -81,8 +76,6 @@ export default function RoomService({ navigation }) {
       alert(error)
     }
   }
-
-
 
   const hideDate = () => {
     setFlagDate(false);
@@ -109,12 +102,9 @@ export default function RoomService({ navigation }) {
     let stringTime = "0";
     if (time.getHours() <= 9) stringTime += time.getHours();
     else stringTime = time.getHours();
-
     stringTime += ":";
-
     if (time.getMinutes() <= 9) stringTime += "0" + time.getMinutes();
     else stringTime += time.getMinutes();
-
     setTime(stringTime);
     hideTime();
   };
@@ -129,9 +119,8 @@ export default function RoomService({ navigation }) {
   };
 
 
-  let listProducts = products.map((prod) => <Produts key={prod.Product_Code} product_Code={prod.Product_Code}
-    category_Number={prod.Category_Number} description={prod.Description} price_Per_Unit={prod.Price_Per_Unit}
-    discount_Percentage={prod.Discount_Percentage} />)
+  // console.log(products);
+  let listProducts = products.map((prod) => <Produts key={prod.Product_Code} item={prod} />)
 
 
   return (
@@ -142,29 +131,96 @@ export default function RoomService({ navigation }) {
           <Dropdown
             style={styles.dropdown}
             data={Rooms}
-            // search
             searchPlaceholder="Search"
             labelField="label"
             valueField="value"
-            placeholder="Room Number"
+            placeholder={room === "" ? "Room Number" : room}
             value={dropdown}
-            onChange={(room) => {
-              SetRoom(room.value);
-            }}
+            onChange={(room) => { SetRoom(room.value) }}
           />
           <View>
-            {room === "" ? (
-              <Text style={styles.alerts}>*Must select room* </Text>
-            ) : null}
+            {room === "" ? (<Text style={styles.alerts}>*Must select room* </Text>) : null}
           </View>
 
-          {/* <View>
+        </View>
+        <View style={styles.container}>
+          <Dropdown
+            style={styles.dropdown}
+            data={RequestType}
+            searchPlaceholder="Search"
+            labelField="label"
+            valueField="value"
+            placeholder={request === "" ? "Request type" : request}
+            value={dropdown}
+            onChange={(request) => SetRequest(request.value)}
+          />
+        </View>
+        <View>
           {request === "" ? (
             <Text style={styles.alerts}>*Must select request type* </Text>
           ) : null}
-        </View> */}
         </View>
         <View style={styles.ProdutsStyle}>
+          {request === "Product purchase" ?
+            (<View>{listProducts}</View>) : (
+              <View>
+                <View>
+                  <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+                    <View style={styles.ButtonContainer}>
+                      <Text style={styles.text}>
+                        {selectedDate === ""
+                          ? "select date"
+                          : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
+                      </Text>
+                      <Image style={styles.icon} source={images.calendar} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                {isDisplayDate && (
+                  <DatePicker
+                    options={{
+                      backgroundColor: "rgb(202, 232, 228)",
+                      mainColor: "#000",
+                    }}
+                    mode="calendar"
+                    minuteInterval={30}
+                    style={{ borderRadius: 10 }}
+                    current={moment(date).format("YYYY-MM-DD").toString()}
+                    minimumDate={moment().weekday(-7).format("YYYY-MM-DD").toString()}
+                    maximumDate={moment().weekday(7).format("YYYY-MM-DD").toString()}
+                    onSelectedChange={(date) => {
+                      setSelectedDate(date), setShow(!isDisplayDate);
+                    }}
+                  />
+                )}
+
+                <View>
+                  <TouchableOpacity style={styles.button} onPress={showTime}>
+                    <Text>{"Time: " + time}</Text>
+                  </TouchableOpacity>
+                  <DateTimePickerModal
+                    isVisible={flagTime}
+                    mode="time"
+                    onConfirm={handleTime}
+                    onCancel={hideTime}
+                  />
+                  <View style={{ height: 20 }}></View>
+                </View>
+
+                <Text style={styles.Text}>Description </Text>
+                <View style={styles.textAreaContainer}>
+                  <TextInput
+                    style={styles.textArea}
+                    underlineColorAndroid="transparent"
+                    placeholder="Type something"
+                    placeholderTextColor="grey"
+                    numberOfLines={10}
+                    multiline={true}
+                  />
+                </View>
+              </View>)}
+        </View>
+        {/* <View style={styles.ProdutsStyle}>
           {request === "Product purchase" ?
             (<View>{listProducts}</View>) : (
               <View>
@@ -172,15 +228,12 @@ export default function RoomService({ navigation }) {
                   <Dropdown
                     style={styles.dropdown}
                     data={RequestType}
-                    // search
                     searchPlaceholder="Search"
                     labelField="label"
                     valueField="value"
-                    placeholder="Request type"
+                    placeholder={request === "" ? "Request type" : request}
                     value={dropdown}
-                    onChange={(request) => {
-                      SetRequest(request.value);
-                    }}
+                    onChange={(request) => SetRequest(request.value)}
                   />
                 </View>
                 <View>
@@ -241,18 +294,18 @@ export default function RoomService({ navigation }) {
                     multiline={true}
                   />
                 </View>
-                <View style={styles.ButtonContainer}>
-                  <TouchableOpacity>
-                    <Text style={styles.button} onPress={SaveOrder}>
-                      ORDER
-                    </Text>
-                  </TouchableOpacity>
-                </View>
               </View>
-            )}
-        </View>
+            )} */}
       </View>
-    </ScrollView>
+      <View style={styles.ButtonContainer}>
+        <TouchableOpacity>
+          <Text style={styles.button} onPress={SaveOrder}>
+            ORDER
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+    </ScrollView >
   );
 }
 
@@ -295,8 +348,6 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: "gray",
-    // padding: 10,
-    // borderRadius: 10,
     padding: 10,
     paddingRight: 60,
     paddingLeft: 60,
@@ -324,5 +375,37 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 10,
   },
-
+  lastItemStyle: {
+    flexDirection: "row",
+    flex: 1,
+    padding: 10,
+    paddingLeft: 15,
+    backgroundColor: "#fff",
+  },
+  textStyle: {
+    flex: 2,
+    justifyContent: "center",
+  },
+  priceStyle: {
+    backgroundColor: "#ddd",
+    width: 40,
+    alignItems: "center",
+    marginTop: 13,
+    borderRadius: 3,
+  },
+  counterStyle: {
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  containerStyle: {
+    flexDirection: "row",
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: "#e2e2e2",
+    padding: 10,
+    paddingLeft: 15,
+    backgroundColor: "#fff",
+  },
 });

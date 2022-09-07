@@ -1,181 +1,212 @@
 import { Text, View, FlatList, Image, TouchableOpacity, StyleSheet, Button, Alert } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { images } from "../../images";
-import { useState, useEffect } from "react";
 import Counter from "react-native-counters";
 
-const Products = [
-  { id: 1, image: images.waterbottle, name: "Water bottle", price: 10, amountTaken: 0 },
-  { id: 2, image: images.whisky, name: "Whiskey", price: 5, amountTaken: 0 },
-  { id: 3, image: images.choclatebar, name: "Chocolate bar", price: 16, amountTaken: 0 },
-  { id: 4, image: images.alcoholWine, name: "White wine", price: 3, amountTaken: 0 },
-  { id: 5, image: images.cocacola, name: "Coca Cola bottle", price: 20, amountTaken: 0 },
-];
+// const Products = [
+//   { id: 1, image: images.waterbottle, name: "Water bottle", price: 10, amountTaken: 0 },
+//   { id: 2, image: images.whisky, name: "Whiskey", price: 5, amountTaken: 0 },
+//   { id: 3, image: images.choclatebar, name: "Chocolate bar", price: 16, amountTaken: 0 },
+//   { id: 4, image: images.alcoholWine, name: "White wine", price: 3, amountTaken: 0 },
+//   { id: 5, image: images.cocacola, name: "Coca Cola bottle", price: 20, amountTaken: 0 },
+// ];
 
-export default function Produts({ route, navigation }) {
+export default function Produts(props) {
   // useEffect(() => { SetCount(0) }, []);
 
-  let { product_Code, category_Number, description, price_Per_Unit, discount_Percentage } = route.params
-
-  const [totalSum, SetTotalSum] = useState(0);
-  const [start, SetStart] = useState(0);
-  const [showBox, setShowBox] = useState(true);
-  const [goodsCount, SetGoodsCount] = useState(0);
-
-  useEffect(() => {
-    SetTotalSum(0);
-    SetGoodsCount(0);
-  }, []);
-
-  const cancel = () => {
-    SetRequest("");
-    SetTotalSum(0);
-    SetGoodsCount(0);
-    SetStart(0);
-    RestCount();
-  };
-  const showConfirmDialog = () => {
-    return Alert.alert(
-      "order",
-      "Are you sure you want to  add the selected products to your account?",
-      [
-        // The "Yes" button
-        {
-          text: "Yes",
-          onPress: () => {
-            setShowBox(false);
-
-            let temp = []
-            Products.map((item) =>
-              temp.push(
-                {
-                  id: item.id,
-                  image: item.image,
-                  name: item.name,
-                  price: item.price,
-                  amountTaken: item.amountTaken
-
-                }))
-
-            let selectedItems = Products.filter((selectedItem) =>
-              selectedItem.amountTaken !== 0)
+  let { item } = props
 
 
-            navigation.navigate("Bill", { Products: selectedItems, totalSum: totalSum });
-            cancel()
-            // getSelectedProducts()
-          },
-        },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
-        {
-          text: "No",
-        },
-      ]
-    );
-  };
-  // const getSelectedProducts = () => {
-  //   for (let i = 0; i < data.length; i++) {
-  //     data[i].amountTaken = 0;
+  // const [totalSum, SetTotalSum] = useState(0);
+  // const [start, SetStart] = useState(0);
+  // const [showBox, setShowBox] = useState(true);
+  // const [goodsCount, SetGoodsCount] = useState(0);
+
+  // useEffect(() => {
+  //   SetTotalSum(0);
+  //   SetGoodsCount(0);
+  // }, []);
+
+  // const cancel = () => {
+  //   SetRequest("");
+  //   SetTotalSum(0);
+  //   SetGoodsCount(0);
+  //   SetStart(0);
+  //   RestCount();
+  // };
+  // const showConfirmDialog = () => {
+  //   return Alert.alert(
+  //     "order",
+  //     "Are you sure you want to  add the selected products to your account?",
+  //     [
+  //       // The "Yes" button
+  //       {
+  //         text: "Yes",
+  //         onPress: () => {
+  //           setShowBox(false);
+
+  //           let temp = []
+  //           Products.map((item) =>
+  //             temp.push(
+  //               {
+  //                 id: item.id,
+  //                 image: item.image,
+  //                 name: item.name,
+  //                 price: item.price,
+  //                 amountTaken: item.amountTaken
+
+  //               }))
+
+  //           let selectedItems = Products.filter((selectedItem) =>
+  //             selectedItem.amountTaken !== 0)
+
+
+  //           navigation.navigate("Bill", { Products: selectedItems, totalSum: totalSum });
+  //           cancel()
+  //           // getSelectedProducts()
+  //         },
+  //       },
+  //       // The "No" button
+  //       // Does nothing but dismiss the dialog when tapped
+  //       {
+  //         text: "No",
+  //       },
+  //     ]
+  //   );
+  // };
+  // // const getSelectedProducts = () => {
+  // //   for (let i = 0; i < data.length; i++) {
+  // //     data[i].amountTaken = 0;
+  // //   }
+
+
+  // // };
+
+  // const RestCount = () => {
+  //   for (let i = 0; i < Products.length; i++) {
+  //     Products[i].amountTaken = 0;
   //   }
 
-
+  //   // SetTotalSum(0);
+  //   // SetGoodsCount(0);
+  //   // SetStart(0)
   // };
 
-  const RestCount = () => {
-    for (let i = 0; i < Products.length; i++) {
-      Products[i].amountTaken = 0;
-    }
+  // // console.log(start);
 
-    // SetTotalSum(0);
-    // SetGoodsCount(0);
-    // SetStart(0)
-  };
+  // const Calculate_Final_Amount = () => {
+  //   let sum = 0;
+  //   let goodsCounter = 0;
+  //   for (let i = 0; i < Products.length; i++) {
+  //     let price = Products[i].price;
+  //     let amountTaken = Products[i].amountTaken;
+  //     let tempToatal = amountTaken * price;
+  //     goodsCounter += amountTaken;
+  //     sum += tempToatal;
+  //   }
 
-  // console.log(start);
+  //   SetTotalSum(sum);
+  //   SetGoodsCount(goodsCounter);
+  // };
 
-  const Calculate_Final_Amount = () => {
-    let sum = 0;
-    let goodsCounter = 0;
-    for (let i = 0; i < Products.length; i++) {
-      let price = Products[i].price;
-      let amountTaken = Products[i].amountTaken;
-      let tempToatal = amountTaken * price;
-      goodsCounter += amountTaken;
-      sum += tempToatal;
-    }
+  // const GetItem = ({ item, index }) => {
+  //   return (
+  //     <View
+  //       style={
+  //         index + 1 === Products.length
+  //           ? styles.lastItemStyle
+  //           : styles.containerStyle
+  //       }
+  //     >
+  //       <Image source={item.image} style={styles.imageStyle} />
 
-    SetTotalSum(sum);
-    SetGoodsCount(goodsCounter);
-  };
+  //       <View style={styles.textStyle}>
+  //         <Text
+  //           style={{
+  //             color: "#2e2f30",
+  //             fontSize: 15,
+  //             paddingLeft: 5,
+  //             paddingTop: 35,
+  //           }}
+  //         >
+  //           {item.name}
+  //         </Text>
+  //         <View style={styles.priceStyle}>
+  //           <Text style={{ color: "#2e2f30", fontSize: 15 }}>
+  //             ${item.price}
+  //           </Text>
+  //         </View>
+  //       </View>
 
-  const GetItem = ({ item, index }) => {
-    return (
-      <View
-        style={
-          index + 1 === Products.length
-            ? styles.lastItemStyle
-            : styles.containerStyle
-        }
-      >
-        <Image source={item.image} style={styles.imageStyle} />
-
-        <View style={styles.textStyle}>
-          <Text
-            style={{
-              color: "#2e2f30",
-              fontSize: 15,
-              paddingLeft: 5,
-              paddingTop: 35,
-            }}
-          >
-            {item.name}
-          </Text>
-          <View style={styles.priceStyle}>
-            <Text style={{ color: "#2e2f30", fontSize: 15 }}>
-              ${item.price}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.counterStyle}>
-          <Counter
-            initial={start}
-            start={start}
-            max={5}
-            style={styles.counterStyle}
-            // onChange={(count) => {SetCount.bind(this)}}
-            onChange={(count) => {
-              (item.amountTaken = count),
-                // console.log(count),
-                Calculate_Final_Amount();
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
+  //       <View style={styles.counterStyle}>
+  //         <Counter
+  //           initial={start}
+  //           start={start}
+  //           max={5}
+  //           style={styles.counterStyle}
+  //           // onChange={(count) => {SetCount.bind(this)}}
+  //           onChange={(count) => {
+  //             (item.amountTaken = count),
+  //               // console.log(count),
+  //               Calculate_Final_Amount();
+  //           }}
+  //         />
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   return (
+
     <View>
-      <View style={styles.headerStyle}>
-        {/* <TouchableOpacity onPress={() => { SetRequest(""), SetTotalSum(0), SetGoodsCount(0), SetStart(0) }}> */}
-        <TouchableOpacity onPress={cancel}>
+      {/* <Image source={item.image} style={styles.imageStyle} /> */}
+
+      <View style={styles.textStyle}>
+        <Text
+          style={{
+            color: "#2e2f30",
+            fontSize: 15,
+            paddingLeft: 5,
+            paddingTop: 35,
+          }}
+        >
+          {item.Description}
+        </Text>
+        <View style={styles.priceStyle}>
+          <Text style={{ color: "#2e2f30", fontSize: 15 }}>
+            ${item.Price_Per_Unit}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.counterStyle}>
+        <Counter
+          initial={0}
+          start={0}
+          max={5}
+          style={styles.counterStyle}
+        // onChange={(count) => {SetCount.bind(this)}}
+        // onChange={(count) => {
+        //   (item.amountTaken = count),
+        //     // console.log(count),
+        //     Calculate_Final_Amount();
+        // }}
+        />
+      </View>
+
+
+      {/* <View style={styles.headerStyle}> */}
+      {/* <TouchableOpacity onPress={() => { SetRequest(""), SetTotalSum(0), SetGoodsCount(0), SetStart(0) }}> */}
+      {/* <TouchableOpacity onPress={cancel}>
           <Icon name="ios-close" size={35} color="#a8a9ad" />
         </TouchableOpacity>
 
-        <Text style={{ fontSize: 20 }}>Mini Bar</Text>
-        {/* <Text onPress={RestCount}>Empty</Text> */}
-      </View>
+        <Text style={{ fontSize: 20 }}>Mini Bar</Text> */}
+      {/* <Text onPress={RestCount}>Empty</Text> */}
+      {/* </View> */}
       {/* <Header  func={func}/> */}
-      <FlatList
-        data={Products}
-        renderItem={GetItem}
-        keyExtractor={(item, index) => index.toString()}
-        scrollEnabled={false}
-      />
-      <View style={styles.footerContainerStyle}>
+
+      {/* <View style={styles.footerContainerStyle}>
         <TotalComponent totalSum={totalSum} goodsCount={goodsCount} />
         <View style={styles.buttonContainerStyle}>
           <TouchableOpacity
@@ -185,8 +216,8 @@ export default function Produts({ route, navigation }) {
             <Text style={{ color: "#fff", textAlign: 'center' }}>ORDER</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      {/* <Footer totalSum={totalSum} goodsCount={goodsCount} /> */}
+      </View> 
+      <Footer totalSum={totalSum} goodsCount={goodsCount} />*/}
     </View>
   );
 }

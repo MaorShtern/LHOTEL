@@ -2026,9 +2026,25 @@ create proc AddRoomServiceRequest
 @time nvarchar(5),
 @description nvarchar(250)
 as
-	
-go
+	begin tran		
+	if(@Task_Name = 'Product purchase')
+		begin
+		exec AddNewBill_Detail @id,@room_Number,'Vodka',6,'Cash'
+		end
+	else
+		begin
+		
+		end
 
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+select * from [dbo].[Tasks_Types]
 exec GetAllTasks
 exec GetAllBill_Details
 
