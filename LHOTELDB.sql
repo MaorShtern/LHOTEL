@@ -243,6 +243,25 @@ create table Employees_Tasks
 )
 go
 
+
+--drop table Purchases_Documentation
+create table Purchases_Documentation
+(
+	--Id int identity(1,1) NOT NULL,
+	Bill_Number int,
+	Customer_ID int,
+	Bill_Date date,
+	Room_Number int,
+	Room_Type nvarchar(30),
+	Price_Per_Night int,
+	Amount_Of_People int,
+	Number_Of_Nights int,
+	Payment_Method nvarchar(30),
+	Purchase_Date date
+)
+go
+--exec Room_Resit 888
+
 --Task_Code int identity(1,1) NOT NULL,
 --	Employee_ID int,
 --	Task_Number int,
@@ -488,13 +507,12 @@ go
 --exec GetCustomerById 10
 
 
-create proc GetCustomerByMailAndPassword
-@Mail nvarchar(100),
-@Password nvarchar(30) 
+create proc GetCustomerByMail
+@Mail nvarchar(100)
 as
 begin tran
 		select * from [dbo].[Customers] 
-		where Mail = @Mail and Password = @Password
+		where Mail = @Mail 
 		if (@@error !=0)
 	begin
 		rollback tran
@@ -504,7 +522,7 @@ begin tran
 commit tran
 go
 
--- exec GetCustomerByMailAndPassword 'ccc@gmail.com','ccc'
+-- exec GetCustomerByMail 'ccc@gmail.com'
 
 
 create proc GetCustomerByIDAndMail
@@ -522,7 +540,7 @@ begin tran
 	end
 commit tran
 go
---exec GetCustomerByIDAndMail 10 , 'ggggg@gmail.com'
+--exec GetCustomerByIDAndMail 315201913 , 'firstName'
 
 
 
@@ -1024,11 +1042,13 @@ go
 create proc GetAllShifts
 as
 begin tran
-	SELECT dbo.Shifts.Employee_ID, dbo.Shifts.Employee_Code, dbo.Employees_Types.Description,
-	dbo.Shifts.Date, CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time,
+	SELECT dbo.Shifts.Employee_ID, dbo.Employees.Employee_Code, dbo.Employees.Employee_Name,
+	dbo.Employees_Types.Description, dbo.Shifts.Date,
+	CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time, 
 	CONVERT(VARCHAR(5), dbo.Shifts.Leaving_Time, 108) AS Leaving_Time
-	FROM  dbo.Shifts INNER JOIN dbo.Employees_Types 
-	ON dbo.Shifts.Worker_Code = dbo.Employees_Types.Worker_Code
+	FROM dbo.Shifts INNER JOIN dbo.Employees 
+	ON dbo.Shifts.Employee_ID = dbo.Employees.Employee_ID INNER JOIN
+    dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1042,15 +1062,16 @@ go
 
 
 
-
 create proc GetWorkersOnShift
 as
 begin tran
-	SELECT dbo.Shifts.Employee_ID, dbo.Shifts.Employee_Code, dbo.Employees_Types.Description,
-	dbo.Shifts.Date, CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time,
+	SELECT dbo.Shifts.Employee_ID, dbo.Employees.Employee_Code, dbo.Employees.Employee_Name,
+	dbo.Employees_Types.Description, dbo.Shifts.Date,
+	CONVERT(VARCHAR(5), dbo.Shifts.Entrance_Time, 108) AS Entrance_Time, 
 	CONVERT(VARCHAR(5), dbo.Shifts.Leaving_Time, 108) AS Leaving_Time
-	FROM  dbo.Shifts INNER JOIN dbo.Employees_Types 
-	ON dbo.Shifts.Worker_Code = dbo.Employees_Types.Worker_Code
+	FROM dbo.Shifts INNER JOIN dbo.Employees 
+	ON dbo.Shifts.Employee_ID = dbo.Employees.Employee_ID INNER JOIN
+    dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
 	where dbo.Shifts.Date =	 FORMAT(getdate(), 'yyyy-MM-dd') and  dbo.Shifts.Leaving_Time is null
 	if (@@error !=0)
 	begin
@@ -1060,9 +1081,7 @@ begin tran
 	end
 commit tran
 go
-
 --exec GetWorkersOnShift
-
 
 
  
@@ -1690,6 +1709,7 @@ go
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
+--select * from [dbo].[Purchases_Documentation]
     --"id": 666,
     --"Card_Holder_Name": "mmm",
     --"Card_Date": "12/29",
@@ -1704,6 +1724,47 @@ go
     --"Amount_Of_People": 5 
 
 
+
+	
+alter proc Room_Resit      
+@id int
+as
+begin tran		
+
+  declare @bill_number as int = (select [Bill_Number] from Bill 
+  where Customer_ID = @id and Bill_Status = 'Open')
+
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
+	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
+	dbo.Customers_Rooms.Amount_Of_People,
+	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
+	dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Purchase_Date
+	FROM     dbo.Customers_Rooms INNER JOIN
+			dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
+			dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
+	WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
+	union all
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
+	dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
+	dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method,
+	dbo.Bill_Details.Purchase_Date
+	FROM     dbo.Bill_Details INNER JOIN
+   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
+   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+	where (dbo.Bill_Details.Product_Code != 8 and dbo.Bill_Details.Customer_ID = @id)
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec Room_Resit 222
+--select * from  [dbo].[Purchases_Documentation]
+
+
 create trigger AddRoomToDetails
 on [Customers_Rooms] for update
 as
@@ -1714,6 +1775,7 @@ as
 				from inserted
 	end
 go
+
 
 
 --  פרוצדורה עבור צאק אין
@@ -1736,7 +1798,7 @@ begin tran
 commit tran
 go
 
---exec CheckIn 666 , '2022-08-22'
+--  exec CheckIn 222 , '2022-09-14'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
 
@@ -1769,10 +1831,11 @@ commit tran
 go
 --exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
 --select * from Customers
-select * from Bill
-select * from [dbo].[Customers_Rooms]
-select * from [dbo].[Bill_Details]
-exec GetAllBill_Details
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+--exec GetAllBill_Details
+
 
 
 create proc CheckIn_Without_Existing_User
@@ -1833,42 +1896,16 @@ go
    -- "Amount_Of_People": 5 
 
 
-
-create proc Room_Resit      
+--  פרוצדורה לשמירת הנתוני הרכישות
+create proc AddPurchases_Documentation
 @id int
 as
-begin tran		
-
-  declare @bill_number as int = (select [Bill_Number] from Bill 
-  where Customer_ID = @id and Bill_Status = 'Open')
-
-	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
-	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
-	dbo.Customers_Rooms.Amount_Of_People,
-	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
-	dbo.Bill_Details.Payment_Method
-	FROM     dbo.Customers_Rooms INNER JOIN
-                  dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
-                  dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
-	WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
-	union all
-	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
-	dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
-	dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method
-	FROM     dbo.Bill_Details INNER JOIN
-   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
-   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
-	WHERE  (dbo.Bill_Details.Product_Code != 8 and dbo.Bill_Details.Bill_Number = @bill_number)
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
+--print(@id)
+--exec Room_Resit @id
+	insert into [dbo].[Purchases_Documentation] exec Room_Resit 222
 go
+--exec AddPurchases_Documentation 222 
 
---exec Room_Resit 888
 
 
 --  פרוצדורת צאק אווט
@@ -1877,13 +1914,12 @@ create proc CheckOut
 @Exit_Date date
 as
 begin tran		
-	
-	 DECLARE @bill_Number AS int = (select Bill_Number from [dbo].[Customers_Rooms]
-	 where [Customer_ID] = @id and Exit_Date = @Exit_Date GROUP BY Bill_Number)
-
+	exec AddPurchases_Documentation @id 
+	DECLARE @bill_Number AS int = (select Bill_Number from [dbo].[Customers_Rooms]
+	where [Customer_ID] = @id and Exit_Date = @Exit_Date GROUP BY Bill_Number)
 	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
 	where Customer_ID=@id and Bill_Number = @bill_Number and Bill_Status = 'Open'
-	exec DeleteBill_Detail @id,@bill_Number
+    exec DeleteBill_Detail @id,@bill_Number
 	exec DeleteCustomerRoom @id , @bill_Number
 	if (@@error !=0)
 	begin
@@ -1896,7 +1932,8 @@ go
 --exec GetAllBilles
 --exec GetAllBill_Details
 --exec GetCustomersRooms
---exec CheckOut 315201913, '2022-08-24'
+--select * from [dbo].[Purchases_Documentation]
+-- exec CheckOut 222, '2022-09-28'
 
 
 
@@ -1967,9 +2004,9 @@ begin tran
 	end
 commit tran
 go
-select * from Bill
---exec AddNewBill_Detail 666,11,'Vodka',6,'Cash'
---exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
+
+--exec AddNewBill_Detail 222,11,'Vodka',6,'Cash'
+--exec AddNewBill_Detail 222,11,'Coca cola',9,'Credit'
 
 
 
@@ -2019,21 +2056,30 @@ go
 
 
 create proc AddRoomServiceRequest
-@id int,
+@employee_ID int,
+@task_Name nvarchar(30),
 @room_Number int,
-@Task_Name nvarchar(30),
 @date date,
 @time nvarchar(5),
-@description nvarchar(250)
+@description nvarchar(250),
+@customer_ID int,
+@Product_Dec nvarchar(30),
+@Amount int,
+@Payment_Method nvarchar(20)
 as
 	begin tran		
-	if(@Task_Name = 'Product purchase')
+	if(@task_Name != 'Product purchase')
 		begin
-		exec AddNewBill_Detail @id,@room_Number,'Vodka',6,'Cash'
+			exec AddNewTask @employee_ID,@task_Name , @description,@room_Number
+		print(@Task_Name)
 		end
 	else
 		begin
-		
+			exec AddNewBill_Detail @customer_ID,@room_Number,@Product_Dec,@Amount,@Payment_Method
+			declare @desc as nvarchar(30) = ('get room ' + (select cast(@room_Number as nvarchar(5)))
+			+ ' ' +  (select cast(@Amount as nvarchar(5))) + ' of ' 
+			+ @Product_Dec)
+			exec AddNewTask @employee_ID,@task_Name , @desc,@room_Number
 		end
 
 	if (@@error !=0)
@@ -2044,78 +2090,110 @@ as
 	end
 commit tran
 go
-select * from [dbo].[Tasks_Types]
-exec GetAllTasks
-exec GetAllBill_Details
+
+--declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
+--declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
+--exec AddRoomServiceRequest 111,'Product purchase',23,@date,@time,null,222,'Coca cola',2,'Cash'
 
 
 
-create proc ProductPurchaseByName
-@Description nvarchar(30)
+
+-- ======================================================================
+-- ----------------------- דוחות ---------------------------------------
+-- ======================================================================
+
+
+create proc Number_Of_Orders_Per_Month
 as
-begin tran		
-	SELECT dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description AS Category, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, sum(dbo.Bill_Details.Amount) as Amount
-	FROM     dbo.Bill_Details INNER JOIN dbo.Products 
-	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
-	ON dbo.Products.Category_Number = dbo.Category.Category_Number
-	WHERE  (dbo.Products.Description = @Description)
-	GROUP BY dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
+	select MONTH(Bill_Date), Count(Bill_Date)AS Count from [dbo].[Purchases_Documentation]
+	GROUP by Bill_Date
+	order by Count
 go
+--exec Number_Of_Orders_Per_Month
+
+
+
+create proc Amount_Of_Products_Purchased_In_The_Store
+as
+	SELECT Room_Type, SUM(Number_Of_Nights) AS Count
+	FROM     dbo.Purchases_Documentation
+	where Room_Type != 'Suite' and Room_Type != 'Double room' and Room_Type != 'Single room'
+	GROUP BY Room_Type
+go
+--exec Amount_Of_Products_Purchased_In_The_Store
+
+
+
+--drop proc ProductPurchaseByName
+--create proc ProductPurchaseByName
+--@Description nvarchar(30)
+--as
+--begin tran		
+--	SELECT dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description AS Category, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, sum(dbo.Bill_Details.Amount) as Amount
+--	FROM     dbo.Bill_Details INNER JOIN dbo.Products 
+--	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
+--	ON dbo.Products.Category_Number = dbo.Category.Category_Number
+--	WHERE  (dbo.Products.Description = @Description)
+--	GROUP BY dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 --exec GetAllProducts
 -- exec ProductPurchaseByName 'Coca cola'
 
 
-
-create proc Product_Resit
-@Bill_Number int
-as
-begin tran		
-SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Date, dbo.Bill_Details.Purchase_Time
-	FROM dbo.Bill_Details INNER JOIN dbo.Products 
-	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
-	WHERE  (dbo.Bill_Details.Bill_Number = @Bill_Number)
-	GROUP BY dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Date, dbo.Bill_Details.Purchase_Time
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
+--drop proc Product_Resit
+--create proc Product_Resit
+--@Bill_Number int
+--as
+--begin tran		
+--SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Date, dbo.Bill_Details.Purchase_Time
+--	FROM dbo.Bill_Details INNER JOIN dbo.Products 
+--	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+--	WHERE  (dbo.Bill_Details.Bill_Number = @Bill_Number)
+--	GROUP BY dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount, dbo.Bill_Details.Purchase_Date, dbo.Bill_Details.Purchase_Time
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 
 --exec Product_Resit 3
 
 
-create proc SumPerProduct
-as
-begin tran		
-SELECT dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description AS Category,
-	dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, 
-	(select sum(Amount) from Bill_Details where Product_Code = dbo.Bill_Details.Product_Code) as Amount
-	FROM dbo.Bill_Details INNER JOIN dbo.Products 
-	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
-	ON dbo.Products.Category_Number = dbo.Category.Category_Number
-	GROUP BY dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
+--drop proc SumPerProduct
+--create proc SumPerProduct
+--as
+--begin tran		
+--SELECT dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description AS Category,
+--	dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, 
+--	(select sum(Amount) from Bill_Details where Product_Code = dbo.Bill_Details.Product_Code) as Amount
+--	FROM dbo.Bill_Details INNER JOIN dbo.Products 
+--	ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
+--	ON dbo.Products.Category_Number = dbo.Category.Category_Number
+--	GROUP BY dbo.Bill_Details.Product_Code, dbo.Products.Description, dbo.Category.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 
 -- exec SumPerProduct
 
 
+
+-----------   לשנות טיפה
 create proc Number_of_tasks_per_month
 as
 begin tran		
@@ -2128,23 +2206,24 @@ begin tran
 	end
 commit tran
 go
-exec GetCustomersRooms
---exec Number_of_tasks_per_month
+--exec GetCustomersRooms
+----exec Number_of_tasks_per_month
 
 
-create proc Month_with_the_most_reservation
-as
-begin tran		
-	select MONTH(Entry_Date) as Month  from [dbo].[Customers_Rooms] GROUP by Entry_Date
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
-exec AddNewCustomerRooms
+--drop proc Month_with_the_most_reservation
+--create proc Month_with_the_most_reservation
+--as
+--begin tran		
+--	select MONTH(Entry_Date) as Month  from [dbo].[Customers_Rooms] GROUP by Entry_Date
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
+--exec AddNewCustomerRooms
 --exec Month_with_the_most_reservation
 
 
@@ -2163,38 +2242,40 @@ go
 
 -- exec Expenses
 
-
-create proc Calu_Rooms_Income
-as
-begin tran		
-	SELECT ((SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date,  dbo.Customers_Rooms.Exit_Date)) * dbo.Rooms.Price_Per_Night) AS Sum_Total
-	FROM dbo.Customers_Rooms INNER JOIN dbo.Rooms 
-	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	if (@@error !=0)
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
+--drop proc Calu_Rooms_Income
+--create proc Calu_Rooms_Income
+--as
+--begin tran		
+--	SELECT ((SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date,  dbo.Customers_Rooms.Exit_Date)) * dbo.Rooms.Price_Per_Night) AS Sum_Total
+--	FROM dbo.Customers_Rooms INNER JOIN dbo.Rooms 
+--	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 
 --exec Calu_Rooms_Income
-select * from dbo.Customers
+--select * from dbo.Customers
 
-create proc Calu_Products_Income
-as
-begin tran		
-	SELECT ((SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date,  dbo.Customers_Rooms.Exit_Date)) * dbo.Rooms.Price_Per_Night) AS Sum_Total
-	FROM dbo.Customers_Rooms INNER JOIN dbo.Rooms 
-	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
-	begin
-		rollback tran
-		print 'error'
-		return
-	end
-commit tran
-go
+
+--drop proc Calu_Products_Income
+--create proc Calu_Products_Income
+--as
+--begin tran		
+--	SELECT ((SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date,  dbo.Customers_Rooms.Exit_Date)) * dbo.Rooms.Price_Per_Night) AS Sum_Total
+--	FROM dbo.Customers_Rooms INNER JOIN dbo.Rooms 
+--	ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 
 --exec Calu_Products_Income
 
