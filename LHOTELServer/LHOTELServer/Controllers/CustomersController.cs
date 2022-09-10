@@ -22,13 +22,13 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
-        public IHttpActionResult GetCustomerByMailAndPassword([FromBody] JObject data)
+        public IHttpActionResult GetCustomerByMail([FromBody] JObject data)
         {
             try
             {
                 string mail = data["mail"].ToObject<string>();
-                string password = data["password"].ToObject<string>();
-                return Ok(BLLCustomers.GetCustomerByMailAndPassword(mail, password));
+             
+                return Ok(BLLCustomers.GetCustomerByMail(mail));
             }
             catch (Exception e)
             {

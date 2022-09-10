@@ -23,4 +23,15 @@ namespace DAL
         //public DateTime Bill_Date { set; get; }
 
     }
+    public class TakenRoomReservation : RoomReservation
+    {
+
+        //public int[] Rooms { set; get; }
+        public int Bill_Number { set; get; }
+        public string FirstName { set; get; }
+        public string LastName { set; get; }
+        public DateTime Bill_Date { set; get; }
+        public int Room_Number { set; get; }
+
+    }
 }

@@ -13,9 +13,9 @@ namespace BLL
         //{
         //    return DALCustomers.GetAllCustomers();
         //}
-        public static Customers GetCustomerByMailAndPassword(string mail, string password)
+        public static Customers GetCustomerByMail(string mail)
         {
-            return DALCustomers.GetCustomerByMailAndPassword(mail, password);
+            return DALCustomers.GetCustomerByMail(mail);
         }
         public static bool AddNewCustomer(Customers customer)
         {

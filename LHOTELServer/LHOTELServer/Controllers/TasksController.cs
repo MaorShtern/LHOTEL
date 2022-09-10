@@ -22,8 +22,8 @@ namespace LHOTELServer.Controllers
     public class TasksController : ApiController
     {
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetAllTaske")]
-        public IHttpActionResult GetAllTaske()
+        [System.Web.Http.Route("~/GetAllTasks")]
+        public IHttpActionResult GetAllTasks()
         {
             try
             {

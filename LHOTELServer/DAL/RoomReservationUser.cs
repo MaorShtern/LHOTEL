@@ -14,6 +14,7 @@ namespace DAL
         public int Counter_Suite { set; get; }
         public DateTime Entry_Date { set; get; }
         public DateTime ExitDate { set; get; }
+       
         public int Amount_Of_People { set; get; }
     }
 }

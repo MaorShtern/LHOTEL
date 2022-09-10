@@ -61,6 +61,7 @@
     <Compile Include="BLLEmployees.cs" />
     <Compile Include="BLLManager.cs" />
     <Compile Include="BLLProducts.cs" />
+    <Compile Include="BLLReceptionist.cs" />
     <Compile Include="BLLRooms.cs" />
     <Compile Include="BLLTasks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -52,11 +52,11 @@ namespace DAL
             }
         }
 
-        public static Customers GetCustomerByMailAndPassword(string mail, string password)
+        public static Customers GetCustomerByMail(string mail)
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetCustomerByMailAndPassword '{mail}','{password}'");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetCustomerByMail '{mail}'");
                 if (reader == null && !reader.HasRows)
                 {
                     return null;
@@ -96,7 +96,7 @@ namespace DAL
         {
             try
             {
-                if (GetCustomerByMailAndPassword(customer.Mail , customer.Password) == null)
+                if (GetCustomerByMail(customer.Mail) == null)
                 {
 
 

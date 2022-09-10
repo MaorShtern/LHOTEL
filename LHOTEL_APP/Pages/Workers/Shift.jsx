@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -33,20 +33,46 @@ const Employees = [
 
 
 export default function Shift() {
-  const [empItems, setEmpItems] = useState(Employees);
+  const [empItems, setEmpItems] = useState([]);
   const [search, setSearch] = useState('');
 
+  useEffect(() => { getDBShift() }, []);
+
+
+  const getDBShift = async () => {
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/GetWorkersOnShift', requestOptions);
+      let temp = await result.json();
+      if (temp !== null) {
+        // console.log(temp);
+        // let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
+        setEmpItems(temp)
+        return
+      }
+      else
+        getDBProducts()
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+  // GetTakenRooms
+  // select * from Customers_Rooms
   const GetEmployeeCard = ({ item }) => {
     return (
       <View style={styles.item}>
         <View style={styles.itemLeft}>
-          <Text>{item.Role}</Text>
+          <Text>{item.Description}</Text>
         </View>
         <View></View>
         <View>
-          <Text>{item.Entry} </Text>
+          <Text>{item.Entrance_Time} </Text>
           <Divider />
-          <Text>{item.Exit} </Text>
+          <Text>{item.Leaving_Time} </Text>
           <Divider />
         </View>
         <View style={styles.verticleLine}></View>
@@ -56,7 +82,7 @@ export default function Shift() {
           <Text>Exit :</Text>
           <Divider />
         </View>
-        <Text>{item.Employee_Name} </Text>
+        <Text>{item.Employee_ID} </Text>
       </View>
     );
   };

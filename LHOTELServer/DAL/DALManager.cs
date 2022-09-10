@@ -61,6 +61,7 @@ namespace DAL
                     {
                         Employee_ID = (int)reader["Employee_ID"],
                         Employee_Code = (int)reader["Employee_Code"],
+                        Employee_Name = (string)reader["Employee_Name"],
                         Description = (string)reader["Description"],
                         Date = (DateTime)reader["Date"],
                         Entrance_Time = (string)reader["Entrance_Time"],
@@ -99,6 +100,7 @@ namespace DAL
                     {
                         Employee_ID = (int)reader["Employee_ID"],
                         Employee_Code = (int)reader["Employee_Code"],
+                        Employee_Name = (string)reader["Employee_Name"],
                         Description = (string)reader["Description"],
                         Date = (DateTime)reader["Date"],
                         Entrance_Time = (string)reader["Entrance_Time"],

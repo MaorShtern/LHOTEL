@@ -62,6 +62,7 @@
     <Compile Include="DALEmployees.cs" />
     <Compile Include="DALManager.cs" />
     <Compile Include="DALProducts.cs" />
+    <Compile Include="DALReceptionist.cs" />
     <Compile Include="DALRooms.cs" />
     <Compile Include="DALTasks.cs" />
     <Compile Include="Employees.cs" />

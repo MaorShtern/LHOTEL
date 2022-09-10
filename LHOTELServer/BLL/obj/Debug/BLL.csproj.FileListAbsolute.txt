@@ -35,3 +35,13 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\System.Memory.xml
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\BCrypt.Net-Next.dll
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Buffers.dll
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Memory.dll
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\BCrypt.Net-Next.xml
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Buffers.xml
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Memory.xml
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
