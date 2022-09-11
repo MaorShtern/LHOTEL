@@ -91,7 +91,7 @@ const ReservationCheck = ()=> {
         resizeMode="cover"
         style={{
           flex: 2,
-          justifyContent: "center",
+          justifyContent: "flex-end",
         }}
       >
         <Text style={styles.header}>LHOTEL</Text>
@@ -168,13 +168,13 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 35,
-    alignSelf: "flex-end",
-    paddingTop: 145,
-    paddingLeft: 25,
-
-    fontWeight: "bold",
-
-    color: "#fff",
+   
+   
+    zIndex: 1,
+    fontWeight: 'bold',
+    bottom:40,
+    color: 'white',
+    right: 10
   },
   input: {
     marginHorizontal: 30,

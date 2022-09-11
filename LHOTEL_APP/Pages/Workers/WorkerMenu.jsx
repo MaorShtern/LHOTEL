@@ -1,58 +1,130 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { images } from '../../images'
-
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+  Animated,
+  ScrollView,
+  StatusBar,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { images } from "../../images";
 
 const workerCardsArr = [
-  { code: 999, Description: 'General', title: 'Exit shift', pic: images.exit_shift, routeNavigation: 'Home' },
-  { code: 999, Description: 'General', title: 'Enter shift', pic: images.enter_shift, routeNavigation: 'Home' },
-  { code: 1, Description: 'Manager', title: 'Employees Management', pic: images.workers_management, routeNavigation: 'EmployeesManagement' },
-  { code: 1, Description: 'Manager', title: 'Current Shift', pic: images.shift, routeNavigation: 'Shift' },
-  { code: 1, Description: 'Manager', title: 'Reports', pic: images.reports, routeNavigation: '' },
-  { code: 2, Description: 'Receptionist', title: 'Add charge', pic: images.add_charge, routeNavigation: 'AddCharge' },
-  { code: 2, Description: 'Receptionist', title: 'Check In', pic: images.checkIn, routeNavigation: 'CheckIn' },
-  { code: 2, Description: 'Receptionist', title: 'Check Out', pic: images.checkOut, routeNavigation: 'CheckOut' },
-  { code: 3, Description: 'Room service', title: 'Tasks', pic: images.tasks, routeNavigation: 'Tasks' },
-]
+  {
+    code: 999,
+    Description: "General",
+    title: "Exit shift",
+    pic: images.exit_shift,
+    routeNavigation: "Home",
+  },
+  {
+    code: 999,
+    Description: "General",
+    title: "Enter shift",
+    pic: images.enter_shift,
+    routeNavigation: "Home",
+  },
+  {
+    code: 1,
+    Description: "Manager",
+    title: "Employees Management",
+    pic: images.workers_management,
+    routeNavigation: "EmployeesManagement",
+  },
+  {
+    code: 1,
+    Description: "Manager",
+    title: "Current Shift",
+    pic: images.shift,
+    routeNavigation: "Shift",
+  },
+  {
+    code: 1,
+    Description: "Manager",
+    title: "Reports",
+    pic: images.reports,
+    routeNavigation: "",
+  },
+  {
+    code: 2,
+    Description: "Receptionist",
+    title: "Add charge",
+    pic: images.add_charge,
+    routeNavigation: "AddCharge",
+  },
+  {
+    code: 2,
+    Description: "Receptionist",
+    title: "Check In",
+    pic: images.checkIn,
+    routeNavigation: "CheckIn",
+  },
+  {
+    code: 2,
+    Description: "Receptionist",
+    title: "Check Out",
+    pic: images.checkOut,
+    routeNavigation: "CheckOut",
+  },
+  {
+    code: 3,
+    Description: "Room service",
+    title: "Tasks",
+    pic: images.tasks,
+    routeNavigation: "Tasks",
+  },
+];
 
-
-const numColumns = 2
-const WIDTH = Dimensions.get('window').width
-
-
+const numColumns = 2;
+const WIDTH = Dimensions.get("window").width;
 
 export default function WorkerMenu({ route, navigation }) {
+  const { role } = route.params;
 
-  const { id, role } = route.params
-
-
-  const [currentUserArr, SetCurrentUserArr] = useState([])
+  const [currentUserArr, SetCurrentUserArr] = useState([]);
 
   useEffect(() => {
-    GetCardsByRole()
+    GetCardsByRole();
   }, []);
 
-
-
   const GetCardsByRole = () => {
-    let arrayTempCards = []
-    switch (id) {
-      case 1:
-        arrayTempCards = workerCardsArr
-        break;
-      case 2:
-        arrayTempCards = workerCardsArr.filter((workerCard) =>
-          workerCard.Description === 'Receptionist' || workerCard.Description === 'General')
-        break;
-      case 3:
-        arrayTempCards = workerCardsArr.filter((workerCard) =>
-          workerCard.Description === 'Room service' || workerCard.Description === 'General')
-        break;
-      default:
-        Alert.alert("error");
+    let arrayTempCards = [];
+    try {
+      if (role === "Manager") arrayTempCards = workerCardsArr;
+      else {
+        arrayTempCards = workerCardsArr.filter(
+          (workerCard) =>
+            workerCard.Description === role ||
+            workerCard.Description === "General"
+        );
+      }
+    } catch (error) {
+      Alert.alert("error");
     }
+
+    // switch (role) {
+    //   i
+    //   case 1:
+    //     arrayTempCards = workerCardsArr
+    //     break;
+    //   case 2:
+    //     arrayTempCards = workerCardsArr.filter((workerCard) =>
+    //       workerCard.Description === 'Receptionist' || workerCard.Description === 'General')
+    //     break;
+    //   case 3:
+    //     arrayTempCards = workerCardsArr.filter((workerCard) =>
+    //       workerCard.Description === 'Room service' || workerCard.Description === 'General')
+    //     break;
+    //   default:
+    // Alert.alert("error");
+
     SetCurrentUserArr(arrayTempCards);
-  }
+  };
   // let { currentUserArr, setWorkerCode, navigation } = route.params
 
   // let { setWorkerCode,currentUserArr,navigation} = props
@@ -63,28 +135,31 @@ export default function WorkerMenu({ route, navigation }) {
   // }
 
   const HandelCardClick = (title) => {
-
     let today = new Date();
-    if (title === 'Enter shift')
-      alert('start shift at : ' + today.getHours() + ':' + today.getMinutes())
-    else if (title === 'Exit shift')
-      alert('end shift at : ' + today.getHours() + ':' + today.getMinutes())
-  }
+    if (title === "Enter shift")
+      alert("start shift at : " + today.getHours() + ":" + today.getMinutes());
+    else if (title === "Exit shift")
+      alert("end shift at : " + today.getHours() + ":" + today.getMinutes());
+  };
 
   const GetItem = ({ item, index }) => {
     // console.log(item.routeNavigation);
     return (
-      <TouchableOpacity style={styles.item} key={index}
-        onPress={() => item.routeNavigation === '' ? HandelCardClick(item.title) :
-          navigation.navigate(item.routeNavigation, { id: id })}>
-
+      <TouchableOpacity
+        style={styles.item}
+        key={index}
+        onPress={() =>
+          item.routeNavigation === ""
+            ? HandelCardClick(item.title)
+            : navigation.navigate(item.routeNavigation, { id: id })
+        }
+      >
         <Image style={{ width: 60, height: 60 }} source={item.pic} />
-        <Text style={styles.itemText} >{item.title}</Text>
+        <Text style={styles.itemText}>{item.title}</Text>
         {/* <Text>{item.toString()}</Text> */}
       </TouchableOpacity>
-    )
-  }
-
+    );
+  };
 
   //onPress={()=> { doAnimation(closeState,1,250),setInfo(false)}}
 
@@ -101,16 +176,14 @@ export default function WorkerMenu({ route, navigation }) {
         numColumns={numColumns}
       />
     </View>
-  )
+  );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
+ 
   },
 
   item: {
@@ -134,7 +207,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   Text: {
-
     color: "black",
     fontWeight: "bold",
     fontSize: 25,
