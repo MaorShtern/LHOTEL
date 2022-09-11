@@ -28,12 +28,13 @@ export default function CheckIn({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+           <StatusBar  translucent={true} backgroundColor={'transparent'}  />
       <ImageBackground
         source={images.hotelback}
         resizeMode="cover"
         style={{
           flex: 2,
-          justifyContent: "center",
+          justifyContent: "flex-end",
         }}
       >
         <Text style={styles.header}>LHOTEL</Text>
@@ -149,13 +150,13 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 35,
-    alignSelf: "flex-end",
-    paddingTop: 145,
-    paddingLeft: 25,
-
-    fontWeight: "bold",
-
-    color: "#fff",
+   
+   
+    zIndex: 1,
+    fontWeight: 'bold',
+    bottom:40,
+    color: 'white',
+    right: 10
   },
   HeadLine: {
     fontSize: 40,
