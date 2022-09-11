@@ -1,5 +1,5 @@
 import { Text, View, FlatList, Image, TouchableOpacity, StyleSheet, Button, Alert } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import Counter from "react-native-counters";
 
@@ -158,18 +158,11 @@ export default function Produts(props) {
 
   return (
 
-    <View>
+    <View style={styles.procs}>
       {/* <Image source={item.image} style={styles.imageStyle} /> */}
 
       <View style={styles.textStyle}>
-        <Text
-          style={{
-            color: "#2e2f30",
-            fontSize: 15,
-            paddingLeft: 5,
-            paddingTop: 35,
-          }}
-        >
+        <Text style={styles.description}>
           {item.Description}
         </Text>
         <View style={styles.priceStyle}>
@@ -185,6 +178,7 @@ export default function Produts(props) {
           start={0}
           max={5}
           style={styles.counterStyle}
+          onChange ={(count) => props.AddToCart(item.Product_Code, count)}
         // onChange={(count) => {SetCount.bind(this)}}
         // onChange={(count) => {
         //   (item.amountTaken = count),
@@ -193,7 +187,6 @@ export default function Produts(props) {
         // }}
         />
       </View>
-
 
       {/* <View style={styles.headerStyle}> */}
       {/* <TouchableOpacity onPress={() => { SetRequest(""), SetTotalSum(0), SetGoodsCount(0), SetStart(0) }}> */}
@@ -216,27 +209,27 @@ export default function Produts(props) {
             <Text style={{ color: "#fff", textAlign: 'center' }}>ORDER</Text>
           </TouchableOpacity>
         </View>
-      </View> 
-      <Footer totalSum={totalSum} goodsCount={goodsCount} />*/}
+      </View>
+      <Footer totalSum={totalSum} goodsCount={goodsCount} /> */}
     </View>
   );
 }
 
-const TotalComponent = ({ totalSum, goodsCount }) => {
-  // const { totalContainerStyle, goodsStyle, totalStyle } = styles;
-  return (
-    <View style={styles.totalContainerStyle}>
-      <View style={styles.goodsStyle}>
-        <Icon name="ios-cart" size={20} style={{ marginRight: 8 }} />
-        <Text>{goodsCount} goods</Text>
-      </View>
+// const TotalComponent = ({ totalSum, goodsCount }) => {
+//   // const { totalContainerStyle, goodsStyle, totalStyle } = styles;
+//   return (
+//     <View style={styles.totalContainerStyle}>
+//       <View style={styles.goodsStyle}>
+//         <Icon name="ios-cart" size={20} style={{ marginRight: 8 }} />
+//         <Text>{goodsCount} goods</Text>
+//       </View>
 
-      <View style={styles.totalContainerStyle}>
-        <Text>Total - ${totalSum} </Text>
-      </View>
-    </View>
-  );
-};
+//       <View style={styles.totalContainerStyle}>
+//         <Text>Total - ${totalSum} </Text>
+//       </View>
+//     </View>
+//   );
+// };
 // const Footer = ({ totalSum, goodsCount }) => {
 //   const {
 //     footerContainerStyle,
@@ -286,6 +279,18 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     backgroundColor: "#fff",
+  },
+  procs: {
+    backgroundColor: "gray",
+    borderColor: "black",
+    borderWidth: 3,
+    borderRadius: 10,
+  },
+  description: {
+    color: "#2e2f30",
+    fontSize: 15,
+    paddingLeft: 5,
+    paddingTop: 35,
   },
   lastItemStyle: {
     flexDirection: "row",

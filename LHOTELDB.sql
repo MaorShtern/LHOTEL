@@ -1249,15 +1249,27 @@ create proc AddNewTask
 @Employee_ID int, 
 @Task_Name nvarchar(30),
 @Description nvarchar(30),
+@Start_Date date,
+@start_Time nvarchar(5),
 @Room_Number int
 as
 begin tran
-	declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+
+	if(@Start_Date is null)
+	begin
+		Set @Start_Date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+	end
+	--declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+	if(@start_Time is null)
+	begin
+		Set @start_Time = (SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+	end 
+
 	declare @number int = (select [Task_Number] from [dbo].[Tasks_Types]where [Task_Name] = @Task_Name)
 
 		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@number,@Room_Number ,@Date,
-		(SELECT CONVERT(VARCHAR(8), GETDATE(), 108)),null,'Open', @Description)
+		values (@Employee_ID,@number,@Room_Number ,@Start_Date,
+		@start_Time,null,'Open', @Description)
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1270,11 +1282,15 @@ go
 --exec AddNewTask 111,'Room Cleaning', 'chips and coke for room 23',23
 --exec AddNewTask 222,'Check-in Customer', 'Room 23',null
 --exec AddNewTask 333,'Room Cleaning',23, 'chips and coke for room 23'
+--exec AddNewTask null,'Change of towels','',null,'13:00',2
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
+--exec ClockIn 111 
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
+
+
 
 
 

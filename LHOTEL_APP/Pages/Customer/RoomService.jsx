@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { ScrollView } from 'react-native-virtualized-view';
 import { Dropdown } from "react-native-element-dropdown";
@@ -7,9 +7,13 @@ import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import { images } from "../../images";
 import Produts from "./Produts";
+import Icon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Task } from "../Class/Tasks";
+
 
 const imagesArray = [
-  {name:"" , image:images.choclatebar}
+  { name: "", image: images.choclatebar }
 ]
 
 const RequestType = [
@@ -28,6 +32,8 @@ const Rooms = [
 ];
 
 export default function RoomService({ navigation }) {
+
+
   const [date, setDate] = useState(new Date());
 
   const [displaymode, setMode] = useState("date");
@@ -47,13 +53,18 @@ export default function RoomService({ navigation }) {
 
   const [flagDate, setFlagDate] = useState(false);
   const [flagTime, setFlagTime] = useState(false);
-
+  const [description, SetDescription] = useState("")
   const [selectedDate, setSelectedDate] = useState("");
   const [time, setTime] = useState("");
   const [products, SetProducts] = useState([])
+  const [cart, SetCart] = useState([])
 
+  const [totalSum, SetTotalSum] = useState(0);
+  const [goodsCount, SetGoodsCount] = useState(0);
 
-  useEffect(() => { getDBProducts() }, []);
+  const [user, SetUser] = useState("")
+
+  useEffect(() => { getDBProducts(), GetConnectedUser() }, []);
 
 
   const getDBProducts = async () => {
@@ -76,6 +87,66 @@ export default function RoomService({ navigation }) {
       alert(error)
     }
   }
+
+
+  const AddNewTask = async (value) => {
+    // console.log("value: "+ JSON.stringify(value));
+    try {
+      const requestOptions = {
+        method: 'POST',
+        body: value,
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewTask', requestOptions);
+      if (result) {
+        alert("The task was successfully saved")
+        navigation.navigate("Home")
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+
+  //  עדין לא רשמנו שרת שיכול לבצא את שמירת החיוב אז יש להוסיף אותו
+  const Save_Purchase = async (value) => {
+    console.log(value);
+
+    try {
+      // const requestOptions = {
+      //   method: 'GET',
+      //   body: value,
+      //   headers: { 'Content-Type': 'application/json' }
+      // };
+      // let result = await fetch('http://proj13.ruppin-tech.co.il/GetProducts', requestOptions);
+      // if (result) {
+      //   alert("The purchase was made successfully")
+      //   navigation.navigate("Home")
+      //   // let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
+      //   // SetProducts(arrayTemp)
+      //   return
+      // }
+      //   // getDBProducts()
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+
+
+  const GetConnectedUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@user');
+      if (value !== null) {
+        SetUser(JSON.parse(value).customerID)
+      }
+    }
+    catch (e) {
+      alert(e)
+    }
+  }
+
 
   const hideDate = () => {
     setFlagDate(false);
@@ -109,18 +180,130 @@ export default function RoomService({ navigation }) {
     hideTime();
   };
 
-  const SaveOrder = async () => {
-    // alert("date: " + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
-    // alert("time: " + time);
-    let order = {
 
+  const Cal_Price = () => {
+    let total = 0;
+    // console.log("cart:  " + JSON.stringify(cart));
+    for (let index = 0; index < cart.length; index++) {
+      let price = cart[index].Price_Per_Unit;
+      let count = cart[index].count;
+      total += price * count
     }
-    // navigation.navigate("Home");
+    return total
+  }
+
+  const Cal_Amount = () => {
+    let counter = 0;
+    // console.log("cart:  " + JSON.stringify(cart));
+    for (let index = 0; index < cart.length; index++) {
+      let count = cart[index].count;
+      counter += count
+    }
+    return counter
+  }
+
+  const Calculate_Final_Amount = () => {
+    let total = 0;
+    let counter = 0;
+    // console.log("cart:  " + JSON.stringify(cart));
+    for (let index = 0; index < cart.length; index++) {
+      let price = cart[index].Price_Per_Unit;
+      let count = cart[index].count;
+      total += price * count
+      counter += count
+    }
+
+    // console.log(total + " " + counter);
+    // SetTotalSum(total);
+    // SetGoodsCount(counter);
+
+  };
+
+  const AddToCart = (code, count) => {
+    let prod = cart.filter((proc) => proc.Product_Code === code)[0]
+    if (prod === undefined) {
+      prod = products.filter((prod) => prod.Product_Code === code)[0]
+      prod.count = count
+      cart.push(prod)
+    }
+    else {
+      prod.count = count
+    }
+  }
+
+
+
+  const CheckValues = () => {
+    if (room !== "" && request !== "" && time !== "")
+      return true
+    else
+      return false
+  }
+
+
+  const SaveOrder = async () => {
+
+    if (CheckValues) {
+      if (request === "Product purchase") {
+        return Alert.alert(
+          "Order",
+          "The amount to be paid is: " + Cal_Price() + " Confirm the purchase?",
+          [
+            {
+              text: "Yes",
+              onPress: () => {
+                // console.log("cart: " + JSON.stringify(cart));
+                // console.log("user: " + JSON.stringify(user));
+                let array = []
+                for (let index = 0; index < cart.length; index++) {
+                  array.push({
+                    id: user,
+                    room: room,
+                    Product_Code: cart[index].Product_Code,
+                    amount: cart[index].count,
+                    payment_Method: "Credit"
+                  })
+                }
+                // console.log("array: " + JSON.stringify(array));
+                Save_Purchase(JSON.stringify(array))
+              },
+            },
+            {
+              text: "No",
+            },]);
+      }
+      else {
+        let task = {
+          className: Task,
+          fields: {
+            Employee_ID: null, 
+            Task_Name: request,
+            Description: description,
+            Start_Date: date, 
+            Start_Time: time, 
+            Room_Number: room
+          }
+        }
+        // console.log("task: " +task.fields);
+        // console.log("task: " + JSON.parse(task));
+        AddNewTask(task)
+      }
+    }
+    else {
+      alert("One of the details is incorrect")
+    }
   };
 
 
   // console.log(products);
-  let listProducts = products.map((prod) => <Produts key={prod.Product_Code} item={prod} />)
+  let listProducts = products.map((product) => <Produts key={product.Product_Code}
+    item={product} AddToCart={AddToCart} />)
+
+
+  // console.log("totalSum: " + totalSum + " goodsCount: " + goodsCount);
+
+
+  // console.log("cart: " + JSON.stringify(cart));
 
 
   return (
@@ -156,13 +339,30 @@ export default function RoomService({ navigation }) {
           />
         </View>
         <View>
-          {request === "" ? (
-            <Text style={styles.alerts}>*Must select request type* </Text>
-          ) : null}
+          {request === "" ? (<Text style={styles.alerts}>*Must select request type* </Text>) : null}
         </View>
+
+
         <View style={styles.ProdutsStyle}>
           {request === "Product purchase" ?
-            (<View>{listProducts}</View>) : (
+            (<View>
+              <View>
+                {listProducts}
+              </View>
+              {/* <View>
+                <View style={styles.footerContainerStyle}>
+                  <View style={styles.totalContainerStyle}>
+                    <View style={styles.goodsStyle}>
+                      <Icon name="ios-cart" size={20} style={{ marginRight: 8 }} />
+                      <Text>{goodsCount} goods</Text>
+                    </View>
+                    <View style={styles.totalContainerStyle}>
+                      <Text>Total - ${totalSum} </Text>
+                    </View>
+                  </View>
+                </View>
+              </View> */}
+            </View>) : (
               <View>
                 <View>
                   <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
@@ -207,15 +407,16 @@ export default function RoomService({ navigation }) {
                   <View style={{ height: 20 }}></View>
                 </View>
 
-                <Text style={styles.Text}>Description </Text>
+                <Text >Description </Text>
                 <View style={styles.textAreaContainer}>
                   <TextInput
                     style={styles.textArea}
-                    underlineColorAndroid="transparent"
-                    placeholder="Type something"
-                    placeholderTextColor="grey"
-                    numberOfLines={10}
+                    // underlineColorAndroid="transparent"
+                    // placeholder="Type something"
+                    // placeholderTextColor="grey"
+                    // numberOfLines={5}
                     multiline={true}
+                    onChange={(text) => SetDescription(text)}
                   />
                 </View>
               </View>)}
@@ -297,7 +498,8 @@ export default function RoomService({ navigation }) {
               </View>
             )} */}
       </View>
-      <View style={styles.ButtonContainer}>
+
+      <View style={{ alignItems: "center", marginBottom: 30 }}>
         <TouchableOpacity>
           <Text style={styles.button} onPress={SaveOrder}>
             ORDER
@@ -323,10 +525,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
   },
-  textArea: {
-    height: 150,
-    justifyContent: "flex-start",
-  },
+  // textArea: {
+  //   height: 150,
+  //   justifyContent: "flex-start",
+  // },
   label: {
     flex: 2,
     padding: 20,
@@ -407,5 +609,28 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     backgroundColor: "#fff",
+  },
+  footerContainerStyle: {
+    paddingRight: 15,
+    paddingLeft: 15,
+  },
+  buttonContainerStyle: {
+    // flexDirection: "row",
+    justifyContent: "center",
+    paddingTop: 15,
+  },
+  checkoutButtonStyle: {
+    backgroundColor: "#f39c12",
+    padding: 10,
+    // textAlign:'center',
+    // paddingRight: 60,
+    // paddingLeft: 60,
+    // justifyContent: "center",
+    borderRadius: 3,
+  },
+  totalContainerStyle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 15,
   },
 });
