@@ -223,7 +223,6 @@ create table Shifts
 go
 
 
-
 create table Employees_Tasks
 (
 	Task_Code int identity(1,1) NOT NULL,

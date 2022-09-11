@@ -90,43 +90,43 @@ export default function RoomService({ navigation }) {
 
 
   const AddNewTask = async (value) => {
-    // console.log("value: "+ JSON.stringify(value));
-    try {
-      const requestOptions = {
-        method: 'POST',
-        body: value,
-        headers: { 'Content-Type': 'application/json' }
-      };
-      let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewTask', requestOptions);
-      if (result) {
-        alert("The task was successfully saved")
-        navigation.navigate("Home")
-      }
-    } catch (error) {
-      alert(error)
-    }
+    console.log("value: " + value);
+    // try {
+    //   const requestOptions = {
+    //     method: 'POST',
+    //     body: value,
+    //     headers: { 'Content-Type': 'application/json' }
+    //   };
+    //   let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewTask', requestOptions);
+    //   if (result) {
+    //     alert("The task was successfully saved")
+    //     navigation.navigate("Home")
+    //   }
+    // } catch (error) {
+    //   alert(error)
+    // }
   }
 
 
   //  עדין לא רשמנו שרת שיכול לבצא את שמירת החיוב אז יש להוסיף אותו
   const Save_Purchase = async (value) => {
-    console.log(value);
+    // console.log(value);
 
     try {
-      // const requestOptions = {
-      //   method: 'GET',
-      //   body: value,
-      //   headers: { 'Content-Type': 'application/json' }
-      // };
-      // let result = await fetch('http://proj13.ruppin-tech.co.il/GetProducts', requestOptions);
-      // if (result) {
-      //   alert("The purchase was made successfully")
-      //   navigation.navigate("Home")
-      //   // let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
-      //   // SetProducts(arrayTemp)
-      //   return
-      // }
-      //   // getDBProducts()
+      const requestOptions = {
+        method: 'GET',
+        body: value,
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/GetProducts', requestOptions);
+      if (result) {
+        alert("The purchase was made successfully")
+        navigation.navigate("Home")
+        // let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
+        // SetProducts(arrayTemp)
+        return
+      }
+      // getDBProducts()
 
     } catch (error) {
       alert(error)
@@ -276,17 +276,16 @@ export default function RoomService({ navigation }) {
         let task = {
           className: Task,
           fields: {
-            Employee_ID: null, 
+            Employee_ID: null,
             Task_Name: request,
             Description: description,
-            Start_Date: date, 
-            Start_Time: time, 
+            Start_Date: moment(date).format("YYYY-MM-DD"),
+            Start_Time: time,
             Room_Number: room
           }
         }
-        // console.log("task: " +task.fields);
         // console.log("task: " + JSON.parse(task));
-        AddNewTask(task)
+        AddNewTask(task.fields)
       }
     }
     else {
