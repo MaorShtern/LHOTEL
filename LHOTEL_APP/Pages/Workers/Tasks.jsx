@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dropdown } from 'react-native-element-dropdown';
 import { images } from '../../images';
 import TasksCard from './TasksCard';
@@ -14,38 +14,61 @@ const RequestType = [
 ];
 
 
-const tasksArray = [
-    {
-        Task_Code: 1, Employee_ID: -1, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-        Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Open', Description: 'ggggg'
-    },
-    {
-        Task_Code: 2, Employee_ID: 111, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-        Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
-    },
-    {
-        Task_Code: 3, Employee_ID: 222, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-        Start_Date: '2022-08-31', End_Time: "23:20", Task_Status: 'Open', Description: 'ggggg'
-    },
-    {
-        Task_Code: 4, Employee_ID: 333, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-        Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
-    },
-]
+// const tasksArray = [
+//     {
+//         Task_Code: 1, Employee_ID: -1, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
+//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Open', Description: 'ggggg'
+//     },
+//     {
+//         Task_Code: 2, Employee_ID: 111, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
+//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
+//     },
+//     {
+//         Task_Code: 3, Employee_ID: 222, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
+//         Start_Date: '2022-08-31', End_Time: "23:20", Task_Status: 'Open', Description: 'ggggg'
+//     },
+//     {
+//         Task_Code: 4, Employee_ID: 333, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
+//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
+//     },
+// ]
 
 
-export default function Tasks({ route, navigation }) {
+export default function Tasks({ navigation }) {
 
-    let { id } = route.params
+    // let { id } = route.params
 
     const [dropdown, setDropdown] = useState(null);
     // const [RequestTask, SetRequestTask] = useState('')
-    const [tasks, SetTasks] = useState(tasksArray)
+    const [tasks, SetTasks] = useState([])
 
     const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([])
 
-    const Edite_Task_Details = (task_code) => {
+    useEffect(() => GetAllTasksFromDB(), [])
 
+
+    const GetAllTasksFromDB = async () => {
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllTasks', requestOptions);
+            let temp = await result.json();
+            if (temp !== null) {
+                SetTasks(temp)
+                return
+            }
+            else
+                GetAllTasksFromDB()
+
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+
+    const Edite_Task_Details = (task_code) => {
         let taskDetails = tasks.filter((per) => per.Task_Code === task_code)[0]
         navigation.navigate('EditTasks', { taskDetails: taskDetails })
     }
@@ -86,9 +109,12 @@ export default function Tasks({ route, navigation }) {
 
     }
 
+
+    // console.log(tasks);
+
     let tasksList = tasks.map((per) => <TasksCard key={per.Task_Code} Task_Code={per.Task_Code}
         Employee_ID={per.Employee_ID} Task_Name={per.Task_Name} Room_Number={per.Room_Number}
-        Start_Date={per.Start_Date} Start_Time={per.Start_Time} End_Time={per.End_Time}
+        Start_Date={moment(per.Start_Date).format("YYYY-MM-DD")} Start_Time={per.Start_Time} End_Time={per.End_Time}
         Task_Status={per.Task_Status} Description={per.Description} Edite_Task_Details={Edite_Task_Details}
         MarkTaskAsDone={MarkTaskAsDone} RemoveFromCheck={RemoveFromCheck} />)
 

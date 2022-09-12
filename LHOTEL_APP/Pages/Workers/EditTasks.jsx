@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { images } from '../../images';
 
 
+
 const RequestType = [
     { label: "Room Cleaning", value: "Room Cleaning" },
     { label: 'Room Service', value: 'Room Service' },
@@ -90,8 +91,6 @@ export default function EditTasks({ route, navigation }) {
         hideEndTime()
     }
 
-
-
     const HandelRequest = (request) => {
         task.Task_Name = request
     }
@@ -104,10 +103,22 @@ export default function EditTasks({ route, navigation }) {
             task.Task_Status = 'Close'
     }
 
-    const SaveTask = () => {
-        // console.log(JSON.stringify(task));
-        alert('The task was successfully saved')
-        navigation.navigate('Tasks')
+    const SaveTask = async () => {
+        try {
+            const requestOptions = {
+                method: 'PUT',
+                body: JSON.stringify(task),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            // console.log(requestOptions.body);
+            let result = await fetch('http://proj13.ruppin-tech.co.il/AlterTask', requestOptions);
+            if (result) {
+                alert("Task details successfully saved")
+                navigation.goBack()
+            }
+        } catch (error) {
+
+        }
     }
 
 

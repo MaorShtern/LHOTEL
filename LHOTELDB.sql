@@ -435,7 +435,6 @@ go
 
 
 
-
 ---------------------------------------------------------
 ---  יהיה צורך למחוק אות מהטבלה "משמרות ו"משימות" ף
 create proc DeleteEmployeeById
@@ -1106,7 +1105,6 @@ go
 --exec ClockIn 333
 
 
-
 create proc DeleteShift
 @Employee_ID int,
 @Entrance_Time datetime
@@ -1328,8 +1326,9 @@ begin tran
 commit tran
 go
 --exec GetAllTasks
+--exec GetAllShifts
 --exec AlterTask 5,111,'Room Cleaning',null,'2022-09-06','13:00','14:00','Close','chips and coke for room 30'
-
+--exec AlterTask 5,222,'Room Cleaning',10,'2022-09-12','06:35','09:40','Open','Igjvibk rbkcrcxe'
 
 
 create proc DeleteTask
