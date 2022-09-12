@@ -26,10 +26,14 @@ namespace BLL
         {
             return DALEmployees.AddNewEmployee(newEmployee);
         }
-
+      
         public static Employees GetEmployeeById(int id)
         {
             return DALEmployees.GetEmployeeById(id);
+        }
+        public static Employees GetEmployeeByIdAndPassword(int id, int password)
+        {
+            return DALEmployees.GetEmployeeByIdAndPassword(id, password);
         }
         public static bool AlterEmployeeById(Employees employee)
         {

@@ -151,7 +151,7 @@ export default function WorkerMenu({ route, navigation }) {
         onPress={() =>
           item.routeNavigation === ""
             ? HandelCardClick(item.title)
-            : navigation.navigate(item.routeNavigation, { id: id })
+            : navigation.navigate(item.routeNavigation)
         }
       >
         <Image style={{ width: 60, height: 60 }} source={item.pic} />

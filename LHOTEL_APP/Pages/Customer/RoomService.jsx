@@ -364,7 +364,7 @@ export default function RoomService({ navigation }) {
             </View>) : (
               <View>
                 <View>
-                  <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+                  <TouchableOpacity style={styles.input} onPress={()=>displayDatepicker()}>
                     <View style={styles.ButtonContainer}>
                       <Text style={styles.text}>
                         {selectedDate === ""

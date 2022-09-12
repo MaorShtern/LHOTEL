@@ -12,7 +12,6 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\bin\Debug\DAL.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\bin\Debug\DAL.pdb
-C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\obj\Debug\DAL.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\DAL\obj\Debug\DAL.pdb

@@ -36,6 +36,21 @@ namespace LHOTELServer.Controllers
         //}
 
 
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/GetEmployeeByIdAndPassword")]
+        public IHttpActionResult GetEmployeeByIdAndPassword([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                int password = data["password"].ToObject<int>();
+                return Ok(BLLEmployees.GetEmployeeByIdAndPassword(id, password));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
 
         [System.Web.Http.HttpPut]

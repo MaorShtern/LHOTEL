@@ -72,7 +72,7 @@ namespace DAL
                         Birth_Date = (DateTime)reader["Birth_Date"],
                         Hourly_Wage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        Employee_Code = (int)reader["Employee_Code"]
+                        //Employee_Code = (int)reader["Employee_Code"]
                     });
                 }
                 return employees;
@@ -111,7 +111,7 @@ namespace DAL
                         Birth_Date = (DateTime)reader["Birth_Date"],
                         Hourly_Wage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        Employee_Code = (int)reader["Employee_Code"]
+                        //Employee_Code = (int)reader["Employee_Code"]
                     };
                 }
                 return employee;
@@ -126,7 +126,45 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
+        public static Employees GetEmployeeByIdAndPassword(int id, int password)
+        {
+            try
+            {
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetEmployeeByIdAndPassword {id},{password} ");
 
+                if (reader == null || !reader.HasRows)
+                {
+                    Console.WriteLine("There is no such employee in the system");
+                    return null;
+                }
+                Employees employee = null;
+                while (reader.Read())
+                {
+                    employee = new Employees()
+                    {
+                        Employee_ID = (int)reader["Employee_ID"],
+                        Description = (string)reader["Description"],
+                        Employee_Name = (string)reader["Employee_Name"],
+                        Phone_Number = (string)reader["Phone_Number"],
+                        Birth_Date = (DateTime)reader["Birth_Date"],
+                        Hourly_Wage = (int)reader["Hourly_Wage"],
+                        Address = (string)reader["Address"],
+                        //Employee_Code = (int)reader["Employee_Code"]
+                    };
+                }
+                return employee;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+       
         public static bool AddNewEmployee(Employees newEmployee)
         {
             try

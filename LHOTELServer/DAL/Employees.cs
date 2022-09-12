@@ -15,7 +15,7 @@ namespace DAL
         public DateTime Birth_Date { set; get; }
         public int Hourly_Wage { set; get; }
         public string Address { set; get; }
-        public int Employee_Code { set; get; }
+        //public int Employee_Code { set; get; }
 
 
         //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,

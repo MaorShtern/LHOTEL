@@ -64,7 +64,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-
+        
         //  צריך לשנות את זה
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetEmployeeById")]
@@ -81,6 +81,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
+      
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewEmployee")]

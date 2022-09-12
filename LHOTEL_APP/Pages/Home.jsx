@@ -11,12 +11,13 @@ import {
 } from "react-native";
 import React from "react";
 // import { BackgroundImage } from '@rneui/base';
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext} from "react";
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
 import WorkerMenu from "./Workers/WorkerMenu";
 import { LinearGradient } from "expo-linear-gradient";
 
+import AppContext from '../AppContext';
 const Users = [
   {
     Employee_ID: -1,
@@ -66,58 +67,93 @@ const Users = [
 
 export default function Home({ navigation }) {
 
-  const [employees, setEmployees] = useState([])
-  const all = async() => {
-    try {
-  
-     
-        const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        };
-        let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllEmployees', requestOptions);
-        let temp = await result.json();
-        if (temp !== null) {
-          let arrayTemp = temp.filter((emp) => emp.Employee_ID !== -1)
-          setEmployees(arrayTemp)
-    //  console.log(arrayTemp);
-          return
-        }
-      
+  const myContext = useContext(AppContext);
 
-      // else
-      //   getDBProducts()
-    } catch (error) {
-      alert(error);
-    }
-  };
+
+
+
+  const [employees, setEmployees] = useState([]);
+
   const [openState, setOpenState] = useState(new Animated.Value(100));
   const [closeState, setCloseState] = useState(new Animated.Value(1));
   const [info, setInfo] = useState(false);
   const [workerCode, setWorkerCode] = useState(1);
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const [id, setId] = useState(0);
+  const [password, setPassword] = useState(0);
 
   // const pass = "123"
 
   useEffect(() => {
     const focus = navigation.addListener("focus", () => {
-      setWorkerCode(1);
+      setWorkerCode(1)
+      setPassword(0)
+      setId(0)
     });
     return focus;
   }, [navigation]);
+  // const all = async() => {
+  //   try {
+
+  //       const requestOptions = {
+  //         method: 'GET',
+  //         headers: { 'Content-Type': 'application/json' }
+  //       };
+  //       let result = await fetch('http://proj13.ruppin-tech.co.il/GetEmployeeById', requestOptions);
+  //       let temp = await result.json();
+  //       if (temp !== null) {
+  //         // let arrayTemp = temp.filter((emp) => emp.Employee_ID !== -1)
+  //         // setEmployees(arrayTemp)
+  //    console.log(arrayTemp);
+  //         return
+  //       }
+
+  //     // else
+  //     //   getDBProducts()
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
 
   const LogIn = async () => {
-    let employee = employees.filter(
-      (emp) => emp.Employee_ID == id && emp.Employee_Code == password
-    )[0];
-  
+    try {
+      const requestOptions = {
+        method: "POST",
+        body: JSON.stringify({
+          id: myContext.employee.id,
+          password: myContext.employee.password,
+        }),
+        headers: { "Content-Type": "application/json" },
+      };
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword",
+        requestOptions
+      );
+      let employee = await result.json();
+     
+      if (employee === undefined|| employee === null) {
+        Alert.alert("No such user exists in the system");
+       return
+        // let role = employee.Description;
+        // navigation.navigate("WorkerMenu", { role: role });
+      } 
+        let role = employee.Description;
+        navigation.navigate("WorkerMenu", { role: role });
     
-    if (employee !== undefined) {
-      let role = employee.Description;
-      navigation.navigate("WorkerMenu", {role: role });
-    } else Alert.alert("No such user exists in the system");
+    } catch (error) {
+      alert(error);
+    }
   };
+  // const LogIn = async () => {
+  //   let employee = employees.filter(
+  //     (emp) => emp.Employee_ID == id && emp.Employee_Code == password
+  //   )[0];
+
+  //   console.log(employee);
+  //   if (employee !== undefined) {
+  //     let role = employee.Description;
+  //     navigation.navigate("WorkerMenu", {role: role });
+  //   } else Alert.alert("No such user exists in the system");
+  // };
 
   const HandelNavigation = (route) => {
     // console.log(route);
@@ -134,7 +170,9 @@ export default function Home({ navigation }) {
               left={<TextInput.Icon name="account" />}
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
-              onChangeText={(id) => setId(id)}
+              // onChangeText={(id) => setId(id)}
+              // value={myContext.employee.id}
+              onChangeText={myContext.setEmployeeId}
             />
 
             <TextInput
@@ -142,9 +180,14 @@ export default function Home({ navigation }) {
               left={<TextInput.Icon name="lock" />}
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
-              onChangeText={(code) => setPassword(code)}
+              // value={myContext.employee.password}
+              onChangeText={myContext.setEmployeePassword}
+              // onChangeText={(code) => setPassword(code)}
             />
-            <TouchableOpacity style={styles.btn} onPress={LogIn}>
+          
+            <TouchableOpacity style={styles.btn}  onPress={() => {LogIn(),console.log(JSON.stringify(
+        myContext.employee
+        ))}}>
               <Text style={{ fontSize: 20, color: "white", fontWeight: "800" }}>
                 LOGIN
               </Text>
@@ -267,7 +310,7 @@ export default function Home({ navigation }) {
               </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
-                  doAnimation(closeState, 8, 500), setInfo(true),all();
+                  doAnimation(closeState, 8, 500), setInfo(true);
                 }}
                 style={{
                   // width: "80%",

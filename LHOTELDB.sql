@@ -364,8 +364,6 @@ go
 --exec GetEmployeeById 222
 --select * from Employees
 
-
-
 create proc InsertEmployee 
 @id int, 
 @name nvarchar(30),
