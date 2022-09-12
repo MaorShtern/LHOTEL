@@ -9,11 +9,11 @@ namespace DAL
 {
     public class DALEmployees
     {
-        public static bool ClockIn(int id)
+        public static bool ClockIn(int id, string time)
         {
             try
             {
-                string str = $@"exec ClockIn {id}";
+                string str = $@"exec ClockIn {id},'{time}'";
                 str = str.Replace("\r\n", string.Empty);
                 int rowsAffected = SQLConnection.ExeNonQuery(str);
                 if (rowsAffected >= 1)
@@ -31,11 +31,11 @@ namespace DAL
             }
         }
 
-        public static bool ClockOut(int id)
+        public static bool ClockOut(int id, string time)
         {
             try
             {
-                string str = $@"exec ClockOut {id}";
+                string str = $@"exec ClockOut {id}, '{time}'";
                 str = str.Replace("\r\n", string.Empty);
                 int rowsAffected = SQLConnection.ExeNonQuery(str);
                 if (rowsAffected >= 1)

@@ -8,8 +8,8 @@ import Booking from "../Customer/Booking";
 import SaveRoom from "../Customer/SaveRoom";
 import Payment from "../Customer/Payment";
 import ConfirmationPage from "../Customer/ConfirmationPage";
-import RoomService from "../Customer/RoomService";
-import Bill from "../Customer/Bill";
+// import RoomService from "../Customer/RoomService";
+// import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
 
 const drawer = createDrawerNavigator();
@@ -78,7 +78,7 @@ export default function Drawer() {
           }}
         />
 
-        <drawer.Screen
+        {/* <drawer.Screen
           name="Room Service"
           component={RoomService}
           options={{
@@ -99,7 +99,7 @@ export default function Drawer() {
               backgroundColor: "#000",
             },
           }}
-        />
+        /> */}
          {/* <drawer.Screen
           name="CheckIn"
           component={CheckIn}

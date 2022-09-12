@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {User} from '../Class/User'
+import { User } from '../Class/User'
 
 
 export default function Registration({ navigation }) {
@@ -29,69 +28,96 @@ export default function Registration({ navigation }) {
     }
 
 
-    const Save_User = () => {
-        if (CheackFields()) {
-
-            let array = getData()
-            let new_user = CreateUser()
-            if (array === null) {
-                setArrUsers([])
-            }
-            else {
-                setArrUsers(array)
-            }
-
-            let new_Array = [...arrUsers, new_user.fields]
-
-            setArrUsers(new_Array)
-
-            saveData(new_Array)
-
-        }
-
-
-        else
-            Alert.alert("All fields must be filled")
-    }
-
-
-    const saveData = async (new_Array) => {
+    const Save_User = async () => {
         try {
-           
-            await AsyncStorage.setItem('@storage_Key_0', JSON.stringify(new_Array), () => {
-                Alert.alert("Data Saved")
+            let user = CreateUser()
+            user = JSON.stringify(user.fields)
+            console.log(user)
+            const requestOptions = {
+                method: 'POST',
+                body: user,
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewCustomer', requestOptions);
+            if(result)
+            {
+                alert("User successfully added")
                 navigation.navigate('Login')
-            });
+            }
 
-        }
-        catch (error) {
-            Alert.alert(error)
-        }
-    }
-
-
-
-
-    const getData = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('@storage_Key_0')
-            return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (error) {
-            Alert.alert(error)
+            alert(error)
         }
+
     }
+
+
+    // const Save_User = () => {
+    //     if (CheackFields()) {
+
+    //         let array = getData()
+    //         let new_user = CreateUser()
+    //         if (array === null) {
+    //             setArrUsers([])
+    //         }
+    //         else {
+    //             setArrUsers(array)
+    //         }
+
+    //         let new_Array = [...arrUsers, new_user.fields]
+
+    //         setArrUsers(new_Array)
+
+    //         saveData(new_Array)
+
+    //     }
+
+
+    //     else
+    //         Alert.alert("All fields must be filled")
+    // }
+
+
+    // const saveData = async (new_Array) => {
+    //     try {
+
+    //         await AsyncStorage.setItem('@storage_Key_0', JSON.stringify(new_Array), () => {
+    //             Alert.alert("Data Saved")
+    //             navigation.navigate('Login')
+    //         });
+
+    //     }
+    //     catch (error) {
+    //         Alert.alert(error)
+    //     }
+    // }
+
+
+
+
+    // const getData = async () => {
+    //     // try {
+    //     //     const jsonValue = await AsyncStorage.getItem('@storage_Key_0')
+    //     //     return jsonValue != null ? JSON.parse(jsonValue) : null;
+    //     // } catch (error) {
+    //     //     Alert.alert(error)
+    //     // }
+    // }
 
 
     const CreateUser = () => {
+        var Hashes = require('jshashes')
+        let SHA1 = new Hashes.SHA1().b64_hmac(id, password)
+
         let user = {
             calssName: User,
             fields: {
-                id: id,
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                password: password,
-                phone: phone
+                CustomerID: id,
+                FirstName: first_name,
+                LastName: last_name,
+                Mail: email,
+                password: SHA1,
+                PhoneNumber: phone
             }
         }
         return user
@@ -152,7 +178,7 @@ export default function Registration({ navigation }) {
                 <TouchableOpacity>
                     <Text style={styles.button} onPress={Save_User} >SUBMIT</Text>
                 </TouchableOpacity>
-               
+
             </View>
         </ScrollView>
     )
@@ -166,7 +192,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-      
+
 
     },
     label: {

@@ -9,13 +9,13 @@ namespace BLL
 {
     public class BLLEmployees
     {
-        public static bool ClockIn(int id)
+        public static bool ClockIn(int id, string time)
         {
-            return DALEmployees.ClockIn(id);
+            return DALEmployees.ClockIn(id, time);
         }
-        public static bool ClockOut(int id)
+        public static bool ClockOut(int id, string time)
         {
-            return DALEmployees.ClockOut(id);
+            return DALEmployees.ClockOut(id, time);
         }
         public static List<Employees> GetAllEmployees()
         {

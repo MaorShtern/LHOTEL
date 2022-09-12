@@ -1,38 +1,11 @@
-import React, { useState, useEffect} from "react";
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Keyboard,
-  ScrollView,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView, } from "react-native";
 import { Divider } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
 
-const Employees = [
-  {
-    Employee_ID: -1, Employee_Code: null, Employee_Name: "John", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "General", Hourly_Wage: null, Address: null, Entry: "09:00", Exit: "18:00"
-  },
-  {
-    Employee_ID: 111, Employee_Code: 1, Employee_Name: "Miri", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Manager", Hourly_Wage: null, Address: null, Entry: "10:00", Exit: "15:00"
-  },
-  {
-    Employee_ID: 222, Employee_Code: 2, Employee_Name: "Alon", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Receptionist", Hourly_Wage: null, Address: null, Entry: "08:00", Exit: "17:00"
-  },
-  {
-    Employee_ID: 333, Employee_Code: 3, Employee_Name: "Tamar", Phone_Number: null, Birth_Date: null,
-    Worker_Code: null, Role: "Room service", Hourly_Wage: null, Address: null, Entry: "09:00", Exit: null
-  },
-];
-
 
 export default function Shift() {
+
   const [empItems, setEmpItems] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -48,8 +21,6 @@ export default function Shift() {
       let result = await fetch('http://proj13.ruppin-tech.co.il/GetWorkersOnShift', requestOptions);
       let temp = await result.json();
       if (temp !== null) {
-        // console.log(temp);
-        // let arrayTemp = temp.filter((proc) => proc.Description !== "Room")
         setEmpItems(temp)
         return
       }
@@ -68,7 +39,8 @@ export default function Shift() {
         <View style={styles.itemLeft}>
           <Text>{item.Description}</Text>
         </View>
-        <View></View>
+        <View>
+        </View>
         <View>
           <Text>{item.Entrance_Time} </Text>
           <Divider />
@@ -82,7 +54,10 @@ export default function Shift() {
           <Text>Exit :</Text>
           <Divider />
         </View>
+        <View>
         <Text>{item.Employee_ID} </Text>
+        <Text>{item.Employee_Name} </Text>
+        </View>
       </View>
     );
   };
@@ -104,27 +79,25 @@ export default function Shift() {
 
   return (
     <View style={styles.container}>
-     
-        <Text style={styles.sectionTitle}>Today's shift</Text>
 
-        <SearchBar
-          round={true}
-          lightTheme={true}
-          placeholder="search worker..."
-          onChangeText={SerchEmployee}
-          value={search}
-        />
-      
-        <ScrollView style={styles.tasksWrapper}
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.items}>{listEmployees}</View>
-        </ScrollView>
-      
-  
+      <Text style={styles.sectionTitle}>Today's shift</Text>
+
+      <SearchBar
+        round={true}
+        lightTheme={true}
+        placeholder="search worker..."
+        onChangeText={SerchEmployee}
+        value={search}
+      />
+
+      <ScrollView style={styles.tasksWrapper}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.items}>{listEmployees}</View>
+      </ScrollView>
     </View>
   );
 }

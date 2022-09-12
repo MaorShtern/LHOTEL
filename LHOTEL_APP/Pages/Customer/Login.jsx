@@ -5,14 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Login({ navigation }) {
 
-  // const [arrUsers, setArrUsers] = useState([])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-
-  // useEffect(() => { readData(); }, []);
-
-  // useEffect(() => { FetchUserFromDB() }, []);
 
 
   const FetchUserFromDB = async () => {
@@ -25,32 +19,16 @@ export default function Login({ navigation }) {
       }),
       headers: { 'Content-Type': 'application/json' }
     };
-    let result = await fetch ('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
     let user = await result.json();
-
-    console.log(user);
-    console.log(email);
-    console.log(password);
     if (user !== null) {
-      console.log(user);
+      console.log(JSON.stringify(user));
       saveUser(user)
       return
     }
-    // FetchData()
+    FetchUserFromDB()
   }
 
-  // const readData = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('@storage_Key_0');
-
-  //     if (value !== null) {
-  //       let new_Array = [value]
-  //       setArrUsers(JSON.parse(new_Array))
-  //     }
-  //   } catch (e) {
-  //     alert('Failed to fetch the input from storage');
-  //   }
-  // };
 
 
   const saveUser = async (value) => {
@@ -69,15 +47,7 @@ export default function Login({ navigation }) {
   const LogIn = () => {
 
     if (email.length != 0 && password.length != 0) {
-
-
       FetchUserFromDB()
-      // let find_user = arrUsers.filter((per) => per['email'] === email && per['password'] === password)
-      // find_user = find_user[0]
-
-      // if (find_user !== undefined) {
-      //   saveUser(email)
-
     }
     else {
       Alert.alert("No such user exists in the system")

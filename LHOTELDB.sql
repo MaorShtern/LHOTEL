@@ -113,6 +113,7 @@ create table Customers
 go
 
 
+
 create table Rooms
 (
 	Room_Number int identity(1,1),
@@ -504,6 +505,7 @@ go
 --exec GetCustomerById 10
 
 
+ 
 create proc GetCustomerByMail
 @Mail nvarchar(100)
 as
@@ -519,7 +521,7 @@ begin tran
 commit tran
 go
 
--- exec GetCustomerByMail 'ccc@gmail.com'
+-- exec GetCustomerByMail 'John@gmail.com'
 
 
 create proc GetCustomerByIDAndMail
@@ -565,7 +567,7 @@ begin tran
 	end
 commit tran
 go
-
+--select * from Customers
 --exec AddNewCustomer 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569,'4580111122223333'
 --exec AddNewCustomer 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781,'4580211122223333'
 --exec AddNewCustomer 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569,'4580311122223333'
@@ -575,8 +577,6 @@ go
 --exec AddNewCustomer 777,2,'ggg','ggg','ggg@gmail.com','ggg','0531528966','ggg','02/28',569,'4580711122223333'
 --exec AddNewCustomer 888,3,'hhh','hhh','hhh@gmail.com','hhh','0576488918','hhh','02/28',381,'4580811122223333'
 --exec AddNewCustomer 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','','',-1,''
-
-
 
 
 
@@ -1083,15 +1083,15 @@ go
 
  
 create proc ClockIn
-@Employee_ID int
+@Employee_ID int,
+@Entry_Time nvarchar(5)
 as
 begin tran
 	DECLARE @Employee_Code int=(select Employee_Code  from Employees 
 	where Employee_ID = @Employee_ID)
 	DECLARE @Worker_Code int =(select Worker_Code from Employees 
 	where Employee_ID = @Employee_ID)
-	insert [dbo].[Shifts] values (@Employee_ID,@Employee_Code,@Worker_Code,getdate(),
-	(select convert(varchar, getdate(), 120)),null)
+	insert [dbo].[Shifts] values (@Employee_ID,@Employee_Code,@Worker_Code,getdate(),@Entry_Time,null)
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1101,14 +1101,15 @@ begin tran
 commit tran
 go
 --exec GetAllShifts
---exec ClockIn 111
+--exec ClockIn 111, '15:33'
 --exec ClockIn 222
 --exec ClockIn 333
 
 
+
 create proc DeleteShift
 @Employee_ID int,
-@Entrance_Time datetime 
+@Entrance_Time datetime
 as
 begin tran
 	delete from [dbo].[Shifts]
@@ -1125,12 +1126,13 @@ go
 
 
 
-create proc ClockOut
-@Employee_ID int
+alter proc ClockOut
+@Employee_ID int,
+@Entry_Time nvarchar(5)
 as
 begin tran
 	update [dbo].[Shifts]
-	set [Leaving_Time] = (SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+	set [Leaving_Time] = @Entry_Time
 	where Employee_ID = @Employee_ID and [Leaving_Time] IS NULL
 	if (@@error !=0)
 	begin
@@ -1814,7 +1816,6 @@ go
 --  exec CheckIn 222 , '2022-09-14'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
-
 
 
 create proc CheckIn_With_Existing_User

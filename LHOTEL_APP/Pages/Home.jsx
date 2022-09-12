@@ -1,87 +1,29 @@
-import {
-  Animated,
-  View,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  StatusBar,
-  Alert,
-  ImageBackground,
-} from "react-native";
+import { Animated, View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
 import React from "react";
 // import { BackgroundImage } from '@rneui/base';
-import { useState, useEffect ,useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
 import WorkerMenu from "./Workers/WorkerMenu";
 import { LinearGradient } from "expo-linear-gradient";
-
 import AppContext from '../AppContext';
-const Users = [
-  {
-    Employee_ID: -1,
-    Employee_Code: null,
-    Employee_Name: "",
-    Phone_Number: null,
-    Birth_Date: null,
-    Worker_Code: null,
-    Role: "General",
-    Hourly_Wage: null,
-    Address: null,
-  },
-  {
-    Employee_ID: 111,
-    Employee_Code: 1,
-    Employee_Name: "",
-    Phone_Number: null,
-    Birth_Date: null,
-    Worker_Code: null,
-    Role: "Manager",
-    Hourly_Wage: null,
-    Address: null,
-  },
-  {
-    Employee_ID: 222,
-    Employee_Code: 2,
-    Employee_Name: "",
-    Phone_Number: null,
-    Birth_Date: null,
-    Worker_Code: null,
-    Role: "Receptionist",
-    Hourly_Wage: null,
-    Address: null,
-  },
-  {
-    Employee_ID: 333,
-    Employee_Code: 3,
-    Employee_Name: "",
-    Phone_Number: null,
-    Birth_Date: null,
-    Worker_Code: null,
-    Role: "Room service",
-    Hourly_Wage: null,
-    Address: null,
-  },
-];
+
 
 export default function Home({ navigation }) {
 
   const myContext = useContext(AppContext);
 
+  // const [employees, setEmployees] = useState([]);
 
+  // const [openState, setOpenState] = useState(new Animated.Value(100));
 
-
-  const [employees, setEmployees] = useState([]);
-
-  const [openState, setOpenState] = useState(new Animated.Value(100));
+  
   const [closeState, setCloseState] = useState(new Animated.Value(1));
   const [info, setInfo] = useState(false);
   const [workerCode, setWorkerCode] = useState(1);
   const [id, setId] = useState(0);
   const [password, setPassword] = useState(0);
 
-  // const pass = "123"
 
   useEffect(() => {
     const focus = navigation.addListener("focus", () => {
@@ -91,28 +33,7 @@ export default function Home({ navigation }) {
     });
     return focus;
   }, [navigation]);
-  // const all = async() => {
-  //   try {
 
-  //       const requestOptions = {
-  //         method: 'GET',
-  //         headers: { 'Content-Type': 'application/json' }
-  //       };
-  //       let result = await fetch('http://proj13.ruppin-tech.co.il/GetEmployeeById', requestOptions);
-  //       let temp = await result.json();
-  //       if (temp !== null) {
-  //         // let arrayTemp = temp.filter((emp) => emp.Employee_ID !== -1)
-  //         // setEmployees(arrayTemp)
-  //    console.log(arrayTemp);
-  //         return
-  //       }
-
-  //     // else
-  //     //   getDBProducts()
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
 
   const LogIn = async () => {
     try {
@@ -124,21 +45,19 @@ export default function Home({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword", requestOptions);
       let employee = await result.json();
-     
-      if (employee === undefined|| employee === null) {
+
+      if (employee === undefined || employee === null) {
         Alert.alert("No such user exists in the system");
-       return
+        return
         // let role = employee.Description;
         // navigation.navigate("WorkerMenu", { role: role });
-      } 
-        let role = employee.Description;
-        navigation.navigate("WorkerMenu", { role: role });
-    
+      }
+      // console.log(JSON.stringify(employee));
+      // let role = employee.Description;
+      navigation.navigate("WorkerMenu", { employee: employee });
+
     } catch (error) {
       alert(error);
     }
@@ -182,12 +101,13 @@ export default function Home({ navigation }) {
               style={{ margin: 10, paddingLeft: 3 }}
               // value={myContext.employee.password}
               onChangeText={myContext.setEmployeePassword}
-              // onChangeText={(code) => setPassword(code)}
+            // onChangeText={(code) => setPassword(code)}
             />
-          
-            <TouchableOpacity style={styles.btn}  onPress={() => {LogIn(),console.log(JSON.stringify(
-        myContext.employee
-        ))}}>
+
+            <TouchableOpacity style={styles.btn} onPress={() => {
+              LogIn()
+              // console.log(JSON.stringify(myContext.employee))
+            }}>
               <Text style={{ fontSize: 20, color: "white", fontWeight: "800" }}>
                 LOGIN
               </Text>

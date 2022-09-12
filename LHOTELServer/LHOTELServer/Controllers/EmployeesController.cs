@@ -60,7 +60,8 @@ namespace LHOTELServer.Controllers
             try
             {
                 int id = data["id"].ToObject<int>();
-                return Ok(BLLEmployees.ClockIn(id));
+                string time = data["time"].ToObject<string>();
+                return Ok(BLLEmployees.ClockIn(id, time));
             }
             catch (Exception)
             {
@@ -75,7 +76,8 @@ namespace LHOTELServer.Controllers
             try
             {
                 int id = data["id"].ToObject<int>();
-                return Ok(BLLEmployees.ClockOut(id));
+                string time = data["time"].ToObject<string>();
+                return Ok(BLLEmployees.ClockOut(id, time));
             }
             catch (Exception)
             {

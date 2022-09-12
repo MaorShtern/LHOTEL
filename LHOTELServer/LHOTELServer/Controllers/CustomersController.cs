@@ -20,15 +20,16 @@ namespace LHOTELServer.Controllers
     public class CustomersController : ApiController
     {
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]
-        public IHttpActionResult GetCustomerByMail([FromBody] JObject data)
+        public IHttpActionResult GetCustomerByMailAndPassword([FromBody] JObject data)
         {
             try
             {
                 string mail = data["mail"].ToObject<string>();
-             
-                return Ok(BLLCustomers.GetCustomerByMail(mail));
+                string password = data["password"].ToObject<string>();
+
+                return Ok(BLLCustomers.GetCustomerByMailAndPassword(mail, password));
             }
             catch (Exception e)
             {
@@ -60,6 +61,8 @@ namespace LHOTELServer.Controllers
         {
             try
             {
+                //return Ok(customer);
+
                 return Ok(BLLCustomers.AddNewCustomer(customer));
             }
             catch (Exception e)

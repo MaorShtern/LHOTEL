@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-//using static BCrypt.Net.BCrypt;
+using static BCrypt.Net.BCrypt;
 
 
 namespace DAL
@@ -61,25 +61,28 @@ namespace DAL
                 {
                     return null;
                 }
-                Customers customer = null;
-                while (reader.Read())
-                {
-                    customer = new Customers()
+
+                //bool verified = Verify(password, (string)reader["Password"]);
+
+                    Customers customer = null;
+                    while (reader.Read())
                     {
-                        CustomerID = (int)reader["Customer_ID"],
-                        CustomerType = (int)reader["Customer_Type"],
-                        FirstName = (string)reader["First_Name"],
-                        LastName = (string)reader["Last_Name"],
-                        Mail = (string)reader["Mail"],
-                        Password = (string)reader["Password"],
-                        PhoneNumber = (string)reader["Phone_Number"],
-                        CardHolderName = (string)reader["Card_Holder_Name"],
-                        CreditCardDate = (string)reader["Credit_Card_Date"],
-                        ThreeDigit = (int)reader["Three_Digit"],
-                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
-                    };
-                }
-                return customer;
+                        customer = new Customers()
+                        {
+                            CustomerID = (int)reader["Customer_ID"],
+                            CustomerType = (int)reader["Customer_Type"],
+                            FirstName = (string)reader["First_Name"],
+                            LastName = (string)reader["Last_Name"],
+                            Mail = (string)reader["Mail"],
+                            Password = (string)reader["Password"],
+                            PhoneNumber = (string)reader["Phone_Number"],
+                            CardHolderName = (string)reader["Card_Holder_Name"],
+                            CreditCardDate = (string)reader["Credit_Card_Date"],
+                            ThreeDigit = (int)reader["Three_Digit"],
+                            Credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        };
+                    }
+                    return customer;
             }
             catch (Exception e)
             {
@@ -92,6 +95,32 @@ namespace DAL
             }
         }
 
+        public static Customers GetCustomerByMailAndPassword(string mail, string password)
+        {
+            try
+            {
+                Customers customer = GetCustomerByMail(mail);
+                return customer;
+                bool verify = Verify(password, customer.Password);
+                if (customer != null  && verify)
+                {
+                    return customer;
+                }
+                else
+                    return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
+
         public static bool AddNewCustomer(Customers customer)
         {
             try
@@ -101,7 +130,7 @@ namespace DAL
 
 
                     string str = $@"exec AddNewCustomer {customer.CustomerID},
-{customer.CustomerType},'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
+1,'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
 '{customer.Password}','{customer.PhoneNumber}','{customer.CardHolderName}',
 '{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
                     str = str.Replace("\r\n", string.Empty);

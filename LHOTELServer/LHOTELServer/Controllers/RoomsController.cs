@@ -99,7 +99,7 @@ namespace LHOTELServer.Controllers
         {
             try
             {
-                string id = data["mail"].ToObject<string>();
+                string id = data["id"].ToObject<string>();
                 string entryDate = data["Entry_Date"].ToObject<string>();
                 return Ok(BLLRooms.CheckIn(id, entryDate));
             }

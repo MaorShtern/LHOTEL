@@ -20,6 +20,8 @@ export default function CustomerHome({ route, navigation }) {
     const [user, SetUser] = useState([])
 
 
+    console.log("user: " + JSON.stringify(user));
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             GetConnectedUser();
@@ -60,7 +62,7 @@ export default function CustomerHome({ route, navigation }) {
                     <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
                         <Text style={{ color: 'white' }}>Log out</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: 'white' }} >Username: {user.firstName} {user.lastName}</Text>
+                    <Text style={{ color: 'white' }} >Username: {user.FirstName} {user.LastName}</Text>
                     {/* <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text> */}
 
                 </View>)

@@ -1,145 +1,106 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-  Animated,
-  ScrollView,
-  StatusBar,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, } from "react-native";
 import React, { useEffect, useState } from "react";
 import { images } from "../../images";
+import moment from "moment/moment";
 
 const workerCardsArr = [
-  {
-    code: 999,
-    Description: "General",
-    title: "Exit shift",
-    pic: images.exit_shift,
-    routeNavigation: "Home",
-  },
-  {
-    code: 999,
-    Description: "General",
-    title: "Enter shift",
-    pic: images.enter_shift,
-    routeNavigation: "Home",
-  },
-  {
-    code: 1,
-    Description: "Manager",
-    title: "Employees Management",
-    pic: images.workers_management,
-    routeNavigation: "EmployeesManagement",
-  },
-  {
-    code: 1,
-    Description: "Manager",
-    title: "Current Shift",
-    pic: images.shift,
-    routeNavigation: "Shift",
-  },
-  {
-    code: 1,
-    Description: "Manager",
-    title: "Reports",
-    pic: images.reports,
-    routeNavigation: "",
-  },
-  {
-    code: 2,
-    Description: "Receptionist",
-    title: "Add charge",
-    pic: images.add_charge,
-    routeNavigation: "AddCharge",
-  },
-  {
-    code: 2,
-    Description: "Receptionist",
-    title: "Check In",
-    pic: images.checkIn,
-    routeNavigation: "CheckIn",
-  },
-  {
-    code: 2,
-    Description: "Receptionist",
-    title: "Check Out",
-    pic: images.checkOut,
-    routeNavigation: "CheckOut",
-  },
-  {
-    code: 3,
-    Description: "Room service",
-    title: "Tasks",
-    pic: images.tasks,
-    routeNavigation: "Tasks",
-  },
+  { code: 999, Description: "General", title: "Exit shift", pic: images.exit_shift, routeNavigation: "" },
+  { code: 999, Description: "General", title: "Enter shift", pic: images.enter_shift, routeNavigation: "" },
+  { code: 1, Description: "Manager", title: "Employees Management", pic: images.workers_management, routeNavigation: "EmployeesManagement" },
+  { code: 1, Description: "Manager", title: "Current Shift", pic: images.shift, routeNavigation: "Shift", },
+  { code: 1, Description: "Manager", title: "Reports", pic: images.reports, routeNavigation: "", },
+  { code: 2, Description: "Receptionist", title: "Add charge", pic: images.add_charge, routeNavigation: "AddCharge", },
+  { code: 2, Description: "Receptionist", title: "Check In", pic: images.checkIn, routeNavigation: "CheckIn", },
+  { code: 2, Description: "Receptionist", title: "Check Out", pic: images.checkOut, routeNavigation: "CheckOut", },
+  { code: 3, Description: "Room service", title: "Tasks", pic: images.tasks, routeNavigation: "Tasks", },
 ];
+
 
 const numColumns = 2;
 const WIDTH = Dimensions.get("window").width;
 
 export default function WorkerMenu({ route, navigation }) {
-  const { role } = route.params;
+
+  const { employee } = route.params;
 
   const [currentUserArr, SetCurrentUserArr] = useState([]);
 
-  useEffect(() => {
-    GetCardsByRole();
-  }, []);
+  useEffect(() => { GetCardsByRole(); }, []);
+
 
   const GetCardsByRole = () => {
     let arrayTempCards = [];
     try {
-      if (role === "Manager") arrayTempCards = workerCardsArr;
+      if (employee.Description === "Manager") arrayTempCards = workerCardsArr;
       else {
         arrayTempCards = workerCardsArr.filter(
           (workerCard) =>
-            workerCard.Description === role ||
+            workerCard.Description === employee.Description ||
             workerCard.Description === "General"
         );
       }
     } catch (error) {
       Alert.alert("error");
     }
-
-    // switch (role) {
-    //   i
-    //   case 1:
-    //     arrayTempCards = workerCardsArr
-    //     break;
-    //   case 2:
-    //     arrayTempCards = workerCardsArr.filter((workerCard) =>
-    //       workerCard.Description === 'Receptionist' || workerCard.Description === 'General')
-    //     break;
-    //   case 3:
-    //     arrayTempCards = workerCardsArr.filter((workerCard) =>
-    //       workerCard.Description === 'Room service' || workerCard.Description === 'General')
-    //     break;
-    //   default:
-    // Alert.alert("error");
-
     SetCurrentUserArr(arrayTempCards);
   };
-  // let { currentUserArr, setWorkerCode, navigation } = route.params
 
-  // let { setWorkerCode,currentUserArr,navigation} = props
+// console.log(employee);
 
-  // const HandelNavigation = (route)=>{
-  //     // console.log(route);
-  //     props.HandelNavigation(route)
-  // }
+
+  const ClockIn = async (today) => {
+    try {
+      // let user = CreateUser()
+      //       user = JSON.stringify(user.fields)
+      //       console.log(user)
+      const requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify({
+          id: employee.Employee_ID,
+          time:today
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/ClockIn', requestOptions);
+      if (result) {
+        alert("ClockIn at : " + today);
+        // navigation.navigate('Login')
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  const ClockOut = async (today) => {
+    try {
+      const requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify({
+          id: employee.Employee_ID,
+          time:today
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      };
+
+      // console.log(requestOptions.body);
+      let result = await fetch('http://proj13.ruppin-tech.co.il/ClockOut', requestOptions);
+      if (result) {
+        alert("ClockOut at : " + today);
+        // navigation.navigate('Login')
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   const HandelCardClick = (title) => {
     let today = new Date();
+    let dateString = moment(today).format('HH:mm')
     if (title === "Enter shift")
-      alert("start shift at : " + today.getHours() + ":" + today.getMinutes());
+      ClockIn(dateString)
     else if (title === "Exit shift")
-      alert("end shift at : " + today.getHours() + ":" + today.getMinutes());
+      ClockOut(dateString)
+    // alert("end shift at : " + today.getHours() + ":" + today.getMinutes());
   };
 
   const GetItem = ({ item, index }) => {
@@ -148,12 +109,7 @@ export default function WorkerMenu({ route, navigation }) {
       <TouchableOpacity
         style={styles.item}
         key={index}
-        onPress={() =>
-          item.routeNavigation === ""
-            ? HandelCardClick(item.title)
-            : navigation.navigate(item.routeNavigation)
-        }
-      >
+        onPress={() => item.routeNavigation === "" ? HandelCardClick(item.title) : navigation.navigate(item.routeNavigation)}>
         <Image style={{ width: 60, height: 60 }} source={item.pic} />
         <Text style={styles.itemText}>{item.title}</Text>
         {/* <Text>{item.toString()}</Text> */}
@@ -183,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
- 
+
   },
 
   item: {
