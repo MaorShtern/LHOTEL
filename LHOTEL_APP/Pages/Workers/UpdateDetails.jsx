@@ -20,8 +20,8 @@ export default function UpdateDetails({ route, navigation }) {
     const [dropdown, setDropdown] = useState(null);
     const [flagDate, setFlagDate] = useState(false)
 
-
     let { employee } = route.params
+
 
     const showDate = () => {
         setFlagDate(true);
@@ -37,24 +37,56 @@ export default function UpdateDetails({ route, navigation }) {
         hideDate()
     };
 
+    const CheckDetails = () => {
+        if (employee.Employee_Name !== "" && employee.Hourly_Wage > 0 && employee.Phone_Number !== "")
+            return true
+        else
+            return false
+    }
+
+    // console.log(JSON.stringify(employee));
+
+
+    const SaveEmployeeToDB = async () => {
+        // navigation.goBack()
+        try {
+            const requestOptions = {
+                method: 'PUT',
+                body: JSON.stringify(employee),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/AlterEmployeeById', requestOptions);
+            if (result) {
+                alert("Employee details have been saved successfully")
+                navigation.goBack()
+            }
+        } catch (error) {
+            alert(error)
+        }
+
+    }
+
+
+
     const SaveUser = () => {
         // console.log(employee);
-        return Alert.alert(
-            "Saving employee details",
-            "Are you sure these are the details for the employee?",
-            [
-                {
-                    text: "Yes",
-                    onPress: () => {
-                        // console.log(employee);
-                        navigation.goBack()
-                        // let newArray = employees.filter((per) => per.Employee_ID !== value)
-                        // SetEmployees(newArray)
+
+        if (CheckDetails()) {
+            return Alert.alert(
+                "Saving employee details",
+                "Are you sure these are the details for the employee?",
+                [
+                    {
+                        text: "Yes",
+                        onPress: () => {
+                            // employee.Birth_Date = moment(employee.Birth_Date).format('YYYY-MM-DD')
+                            SaveEmployeeToDB()
+                        },
                     },
-                },
-                { text: "No", },
-            ]
-        );
+                    { text: "No", },
+                ]
+            );
+        }
 
     }
     // console.log(employee);
@@ -65,16 +97,9 @@ export default function UpdateDetails({ route, navigation }) {
             <Text style={styles.HeadLine}>Update Details</Text>
             <View style={styles.DetailsContainer}>
                 <View>
-                    <Text style={{ paddingLeft: 15 }}>Employee ID:</Text>
-                    <TextInput
-                        label={JSON.stringify(employee.Employee_ID)}
-                        placeholder={JSON.stringify(employee.Employee_ID)}
-                        left={<TextInput.Icon name="account" />}
-                        keyboardType='numeric'
-                        mode="outlined"
-                        style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(id) => employee.Employee_ID = id}
-                    />
+                    <Text style={{
+                        alignSelf: "center", paddingBottom: 10, textDecorationLine: 'underline',
+                    }}>Employee ID: {employee.Employee_ID}</Text>
                 </View>
                 <View>
                     <Text style={{ paddingLeft: 15 }}>Employee Name:</Text>
@@ -84,7 +109,7 @@ export default function UpdateDetails({ route, navigation }) {
                         left={<TextInput.Icon name="account" />}
                         mode="outlined"
                         style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(id) => employee.Employee_ID = id}
+                        onChangeText={(name) => employee.Employee_Name = name}
                     />
                 </View>
                 <View style={styles.container}>
@@ -121,7 +146,7 @@ export default function UpdateDetails({ route, navigation }) {
                         onCancel={hideDate} />
                     <View style={{ height: 20 }}></View>
                     <TouchableOpacity style={styles.button} onPress={showDate}>
-                        <Text>{"Birth Date: " + employee.Birth_Date}</Text>
+                        <Text>{"Birth Date: " + moment(employee.Birth_Date).format('YYYY-MM-DD')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -129,7 +154,6 @@ export default function UpdateDetails({ route, navigation }) {
                     <Counter
                         initial={employee.Hourly_Wage}
                         start={employee.Hourly_Wage}
-                        style={styles.counterStyle}
                         onChange={(count) => { employee.Hourly_Wage = count }}
                     />
                     <Text style={{ paddingRight: 10 }}>Hourly_Wage: </Text>
@@ -186,8 +210,7 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     container: {
-        padding: 5,
-        paddingBottom: 20,
+        paddingBottom: 15,
     },
     dropdown: {
         backgroundColor: 'white',

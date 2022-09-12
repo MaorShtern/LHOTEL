@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import { images } from '../../images';
-
+import moment from 'moment/moment';
 
 export default function EMCard(props) {
 
@@ -27,13 +27,15 @@ export default function EMCard(props) {
             </View>
             <View style={styles.details}>
                 <Text style={{ paddingRight: 10 }}>Role: {Description}</Text>
-                <Text >Phone Number: {Phone_Number}</Text>
+                <Text >Phone: {Phone_Number}</Text>
             </View>
 
             <View style={styles.details}>
-                <Text style={{ paddingRight: 20 }}>Birth Date: {Birth_Date}</Text>
-                <Text >Hourly Wage: {Hourly_Wage}</Text>
+                <Text style={{ paddingRight: 20 }}>Birth Date: {moment(Birth_Date).format('YYYY-MM-DD')}</Text>
+                {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
             </View>
+            <Text style={{paddingLeft:5}}>Hourly Wage: {Hourly_Wage}</Text>
+
             <View style={styles.details}>
 
                 <Text style={{ paddingRight: 20 }}>Address: {Address}</Text>

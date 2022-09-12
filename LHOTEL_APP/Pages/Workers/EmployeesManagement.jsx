@@ -1,58 +1,108 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchBar } from 'react-native-elements';
 // import { images } from '../../images';
 import EMCard from './EMCard';
+import { te } from 'date-fns/locale';
 
 
 
-const RequestType = [
-    { label: "All Employees", value: "All Employees" },
-    { label: "Add New Employee", value: "Add New Employee" },
-    { label: "Update Employee Details", value: "Update Employee Details" },
-    { label: "Delete Employee", value: "Delete Employee" },
-];
+// const RequestType = [
+//     { label: "All Employees", value: "All Employees" },
+//     { label: "Add New Employee", value: "Add New Employee" },
+//     { label: "Update Employee Details", value: "Update Employee Details" },
+//     { label: "Delete Employee", value: "Delete Employee" },
+// ];
 
 
-const Employees = [
-    // {
-    //     Employee_ID: -1, Description: "General", Employee_Name: " ", Phone_Number: " ",
-    //     Birth_Date: "1900-01-01", Hourly_Wage: -1, Address: " ", Employee_Code: 20
-    // },
-    {
-        Employee_ID: 111, Description: "Manager", Employee_Name: "aaa", Phone_Number: "0526211881",
-        Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "aaa", Employee_Code: 1
-    },
-    {
-        Employee_ID: 222, Description: "Receptionist", Employee_Name: "bbb", Phone_Number: "0526211881",
-        Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "bbb", Employee_Code: 2
-    },
-    {
-        Employee_ID: 333, Description: "Room service", Employee_Name: "ccc", Phone_Number: "0526211881",
-        Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "ccc", Employee_Code: 3
-    },
-]
+// const Employees = [
+//     // {
+//     //     Employee_ID: -1, Description: "General", Employee_Name: " ", Phone_Number: " ",
+//     //     Birth_Date: "1900-01-01", Hourly_Wage: -1, Address: " ", Employee_Code: 20
+//     // },
+//     {
+//         Employee_ID: 111, Description: "Manager", Employee_Name: "aaa", Phone_Number: "0526211881",
+//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "aaa", Employee_Code: 1
+//     },
+//     {
+//         Employee_ID: 222, Description: "Receptionist", Employee_Name: "bbb", Phone_Number: "0526211881",
+//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "bbb", Employee_Code: 2
+//     },
+//     {
+//         Employee_ID: 333, Description: "Room service", Employee_Name: "ccc", Phone_Number: "0526211881",
+//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "ccc", Employee_Code: 3
+//     },
+// ]
 
 
 
-export default function EmployeesManagement({ navigation}) {
+export default function EmployeesManagement({ navigation }) {
 
-    const [employees, SetEmployees] = useState(Employees)
+    const [DBemployees, SetDBEmployees] = useState([])
+    const [employees, SetEmployees] = useState([])
     const [search, setSearch] = useState('');
 
+
+    useEffect(() => { GetDBEmployees() }, [])
+
+
+    const GetDBEmployees = async () => {
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllEmployees', requestOptions);
+            let temp = await result.json();
+            if (temp !== null) {
+                SetDBEmployees(temp)
+                SetEmployees(temp)
+                return
+            }
+            else
+                GetDBEmployees()
+
+        } catch (error) {
+            alert(error)
+        }
+    }
 
 
     const SerchEmployee = (value) => {
         setSearch(value)
-        let employee = Employees.filter((per) => per.Employee_Name === value)
-        if (employee.length > 0) {
+        let employee = DBemployees.filter((per) => per.Employee_Name === value)
+        console.log(employee);
+        if (employee.length > 0 && employee[0].Employee_ID != -1) {
             SetEmployees(employee)
         }
         else {
-            SetEmployees(Employees)
+            SetEmployees(DBemployees)
         }
     }
 
+
+
+    //   צריך לרשום מתודת מחיקה לעובד
+    const DeleteEmployeeFromDB = async (value) => {
+        try {
+            let employee = JSON.stringify(employees.filter((per) => per.Employee_ID === value))
+            let newArray = employees.filter((per) => per.Employee_ID !== value)
+            SetEmployees(newArray)
+            // const requestOptions = {
+            //     method: 'PUT',
+            //     body: employee,
+            //     headers: { 'Content-Type': 'application/json' }
+            //   };
+
+            // //   console.log(requestOptions.body);
+            //   let result = await fetch('http://proj13.ruppin-tech.co.il/ClockOut', requestOptions);
+            //   if (result) {
+            //     alert("");
+            //   }
+        } catch (error) {
+            alert(error)
+        }
+    }
 
 
     const DeleteEmployee = (value) => {
@@ -64,8 +114,9 @@ export default function EmployeesManagement({ navigation}) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        let newArray = employees.filter((per) => per.Employee_ID !== value)
-                        SetEmployees(newArray)
+                        DeleteEmployeeFromDB(value)
+                        // let newArray = employees.filter((per) => per.Employee_ID !== value)
+                        // SetEmployees(newArray)
                     },
                 },
                 { text: "No", },
@@ -73,19 +124,21 @@ export default function EmployeesManagement({ navigation}) {
         );
     }
 
-    const EditeDetails = (value) =>{
+    const EditeDetails = (value) => {
         // console.log(valuse);
-        let employee= employees.filter((per) => per.Employee_ID === value)[0]
+        let employee = employees.filter((per) => per.Employee_ID === value)[0]
         // console.log(JSON.stringify(employee));
-        navigation.navigate('UpdateDetails',{employee:employee})
+        navigation.navigate('UpdateDetails', { employee: employee })
     }
 
+
+    // console.log("employees:   ---> "+JSON.stringify(employees));
 
     let listEmployees = employees.map((item) => <EMCard key={item.Employee_ID}
         Employee_ID={item.Employee_ID} Description={item.Description} Employee_Name={item.Employee_Name}
         Phone_Number={item.Phone_Number} Birth_Date={item.Birth_Date} Hourly_Wage={item.Hourly_Wage}
-        Address={item.Address} Employee_Code={item.Employee_Code} 
-        DeleteEmployee={DeleteEmployee} EditeDetails={EditeDetails}/>)
+        Address={item.Address} Employee_Code={item.Employee_Code}
+        DeleteEmployee={DeleteEmployee} EditeDetails={EditeDetails} />)
 
 
     return (
@@ -97,8 +150,7 @@ export default function EmployeesManagement({ navigation}) {
                     lightTheme={true}
                     placeholder="search worker..."
                     onChangeText={SerchEmployee}
-                    value={search}
-                />
+                    value={search} />
             </View>
             <View style={styles.container}>
                 {listEmployees}

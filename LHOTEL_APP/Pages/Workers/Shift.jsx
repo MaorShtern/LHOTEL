@@ -6,6 +6,7 @@ import { SearchBar } from "react-native-elements";
 
 export default function Shift() {
 
+  const [DBShifts, SetDBShifts] = useState()
   const [empItems, setEmpItems] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -21,6 +22,7 @@ export default function Shift() {
       let result = await fetch('http://proj13.ruppin-tech.co.il/GetWorkersOnShift', requestOptions);
       let temp = await result.json();
       if (temp !== null) {
+        SetDBShifts(temp)
         setEmpItems(temp)
         return
       }
@@ -55,8 +57,8 @@ export default function Shift() {
           <Divider />
         </View>
         <View>
-        <Text>{item.Employee_ID} </Text>
-        <Text>{item.Employee_Name} </Text>
+          <Text>{item.Employee_Name} </Text>
+          <Text>{item.Employee_ID} </Text>
         </View>
       </View>
     );
@@ -64,18 +66,16 @@ export default function Shift() {
 
   const SerchEmployee = (value) => {
     setSearch(value);
-    let employee = Employees.filter((per) => per.Employee_Name === value);
-    // console.log(employee.length > 0);
-    if (employee.length > 0) {
+    let employee = empItems.filter((per) => per.Employee_Name === value);
+    if (employee.length === 1) {
       setEmpItems(employee);
     } else {
-      setEmpItems(Employees);
+      setEmpItems(DBShifts);
     }
   };
 
-  let listEmployees = empItems.map((item, index) => (
-    <GetEmployeeCard key={index} item={item} />
-  ));
+  let listEmployees = empItems.map((item, index) => (<GetEmployeeCard key={index} item={item} />));
+
 
   return (
     <View style={styles.container}>

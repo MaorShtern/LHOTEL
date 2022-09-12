@@ -24,10 +24,9 @@ namespace DAL
                     tasks.Add(new Task()
                     {
                         Task_Code = (int)reader["Task_Code"],
-                        Employee_ID = (int)reader["Employee_ID"],
+                        Employee_ID = (reader["Employee_ID"] != DBNull.Value) ? (int)reader["Employee_ID"] : -1,
                         Task_Name = (string)reader["Task_Name"],
-                        Room_Number = (reader["Room_Number"] != DBNull.Value)
-                        ? (int)reader["Room_Number"] : -1,
+                        Room_Number = (reader["Room_Number"] != DBNull.Value) ? (int)reader["Room_Number"] : -1,
                         Start_Date = (DateTime)reader["Start_Date"],
                         Start_Time = (string)reader["Start_Time"],
                         End_Time = (reader["End_Time"] != DBNull.Value)
@@ -40,8 +39,9 @@ namespace DAL
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                return null;
+                throw e;
+                //Console.WriteLine(e.Message);
+                //return null;
             }
             finally
             {
