@@ -365,6 +365,34 @@ go
 --exec GetEmployeeById 222
 --select * from Employees
 
+
+
+
+create proc GetEmployeeByIdAndPassword
+@id int,
+@password int
+as
+begin tran
+
+SELECT dbo.Employees.Employee_ID, dbo.Employees_Types.Description,
+dbo.Employees.Employee_Name, 
+dbo.Employees.Phone_Number, dbo.Employees.Birth_Date,
+dbo.Employees_Types.Description as Role, dbo.Employees.Hourly_Wage, dbo.Employees.Address
+FROM     dbo.Employees INNER JOIN
+                  dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
+				  where dbo.Employees.Employee_ID = @id and Employee_Code = @password
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec GetEmployeeByIdAndPassword 222,2
+--select * from Employees
+
 create proc InsertEmployee 
 @id int, 
 @name nvarchar(30),

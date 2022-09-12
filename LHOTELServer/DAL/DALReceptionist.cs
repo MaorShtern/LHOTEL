@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-  public  class DALReceptionist
+    public class DALReceptionist
     {
         public static List<TakenRoomReservation> GetTakenRooms()
         {
@@ -26,7 +26,7 @@ namespace DAL
                     {
 
                         Id = (int)reader["Customer_ID"],
-                        Room_Number =  (int)reader["Room_Number"],
+                        Room_Number = (int)reader["Room_Number"],
                         //Card_Holder_Name = (string)reader["Card_Holder_Name"],
                         //Card_Date = (string)reader["Card_Date"],
                         //Three_Digit = (int)reader["Three_Digit"],
@@ -57,7 +57,11 @@ namespace DAL
             {
                 SQLConnection.CloseDB();
             }
+
+
+
         }
+
 
 
 

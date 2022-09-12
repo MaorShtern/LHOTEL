@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
+import Customer  from "../Class/Customer";
+import Room  from "../Class/Room";
+import Reservation  from "../Class/Reservation";
+import AppContext from '../../AppContext';
+import CardRoom from '../Customer/CardRoom'
 import {
   ImageBackground,
   View,
@@ -19,51 +24,34 @@ import { useNavigation } from "@react-navigation/native";
 import { images } from "../../images";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomCard } from "./CustomCard";
-
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { Checkbox, TextInput } from "react-native-paper";
 import moment from "moment";
 export default function NewReservation({ route, navigation }) {
-  const nav = useNavigation();
-  const DATA = [
-    {
-      id: 1,
-      name: "Save",
-      backgroundColor: "#6BC5E8",
-      imagesrc: images.save,
-      onPressHandler: () => {
-        nav.navigate("schedule", {
-          title: "Save",
-          imagesrc: images.save,
-          backgroundColor: "#6BC5E8",
-        });
-      },
-    },
-    {
-      id: 2,
-      name: "trashCan",
-      backgroundColor: "#3A9EC2",
-      imagesrc: images.trashCan,
-      onPressHandler: () => {
-        nav.navigate("schedule", {
-          title: "trashCan",
-          imagesrc: images.trashCan,
-          backgroundColor: "#3A9EC2",
-        });
-      },
-    },
-  ];
 
-  const [text, setText] = useState("");
+  const myContext = useContext(AppContext);
+ 
+  const [single, SetSingle] = useState(0)
+  const [double, SetDouble] = useState(0)
+  const [suite, SetSuite] = useState(0)
+  const [loading, SetLoading] = useState(false)
+  const [arrRoomsData, SetArrRoomsData] = useState([])
+ 
+  const [customerID, setCustomerID] = useState("");
+  const [Mail, setMail] = useState("");
+
   const [totalSum, SetTotalSum] = useState(0);
   const [name, setName] = useState("");
-  const [cardNum, setCardNum] = useState("");
-  const [cardDate, SetCardData] = useState("");
+  const [cardHolderName, setHolderName] = useState("");
+  const [cardDate, SetCardDate] = useState("");
   const [cardCVC, SetCardCVC] = useState("");
-
-  const [user, SetUser] = useState([]);
-  const [userDB, SetUserDB] = useState([]);
+  const [Credit_Card_Number, setCredit_Card_Number] = useState("");
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+ 
 
   const [flagEnrty, setFlagEntry] = useState(false);
   const [flagExit, setFlagExit] = useState(false);
@@ -75,6 +63,7 @@ export default function NewReservation({ route, navigation }) {
   const [doubleFlag, setDouble] = useState(false);
   const [suiteFlag, setSuite] = useState(false);
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0);
+  const [amount_Of_People, setAmount_Of_People] = useState(0);
   const [breakfast, setreakfast] = useState(false);
 
   const showDatePickerEntry = () => {
@@ -98,11 +87,17 @@ export default function NewReservation({ route, navigation }) {
     setExitDate(date);
     hideDatePickerExit();
   };
+  const handleExpiryDate = (date) => {
+    setExpiryDate({
+      value: date,
+    });
+  };
 
   const entry = moment(entryDate).format("DD/MM/YYYY");
   const exit = moment(exitDate).format("DD/MM/YYYY");
 
   useEffect(() => {
+    
     let tomorrow = new Date(entryDate);
     tomorrow.setDate(tomorrow.getDate() + 1);
     if (exitDate.toDateString() === tomorrow.toDateString()) {
@@ -115,7 +110,7 @@ export default function NewReservation({ route, navigation }) {
       setNumber_Of_Nights(moment(exitDate).diff(moment(entryDate), "days"));
     }
   });
-
+  useEffect(() => { FetchData() }, []);
   const ChaeckRoomsMarks = () => {
     return singleFlag || doubleFlag || suiteFlag;
   };
@@ -124,53 +119,8 @@ export default function NewReservation({ route, navigation }) {
     return new Date(date.toDateString()) < new Date(new Date().toDateString());
   };
 
-  const ChaeckAll = () => {
-    // navigation.navigate('SaveRoom')
-    if (
-      CheackDates(entryDate) ||
-      CheackDates(exitDate) ||
-      number_Of_Nights === 0
-    ) {
-      Alert.alert("Error selecting dates");
-      return;
-    }
-    if (ChaeckRoomsMarks()) {
-      let rooms_flags = {
-        "Single room": singleFlag,
-        "Double room": doubleFlag,
-        Suite: suiteFlag,
-      };
-      navigation.navigate("SaveRoom", {
-        rooms_flags: rooms_flags,
-        number_Of_Nights: number_Of_Nights,
-        breakfast: breakfast,
-        entryDate: entry,
-        exitDate: exit,
-      });
-    } else Alert.alert("Some fields are not filled in Properly");
-  };
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     readData();
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
-
-  // const Calculate_Final_Amount = () => {
-  //   let sum = 0
-  //   // console.log("sum: "+sum);
-  //   // console.log("the_data: " + the_data);
-  //   for (let i = 0; i < the_data.length; i++) {
-  //     let pricePerNight = the_data[i].pricePerNight;
-  //     let count = the_data[i].count;
-  //     let tempToatal = pricePerNight * count
-
-  //     sum += tempToatal;
-  //   }
-  //   SetTotalSum(sum)
-  // }
-
+ 
+ 
   const Delete = () => {
     setName("");
     setCardNum("");
@@ -185,209 +135,145 @@ export default function NewReservation({ route, navigation }) {
     setExitDate(new Date());
   };
 
-  const fixCardDate = (text) => {
-    if (text.length == 2 && cardDate.length == 1) {
-      text += "/";
-    } else if (text.length == 2 && cardDate.length == 3) {
-      text = text.substring(0, text.length - 1);
-    }
-    SetCardData(text);
+  const CheckCardDate = () => {
+    const CardDateRegex = /^(0[1-9]|1[0-2])\/([2][2-9])$/;
+    return CardDateRegex.test(cardDate);
+
   };
 
-  const CheackDate = () => {
-    let courentYear = new Date().getFullYear();
-    let courentMonth = new Date().getMonth() + 1;
-    let month = cardDate.substring(0, 2);
-    let year = "20" + cardDate.substring(3, 5);
-
-    if (
-      cardDate.length === 5 &&
-      year >= courentYear &&
-      month > courentMonth &&
-      month >= "01" &&
-      month <= "12"
-    ) {
-      return true;
-    } else return false;
-  };
-  // !CheackDate()
-  const isValidCardDetails = () => {
-    return cardNum.length !== 16 || cardCVC.length !== 3 ? false : true;
-  };
-
-  // const readData = async () => {
-  //   try {
-  //     const user = await AsyncStorage.getItem('@user');
-  //     // const arrUsers = await AsyncStorage.getItem('@storage_Key_0');
-  //     // console.log("user: " + user !== null);
-
-  //     if (user !== null) {
-  //       // console.log("user: " + user);
-  //       SetUser(JSON.parse(user))
-  //       Calculate_Final_Amount()
-  //     }
-  //     //   let email = JSON.parse(user)
-  //     //   let arr = JSON.parse(arrUsers)
-  //     //   let userDetails = arr.filter((per) => per.email === email)
-  //     //   id = userDetails[0].id
-  //     //   cheackForUser(id)
-  //     //   SetUser(userDetails[0])
-  //     // }
-  //     // Calculate_Final_Amount()
-  //   } catch (e) {
-  //     alert('Failed to fetch the input from storage');
-  //   }
-  // };
+ 
 
   const CustomerToDataBS = async (value) => {
-    console.log(value);
-    // const requestOptions = {
-    //   method: 'POST',
-    //   body: JSON.stringify(value),
-    //   headers: { 'Content-Type': 'application/json' }
-    // };
-    // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
-    // let customerResult = await result.json();
-
-    // if (customerResult)
-    //   navigation.navigate('ConfirmationPage', {
-    //     id: value.customerID, the_data: the_data,
-    //     number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-    //     total: totalSum, Name: name, CardNum: cardNum
-    //   })
-    // else
-    //   alert("CustomerToDataBS")
-  };
-
-  const cheackForUser = async (value) => {
-    console.log(value);
-
-    // const requestOptions = {
-    //   method: 'GET',
-    //   headers: { 'Content-Type': 'application/json' }
-    // };
-    // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
-    // let deleteResult = await result.json();
-
-    // if (deleteResult !== null) {
-
-    //   SetUserDB(deleteResult)
-    //   return
-    // }
-    // else {
-    //   cheackForUser(value)
-    // }
-  };
-
-  const AlterCustomer = async (value) => {
-    const requestOptions = {
-      method: "PUT",
-      body: JSON.stringify(value),
-      headers: { "Content-Type": "application/json" },
+    // console.log(value);
+    let newReservation = {
+      calssName: Reservation,
+      fields: {
+        amount_Of_People :amount_Of_People,
+        Employee_ID  : myContext.employee.id,
+        Counter_Single : single,
+        Counter_Double : double,
+        Counter_Suite :suite,
+        ExitDate	: exitDate,
+        Entry_Date :entryDate
+        // Exit_Date	: moment(exitDate).format('YYYY-MM-DD'),
+        // Entry_Date : moment(entryDate).format('YYYY-MM-DD')
+       
+      },
+    
     };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/api/Customers",
-      requestOptions
-    );
+    let roomReservation ={...value,...newReservation.fields}
+    console.log(JSON.stringify(roomReservation));
+  
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(roomReservation),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User', requestOptions);
     let customerResult = await result.json();
+
     if (customerResult)
-      navigation.navigate("ConfirmationPage", {
-        id: value.customerID,
-        the_data: the_data,
-        number_Of_Nights: number_Of_Nights,
-        breakfast: breakfast,
-        entryDate: entryDate,
-        exitDate: exitDate,
-        total: totalSum,
-        Name: name,
-        CardNum: cardNum,
-      });
-    else alert("AlterCustomer");
+      alert('yaaayyyy')
+    else
+      alert("noooo CustomerToDataBS")
   };
+
+  
 
   const ConfirmInformation = () => {
-    if (name.length > 1 && isValidCardDetails()) {
+    if (
+      FirstName.length < 2 ||
+      Credit_Card_Number.length !== 16 ||
+      LastName.length < 2 ||
+      customerID.length < 9 ||
+      cardHolderName.length < 2
+    ) {
+      alert("EROR");
+      return;
+    }
+    
       // console.log(user);
       let newCustomer = {
         calssName: Customer,
         fields: {
-          customerID: user.customerID,
+          customerID: customerID,
           customerType: 1,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mail: user.mail,
-          phoneNumber: user.phoneNumber,
-          cardHolderName: name,
+          FirstName: FirstName,
+          LastName: LastName,
+          Mail: Mail,
+          PhoneNumber: PhoneNumber,
+          cardHolderName: cardHolderName,
+          Credit_Card_Number: Credit_Card_Number,
           creditCardDate: cardDate,
           threeDigit: cardCVC,
         },
       };
 
-      // // console.log(newCustomer);
-      // navigation.navigate("ConfirmationPage", {
-      //   id: newCustomer.customerID,
-      //   the_data: the_data,
-      //   number_Of_Nights: number_Of_Nights,
-      //   breakfast: breakfast,
-      //   entryDate: entryDate,
-      //   exitDate: exitDate,
-      //   total: totalSum,
-      //   Name: name,
-      //   CardNum: cardNum,
-      // });
-
-      if (userDB !== null && userDB.length !== 0) {
-        AlterCustomer(newCustomer.fields);
-      } else {
-        CustomerToDataBS(newCustomer.fields);
-      }
-    } else Alert.alert("The card details are incorrect");
+      CustomerToDataBS(newCustomer.fields);
+  
   };
+  
 
-  const transportItem = ({ item }) => {
-    return (
-      <CustomCard>
-        <View
-          style={{
-            flexDirection: "row",
-            overflow: "hidden",
-            justifyContent: "space-between",
-            padding: 15,
-            backgroundColor: item.backgroundColor,
-            marginHorizontal: 26,
-            marginBottom: 10,
-            borderRadius: 10,
-          }}
-        >
-          <View style={{ justifyContent: "space-between" }}>
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
-              {item.name}
-            </Text>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#fff",
-                width: 70,
-                padding: 5,
-                borderRadius: 6,
-                marginTop: 50,
-              }}
-              onPress={item.onPressHandler}
-            >
-              <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-                Select
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Image
-              style={{ position: "absolute", right: -15, bottom: 2 }}
-              source={item.imagesrc}
-            ></Image>
-          </View>
-        </View>
-      </CustomCard>
-    );
-  };
+
+  const FetchData = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetAvailableRooms', requestOptions);
+    let rooms = await result.json();
+    if (rooms !== null) {
+      // console.log("rooms: " + JSON.stringify(rooms));
+      BilldData(rooms)
+      
+      return
+    }
+    FetchData()
+
+  }
+
+  const SetCount = (number, roomType) => {
+    switch (roomType) {
+      case "Single room":
+        SetSingle(number)
+        break;
+      case "Double room":
+        SetDouble(number)
+        break;
+      case "Suite":
+        SetSuite(number)
+        break;
+    }
+  }
+  const BilldData = (rooms) => {
+   
+    let temp = []
+    rooms.map((room) =>{
+ let tempRoom = {calssName: Room,
+        fields: {
+          Details : room.Details,
+          PricePerNight : room.PricePerNight,
+          RoomNumber : room.RoomNumber,
+          RoomType : room.RoomType,
+          count :  rooms.filter((item) => room.RoomType === item.RoomType).length
+        },
+         }
+         
+          // temp.push(tempRoom.fields,{count :  rooms.filter((item) => room.RoomType === item.RoomType).length})
+   
+          temp.push(tempRoom.fields)
+
+    })
+    let list = temp.filter((ele, ind) => ind === temp.findIndex(
+      elem => elem.RoomType === ele.RoomType && elem.RoomType === ele.RoomType))
+   
+    SetArrRoomsData(list)
+  }
+  let roomsList = arrRoomsData.map((room, index) => {return <CardRoom key={index} SetCount={SetCount} roomType={room.RoomType}
+  details={room.Details} count={room.count} />})
+  // let roomsList = arrRoomsData.map((room, index) => {return <CardRoom key={index} SetCount={SetCount} roomType={room.roomType}
+  // details={room.Details} count={room.count} />})
+  // console.log(roomsList);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -465,8 +351,19 @@ export default function NewReservation({ route, navigation }) {
                 <Text> Number of nights: {number_Of_Nights} </Text>
               )}
             </View>
+            <TextInput
+              style={{
+                paddingHorizontal: 20,
+                marginHorizontal: 10,
+                marginVertical: 10,
+              }}
+              label="Amount Of people"
+              autoCapitalize="none"
+              keyboardType="numeric"
+              onChangeText={(amount) => setAmount_Of_People(amount)}
+            />
 
-            <View style={{ paddingVertical: 25 }}>
+            {/* <View style={{ paddingVertical: 25 }}>
               <Text style={styles.Text}>Room Type</Text>
               <View style={styles.RadioCheckbox}>
                 <View style={styles.Checkbox}>
@@ -507,8 +404,12 @@ export default function NewReservation({ route, navigation }) {
                   </Text>
                 ) : null}
               </View>
-            </View>
-
+            </View> */}
+ <Text style={styles.HeadLine}>Choose a room</Text>
+      <View>
+        {roomsList}
+      </View>
+    
             <View style={styles.switchContainer}>
               <Switch
                 onValueChange={() => {
@@ -523,34 +424,35 @@ export default function NewReservation({ route, navigation }) {
               <TextInput
                 style={styles.input}
                 placeholder="Customer ID "
+                keyboardType="numeric"
                 autoCapitalize="none"
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => setCustomerID(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="First Name "
                 autoCapitalize="none"
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => setFirstName(text)}
               />
- 
-                <TextInput
+
+              <TextInput
                 style={styles.input}
                 placeholder="Last Name "
                 autoCapitalize="none"
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => setLastName(text)}
               />
-            
+
               <TextInput
                 style={styles.input}
                 placeholder="Email"
                 autoCapitalize="none"
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => setMail(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Phone Number"
                 autoCapitalize="none"
-                onChangeText={(text) => setText(text)}
+                onChangeText={(text) => setPhoneNumber(text)}
               />
 
               <Text style={styles.SubHeadLine}>Enter payment information</Text>
@@ -558,26 +460,28 @@ export default function NewReservation({ route, navigation }) {
                 style={styles.input}
                 placeholder="Cardholder's name"
                 autoCapitalize="none"
-                onChangeText={(name) => setName(name)}
+                onChangeText={(name) => setHolderName(name)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Card's Number"
                 autoCapitalize="none"
                 keyboardType="numeric"
-                onChangeText={(cardNum) => setCardNum(cardNum)}
+                onChangeText={(cardNum) => setCredit_Card_Number(cardNum)}
               />
               <TextInput
                 style={styles.input}
                 placeholder={"Card's Date " || cardDate}
                 autoCapitalize="none"
-                keyboardType="numeric"
+                keyboardType="phone-pad"
+                maxLength={5}
                 onChangeText={(text) => {
-                  fixCardDate(text);
+                  SetCardDate(text);
                 }}
               />
+
               <View>
-                {!CheackDate() ? (
+                {!CheckCardDate() ? (
                   <Text style={styles.alerts}>
                     *The card DATE is incorrect*
                   </Text>
@@ -588,6 +492,7 @@ export default function NewReservation({ route, navigation }) {
                 placeholder="cvv"
                 autoCapitalize="none"
                 keyboardType="numeric"
+                maxLength={3}
                 onChangeText={(cvv) => SetCardCVC(cvv)}
               />
 
@@ -604,7 +509,7 @@ export default function NewReservation({ route, navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.footerButtonTwo}
-                  onPress={ConfirmInformation}
+                  onPress={() => ConfirmInformation()}
                 >
                   <Text
                     style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}

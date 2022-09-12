@@ -171,9 +171,9 @@ namespace DAL
 '{roomReservationUser.CreditCardDate}',{roomReservationUser.ThreeDigit},
 '{roomReservationUser.Credit_Card_Number}',{roomReservationUser.Employee_ID},
 {roomReservationUser.Counter_Single},{roomReservationUser.Counter_Double},
-{roomReservationUser.Counter_Single},
-'{roomReservationUser.Entry_Date.ToString("yyyy - MM - dd")}',
-'{roomReservationUser.ExitDate.ToString("yyyy - MM - dd")}',{roomReservationUser.Amount_Of_People}";
+{roomReservationUser.Counter_Suite},
+'{roomReservationUser.Entry_Date:yyyy-MM-dd}',
+'{roomReservationUser.ExitDate:yyyy-MM-dd}',{roomReservationUser.Amount_Of_People}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result >= 1)

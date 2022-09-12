@@ -20,6 +20,19 @@ namespace DAL
         public int ThreeDigit { set; get; }
         public string Credit_Card_Number { set; get; }
 
+       
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }
