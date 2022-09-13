@@ -29,6 +29,11 @@ namespace BLL
         {
             return DALTasks.AddNewTask(task);
         }
+
+        public static bool CloseTask(int code)
+        {
+            return DALTasks.CloseTask(code);
+        }
         public static bool AlterTask(Task task)
         {
             return DALTasks.AlterTask(task);

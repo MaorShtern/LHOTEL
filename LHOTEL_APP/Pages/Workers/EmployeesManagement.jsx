@@ -1,38 +1,9 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { SearchBar } from 'react-native-elements';
-// import { images } from '../../images';
 import EMCard from './EMCard';
-import { te } from 'date-fns/locale';
-
-
-
-// const RequestType = [
-//     { label: "All Employees", value: "All Employees" },
-//     { label: "Add New Employee", value: "Add New Employee" },
-//     { label: "Update Employee Details", value: "Update Employee Details" },
-//     { label: "Delete Employee", value: "Delete Employee" },
-// ];
-
-
-// const Employees = [
-//     // {
-//     //     Employee_ID: -1, Description: "General", Employee_Name: " ", Phone_Number: " ",
-//     //     Birth_Date: "1900-01-01", Hourly_Wage: -1, Address: " ", Employee_Code: 20
-//     // },
-//     {
-//         Employee_ID: 111, Description: "Manager", Employee_Name: "aaa", Phone_Number: "0526211881",
-//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "aaa", Employee_Code: 1
-//     },
-//     {
-//         Employee_ID: 222, Description: "Receptionist", Employee_Name: "bbb", Phone_Number: "0526211881",
-//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "bbb", Employee_Code: 2
-//     },
-//     {
-//         Employee_ID: 333, Description: "Room service", Employee_Name: "ccc", Phone_Number: "0526211881",
-//         Birth_Date: "2022-08-15", Hourly_Wage: 40, Address: "ccc", Employee_Code: 3
-//     },
-// ]
+import { ActivityIndicator } from "react-native";
+import AppContext from '../../AppContext';
 
 
 
@@ -41,6 +12,8 @@ export default function EmployeesManagement({ navigation }) {
     const [DBemployees, SetDBEmployees] = useState([])
     const [employees, SetEmployees] = useState([])
     const [search, setSearch] = useState('');
+    const [loading, SetLoading] = useState(false)
+    const myContext = useContext(AppContext);
 
 
     useEffect(() => { GetDBEmployees() }, [])
@@ -57,6 +30,7 @@ export default function EmployeesManagement({ navigation }) {
             if (temp !== null) {
                 SetDBEmployees(temp)
                 SetEmployees(temp)
+                SetLoading(true)
                 return
             }
             else
@@ -134,6 +108,12 @@ export default function EmployeesManagement({ navigation }) {
 
     // console.log("employees:   ---> "+JSON.stringify(employees));
 
+    const Spinner = () => (
+        <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" />
+        </View>
+    );
+
     let listEmployees = employees.map((item) => <EMCard key={item.Employee_ID}
         Employee_ID={item.Employee_ID} Description={item.Description} Employee_Name={item.Employee_Name}
         Phone_Number={item.Phone_Number} Birth_Date={item.Birth_Date} Hourly_Wage={item.Hourly_Wage}
@@ -153,7 +133,9 @@ export default function EmployeesManagement({ navigation }) {
                     value={search} />
             </View>
             <View style={styles.container}>
-                {listEmployees}
+                <View style={styles.items}>
+                    {loading ? listEmployees : <Spinner />}
+                </View>
             </View>
         </ScrollView>
     )

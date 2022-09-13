@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView, } from "react-native";
 import { Divider } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
+import { ActivityIndicator } from "react-native";
 
 
 export default function Shift() {
@@ -9,6 +10,8 @@ export default function Shift() {
   const [DBShifts, SetDBShifts] = useState()
   const [empItems, setEmpItems] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, SetLoading] = useState(false)
+
 
   useEffect(() => { getDBShift() }, []);
 
@@ -24,6 +27,7 @@ export default function Shift() {
       if (temp !== null) {
         SetDBShifts(temp)
         setEmpItems(temp)
+        SetLoading(true)
         return
       }
       else
@@ -32,9 +36,18 @@ export default function Shift() {
     } catch (error) {
       alert(error)
     }
+    // SetLoading(false)
   }
   // GetTakenRooms
   // select * from Customers_Rooms
+
+  const Spinner = () => (
+    <View style={[styles.container, styles.horizontal]}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+
+
   const GetEmployeeCard = ({ item }) => {
     return (
       <View style={styles.item}>
@@ -94,9 +107,12 @@ export default function Shift() {
         contentContainerStyle={{
           flexGrow: 1,
         }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.items}>{listEmployees}</View>
+        keyboardShouldPersistTaps="handled">
+
+        <View style={styles.items}>
+          {loading ? listEmployees : <Spinner />}
+        </View>
+        {/* <View style={styles.items}>{listEmployees}</View> */}
       </ScrollView>
     </View>
   );
@@ -137,10 +153,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
   },
-
   verticleLine: {
     height: "100%",
     width: 1,
     backgroundColor: "#909090",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+
   },
 });

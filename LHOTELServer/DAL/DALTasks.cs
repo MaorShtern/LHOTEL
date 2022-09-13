@@ -169,6 +169,31 @@ namespace DAL
         }
 
 
+        public static bool CloseTask(int code)
+        {
+            try
+            {
+                if (GetTaskByCode(code) == null)
+                {
+                    return false;
+                }
+                string str = $@"exec CloseTask {code}";
+                int result = SQLConnection.ExeNonQuery(str);
+                if (result >= 1)
+                    return true;
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
         public static bool AlterTask(Task task)
         {
             try
@@ -213,7 +238,7 @@ namespace DAL
                 }
                 string str = $@"exec DeleteTask {code}";
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result == 1)
+                if (result >= 1)
                     return true;
                 return false;
             }

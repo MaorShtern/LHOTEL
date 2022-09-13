@@ -9,24 +9,31 @@ import AppContext from './AppContext';
 export default function App() {
 
 
-  const [employee, setEmployee] = useState({id:0,password:0});
+  const [employee, setEmployee] = useState({}
+    // {Employee_ID :0,Description :"",Employee_Name: "",Phone_Number :"",Birth_Date :"",Hourly_Wage :0,
+    // Address :"",Employee_Code :0}
+    );
 
+
+  const setEmployeeDB = (obj) => {
+    // console.log(obj);
+    setEmployee(obj)
+  }
   
-  const setEmployeeId = (id) => {
+//   const setEmployeeId = (id) => {
+//     setEmployee((prev) => { return { ...prev, ...{id:id}}});
+// }
 
-    setEmployee((prev) => {
-          return { ...prev, ...{id:id}}});
-}
-  const setEmployeePassword = (password) => {
-   
-    setEmployee((prev) => {
-      return { ...prev, ...{password:password}}});
-  };
+//   const setEmployeePassword = (password) => {
+//     setEmployee((prev) => { return { ...prev, ...{password:password}}});
+//   };
+
+
   const userSettings = {
     employee:employee,
-    setEmployeeId,
-    setEmployeePassword
+    setEmployeeDB
   };
+  
   ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]'])
 
   LogBox.ignoreLogs([

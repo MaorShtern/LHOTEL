@@ -19,11 +19,13 @@ export default function TasksCard(props) {
     }
 
     // console.log(flag);
+    const DeleteTask = (Task_Code) => {
+        props.DeleteTask(Task_Code)
+    }
 
 
     const MarkTaskAsDone = () =>{
         SetFlag(!flag)
-        // console.log(flag);
         if(!flag === true)
             props.MarkTaskAsDone(Task_Code)
         else
@@ -66,7 +68,7 @@ export default function TasksCard(props) {
                                 onPress={MarkTaskAsDone} />
                             : null}
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => DeleteTask(Task_Code)}>
                         <Image style={styles.BTNImages} source={images.trashCan} />
                     </TouchableOpacity>
 

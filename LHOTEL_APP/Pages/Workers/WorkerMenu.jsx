@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { images } from "../../images";
 import moment from "moment/moment";
+import AppContext from "../../AppContext";
+
 
 const workerCardsArr = [
   { code: 999, Description: "General", title: "Exit shift", pic: images.exit_shift, routeNavigation: "" },
@@ -19,10 +21,12 @@ const workerCardsArr = [
 const numColumns = 2;
 const WIDTH = Dimensions.get("window").width;
 
-export default function WorkerMenu({ route, navigation }) {
+export default function WorkerMenu({ navigation }) {
 
-  const { employee } = route.params;
+  // const { employee } = route.params;
 
+  const myContext = useContext(AppContext);
+  const myEmployee = myContext.employee
   const [currentUserArr, SetCurrentUserArr] = useState([]);
 
   useEffect(() => { GetCardsByRole(); }, []);
@@ -30,22 +34,27 @@ export default function WorkerMenu({ route, navigation }) {
 
   const GetCardsByRole = () => {
     let arrayTempCards = [];
+    // console.log(myEmployee);
     try {
-      if (employee.Description === "Manager") arrayTempCards = workerCardsArr;
+      if (myEmployee.Description === "Manager") {
+        arrayTempCards = workerCardsArr;
+        // console.log("Manager");
+      }
       else {
         arrayTempCards = workerCardsArr.filter(
           (workerCard) =>
-            workerCard.Description === employee.Description ||
+            workerCard.Description === myEmployee.Description ||
             workerCard.Description === "General"
         );
       }
     } catch (error) {
       Alert.alert("error");
     }
+    // console.log(arrayTempCards);
     SetCurrentUserArr(arrayTempCards);
   };
 
-// console.log(employee);
+  // console.log(employee);
 
 
   const ClockIn = async (today) => {
@@ -56,8 +65,8 @@ export default function WorkerMenu({ route, navigation }) {
       const requestOptions = {
         method: 'PUT',
         body: JSON.stringify({
-          id: employee.Employee_ID,
-          time:today
+          id: myEmployee.Employee_ID,
+          time: today
         }),
         headers: { 'Content-Type': 'application/json' }
       };
@@ -76,8 +85,8 @@ export default function WorkerMenu({ route, navigation }) {
       const requestOptions = {
         method: 'PUT',
         body: JSON.stringify({
-          id: employee.Employee_ID,
-          time:today
+          id: myEmployee.Employee_ID,
+          time: today
         }),
         headers: { 'Content-Type': 'application/json' }
       };

@@ -125,7 +125,11 @@ export default function EditTasks({ route, navigation }) {
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Tasks</Text>
-            <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text>
+            {task.Task_Code !== null ?
+                <View>
+                    <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text>
+                </View> : null}
+            {/* <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text> */}
             <View style={styles.DetailsContainer}>
                 <Text style={{ paddingLeft: 15 }}>Employee ID:</Text>
                 <TextInput

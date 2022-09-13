@@ -1,19 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList,} from "react-native";
 import React, { useState } from "react";
 import { Checkbox } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import { Searchbar } from "react-native-paper";
+
 const Occupiedreservations = [
   // { Room_Number: 2, Bill_Number:2,	Customer_ID:222,	Bill_Date:'2021-01-01'	,Entry_Date:'2021-01-01',
   // Exit_Date:'2021-01-03',	Amount_Of_People:1,	Room_Status:'Occupied'},
@@ -125,7 +117,7 @@ export default function CheckOut() {
  
 
   const SerchReservation = (value) => {
-    console.log(value);
+    // console.log(value);
     setSearch(value);
     let occupiedReservation = Occupiedreservations.filter(
       (reservation) => reservation.Customer_ID == value

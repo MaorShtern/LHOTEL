@@ -6,13 +6,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { images } from '../../images';
 
 
-const RequestType = [
-    { label: "Room Cleaning", value: "Room Cleaning" },
-    { label: "Room Service", value: "Room Service" },
-    { label: "Change of towels", value: "Change of towels" },
-    { label: "Refill mini bar", value: "Refill mini bar" },
-    { label: "Product purchase", value: "Product purchase" },
-];
+// const RequestType = [
+//     { label: "Room Cleaning", value: "Room Cleaning" },
+//     { label: "Room Service", value: "Room Service" },
+//     { label: "Change of towels", value: "Change of towels" },
+//     { label: "Refill mini bar", value: "Refill mini bar" },
+//     { label: "Product purchase", value: "Product purchase" },
+// ];
 
 // const Products = [
 //     { id: 1, image: images.waterbottle, name: "Water bottle", price: 10, amountTaken: 0 },
@@ -22,41 +22,110 @@ const RequestType = [
 //     { id: 5, image: images.cocacola, name: "Coca Cola bottle", price: 20, amountTaken: 0 },
 // ];
 
+// 1	1	Coca cola	15.00	0.00
+// 2	2	Vodka	35.00	0.00
+// 3	3	Bamba	20.00	0.00
+// 4	3	Doritos	20.00	50.00
+// 5	1	Sprite	15.00	15.00
+// 6	2	Whiskey	45.00	0.00
+// 7	3	Chips	20.00	0.00
+// 8	4	Room	0.00	0.00
+
+const Products = [
+    { Id: 1, Product_Dec: "Coca cola", price: 15, Amount: 0 },
+    { Id: 2, Product_Dec: "Vodka", price: 35, Amount: 0 },
+    { Id: 3, Product_Dec: "Bamba", price: 20, Amount: 0 },
+    { Id: 4, Product_Dec: "Doritos", price: 20, Amount: 0 },
+    { Id: 5, Product_Dec: "Sprite", price: 15, Amount: 0 },
+    { Id: 6, Product_Dec: "Whiskey", price: 45, Amount: 0 },
+    { Id: 7, Product_Dec: "Chips", price: 20, Amount: 0 },]
 
 
 export default function AddCharge({ navigation }) {
 
-    const [request, SetRequest] = useState("");
+    // const [request, SetRequest] = useState("");
     const [dropdown, setDropdown] = useState(null);
     const [sumTotal, SetSumTotal] = useState(0)
+    const [id, SetId] = useState(-1)
+    // const [name, SetName] = useState("")
+    const [room_Number, SetRoom_Number] = useState(-1)
     const [payment, SetPayment] = useState("")
-    const [productsToAdd, SetProductsToAdd] = useState(
-        [{ id: 1, name: "Water bottle", price: 10, amountTaken: 0 },
-        { id: 2, name: "Whiskey", price: 5, amountTaken: 0 },
-        { id: 3, name: "Chocolate bar", price: 16, amountTaken: 0 },
-        { id: 4, name: "White wine", price: 3, amountTaken: 0 },
-        { id: 5, name: "Coca Cola bottle", price: 20, amountTaken: 0 },]
-    )
+    const [productsToAdd, SetProductsToAdd] = useState([])
+
 
     const AddAmount = (id, amount) => {
-        for (let index = 0; index < productsToAdd.length; index++) {
-            if (productsToAdd[index].id === id) {
-                productsToAdd[index].amountTaken = amount
-            }
+        let product = productsToAdd.filter((prod) => prod.Id === id)
+        if (product.length === 0) {
+            product = Products.filter((prod) => prod.Id === id)[0]
+            product.Amount = amount
+            let temp = [...productsToAdd, product]
+            SetProductsToAdd(temp)
+        }
+        else {
+            product = productsToAdd.filter((prod) => prod.Id === id)[0]
+            product.Amount = amount
+            // console.log(product);
         }
         Cal_Sum()
     }
 
     const Cal_Sum = () => {
         let sum = 0
-        for (let index = 0; index < productsToAdd.length; index++) {
-            sum += (productsToAdd[index].amountTaken * productsToAdd[index].price)
+        for (let index = 0; index < Products.length; index++) {
+            sum += (Products[index].Amount * Products[index].price)
         }
         SetSumTotal(sum)
     }
 
 
+    const AddChargeToDB = async () => {
+        try {
+            let counter = 0
+            for (let index = 0; index < productsToAdd.length; index++) {
+                // console.log(productsToAdd[index]);
+                // Products[index].Room_Number = room_Number
+                // Products[index].Payment_Method = payment
+                const requestOptions = {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Id: Number(id),
+                        Room_Number: Number(room_Number),
+                        Product_Dec: productsToAdd[index].Product_Dec,
+                        Amount: productsToAdd[index].Amount,
+                        Payment_Method: payment
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                // console.log(requestOptions.body);        
+                let result = await fetch('http://proj13.ruppin-tech.co.il/AddCharge', requestOptions);
+                let temp = await result.json();
+                if (temp) {
+                    counter++
+                    // GetAllTasksFromDB()
+                }
+            }
+            if (counter > 0) {
+                alert("The purchase was successfully registered")
+                navigation.goBack()
+            }
+        } catch (error) {
+            alert(error)
+            SetLoading(true)
+        }
+    }
+
+
+    const CheckInput = () => {
+        if (id !== -1 && room_Number !== -1 && productsToAdd.length > 0 && payment !== "")
+            return true
+        else
+            return false
+    }
+
+
     const SavePurchase = () => {
+        if(CheckInput())
+        {
         return Alert.alert(
             "order",
             "Are you sure you want to  add the selected products to your account?",
@@ -64,8 +133,10 @@ export default function AddCharge({ navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        alert("The purchase was successfully registered")
-                        navigation.goBack()
+                        // console.log(productsToAdd);
+                        AddChargeToDB()
+                        // alert("The purchase was successfully registered")
+                        // navigation.goBack()
                     },
                 },
                 {
@@ -73,17 +144,22 @@ export default function AddCharge({ navigation }) {
                 },
             ]
         );
+        }
+        else
+        {
+            alert("The format is not filled correctly")
+        }
     }
 
 
-    let listOfProducts = productsToAdd.map((per) => <ProductsCards key={per.id} id={per.id}
-        image={per.image} name={per.name}
-        price={per.price} amountTaken={per.amountTaken}
+    let listOfProducts = Products.map((per) => <ProductsCards key={per.Id} id={per.Id}
+        image={per.image} name={per.Product_Dec}
+        price={per.price} amountTaken={per.Amount}
         AddAmount={AddAmount}
     />)
 
 
-
+    // console.log(JSON.stringify(productsToAdd));
 
 
     return (
@@ -91,20 +167,23 @@ export default function AddCharge({ navigation }) {
             <Text style={styles.HeadLine}>Add Charge</Text>
 
             <View style={styles.label}>
-                <Text>Customer Name:</Text>
-                <TextInput placeholder="Customer Name" style={styles.TextInput}></TextInput>
-                <View style={{ height: 10 }}></View>
+                {/* <Text>Customer Name:</Text>
+                <TextInput placeholder="Customer Name" style={styles.TextInput}
+                    onChangeText={(name) => SetName(name)}></TextInput>
+                <View style={{ height: 10 }}></View> */}
 
                 <Text>Customer ID:</Text>
-                <TextInput placeholder="Customer ID" style={styles.TextInput}></TextInput>
+                <TextInput keyboardType="numeric" placeholder="Customer ID" style={styles.TextInput}
+                    onChangeText={(id) => SetId(id)}></TextInput>
                 <View style={{ height: 10 }}></View>
 
                 <Text>Room Number:</Text>
-                <TextInput keyboardType="numeric" placeholder="Room Number" style={styles.TextInput}></TextInput>
+                <TextInput keyboardType="numeric" placeholder="Room Number" style={styles.TextInput}
+                    onChangeText={(room) => SetRoom_Number(room)}></TextInput>
                 <View style={{ height: 10 }}></View>
 
 
-                <View>
+                {/* <View>
                     <Dropdown
                         style={styles.dropdown}
                         data={RequestType}
@@ -118,10 +197,15 @@ export default function AddCharge({ navigation }) {
                             SetRequest(action.value);
                         }}
                     />
-                </View>
+                </View> */}
                 <View>
                     <View style={{ height: 10 }}></View>
-                    {request === 'Product purchase' ?
+                    {listOfProducts}
+                    <View style={styles.goodsStyle}>
+                        <Text style={{ direction: 'rtl' }}>   goods:  {sumTotal}  </Text>
+                        <Icon name="ios-cart" size={20} />
+                    </View>
+                    {/* {request === 'Product purchase' ?
                         (<View>
                             {listOfProducts}
                             <View style={styles.goodsStyle}>
@@ -129,7 +213,7 @@ export default function AddCharge({ navigation }) {
                                 <Icon name="ios-cart" size={20} />
                             </View>
                         </View>
-                        ) : null}
+                        ) : null} */}
                 </View>
 
                 <View style={{ height: 10 }}></View>
@@ -138,8 +222,8 @@ export default function AddCharge({ navigation }) {
                     <Dropdown
                         style={styles.dropdown}
                         data={[
-                            { label: "Charge on the room", value: "Charge on the room" },
-                            { label: "Immediate Cash Payment", value: "Immediate Cash Payment" }
+                            { label: "Charge on the room", value: "Credit" },
+                            { label: "Immediate Cash Payment", value: "Cash" }
                         ]}
                         // search
                         searchPlaceholder="Search"

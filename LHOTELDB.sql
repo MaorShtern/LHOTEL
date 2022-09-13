@@ -377,7 +377,8 @@ begin tran
 SELECT dbo.Employees.Employee_ID, dbo.Employees_Types.Description,
 dbo.Employees.Employee_Name, 
 dbo.Employees.Phone_Number, dbo.Employees.Birth_Date,
-dbo.Employees_Types.Description as Role, dbo.Employees.Hourly_Wage, dbo.Employees.Address
+dbo.Employees_Types.Description as Role, dbo.Employees.Hourly_Wage, dbo.Employees.Address,
+dbo.Employees.[Employee_Code]
 FROM     dbo.Employees INNER JOIN
                   dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
 				  where dbo.Employees.Employee_ID = @id and Employee_Code = @password
@@ -1196,6 +1197,8 @@ dbo.Employees_Tasks.End_Time, dbo.Employees_Tasks.Task_Status, dbo.Employees_Tas
 	end
 commit tran
 go
+--select * from [dbo].[Employees_Tasks]
+--select * from [dbo].[Employees_Types]
 -- exec GetAllTasks
     -- "Task_Code":5,
     --"Employee_ID":222,
@@ -1304,9 +1307,6 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 111,'Room Cleaning', 'chips and coke for room 23',23
---exec AddNewTask 222,'Check-in Customer', 'Room 23',null
---exec AddNewTask 333,'Room Cleaning',23, 'chips and coke for room 23'
 --exec AddNewTask null,'Change of towels','',null,'13:00',2
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
@@ -1314,7 +1314,6 @@ go
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
-
 
 
 
@@ -1375,21 +1374,18 @@ commit tran
 go
 --select * from [Employees_Tasks]
 --exec DeleteTask 4
+--exec DeleteTask {code}
 
 
 
 create proc CloseTask
-@Employee_ID int, 
-@Task_Number int,
-@Start_Date date,
-@Start_Time time(7)
+@Task_Code int
 as
 begin tran
 	UPDATE [dbo].[Employees_Tasks]
 	SET 
 	[Task_Status]='Close'
-	WHERE [Employee_ID] = @Employee_ID and [Task_Number]=@Task_Number and [Start_Date]=@Start_Date 
-	and [Start_Time]=@Start_Time
+	WHERE [Task_Code] = @Task_Code
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1399,8 +1395,11 @@ begin tran
 commit tran
 go
 
---exec CloseTask 222, 7 ,'2022-08-23','07:03:33.0000000'
+--exec CloseTask 6
 --select * from [dbo].[Employees_Tasks]
+
+
+
 
 
 -- פרוצדורות חשבון ללקוח
@@ -1993,6 +1992,7 @@ begin tran
 commit tran
 go
 -- exec GetAllBill_Details
+exec GetAllTasks
 
 
 
