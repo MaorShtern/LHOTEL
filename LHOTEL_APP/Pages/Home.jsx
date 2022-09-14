@@ -53,18 +53,17 @@ export default function Home({ navigation }) {
       let result = await fetch("http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword", requestOptions);
       let employee = await result.json();
       if (employee === null) {
+        SetLoading(true)
         Alert.alert("No such user exists in the system");
         return
       }
-      SetLoading(true)
       myContext.setEmployeeDB(employee)
       navigation.navigate("WorkerMenu");
     }
     catch (error) {
-      SetLoading(true)
       alert(error);
-
     }
+    SetLoading(true)
   };
   // const LogIn = async () => {
   //   let employee = employees.filter(

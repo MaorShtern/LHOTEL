@@ -118,7 +118,8 @@ export default function WorkerMenu({ navigation }) {
       <TouchableOpacity
         style={styles.item}
         key={index}
-        onPress={() => item.routeNavigation === "" ? HandelCardClick(item.title) : navigation.navigate(item.routeNavigation)}>
+        // onPress={() => item.routeNavigation === "" ? HandelCardClick(item.title) : console.log(item.routeNavigation)}>
+         onPress={() => item.routeNavigation === "" ? HandelCardClick(item.title) : navigation.navigate(item.routeNavigation)}> 
         <Image style={{ width: 60, height: 60 }} source={item.pic} />
         <Text style={styles.itemText}>{item.title}</Text>
         {/* <Text>{item.toString()}</Text> */}

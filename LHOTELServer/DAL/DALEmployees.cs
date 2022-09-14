@@ -111,7 +111,7 @@ namespace DAL
                         Birth_Date = (DateTime)reader["Birth_Date"],
                         Hourly_Wage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        //Employee_Code = (int)reader["Employee_Code"]
+                        Employee_Code = (int)reader["Employee_Code"]
                     };
                 }
                 return employee;
@@ -220,31 +220,31 @@ namespace DAL
             }
         }
 
-        //        public static bool DeleteEmployeeByIdAndCode(int id, int code)
-        //        {
-        //            try
-        //            {
-        //                Employees findEmployee = GetEmployeeByIdAndCode(id, code);
-        //                if (findEmployee == null)
-        //                {
-        //                    return false;
-        //                }
-        //                string str = $@"exec DeleteEmployeeById {id}";
-        //                int result = SQLConnection.ExeNonQuery(str);
-        //                if (result >= 1)
-        //                    return true;
-        //                return false;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                Console.WriteLine(e.Message);
-        //                return false;
-        //            }
-        //            finally
-        //            {
-        //                SQLConnection.CloseDB();
-        //            }
-        //        }
+        public static bool DeleteEmployeeById(int id)
+        {
+            try
+            {
+                Employees findEmployee = GetEmployeeById(id);
+                if (findEmployee == null)
+                {
+                    return false;
+                }
+                string str = $@"exec DeleteEmployeeById {id}";
+                int result = SQLConnection.ExeNonQuery(str);
+                if (result >= 1)
+                    return true;
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
 
     }
 }

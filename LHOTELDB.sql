@@ -92,7 +92,6 @@ go
 
 
 
-
 create table Customers
 (
 	Customer_ID int NOT NULL,
@@ -312,6 +311,7 @@ go
 --insert [dbo].[Tasks_Types] values(7,'Reception desk arrangement')
 
 
+
 --=================================================================================================================================================
                                                 --פרוצדורות
 --=================================================================================================================================================
@@ -391,8 +391,9 @@ FROM     dbo.Employees INNER JOIN
 commit tran
 go
 
---exec GetEmployeeByIdAndPassword 222,2
+--exec GetEmployeeByIdAndPassword 111,21
 --select * from Employees
+
 
 create proc InsertEmployee 
 @id int, 
@@ -416,9 +417,8 @@ begin tran
 	end
 commit tran
 go
---exec InsertEmployee 999,'aaa','0526211881','2022-08-15','Manager',40,'aaa'
+--exec InsertEmployee 111,'aaa','0526211881','2022-08-15','Manager',40,'aaa'
 --exec InsertEmployee -1,'','','','General',-1,''
-
 --111	Manager	aaa	0526211881	2022-08-15	40	aaa	1
 --222	Receptionist	bbb	0526211881	2022-08-15	40	bbb	2
 --333	Room service	ccc	0542611881	2022-08-15	40	ccc	3
@@ -466,10 +466,16 @@ go
 
 ---------------------------------------------------------
 ---  יהיה צורך למחוק אות מהטבלה "משמרות ו"משימות" ף
-create proc DeleteEmployeeById
+alter proc DeleteEmployeeById
 @id int
 as
 begin tran
+
+	delete from [dbo].[Employees_Tasks] where [Employee_ID] = @id
+	delete from [dbo].[Shifts] where [Employee_ID] = @id
+	update [dbo].[Bill]
+	set [Employee_ID] = -1
+	where [Employee_ID] = @id
 	delete FROM [Employees] WHERE [Employee_ID] = @id
 	if (@@error !=0)
 	begin
@@ -478,22 +484,8 @@ begin tran
 		return
 	end
 commit tran
-	--DECLARE @RowCount1 INTEGER
- --   DECLARE @RowCount2 INTEGER
- --   DECLARE @RowCount3 INTEGER
-
-	--DELETE FROM Employees_Tasks WHERE [Employee_ID] = @id
-	--SELECT @RowCount1 = @@ROWCOUNT
-	--DELETE FROM Bill WHERE [Employee_ID] = @id
-	--SELECT @RowCount2 = @@ROWCOUNT
-	--DELETE FROM Employees WHERE [Employee_ID] = @id
-	--SELECT @RowCount3 = @@ROWCOUNT
-	--SELECT @RowCount1 + @RowCount2 + @RowCount3 AS Result
 go
---exec DeleteEmployeeById 999
---exec GetAllEmployees
---exec GetAllTasks
-
+--exec DeleteEmployeeById 111
 
 
 
@@ -1130,8 +1122,8 @@ commit tran
 go
 --exec GetAllShifts
 --exec ClockIn 111, '15:33'
---exec ClockIn 222
---exec ClockIn 333
+--exec ClockIn 222, '15:33'
+--exec ClockIn 333, '15:33'
 
 
 create proc DeleteShift
@@ -1814,19 +1806,19 @@ go
     --"Entry_Date": "2022-08-22",
     --"exitDate": "2022-08-24",
     --"Amount_Of_People": 5 
-	SELECT Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
-FROM     dbo.Customers_Rooms
-GROUP BY Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+--	SELECT Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+--FROM     dbo.Customers_Rooms
+--GROUP BY Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
 	
 
 
-SELECT Room_Number, COUNT(Bill_Number) AS Expr1, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
-FROM     dbo.Customers_Rooms
-GROUP BY Room_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+--SELECT Room_Number, COUNT(Bill_Number) AS Expr1, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+--FROM     dbo.Customers_Rooms
+--GROUP BY Room_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
 
+--select * from Customers_Rooms
 
-
-alter proc Room_Resit      
+create proc Room_Resit      
 @id int
 as
 begin tran		

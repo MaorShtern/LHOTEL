@@ -20,7 +20,7 @@ export default function CustomerHome({ route, navigation }) {
     const [user, SetUser] = useState([])
 
 
-    console.log("user: " + JSON.stringify(user));
+    // console.log("user: " + JSON.stringify(user));
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {

@@ -108,10 +108,10 @@ export default function Tasks({ navigation }) {
                 body: JSON.stringify({ task_code: task_Code }),
                 headers: { 'Content-Type': 'application/json' }
             };
-            console.log(requestOptions.body);
+            // console.log(requestOptions.body);
             let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteTask', requestOptions);
             let temp = await result.json();
-            console.log(temp);
+            // console.log(temp);
             if (temp) {
                 SetLoading(true)
                 GetAllTasksFromDB()

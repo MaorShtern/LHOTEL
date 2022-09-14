@@ -1,26 +1,11 @@
-<<<<<<< HEAD
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList} from "react-native";
 import React, { useState ,useEffect} from "react";
-=======
-import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList,} from "react-native";
-import React, { useState } from "react";
->>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
 import { Checkbox } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import { Searchbar } from "react-native-paper";
-<<<<<<< HEAD
-=======
+
 
 const Occupiedreservations = [
   // { Room_Number: 2, Bill_Number:2,	Customer_ID:222,	Bill_Date:'2021-01-01'	,Entry_Date:'2021-01-01',
@@ -122,7 +107,6 @@ const Occupiedreservations = [
     Room_Status: "Occupied",
   },
 ];
->>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
 
 const numColumns = 2;
 
@@ -155,11 +139,8 @@ export default function CheckOut() {
 
 
   const SerchReservation = (value) => {
-<<<<<<< HEAD
  
-=======
     // console.log(value);
->>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
     setSearch(value);
     let occupiedReservation = reservationItems.filter(
       (reservation) => reservation.Id == value

@@ -57,22 +57,29 @@ export default function EmployeesManagement({ navigation }) {
 
 
     //   צריך לרשום מתודת מחיקה לעובד
-    const DeleteEmployeeFromDB = async (value) => {
+    const DeleteEmployeeFromDB = async (id) => {
         try {
-            let employee = JSON.stringify(employees.filter((per) => per.Employee_ID === value))
-            let newArray = employees.filter((per) => per.Employee_ID !== value)
-            SetEmployees(newArray)
-            // const requestOptions = {
-            //     method: 'PUT',
-            //     body: employee,
-            //     headers: { 'Content-Type': 'application/json' }
-            //   };
+            SetLoading(false)
+            // console.log(value);
+            const requestOptions = {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    id: id
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            };
 
-            // //   console.log(requestOptions.body);
-            //   let result = await fetch('http://proj13.ruppin-tech.co.il/ClockOut', requestOptions);
-            //   if (result) {
-            //     alert("");
-            //   }
+            //   console.log(requestOptions.body);
+            let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteEmployeeById', requestOptions);
+            let temp = await result.json();
+            if (temp) {
+                SetLoading(true)
+                alert("The employee was successfully deleted");
+                GetDBEmployees()
+            }
+            else {
+
+            }
         } catch (error) {
             alert(error)
         }
@@ -88,7 +95,8 @@ export default function EmployeesManagement({ navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        DeleteEmployeeFromDB(value)
+                        let employee = employees.filter((per) => per.Employee_ID === value)[0].Employee_ID
+                        DeleteEmployeeFromDB(employee)
                         // let newArray = employees.filter((per) => per.Employee_ID !== value)
                         // SetEmployees(newArray)
                     },
@@ -131,6 +139,11 @@ export default function EmployeesManagement({ navigation }) {
                     placeholder="search worker..."
                     onChangeText={SerchEmployee}
                     value={search} />
+            </View>
+            <View style={{  width: 200, alignSelf: "center", alignItems: "center" }}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddEmployee')}>
+                    <Text>Add New Employee</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.container}>
                 <View style={styles.items}>
@@ -192,4 +205,10 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
+    button: {
+        padding: 10,
+        backgroundColor: "gray",
+        borderRadius:10,
+
+    }
 })

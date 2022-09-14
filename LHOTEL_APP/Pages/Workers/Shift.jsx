@@ -36,6 +36,8 @@ export default function Shift() {
     } catch (error) {
       alert(error)
     }
+    SetLoading(true)
+
     // SetLoading(false)
   }
   // GetTakenRooms
@@ -95,13 +97,13 @@ export default function Shift() {
 
       <Text style={styles.sectionTitle}>Today's shift</Text>
 
-      <SearchBar
+      {/* <SearchBar
         round={true}
         lightTheme={true}
         placeholder="search worker..."
         onChangeText={SerchEmployee}
         value={search}
-      />
+      /> */}
 
       <ScrollView style={styles.tasksWrapper}
         contentContainerStyle={{

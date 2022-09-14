@@ -40,10 +40,10 @@ namespace BLL
             return DALEmployees.AlterEmployeeById(employee);
         }
 
-        //public static bool DeleteEmployeeByIdAndCode(int id, int code)
-        //{
-        //    return DALEmployees.DeleteEmployeeByIdAndCode(id, code);
-        //}
+        public static bool DeleteEmployeeById(int id)
+        {
+            return DALEmployees.DeleteEmployeeById(id);
+        }
 
     }
 }

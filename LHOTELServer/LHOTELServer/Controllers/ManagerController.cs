@@ -111,21 +111,22 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        
-        
 
-        //[System.Web.Http.HttpDelete]
-        //[System.Web.Http.Route("~/DeleteEmployeeByIdAndCode")]
-        //public IHttpActionResult DeleteEmployeeByIdAndCode(int id, int code)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLEmployees.DeleteEmployeeByIdAndCode(id, code));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+
+
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("~/DeleteEmployeeById")]
+        public IHttpActionResult DeleteEmployeeById([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLEmployees.DeleteEmployeeById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

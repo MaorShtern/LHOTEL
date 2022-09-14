@@ -117,7 +117,7 @@ export default function EditTasks({ route, navigation }) {
                 navigation.goBack()
             }
         } catch (error) {
-
+alert(error)
         }
     }
 
