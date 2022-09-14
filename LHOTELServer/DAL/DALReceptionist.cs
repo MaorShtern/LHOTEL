@@ -9,44 +9,34 @@ namespace DAL
 {
     public class DALReceptionist
     {
-        public static List<TakenRoomReservation> GetTakenRooms()
+        public static List<TakenRoom> GetTakenRooms()
         {
             try
             {
+
                 SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetTakenRooms");
                 if (reader == null || !reader.HasRows)
                     return null;
 
 
-                List<TakenRoomReservation> takenRoomReservation = new List<TakenRoomReservation>();
+                List<TakenRoom> takenRooms = new List<TakenRoom>();
                 while (reader.Read())
                 {
 
-                    takenRoomReservation.Add(new TakenRoomReservation()
+                    takenRooms.Add(new TakenRoom()
                     {
-
-                        Id = (int)reader["Customer_ID"],
+                        CustomerID = (int)reader["Customer_ID"],
                         Room_Number = (int)reader["Room_Number"],
-                        //Card_Holder_Name = (string)reader["Card_Holder_Name"],
-                        //Card_Date = (string)reader["Card_Date"],
-                        //Three_Digit = (int)reader["Three_Digit"],
-                        //Credit_Card_Number = (string)reader["Credit_Card_Number"],
-                        //Employee_ID = (int)reader["Employee_ID"],
-                        //Counter_Single = (int)reader["Counter_Single"],
-                        //Counter_Double = (int)reader["Counter_Double"],
-                        //Counter_Suite = (int)reader["Counter_Suite"],
                         Entry_Date = (DateTime)reader["Entry_Date"],
                         ExitDate = (DateTime)reader["Exit_Date"],
                         Amount_Of_People = (int)reader["Amount_Of_People"],
                         Bill_Number = (int)reader["Bill_Number"],
-                        //FirstName = (string)reader["FirstName"],
-                        //LastName = (string)reader["LastName"],
                         Bill_Date = (DateTime)reader["Bill_Date"]
 
 
                     });
                 }
-                return takenRoomReservation;
+                return takenRooms;
             }
             catch (Exception e)
             {
@@ -62,7 +52,92 @@ namespace DAL
 
         }
 
+        public static List<Reservation> GetReservedRoomsByCustomerId(int id)
+        {
+            try
+            {
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetReservedRoomsByCustomerId {id}");
+                if (reader == null && !reader.HasRows)
+                {
+                    return null;
+                }
 
+            
+
+                List<Reservation> reservations = new List<Reservation>();
+                while (reader.Read())
+                {
+                    reservations.Add(new Reservation()
+                    {
+                        Bill_Number = (int)reader["Bill_Number"],
+                        Bill_Date = (DateTime)reader["Bill_Date"],
+                        Customer_ID = (int)reader["Customer_ID"],
+                        Customer_Type = (int)reader["Customers_Type"],
+                        First_Name = (string)reader["First_Name"],
+                        Last_Name = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        Phone_Number = (string)reader["Phone_Number"],
+                        Entry_Date = (DateTime)reader["Entry_Date"],
+                        Exit_Date = (DateTime)reader["Exit_Date"],
+                        Amount_Of_People = (int)reader["Amount_Of_People"],
+                        Room_Number = (int)reader["Room_Number"],
+                        Price_Per_Night = (int)reader["Price_Per_Night"],
+                        Room_Status = (string)reader["Room_Status"],
+
+                    });
+
+                }
+                return reservations;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
+
+        //public static TakenRoom GetReservedRoomsByCustomerId(int id)
+        //{
+        //    try
+        //    {
+        //        SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetReservedRoomsByCustomerId {id}");
+        //        if (reader == null && !reader.HasRows)
+        //        {
+        //            return null;
+        //        }
+        //        TakenRoom reserved = null;
+        //        while (reader.Read())
+        //        {
+        //            reserved = new TakenRoom()
+        //            {
+
+        //                CustomerID = (int)reader["Customer_ID"],
+        //                Room_Number = (int)reader["Room_Number"],
+        //                Entry_Date = (DateTime)reader["Entry_Date"],
+        //                ExitDate = (DateTime)reader["Exit_Date"],
+        //                Amount_Of_People = (int)reader["Amount_Of_People"],
+        //                Bill_Number = (int)reader["Bill_Number"],
+        //                Bill_Date = (DateTime)reader["Bill_Date"]
+        //            };
+
+        //        }
+        //        return reserved;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        SQLConnection.CloseDB();
+        //    }
+        //}
 
 
 

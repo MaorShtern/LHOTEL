@@ -58,7 +58,7 @@ export default function NewReservation({ route, navigation }) {
 
   const [entryDate, setEntryDate] = useState(new Date());
   const [exitDate, setExitDate] = useState(new Date());
-
+const [customerReservation, SetCustomerReservation] = useState([])
   const [singleFlag, setSingle] = useState(false);
   const [doubleFlag, setDouble] = useState(false);
   const [suiteFlag, setSuite] = useState(false);
@@ -143,42 +143,43 @@ export default function NewReservation({ route, navigation }) {
 
  
 
-  const CustomerToDataBS = async (value) => {
-    // console.log(value);
-    let newReservation = {
-      calssName: Reservation,
-      fields: {
-        amount_Of_People :amount_Of_People,
-        Employee_ID  : myContext.employee.id,
-        Counter_Single : single,
-        Counter_Double : double,
-        Counter_Suite :suite,
-        ExitDate	: exitDate,
-        Entry_Date :entryDate
-        // Exit_Date	: moment(exitDate).format('YYYY-MM-DD'),
-        // Entry_Date : moment(entryDate).format('YYYY-MM-DD')
-       
-      },
-    
-    };
-    let roomReservation ={...value,...newReservation.fields}
-    console.log(JSON.stringify(roomReservation));
-  
+  const CustomerReservationToDB = async (roomReservation) => {
+   
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(roomReservation),
       headers: { 'Content-Type': 'application/json' }
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User', requestOptions);
-    let customerResult = await result.json();
+    let reservationResult = await result.json();
 
-    if (customerResult)
-      alert('yaaayyyy')
-    else
-      alert("noooo CustomerToDataBS")
-  };
-
+    if (reservationResult)
+    navigation.navigate("ExistingReservation",{Id: roomReservation.customerID})
+    
+    
+    else alert("No matching Reservation for the ID you entered")
+  }
+ 
   
+
+  const  GetCustomerReservation = async ()=>{
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        "id": customerReservation.customerID,
+       
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
+    let currReservation  = await result.json();
+    if (currReservation !== null) {
+      navigation.navigate("ShortCheckIn",{currReservation:currReservation})
+      return
+      
+    }
+    else alert("ERROR")
+  }
 
   const ConfirmInformation = () => {
     if (
@@ -192,7 +193,7 @@ export default function NewReservation({ route, navigation }) {
       return;
     }
     
-      // console.log(user);
+     
       let newCustomer = {
         calssName: Customer,
         fields: {
@@ -208,8 +209,24 @@ export default function NewReservation({ route, navigation }) {
           threeDigit: cardCVC,
         },
       };
+      let newReservation = {
+        calssName: Reservation,
+        fields: {
+          amount_Of_People :amount_Of_People,
+          Employee_ID  : myContext.employee.id,
+          Counter_Single : single,
+          Counter_Double : double,
+          Counter_Suite :suite,
+          ExitDate	: exitDate,
+          Entry_Date :entryDate
+         
+         
+        },
+      
+      };
+     let roomReservation ={...newCustomer.fields,...newReservation.fields}
+      CustomerReservationToDB(roomReservation)
 
-      CustomerToDataBS(newCustomer.fields);
   
   };
   

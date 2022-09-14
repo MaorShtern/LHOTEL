@@ -69,20 +69,37 @@ const reservations = [
   },
 ];
 
+
+
 export default function ExistingReservation({ route, navigation }) {
 
-  const [id, setId] = useState(0);
-  const [currentReservationsArr, setCurrentReservationsArr] = useState([])
+  let {Id} = route.params
+  // useEffect =()=>{  console. log("fsfsdf"),[]}
+  const [id, setId] = useState(Id)
+  // const [currentReservation, setCurrentReservation] = useState([])
+  // useEffect(() => { FetchData() }, []);
 
+ 
 
-const ReservationCheck = ()=> {
-  let currReservations =  reservations.filter(
-    (reservation) => reservation.Customer_ID == id  )
-    if  (currReservations.length !== 0) {
-      // setCurrentReservationsArr(currReservations)
-      console.log(JSON.stringify(currReservations));
-      navigation.navigate("ShortCheckIn",{currentReservationsArr:currReservations})
-    } else alert("No matching Reservation for the ID you entered")
+const ReservationCheck = async ()=> {
+
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify({
+      "id": id,
+     
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  };
+  let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
+  let currReservation  = await result.json();
+  if (currReservation !== null) {
+    navigation.navigate("ShortCheckIn",{currReservation:currReservation})
+    return
+    
+  }
+  else alert("No matching Reservation for the ID you entered")
+ 
 } 
   return (
     <View style={styles.container}>

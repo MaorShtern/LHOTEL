@@ -23,15 +23,41 @@ namespace DAL
         //public DateTime Bill_Date { set; get; }
 
     }
-    public class TakenRoomReservation : RoomReservation
+    public class TakenRoom
     {
 
+        public int Room_Number { set; get; }
         //public int[] Rooms { set; get; }
         public int Bill_Number { set; get; }
-        public string FirstName { set; get; }
-        public string LastName { set; get; }
+        public int CustomerID { set; get; }
         public DateTime Bill_Date { set; get; }
+        public DateTime Entry_Date { set; get; }
+        public DateTime ExitDate { set; get; }
+
+        public int Amount_Of_People { set; get; }
+
+
+
+    }
+    public class Reservation
+    {
+        public int Bill_Number { set; get; }
+        public DateTime Bill_Date { set; get; }
+        public int Customer_ID { set; get; } 
+        public int Customer_Type { set; get; }
+        public string First_Name { set; get; }
+        public string Last_Name { set; get; }
+        public string Mail { set; get; }
+        public string Phone_Number { set; get; }
+      public DateTime Entry_Date { set; get; }
+        public DateTime Exit_Date { set; get; }
+        public int Amount_Of_People { set; get; }
         public int Room_Number { set; get; }
+        public int Price_Per_Night { set; get; }
+        public string Room_Status { set; get; }
+
+
+
 
     }
 }

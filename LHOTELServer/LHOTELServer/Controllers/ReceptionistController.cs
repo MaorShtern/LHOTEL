@@ -37,8 +37,22 @@ namespace LHOTELServer.Controllers
                     return BadRequest();
                 }
             }
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/GetReservedRoomsByCustomerId")]
+        public IHttpActionResult GetReservedRoomsByCustomerId([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(DALReceptionist.GetReservedRoomsByCustomerId(id));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
 
     }
-    
+
 }

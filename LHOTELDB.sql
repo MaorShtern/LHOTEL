@@ -1537,6 +1537,32 @@ go
 -- exec GetCustomersRooms
 
 
+create proc GetReservedRoomsByCustomerId
+@Customer_ID int
+as
+begin tran	
+SELECT * FROM  ReservationsDetails() WHERE Customer_ID  = @Customer_ID and  [Room_Status] = 'Reserved' 
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go 
+
+
+--exec GetReservedRoomsByCustomerId 747474744
+
+
+
+
+
+
+
+
+
+
 create proc AddNewCustomerRooms
 @Room_Number int,
 @Bill_Number int,
@@ -1638,6 +1664,7 @@ commit tran
 go
 --exec GetCustomersRooms
 --exec AlterCustomerRoom 8,8,888,'2022-12-06','2022-12-09','2022-09-15',2	,'Reserved'
+--exec AlterCustomerRoom 27,16,747474744,'2022-09-13','2022-09-29','2022-10-06'1,'Reserved'
 
 
 
@@ -1646,9 +1673,10 @@ go
 --  מצביא על חדרים תפוסים
 create proc GetTakenRooms
 as
+
 begin tran	
 	select * from [dbo].[Customers_Rooms]
-	where [Room_Status] = 'Occupied'
+	where [Room_Status] = 'Occupied' order by  Customer_ID
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1660,6 +1688,7 @@ go
 -- exec GetTakenRooms
 
 
+   
 
 
 --  תביא לי את כול החדרים הפנויים
@@ -1674,6 +1703,27 @@ as
 go
 
 --SELECT * FROM  AvailableRooms() order by Room_Number
+
+alter FUNCTION ReservationsDetails()
+returns @Temp TABLE (Bill_Number int ,Bill_Date Date,Customer_ID int,Customers_Type int ,First_Name nvarchar(30),Last_Name nvarchar(30),Mail nvarchar(100) , Phone_Number nvarchar(30) ,
+Entry_Date Date,Exit_Date Date,Amount_Of_People int,Room_Number int,Price_Per_Night int,Room_Status nvarchar(30))                     
+as
+	begin
+		insert @Temp
+
+SELECT dbo.Bill.Bill_Number, dbo.Bill.Bill_Date, dbo.Customers.Customer_ID, dbo.Customers.Customer_Type, dbo.Customers.First_Name, dbo.Customers.Last_Name, dbo.Customers.Mail, dbo.Customers.Phone_Number, 
+                  dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Rooms.Room_Number, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Room_Status
+FROM     dbo.Bill INNER JOIN
+                  dbo.Customers ON dbo.Bill.Customer_ID = dbo.Customers.Customer_ID INNER JOIN
+                  dbo.Customers_Rooms ON dbo.Bill.Bill_Number = dbo.Customers_Rooms.Bill_Number AND dbo.Bill.Customer_ID = dbo.Customers_Rooms.Customer_ID AND dbo.Bill.Bill_Date = dbo.Customers_Rooms.Bill_Date INNER JOIN
+                  dbo.Rooms ON dbo.Customers_Rooms.Room_Number = dbo.Rooms.Room_Number
+		RETURN
+	end
+go
+
+SELECT * FROM  ReservationsDetails() order by Customer_ID 
+--SELECT * FROM  ReservationsDetails() WHERE Customer_ID  = 666
+
 
 
 
@@ -1693,6 +1743,7 @@ create proc SaveRoomReservation
 @Amount_Of_People int
 as
 begin tran	
+    
 	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
 	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @date as date = GETDATE()
@@ -1764,10 +1815,18 @@ go
     --"Entry_Date": "2022-08-22",
     --"exitDate": "2022-08-24",
     --"Amount_Of_People": 5 
-
-
-
+	SELECT Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+FROM     dbo.Customers_Rooms
+GROUP BY Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
 	
+
+
+SELECT Room_Number, COUNT(Bill_Number) AS Expr1, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+FROM     dbo.Customers_Rooms
+GROUP BY Room_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
+
+
+
 alter proc Room_Resit      
 @id int
 as
@@ -1803,7 +1862,7 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 222
+--exec Room_Resit 747474744
 --select * from  [dbo].[Purchases_Documentation]
 
 

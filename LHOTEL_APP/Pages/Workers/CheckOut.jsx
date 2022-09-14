@@ -8,133 +8,54 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Checkbox } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import { Searchbar } from "react-native-paper";
-const Occupiedreservations = [
-  // { Room_Number: 2, Bill_Number:2,	Customer_ID:222,	Bill_Date:'2021-01-01'	,Entry_Date:'2021-01-01',
-  // Exit_Date:'2021-01-03',	Amount_Of_People:1,	Room_Status:'Occupied'},
-  {
-    Room_Number: 1,
-    Bill_Number: 35,
-    Customer_ID: 333,
-    Bill_Date: "2022-09-01",
-    Entry_Date: "2022-08-22",
-    Exit_Date: "2022-08-24",
-    Amount_Of_People: 5,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 2,
-    Bill_Number: 2,
-    Customer_ID: 222,
-    Bill_Date: "2021-01-01",
-    Entry_Date: "2021-01-01",
-    Exit_Date: "2021-01-03",
-    Amount_Of_People: 1,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 4,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 8,
-    Bill_Number: 8,
-    Customer_ID: 888,
-    Bill_Date: "2022-12-06",
-    Entry_Date: "2022-12-09",
-    Exit_Date: "2022-09-15",
-    Amount_Of_People: 2,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 9,
-    Bill_Number: 4,
-    Customer_ID: 444,
-    Bill_Date: "2021-01-01",
-    Entry_Date: "2021-01-01",
-    Exit_Date: "2021-01-09",
-    Amount_Of_People: 1,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 11,
-    Bill_Number: 35,
-    Customer_ID: 666,
-    Bill_Date: "2022-09-01",
-    Entry_Date: "2022-08-22",
-    Exit_Date: "2022-08-24",
-    Amount_Of_People: 5,
-    Room_Status: "Occupied",
-  },
-
-  {
-    Room_Number: 12,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Occupied",
-  },
-  {
-    Room_Number: 13,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Occupied",
-  },
-  {
-    Room_Number: 21,
-    Bill_Number: 35,
-    Customer_ID: 666,
-    Bill_Date: "2022-09-01",
-    Entry_Date: "2022-08-22",
-    Exit_Date: "2022-08-24",
-    Amount_Of_People: 5,
-    Room_Status: "Occupied",
-  },
-];
 
 const numColumns = 2;
 
 
 export default function CheckOut() {
-  
-  const [reservationItems, setReservationItems] = useState(Occupiedreservations);
+
+  const [DBreservationItems, SetDBReservationItems] = useState([])
+  const [reservationItems, setReservationItems] = useState([]);
   const [search, setSearch] = useState("");
  
+  useEffect(() => { FetchData() }, []);
+
+
+  const FetchData = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetTakenRooms', requestOptions);
+    let rooms = await result.json();
+    if (rooms !== null) {
+     setReservationItems(rooms)
+     SetDBReservationItems(rooms)
+    
+      return
+    }
+    FetchData()
+
+  }
+
 
   const SerchReservation = (value) => {
-    console.log(value);
+ 
     setSearch(value);
-    let occupiedReservation = Occupiedreservations.filter(
-      (reservation) => reservation.Customer_ID == value
+    let occupiedReservation = reservationItems.filter(
+      (reservation) => reservation.Id == value
     );
-
+    console.log(occupiedReservation);
     if (occupiedReservation.length > 0) {
       setReservationItems(occupiedReservation);
     } else {
-      setReservationItems(Occupiedreservations);
+      setReservationItems(DBreservationItems);
     }
   };
 
@@ -149,33 +70,66 @@ export default function CheckOut() {
         </View>
         <View style={styles.containerTaskDedtails}>
           <Text
-            style={{ paddingHorizontal: 5, paddingVertical: 5, fontSize: 18 }}
+            style={{ padding:10,alignSelf:'flex-end', fontSize: 18 }}
           >
-            ID : {item.Customer_ID}
+            ID : {item.Id}
           </Text>
+          <Text style={{padding:10,alignSelf:'flex-end', fontSize: 18 }}>
+            FROM :  
+          {moment(new Date(item.Entry_Date)).format("DD.MM.YYYY")}
+          </Text>
+          <Text style={{ padding:10,alignSelf:'flex-end', fontSize: 18 }}>
+            TO :  
+            {
+              moment(new Date(item.ExitDate)).format("DD.MM.YYYY")}
+          </Text>
+          <View style={{ flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",paddingHorizontal:10}}>
+          <Text style={{ padding: 4,fontSize: 18 }}>
+          Room : {item.Room_Number}
 
-          <Text style={{ paddingRight: 55, paddingBottom: 5, fontSize: 18 }}>
-            {" " +
-              item.Entry_Date.split("-")[2] +
-              "-" +
-              moment(new Date(item.Exit_Date)).format("DD.MM.YYYY")}
           </Text>
 
           <Icon name="person" size={18} style={{ padding: 4 }}>
             {" "}
             {item.Amount_Of_People}
           </Icon>
-
+          </View>
+          
           <View style={styles.BTNContainer}>
-            <TouchableOpacity>
+          <TouchableOpacity style={styles.LogoutBtn} onPress ={()=> Checkout(item.Id,item.ExitDate)} >
+                        <Text style={{ color: 'black' }}>Check out</Text>
+                    </TouchableOpacity>
+            {/* <TouchableOpacity >
               <Image style={styles.BTNImages} source={images.exit_shift} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>
     );
   };
+  const  Checkout = async (Id,ExitDate) =>{
+   
+      const requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify({
+          "id": Id,
+          "Exit_Date": ExitDate
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/CheckOut', requestOptions);
+      let rooms = await result.json();
+      if (rooms) {
+       alert("You have successfully checked out !!!")
+       FetchData()
+        return
+      }
+  
 
+  
+  }
   return (
     <View style={styles.container}>
       <View style={styles.SearchbarContainer}>
@@ -191,7 +145,7 @@ export default function CheckOut() {
         data={reservationItems}
         renderItem={CheckOutCard}
         keyExtarctor={(item, index) => index.toString()}
-        numColumns={numColumns}
+        numColumns={1}
       />
     </View>
   );
@@ -312,4 +266,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
   },
+  LogoutBtn: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5
+},
 });
