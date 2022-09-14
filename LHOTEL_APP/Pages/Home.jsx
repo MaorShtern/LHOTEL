@@ -7,23 +7,26 @@ import { TextInput } from "react-native-paper";
 import WorkerMenu from "./Workers/WorkerMenu";
 import { LinearGradient } from "expo-linear-gradient";
 import AppContext from '../AppContext';
+import { ActivityIndicator } from "react-native";
 
 
 export default function Home({ navigation }) {
 
+  const [loading, SetLoading] = useState(true)
   const myContext = useContext(AppContext);
 
-  // const [employees, setEmployees] = useState([]);
-
-  // const [openState, setOpenState] = useState(new Animated.Value(100));
-
-  
   const [closeState, setCloseState] = useState(new Animated.Value(1));
   const [info, setInfo] = useState(false);
   const [workerCode, setWorkerCode] = useState(1);
   const [id, setId] = useState(0);
   const [password, setPassword] = useState(0);
 
+
+  const Spinner = () => (
+    <View style={[styles.container, styles.horizontal]}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
 
   useEffect(() => {
     const focus = navigation.addListener("focus", () => {
@@ -37,29 +40,30 @@ export default function Home({ navigation }) {
 
   const LogIn = async () => {
     try {
+      SetLoading(false)
       const requestOptions = {
         method: "POST",
         body: JSON.stringify({
-          id: myContext.employee.id,
-          password: myContext.employee.password,
+          id: id,
+          password: password,
         }),
         headers: { "Content-Type": "application/json" },
       };
+      // console.log(requestOptions.body);
       let result = await fetch("http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword", requestOptions);
       let employee = await result.json();
-
-      if (employee === undefined || employee === null) {
+      if (employee === null) {
         Alert.alert("No such user exists in the system");
         return
-        // let role = employee.Description;
-        // navigation.navigate("WorkerMenu", { role: role });
       }
-      // console.log(JSON.stringify(employee));
-      // let role = employee.Description;
-      navigation.navigate("WorkerMenu", { employee: employee });
-
-    } catch (error) {
+      SetLoading(true)
+      myContext.setEmployeeDB(employee)
+      navigation.navigate("WorkerMenu");
+    }
+    catch (error) {
+      SetLoading(true)
       alert(error);
+
     }
   };
   // const LogIn = async () => {
@@ -84,14 +88,17 @@ export default function Home({ navigation }) {
       case 1:
         return (
           <View style={styles.loginContainer}>
+            <View style={styles.items}>
+              {loading ? null : <Spinner />}
+            </View>
             <TextInput
               label="Employee ID"
               left={<TextInput.Icon name="account" />}
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
-              // onChangeText={(id) => setId(id)}
-              // value={myContext.employee.id}
-              onChangeText={myContext.setEmployeeId}
+              onChangeText={(id) => setId(id)}
+              value={id}
+            // onChangeText={myContext.setEmployeeId}
             />
 
             <TextInput
@@ -99,9 +106,9 @@ export default function Home({ navigation }) {
               left={<TextInput.Icon name="lock" />}
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
-              // value={myContext.employee.password}
-              onChangeText={myContext.setEmployeePassword}
-            // onChangeText={(code) => setPassword(code)}
+              value={password}
+              // onChangeText={myContext.setEmployeePassword}
+              onChangeText={(code) => setPassword(code)}
             />
 
             <TouchableOpacity style={styles.btn} onPress={() => {
@@ -298,6 +305,12 @@ const styles = StyleSheet.create({
     width: 150,
     backgroundColor: "blue",
     borderRadius: 5,
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+
   },
   scrollContainer: {
     height: 300,

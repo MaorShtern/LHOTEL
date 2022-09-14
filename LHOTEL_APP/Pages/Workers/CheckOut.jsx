@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   View,
   Text,
@@ -9,11 +10,119 @@ import {
   FlatList,
 } from "react-native";
 import React, { useState ,useEffect} from "react";
+=======
+import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList,} from "react-native";
+import React, { useState } from "react";
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
 import { Checkbox } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import { Searchbar } from "react-native-paper";
+<<<<<<< HEAD
+=======
+
+const Occupiedreservations = [
+  // { Room_Number: 2, Bill_Number:2,	Customer_ID:222,	Bill_Date:'2021-01-01'	,Entry_Date:'2021-01-01',
+  // Exit_Date:'2021-01-03',	Amount_Of_People:1,	Room_Status:'Occupied'},
+  {
+    Room_Number: 1,
+    Bill_Number: 35,
+    Customer_ID: 333,
+    Bill_Date: "2022-09-01",
+    Entry_Date: "2022-08-22",
+    Exit_Date: "2022-08-24",
+    Amount_Of_People: 5,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 2,
+    Bill_Number: 2,
+    Customer_ID: 222,
+    Bill_Date: "2021-01-01",
+    Entry_Date: "2021-01-01",
+    Exit_Date: "2021-01-03",
+    Amount_Of_People: 1,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 4,
+    Bill_Number: 38,
+    Customer_ID: 7878,
+    Bill_Date: "2022-09-03",
+    Entry_Date: "2022-09-05",
+    Exit_Date: "2022-09-10",
+    Amount_Of_People: 3,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 8,
+    Bill_Number: 8,
+    Customer_ID: 888,
+    Bill_Date: "2022-12-06",
+    Entry_Date: "2022-12-09",
+    Exit_Date: "2022-09-15",
+    Amount_Of_People: 2,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 9,
+    Bill_Number: 4,
+    Customer_ID: 444,
+    Bill_Date: "2021-01-01",
+    Entry_Date: "2021-01-01",
+    Exit_Date: "2021-01-09",
+    Amount_Of_People: 1,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 11,
+    Bill_Number: 35,
+    Customer_ID: 666,
+    Bill_Date: "2022-09-01",
+    Entry_Date: "2022-08-22",
+    Exit_Date: "2022-08-24",
+    Amount_Of_People: 5,
+    Room_Status: "Occupied",
+  },
+
+  {
+    Room_Number: 12,
+    Bill_Number: 38,
+    Customer_ID: 7878,
+    Bill_Date: "2022-09-03",
+    Entry_Date: "2022-09-05",
+    Exit_Date: "2022-09-10",
+    Amount_Of_People: 3,
+    Room_Status: "Occupied",
+  },
+  {
+    Room_Number: 13,
+    Bill_Number: 38,
+    Customer_ID: 7878,
+    Bill_Date: "2022-09-03",
+    Entry_Date: "2022-09-05",
+    Exit_Date: "2022-09-10",
+    Amount_Of_People: 3,
+    Room_Status: "Occupied",
+  },
+  {
+    Room_Number: 21,
+    Bill_Number: 35,
+    Customer_ID: 666,
+    Bill_Date: "2022-09-01",
+    Entry_Date: "2022-08-22",
+    Exit_Date: "2022-08-24",
+    Amount_Of_People: 5,
+    Room_Status: "Occupied",
+  },
+];
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
 
 const numColumns = 2;
 
@@ -46,7 +155,11 @@ export default function CheckOut() {
 
 
   const SerchReservation = (value) => {
+<<<<<<< HEAD
  
+=======
+    // console.log(value);
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
     setSearch(value);
     let occupiedReservation = reservationItems.filter(
       (reservation) => reservation.Id == value

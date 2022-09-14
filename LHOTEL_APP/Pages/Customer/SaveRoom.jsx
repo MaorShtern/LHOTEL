@@ -41,7 +41,6 @@ export default function SaveRoom({ route, navigation }) {
       return
     }
     FetchData()
-
   }
 
 

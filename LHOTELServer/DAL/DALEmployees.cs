@@ -149,7 +149,7 @@ namespace DAL
                         Birth_Date = (DateTime)reader["Birth_Date"],
                         Hourly_Wage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        //Employee_Code = (int)reader["Employee_Code"]
+                        Employee_Code = (int)reader["Employee_Code"]
                     };
                 }
                 return employee;

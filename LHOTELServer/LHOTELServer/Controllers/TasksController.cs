@@ -95,6 +95,23 @@ namespace LHOTELServer.Controllers
             }
         }
 
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/CloseTask")]
+        public IHttpActionResult CloseTask([FromBody] JObject data)
+        {
+            try
+            {
+                int code = data["task_code"].ToObject<int>();
+                return Ok(BLLTasks.CloseTask(code));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
         [System.Web.Http.HttpDelete]
         [System.Web.Http.Route("~/DeleteTask")]
         public IHttpActionResult DeleteTask([FromBody] JObject data)

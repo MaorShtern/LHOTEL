@@ -16,6 +16,19 @@ namespace LHOTELServer.Controllers
 
     public class Bill_DetailsController : ApiController
     {
-       
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/AddCharge")]
+        public IHttpActionResult AddCharge([FromBody] AddCharge addCharge)
+        {
+            try
+            {
+                return Ok(BLLBill_Details.AddCharge(addCharge));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

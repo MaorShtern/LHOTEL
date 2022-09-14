@@ -284,4 +284,3 @@ C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELSe
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\System.Memory.xml
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\System.Numerics.Vectors.xml
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Release\LHOTELServer.csproj.CopyComplete

@@ -4,8 +4,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+<<<<<<< HEAD
     <_PublishTargetUrl>C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\bin\app.publish\</_PublishTargetUrl>
     <History>True|2022-09-13T23:59:55.1279292Z;True|2022-09-14T01:20:44.2684180+03:00;True|2022-09-13T21:14:18.4558376+03:00;True|2022-09-12T17:14:04.6780935+03:00;True|2022-09-12T14:33:28.4562385+03:00;True|2022-09-12T13:49:55.2464835+03:00;True|2022-09-12T12:38:01.5807628+03:00;True|2022-09-11T21:16:40.1306623+03:00;True|2022-09-07T15:13:07.3724919+03:00;True|2022-09-07T13:10:18.6427778+03:00;True|2022-09-04T00:37:43.0287276+03:00;True|2022-08-28T11:59:16.9240542+03:00;True|2022-08-14T17:06:18.6635786+03:00;True|2022-08-08T18:05:54.0513399+03:00;</History>
+=======
+    <_PublishTargetUrl>C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\bin\app.publish\</_PublishTargetUrl>
+    <History>True|2022-09-13T11:47:53.0475572Z;True|2022-09-13T11:32:08.8753627+03:00;True|2022-09-12T17:14:04.6780935+03:00;True|2022-09-12T14:33:28.4562385+03:00;True|2022-09-12T13:49:55.2464835+03:00;True|2022-09-12T12:38:01.5807628+03:00;True|2022-09-11T21:16:40.1306623+03:00;True|2022-09-07T15:13:07.3724919+03:00;True|2022-09-07T13:10:18.6427778+03:00;True|2022-09-04T00:37:43.0287276+03:00;True|2022-08-28T11:59:16.9240542+03:00;True|2022-08-14T17:06:18.6635786+03:00;True|2022-08-08T18:05:54.0513399+03:00;</History>
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/HelpPage/HelpPage.css">
@@ -81,6 +86,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/07/2022 11:55:07</publishTime>
     </File>
     <File Include="bin/BLL.dll">
+<<<<<<< HEAD
       <publishTime>09/14/2022 02:53:36</publishTime>
     </File>
     <File Include="bin/BLL.pdb">
@@ -97,6 +103,24 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="bin/LHOTELServer.pdb">
       <publishTime>09/14/2022 02:53:38</publishTime>
+=======
+      <publishTime>09/13/2022 13:31:57</publishTime>
+    </File>
+    <File Include="bin/BLL.pdb">
+      <publishTime>09/13/2022 13:31:57</publishTime>
+    </File>
+    <File Include="bin/DAL.dll">
+      <publishTime>09/13/2022 13:31:57</publishTime>
+    </File>
+    <File Include="bin/DAL.pdb">
+      <publishTime>09/13/2022 13:31:57</publishTime>
+    </File>
+    <File Include="bin/LHOTELServer.dll">
+      <publishTime>09/13/2022 13:32:45</publishTime>
+    </File>
+    <File Include="bin/LHOTELServer.pdb">
+      <publishTime>09/13/2022 13:32:45</publishTime>
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>08/15/2022 12:39:51</publishTime>
@@ -390,7 +414,11 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/15/2022 12:39:49</publishTime>
     </File>
     <File Include="Web.config">
+<<<<<<< HEAD
       <publishTime>09/13/2022 01:15:06</publishTime>
+=======
+      <publishTime>09/13/2022 11:32:08</publishTime>
+>>>>>>> 467827c1ed57d1d9f08c3b0bfb65a6e4d09be269
     </File>
   </ItemGroup>
 </Project>

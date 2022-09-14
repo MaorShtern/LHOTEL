@@ -57,7 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddCharge.cs" />
     <Compile Include="Customers.cs" />
+    <Compile Include="DALBill_Details.cs" />
     <Compile Include="DALCustomers.cs" />
     <Compile Include="DALEmployees.cs" />
     <Compile Include="DALManager.cs" />

@@ -1,21 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-  Animated,
-  ScrollView,
-  StatusBar,
-  Switch,
-  ImageBackground,
-} from "react-native";
-
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, Switch, ImageBackground, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { images } from "../../images";
@@ -25,10 +10,9 @@ export default function CheckIn({ route, navigation }) {
   // let { id } = route.params;
 
 
-
   return (
     <View style={styles.container}>
-           <StatusBar  translucent={true} backgroundColor={'transparent'}  />
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <ImageBackground
         source={images.hotelback}
         resizeMode="cover"
@@ -42,7 +26,7 @@ export default function CheckIn({ route, navigation }) {
 
       <View style={styles.bottomview}>
         <View style={{ paddingTop: 50 }}>
-        <Text style={styles.HeadLine}>CHECK IN</Text>
+          <Text style={styles.HeadLine}>CHECK IN</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("NewReservation")}
             style={{
@@ -150,18 +134,16 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 35,
-   
-   
     zIndex: 1,
     fontWeight: 'bold',
-    bottom:40,
+    bottom: 40,
     color: 'white',
     right: 10
   },
   HeadLine: {
     fontSize: 40,
     fontWeight: "bold",
-  paddingBottom: 40,
+    paddingBottom: 40,
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",

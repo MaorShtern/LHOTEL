@@ -11,22 +11,22 @@ export default function ConfirmationPage({ route, navigation }) {
         entryDate, exitDate, total, Name, CardNum } = route.params
 
 
-    const Delete = async () => {
-        const requestOptions = {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
-        };
-        let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
-        let deleteResult = await result.json();
-        if (deleteResult) {
-            alert("The order has been removed")
-            navigation.navigate('Homepage')
-        }
-        else {
-            alert("ERROR")
-        }
+    // const Delete = async () => {
+    //     const requestOptions = {
+    //         method: 'DELETE',
+    //         headers: { 'Content-Type': 'application/json' }
+    //     };
+    //     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
+    //     let deleteResult = await result.json();
+    //     if (deleteResult) {
+    //         alert("The order has been removed")
+    //         navigation.navigate('Homepage')
+    //     }
+    //     else {
+    //         alert("ERROR")
+    //     }
 
-    }
+    // }
 
 
     let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
@@ -51,9 +51,9 @@ export default function ConfirmationPage({ route, navigation }) {
 
 
             <View style={styles.ButtonContainer}>
-                <TouchableOpacity style={styles.button} onPress={Delete}>
+                {/* <TouchableOpacity style={styles.button} onPress={Delete}>
                     <Text>Delete order</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
                     <Text>Home Page</Text>
                 </TouchableOpacity>

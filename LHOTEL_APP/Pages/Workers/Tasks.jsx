@@ -1,9 +1,10 @@
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Dropdown } from 'react-native-element-dropdown';
-import { images } from '../../images';
+import { ActivityIndicator } from "react-native";
 import TasksCard from './TasksCard';
 import moment from 'moment';
+import AppContext from "../../AppContext";
 
 
 const RequestType = [
@@ -14,35 +15,17 @@ const RequestType = [
 ];
 
 
-// const tasksArray = [
-//     {
-//         Task_Code: 1, Employee_ID: -1, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Open', Description: 'ggggg'
-//     },
-//     {
-//         Task_Code: 2, Employee_ID: 111, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
-//     },
-//     {
-//         Task_Code: 3, Employee_ID: 222, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-//         Start_Date: '2022-08-31', End_Time: "23:20", Task_Status: 'Open', Description: 'ggggg'
-//     },
-//     {
-//         Task_Code: 4, Employee_ID: 333, Task_Name: 'Room Cleaning', Room_Number: 23, Start_Time: '13:00',
-//         Start_Date: '2022-08-08', End_Time: null, Task_Status: 'Close', Description: 'ggggg'
-//     },
-// ]
-
-
 export default function Tasks({ navigation }) {
 
-    // let { id } = route.params
 
+    const myContext = useContext(AppContext);
+    const myEmployee = myContext.employee
     const [dropdown, setDropdown] = useState(null);
-    // const [RequestTask, SetRequestTask] = useState('')
     const [tasks, SetTasks] = useState([])
-
+    const [tasksDisplay, SetTasksDisplay] = useState([])
     const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([])
+    const [loading, SetLoading] = useState(false)
+
 
     useEffect(() => GetAllTasksFromDB(), [])
 
@@ -55,15 +38,18 @@ export default function Tasks({ navigation }) {
             };
             let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllTasks', requestOptions);
             let temp = await result.json();
+            // console.log(temp);
             if (temp !== null) {
                 SetTasks(temp)
+                SetTasksDisplay(temp)
+                SetLoading(true)
                 return
             }
             else
                 GetAllTasksFromDB()
-
         } catch (error) {
             alert(error)
+            SetLoading(true)
         }
     }
 
@@ -76,16 +62,17 @@ export default function Tasks({ navigation }) {
 
 
     const HandelRequest = (request) => {
+        // console.log(request);
         let listTemp = null
         switch (request) {
             case "All Task":
-                listTemp = tasksArray
+                listTemp = tasks
                 break;
             case "Today's tasks":
-                listTemp = tasksArray.filter((per) => per.Start_Date === moment(new Date()).format('YYYY-MM-DD'))
+                listTemp = tasks.filter((per) => per.Start_Date === moment(new Date()).format('YYYY-MM-DD'))
                 break;
             case "Open Tasks":
-                listTemp = tasksArray.filter((per) => per.Task_Status === 'Open')
+                listTemp = tasks.filter((per) => per.Task_Status === 'Open')
                 break;
             case "Add New Task":
                 navigation.navigate('EditTasks')
@@ -94,29 +81,91 @@ export default function Tasks({ navigation }) {
                 return;
         }
         // console.log(JSON.stringify(listTemp));
-        SetTasks(listTemp)
+        SetTasksDisplay(listTemp)
     }
 
     const MarkTaskAsDone = (task_Code) => {
-        let newArrayTasks = tasks.filter((per) => per.Task_Code === task_Code)
+        // console.log("Task_Code to Add: " +Task_Code);
+        let newArrayTasks = tasksDisplay.filter((per) => per.Task_Code === task_Code)[0]
         let temp = [...taskToMarkAsDone, newArrayTasks]
-        console.log(JSON.stringify(temp));
+        // console.log(JSON.stringify(temp));
         SetTaskToMarkAsDone(temp)
     }
 
-    const RemoveFromCheck = (Task_Code) => {
-        console.log("Task_Code to remove: " + Task_Code);
+    const RemoveFromCheck = (task_Code) => {
+        // console.log("Task_Code to remove: " + task_Code);
+        // console.log(JSON.stringify(taskToMarkAsDone));
+        let newArrayTasks = taskToMarkAsDone.filter((per) => per.Task_Code !== task_Code)
+        // console.log(JSON.stringify(newArrayTasks));
+        SetTaskToMarkAsDone(newArrayTasks)
+    }
 
+    const DeleteTask = async (task_Code) => {
+        try {
+            SetLoading(false)
+            const requestOptions = {
+                method: 'DELETE',
+                body: JSON.stringify({ task_code: task_Code }),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            console.log(requestOptions.body);
+            let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteTask', requestOptions);
+            let temp = await result.json();
+            console.log(temp);
+            if (temp) {
+                SetLoading(true)
+                GetAllTasksFromDB()
+            }
+        } catch (error) {
+            alert(error)
+        }
+        SetLoading(true)
     }
 
 
-    // console.log(tasks);
 
-    let tasksList = tasks.map((per) => <TasksCard key={per.Task_Code} Task_Code={per.Task_Code}
+    const CloseTask = async () => {
+        try {
+            SetLoading(false)
+            let counter = 0
+            for (let index = 0; index < taskToMarkAsDone.length; index++) {
+                console.log(taskToMarkAsDone[index]);
+                const requestOptions = {
+                    method: 'Delete',
+                    body: JSON.stringify({ task_code: taskToMarkAsDone[index].Task_Code }),
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                let result = await fetch('http://proj13.ruppin-tech.co.il/CloseTask', requestOptions);
+                let temp = await result.json();
+                if (temp) {
+                    counter++
+                    // GetAllTasksFromDB()
+                }
+            }
+            if (counter > 0)
+                GetAllTasksFromDB()
+        } catch (error) {
+            alert(error)
+            SetLoading(false)
+        }
+    }
+
+
+    // console.log(JSON.stringify(taskToMarkAsDone));
+
+
+    const Spinner = () => (
+        <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" />
+        </View>
+    );
+
+
+    let tasksList = tasksDisplay.map((per) => <TasksCard key={per.Task_Code} Task_Code={per.Task_Code}
         Employee_ID={per.Employee_ID} Task_Name={per.Task_Name} Room_Number={per.Room_Number}
         Start_Date={moment(per.Start_Date).format("YYYY-MM-DD")} Start_Time={per.Start_Time} End_Time={per.End_Time}
         Task_Status={per.Task_Status} Description={per.Description} Edite_Task_Details={Edite_Task_Details}
-        MarkTaskAsDone={MarkTaskAsDone} RemoveFromCheck={RemoveFromCheck} />)
+        MarkTaskAsDone={MarkTaskAsDone} RemoveFromCheck={RemoveFromCheck} DeleteTask={DeleteTask} />)
 
 
 
@@ -140,12 +189,12 @@ export default function Tasks({ navigation }) {
                         onChange={request => { HandelRequest(request.value) }} />
                 </View>
                 <View style={styles.SaveContainer}>
-                    <TouchableOpacity style={styles.Save}>
+                    <TouchableOpacity style={styles.Save} onPress={CloseTask}>
                         <Text>Save the tasks marked as "Done"</Text>
                     </TouchableOpacity>
                 </View>
-                <View>
-                    {tasksList}
+                <View style={styles.items}>
+                    {loading ? tasksList : <Spinner />}
                 </View>
 
             </ScrollView>
@@ -157,7 +206,6 @@ export default function Tasks({ navigation }) {
             <ScrollView>
                 <Text>thrthrtbnt</Text>
             </ScrollView>
-
         )
     }
 }
@@ -189,6 +237,7 @@ const styles = StyleSheet.create({
     },
     SaveContainer: {
         alignItems: 'center',
+        padding: 10,
     },
     Save: {
         backgroundColor: 'blue',
@@ -196,6 +245,15 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center',
         borderWidth: 2,
+    },
+    container: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    horizontal: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
 
-    }
+    },
 })
