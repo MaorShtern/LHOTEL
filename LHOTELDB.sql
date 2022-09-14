@@ -525,7 +525,23 @@ go
 --exec GetCustomerById 10
 
 
- 
+create proc GetDBCustomerById 
+@id int
+as
+begin tran
+	select Customer_ID,Customer_Type,First_Name,Last_Name,Mail,Phone_Number from [dbo].[Customers] where [Customer_ID] = @id
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+ exec GetDBCustomerById 7878
+
+
+
 create proc GetCustomerByMail
 @Mail nvarchar(100)
 as

@@ -23,11 +23,11 @@ namespace DAL
                 {
                     products.Add(new Products()
                     {
-                        Product_Code = (int)reader["Product_Code"],
-                        Category_Number = (int)reader["Category_Number"],
+                        ProductCode = (int)reader["Product_Code"],
+                        CategoryNumber = (int)reader["Category_Number"],
                         Description = (string)reader["Description"],
-                        Price_Per_Unit = (decimal)reader["Price_Per_Unit"],
-                        Discount_Percentage = (decimal)reader["Discount_Percentage"]
+                        PricePerUnit = (decimal)reader["Price_Per_Unit"],
+                        DiscountPercentage = (decimal)reader["Discount_Percentage"]
                     });
                 }
                 return products;
@@ -53,11 +53,11 @@ namespace DAL
                 {
                     product = new Products()
                     {
-                        Product_Code = (int)reader["Product_Code"],
-                        Category_Number = (int)reader["Category_Number"],
+                        ProductCode = (int)reader["Product_Code"],
+                        CategoryNumber = (int)reader["Category_Number"],
                         Description = (string)reader["Description"],
-                        Price_Per_Unit = (decimal)reader["Price_Per_Unit"],
-                        Discount_Percentage = (decimal)reader["Discount_Percentage"]
+                        PricePerUnit = (decimal)reader["Price_Per_Unit"],
+                        DiscountPercentage = (decimal)reader["Discount_Percentage"]
                     };
                 }
                 return product;

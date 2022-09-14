@@ -22,12 +22,12 @@ namespace DAL
                 {
                     employees.Add(new Employees()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
+                        EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
-                        Employee_Name = (string)reader["Employee_Name"],
-                        Phone_Number = (string)reader["Phone_Number"],
-                        Birth_Date = (DateTime)reader["Birth_Date"],
-                        Hourly_Wage = (int)reader["Hourly_Wage"],
+                        EmployeeName = (string)reader["Employee_Name"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        BirthDate = (DateTime)reader["Birth_Date"],
+                        HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
                         //Employee_Code = (int)reader["Employee_Code"]
                     });
@@ -59,13 +59,13 @@ namespace DAL
 
                     employees.Add(new Shift()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
-                        Employee_Code = (int)reader["Employee_Code"],
-                        Employee_Name = (string)reader["Employee_Name"],
+                        EmployeeID = (int)reader["Employee_ID"],
+                        EmployeeCode = (int)reader["Employee_Code"],
+                        EmployeeName = (string)reader["Employee_Name"],
                         Description = (string)reader["Description"],
                         Date = (DateTime)reader["Date"],
-                        Entrance_Time = (string)reader["Entrance_Time"],
-                        Leaving_Time = (reader["Leaving_Time"] != DBNull.Value)
+                        EntranceTime = (string)reader["Entrance_Time"],
+                        LeavingTime = (reader["Leaving_Time"] != DBNull.Value)
                         ? (string)reader["Leaving_Time"] : null
 
                 });
@@ -98,13 +98,13 @@ namespace DAL
 
                     employees.Add(new Shift()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
-                        Employee_Code = (int)reader["Employee_Code"],
-                        Employee_Name = (string)reader["Employee_Name"],
+                        EmployeeID = (int)reader["Employee_ID"],
+                        EmployeeCode = (int)reader["Employee_Code"],
+                        EmployeeName = (string)reader["Employee_Name"],
                         Description = (string)reader["Description"],
                         Date = (DateTime)reader["Date"],
-                        Entrance_Time = (string)reader["Entrance_Time"],
-                        Leaving_Time = null
+                        EntranceTime = (string)reader["Entrance_Time"],
+                        LeavingTime = null
 
                     });
                 }

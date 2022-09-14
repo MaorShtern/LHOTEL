@@ -23,15 +23,15 @@ namespace DAL
                 {
                     tasks.Add(new Task()
                     {
-                        Task_Code = (int)reader["Task_Code"],
-                        Employee_ID = (reader["Employee_ID"] != DBNull.Value) ? (int)reader["Employee_ID"] : -1,
-                        Task_Name = (string)reader["Task_Name"],
-                        Room_Number = (reader["Room_Number"] != DBNull.Value) ? (int)reader["Room_Number"] : -1,
-                        Start_Date = (DateTime)reader["Start_Date"],
-                        Start_Time = (string)reader["Start_Time"],
-                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        TaskCode = (int)reader["Task_Code"],
+                        EmployeeID = (reader["Employee_ID"] != DBNull.Value) ? (int)reader["Employee_ID"] : -1,
+                        TaskName = (string)reader["Task_Name"],
+                        RoomNumber = (reader["Room_Number"] != DBNull.Value) ? (int)reader["Room_Number"] : -1,
+                        StartDate = (DateTime)reader["Start_Date"],
+                        StartTime = (string)reader["Start_Time"],
+                        EndTime = (reader["End_Time"] != DBNull.Value)
                         ? (string)reader["End_Time"] : null,
-                        Task_Status = (string)reader["Task_Status"],
+                        TaskStatus = (string)reader["Task_Status"],
                         Description = (string)reader["Description"]
                     });
                 }
@@ -66,19 +66,19 @@ namespace DAL
                 {
                     tasks.Add(new Task()
                     {
-                        Task_Code = (int)reader["Task_Code"],
-                        Employee_ID = (int)reader["Employee_ID"],
-                        Task_Name = (string)reader["Task_Name"],
-                        Room_Number = (reader["Room_Number"] != DBNull.Value)
+                        TaskCode = (int)reader["Task_Code"],
+                        EmployeeID = (int)reader["Employee_ID"],
+                        TaskName = (string)reader["Task_Name"],
+                        RoomNumber = (reader["Room_Number"] != DBNull.Value)
                         ? (int)reader["Room_Number"] : -1,
 
-                        Start_Date = (DateTime)reader["Start_Date"],
-                        Start_Time = (string)reader["Start_Time"],
+                        StartDate = (DateTime)reader["Start_Date"],
+                        StartTime = (string)reader["Start_Time"],
 
-                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        EndTime = (reader["End_Time"] != DBNull.Value)
                         ? (string)reader["End_Time"] : null,
 
-                        Task_Status = (string)reader["Task_Status"],
+                        TaskStatus = (string)reader["Task_Status"],
                         Description = (string)reader["Description"]
                     });
                 }
@@ -113,18 +113,18 @@ namespace DAL
                 {
                     tasks.Add(new Task()
                     {
-                        Task_Code = (int)reader["Task_Code"],
-                        Employee_ID = (int)reader["Employee_ID"],
-                        Task_Name = (string)reader["Task_Name"],
-                        Room_Number = (reader["Room_Number"] != DBNull.Value)
+                        TaskCode = (int)reader["Task_Code"],
+                        EmployeeID = (int)reader["Employee_ID"],
+                        TaskName = (string)reader["Task_Name"],
+                        RoomNumber = (reader["Room_Number"] != DBNull.Value)
                         ? (int)reader["Room_Number"] : -1,
-                        Start_Date = (DateTime)reader["Start_Date"],
-                        Start_Time = (string)reader["Start_Time"],
+                        StartDate = (DateTime)reader["Start_Date"],
+                        StartTime = (string)reader["Start_Time"],
 
-                        End_Time = (reader["End_Time"] != DBNull.Value)
+                        EndTime = (reader["End_Time"] != DBNull.Value)
                         ? (string)reader["End_Time"] : null,
 
-                        Task_Status = (string)reader["Task_Status"],
+                        TaskStatus = (string)reader["Task_Status"],
                         Description = (string)reader["Description"]
                     });
                 }
@@ -146,9 +146,9 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewTask {task.Employee_ID},'{task.Task_Name}','{task.Description}',";
-                if (task.Room_Number != 0)
-                    str += $"{task.Room_Number}";
+                string str = $@"exec AddNewTask {task.EmployeeID},'{task.TaskName}','{task.Description}',";
+                if (task.RoomNumber != 0)
+                    str += $"{task.RoomNumber}";
                 else
                     str += "null";
                 str = str.Replace("\r\n", string.Empty);
@@ -198,18 +198,18 @@ namespace DAL
         {
             try
             {
-                if (GetTaskByCode(task.Task_Code) == null)
+                if (GetTaskByCode(task.TaskCode) == null)
                 {
                     return false;
                 }
 
-                string str = $@"exec AlterTask {task.Task_Code},{task.Employee_ID},'{task.Task_Name}',";
-                if (task.Room_Number != 0)
-                    str += $"{task.Room_Number}";
+                string str = $@"exec AlterTask {task.TaskCode},{task.EmployeeID},'{task.TaskName}',";
+                if (task.RoomNumber != 0)
+                    str += $"{task.RoomNumber}";
                 else
                     str += "null";
-                str += $@",'{task.Start_Date.ToString("yyyy - MM - dd")}','{task.Start_Time}','{task.End_Time}',
-'{task.Task_Status}','{task.Description}'";
+                str += $@",'{task.StartDate:yyyy - MM - dd}','{task.StartTime}','{task.EndTime}',
+'{task.TaskStatus}','{task.Description}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

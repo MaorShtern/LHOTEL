@@ -1,17 +1,17 @@
 export class User {
     
     constructor(User) {
-      this.id = User.id;
-      this.first_name = User.first_name;
-      this.last_name = User.last_name;
-      this.email =User.email;
-      this.password = User.password;
-      this.phone = User.phone;
+      this.Id = User.Id;
+      this.FirstName = User.FirstName;
+      this.LastName = User.LastName;
+      this.Email =User.Email;
+      this.Password = User.Password;
+      this.Phone = User.Phone;
     }
 
     ToString()
     {
-        return "ID: " + this.id + "Name: " + this.first_name + " " + this.last_name 
-        + "Email: " + this.email + "Password: " + this.password + "Phone: " + this.phone
+        return "ID: " + this.Id + "Name: " + this.FirstName  + " " + this.LastName
+        + "Email: " + this.Email + "Password: " +  this.Password + "Phone: " +  this.Phone
     }
 }

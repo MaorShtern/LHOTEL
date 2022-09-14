@@ -14,60 +14,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomCard } from "./CustomCard";
-const reservations = [
-
-  {
-    Room_Number: 3,
-    
-    Bill_Number: 3,
-    Customer_ID: 333,
-    Bill_Date: "2021-01-01",
-    Entry_Date: "2021-01-01",
-    Exit_Date: "2021-01-05",
-    Amount_Of_People: 2,
-    Room_Status: "Reserved",
-  },
-  {
-    Room_Number: 4,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Reserved",
-  },
-  {
-    Room_Number: 12,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Reserved",
-  },
-  {
-    Room_Number: 13,
-    Bill_Number: 38,
-    Customer_ID: 7878,
-    Bill_Date: "2022-09-03",
-    Entry_Date: "2022-09-05",
-    Exit_Date: "2022-09-10",
-    Amount_Of_People: 3,
-    Room_Status: "Reserved",
-  },
-  {
-    Room_Number: 5,
-    Bill_Number: 5,
-    Customer_ID: 555,
-    Bill_Date: "2020-09-12",
-    Entry_Date: "2020-09-12",
-    Exit_Date: "2020-09-16",
-    Amount_Of_People: 2,
-    Room_Status: "Reserved",
-  },
-];
 
 
 

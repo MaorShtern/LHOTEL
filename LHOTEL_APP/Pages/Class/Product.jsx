@@ -1,13 +1,13 @@
 export default class Product {
     
     constructor(Product) {
-        this.Product_Code = Product.Product_Code,
+        this.ProductCode = Product.ProductCode,
         this.Category =  Product.Category,
-        this.name = Product.name,
-        this.image =  Product.image
-        this.Price_Per_Unit = Product.Price_Per_Unit ,
-        this.Discount_Percentage = Product.Discount_Percentage,
-        this.amountTaken = Product.amountTaken
+        this.Name = Product.Name,
+        this.Image =  Product.Image
+        this.PricePerUnit = Product.PricePerUnit ,
+        this.DiscountPercentage = Product.DiscountPercentage,
+        this.AmountTaken = Product.AmountTaken
 	
     }
 }

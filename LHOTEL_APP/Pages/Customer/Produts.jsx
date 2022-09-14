@@ -167,7 +167,7 @@ export default function Produts(props) {
         </Text>
         <View style={styles.priceStyle}>
           <Text style={{ color: "#2e2f30", fontSize: 15 }}>
-            ${item.Price_Per_Unit}
+            ${item.PricePerUnit}
           </Text>
         </View>
       </View>
@@ -178,7 +178,7 @@ export default function Produts(props) {
           start={0}
           max={5}
           style={styles.counterStyle}
-          onChange ={(count) => props.AddToCart(item.Product_Code, count)}
+          onChange ={(count) => props.AddToCart(item.ProductCode, count)}
         // onChange={(count) => {SetCount.bind(this)}}
         // onChange={(count) => {
         //   (item.amountTaken = count),

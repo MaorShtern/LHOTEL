@@ -9,11 +9,11 @@ namespace DAL
     public class Products
     {
 
-        public int Product_Code { set; get; }
-        public int Category_Number { set; get; }
+        public int ProductCode { set; get; }
+        public int CategoryNumber { set; get; }
         public string Description { set; get; }
-        public decimal Price_Per_Unit { set; get; }
-        public decimal Discount_Percentage { set; get; }
+        public decimal PricePerUnit { set; get; }
+        public decimal DiscountPercentage { set; get; }
 
 
     }

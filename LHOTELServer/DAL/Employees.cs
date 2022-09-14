@@ -8,14 +8,14 @@ namespace DAL
 {
     public class Employees
     {
-        public int Employee_ID { set; get; }
+        public int EmployeeID { set; get; }
         public string Description { set; get; }
-        public string Employee_Name { set; get; }
-        public string Phone_Number { set; get; }
-        public DateTime Birth_Date { set; get; }
-        public int Hourly_Wage { set; get; }
+        public string EmployeeName { set; get; }
+        public string PhoneNumber { set; get; }
+        public DateTime BirthDate { set; get; }
+        public int HourlyWage { set; get; }
         public string Address { set; get; }
-        public int Employee_Code { set; get; }
+        public int EmployeeCode { set; get; }
 
 
         //public Employees(int id, string name, string phoneNumber, DateTime birthDate, int worker_Code,

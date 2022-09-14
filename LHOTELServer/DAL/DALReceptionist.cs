@@ -27,11 +27,11 @@ namespace DAL
                     {
                         CustomerID = (int)reader["Customer_ID"],
                         Room_Number = (int)reader["Room_Number"],
-                        Entry_Date = (DateTime)reader["Entry_Date"],
+                        EntryDate = (DateTime)reader["Entry_Date"],
                         ExitDate = (DateTime)reader["Exit_Date"],
-                        Amount_Of_People = (int)reader["Amount_Of_People"],
-                        Bill_Number = (int)reader["Bill_Number"],
-                        Bill_Date = (DateTime)reader["Bill_Date"]
+                        AmountOfPeople = (int)reader["Amount_Of_People"],
+                        BillNumber = (int)reader["Bill_Number"],
+                        BillDate = (DateTime)reader["Bill_Date"]
 
 
                     });
@@ -69,20 +69,20 @@ namespace DAL
                 {
                     reservations.Add(new Reservation()
                     {
-                        Bill_Number = (int)reader["Bill_Number"],
-                        Bill_Date = (DateTime)reader["Bill_Date"],
-                        Customer_ID = (int)reader["Customer_ID"],
-                        Customer_Type = (int)reader["Customers_Type"],
-                        First_Name = (string)reader["First_Name"],
-                        Last_Name = (string)reader["Last_Name"],
+                        BillNumber = (int)reader["Bill_Number"],
+                        BillDate = (DateTime)reader["Bill_Date"],
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customers_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
                         Mail = (string)reader["Mail"],
-                        Phone_Number = (string)reader["Phone_Number"],
-                        Entry_Date = (DateTime)reader["Entry_Date"],
-                        Exit_Date = (DateTime)reader["Exit_Date"],
-                        Amount_Of_People = (int)reader["Amount_Of_People"],
-                        Room_Number = (int)reader["Room_Number"],
-                        Price_Per_Night = (int)reader["Price_Per_Night"],
-                        Room_Status = (string)reader["Room_Status"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        EntryDate = (DateTime)reader["Entry_Date"],
+                        ExitDate = (DateTime)reader["Exit_Date"],
+                        AmountOfPeople = (int)reader["Amount_Of_People"],
+                        RoomNumber = (int)reader["Room_Number"],
+                        PricePerNight = (int)reader["Price_Per_Night"],
+                        RoomStatus = (string)reader["Room_Status"],
 
                     });
 

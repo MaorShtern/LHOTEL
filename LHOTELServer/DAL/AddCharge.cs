@@ -8,11 +8,11 @@ namespace DAL
 {
     public class AddCharge
     {
-        public int Id  { set; get; }
-        public int Room_Number { set; get; }
-        public string Product_Dec { set; get; }
+        public int CustomerID { set; get; }
+        public int RoomNumber { set; get; }
+        public string ProductDec { set; get; }
         public int Amount { set; get; }
-        public string Payment_Method { set; get; }
+        public string PaymentMethod { set; get; }
 
 
    

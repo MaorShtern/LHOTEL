@@ -12,8 +12,8 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewBill_Detail {addCharge.Id},{addCharge.Room_Number},
-'{addCharge.Product_Dec}',{addCharge.Amount},'{addCharge.Payment_Method}'";
+                string str = $@"exec AddNewBill_Detail {addCharge.CustomerID},{addCharge.RoomNumber},
+'{addCharge.ProductDec}',{addCharge.Amount},'{addCharge.PaymentMethod}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

@@ -26,10 +26,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { CustomCard } from "./CustomCard";
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import Dialog from "react-native-dialog";
 import { Checkbox, TextInput } from "react-native-paper";
 import moment from "moment";
 export default function NewReservation({ route, navigation }) {
+
+  const [visible, setVisible] = useState(false);
+
+
 
   const myContext = useContext(AppContext);
  
@@ -38,16 +42,16 @@ export default function NewReservation({ route, navigation }) {
   const [suite, SetSuite] = useState(0)
   const [loading, SetLoading] = useState(false)
   const [arrRoomsData, SetArrRoomsData] = useState([])
- 
-  const [customerID, setCustomerID] = useState("");
+  const [IDCheck, setIDCheck] = useState("");
+  const [CustomerID, setCustomerID] = useState("");
   const [Mail, setMail] = useState("");
 
-  const [totalSum, SetTotalSum] = useState(0);
-  const [name, setName] = useState("");
-  const [cardHolderName, setHolderName] = useState("");
-  const [cardDate, SetCardDate] = useState("");
+  const [CustomerType, SetCustomerType] = useState(0);
+  const [Name, setName] = useState("");
+  const [CardHolderName, setHolderName] = useState("");
+  const [CreditCardDate, SetCreditCardDate] = useState("");
   const [cardCVC, SetCardCVC] = useState("");
-  const [Credit_Card_Number, setCredit_Card_Number] = useState("");
+  const [CreditCardNumber, setCreditCardNumber] = useState("");
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
@@ -63,7 +67,7 @@ const [customerReservation, SetCustomerReservation] = useState([])
   const [doubleFlag, setDouble] = useState(false);
   const [suiteFlag, setSuite] = useState(false);
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0);
-  const [amount_Of_People, setAmount_Of_People] = useState(0);
+  const [AmountOfPeople, setAmountOfPeople] = useState(0);
   const [breakfast, setreakfast] = useState(false);
 
   const showDatePickerEntry = () => {
@@ -87,12 +91,21 @@ const [customerReservation, SetCustomerReservation] = useState([])
     setExitDate(date);
     hideDatePickerExit();
   };
-  const handleExpiryDate = (date) => {
-    setExpiryDate({
-      value: date,
-    });
+ 
+  const showDialog = () => {
+    setVisible(true);
   };
 
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleOk = () => {
+    setVisible(false);
+    GetDBCustomerById();
+    
+
+  };
   const entry = moment(entryDate).format("DD/MM/YYYY");
   const exit = moment(exitDate).format("DD/MM/YYYY");
 
@@ -137,7 +150,7 @@ const [customerReservation, SetCustomerReservation] = useState([])
 
   const CheckCardDate = () => {
     const CardDateRegex = /^(0[1-9]|1[0-2])\/([2][2-9])$/;
-    return CardDateRegex.test(cardDate);
+    return CardDateRegex.test(CreditCardDate);
 
   };
 
@@ -162,6 +175,33 @@ const [customerReservation, SetCustomerReservation] = useState([])
  
   
 
+  const GetDBCustomerById = async () => {
+
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        "Customer_ID": IDCheck,
+       
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetDBCustomerById', requestOptions);
+    let user = await result.json();
+    if (user !== null) {
+      
+      setCustomerID(IDCheck);
+      setMail(user.Mail);
+    setFirstName(user.FirstName);
+      setLastName(user.LastName);
+      setPhoneNumber(user.PhoneNumber);
+      // SetCustomerType(user.CustomerType);
+    
+    }
+
+  }
+
+
+
   const  GetCustomerReservation = async ()=>{
     const requestOptions = {
       method: 'POST',
@@ -184,49 +224,49 @@ const [customerReservation, SetCustomerReservation] = useState([])
   const ConfirmInformation = () => {
     if (
       FirstName.length < 2 ||
-      Credit_Card_Number.length !== 16 ||
+      CreditCardNumber.length !== 16 ||
       LastName.length < 2 ||
-      customerID.length < 9 ||
-      cardHolderName.length < 2
+ 
+      CardHolderName.length < 2
     ) {
       alert("EROR");
       return;
     }
     
-     
+    
       let newCustomer = {
         calssName: Customer,
         fields: {
-          customerID: customerID,
-          customerType: 1,
+          CustomerID: CustomerID,
+         CustomerType: 1,
           FirstName: FirstName,
           LastName: LastName,
           Mail: Mail,
           PhoneNumber: PhoneNumber,
-          cardHolderName: cardHolderName,
-          Credit_Card_Number: Credit_Card_Number,
-          creditCardDate: cardDate,
-          threeDigit: cardCVC,
+          CardHolderName: CardHolderName,
+          CreditCardNumber: CreditCardNumber,
+          CreditCardDate: CreditCardDate,
+          ThreeDigit: cardCVC,
         },
       };
       let newReservation = {
         calssName: Reservation,
         fields: {
-          amount_Of_People :amount_Of_People,
-          Employee_ID  : myContext.employee.id,
-          Counter_Single : single,
-          Counter_Double : double,
-          Counter_Suite :suite,
+          AmountOfPeople :AmountOfPeople,
+          EmployeeID  : myContext.employee.EmployeeID,
+          CounterSingle : single,
+          CounterDouble : double,
+          CounterSuite :suite,
           ExitDate	: exitDate,
-          Entry_Date :entryDate
+          EntryDate :entryDate
          
          
         },
       
       };
-     let roomReservation ={...newCustomer.fields,...newReservation.fields}
-      CustomerReservationToDB(roomReservation)
-
+     let roomReservation =[{...newCustomer.fields,...newReservation.fields}]
+      
+     navigation.navigate("ShortCheckIn",{currReservation:roomReservation})
   
   };
   
@@ -313,6 +353,31 @@ const [customerReservation, SetCustomerReservation] = useState([])
         >
           New reservation
         </Text>
+        <TouchableOpacity onPress={()=>showDialog()} >
+              <Text
+                style={styles.underLineText}
+             
+              >
+                User exists ? 
+              </Text>
+            </TouchableOpacity>
+           
+      
+      <Dialog.Container visible={visible}>
+
+        <Dialog.Description>
+          Enter customer's ID 
+        </Dialog.Description>
+        <Dialog.Input 
+            keyboardType="numeric"
+            onChangeText={(id) =>setIDCheck(id)}
+           />
+        <View style={{flexDirection:'row'}}>
+        <Dialog.Button style = {{paddingHorizontal:20}} label="Ok" onPress={handleOk} />
+        <Dialog.Button label="Cancel" onPress={handleCancel} /> 
+        </View>
+       
+      </Dialog.Container>
 
         <View
           style={{
@@ -377,7 +442,7 @@ const [customerReservation, SetCustomerReservation] = useState([])
               label="Amount Of people"
               autoCapitalize="none"
               keyboardType="numeric"
-              onChangeText={(amount) => setAmount_Of_People(amount)}
+              onChangeText={(amount) => setAmountOfPeople(amount)}
             />
 
             {/* <View style={{ paddingVertical: 25 }}>
@@ -442,20 +507,21 @@ const [customerReservation, SetCustomerReservation] = useState([])
                 style={styles.input}
                 placeholder="Customer ID "
                 keyboardType="numeric"
-                autoCapitalize="none"
+               
+                value ={CustomerID}
                 onChangeText={(text) => setCustomerID(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="First Name "
-                autoCapitalize="none"
+                value ={FirstName}
                 onChangeText={(text) => setFirstName(text)}
               />
 
               <TextInput
                 style={styles.input}
                 placeholder="Last Name "
-                autoCapitalize="none"
+                value ={LastName}
                 onChangeText={(text) => setLastName(text)}
               />
 
@@ -463,12 +529,14 @@ const [customerReservation, SetCustomerReservation] = useState([])
                 style={styles.input}
                 placeholder="Email"
                 autoCapitalize="none"
+                value ={Mail}
                 onChangeText={(text) => setMail(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Phone Number"
-                autoCapitalize="none"
+                value ={PhoneNumber}
+                keyboardType="numeric"
                 onChangeText={(text) => setPhoneNumber(text)}
               />
 
@@ -476,24 +544,24 @@ const [customerReservation, SetCustomerReservation] = useState([])
               <TextInput
                 style={styles.input}
                 placeholder="Cardholder's name"
-                autoCapitalize="none"
+          
                 onChangeText={(name) => setHolderName(name)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Card's Number"
-                autoCapitalize="none"
+          
                 keyboardType="numeric"
-                onChangeText={(cardNum) => setCredit_Card_Number(cardNum)}
+                onChangeText={(cardNum) => setCreditCardNumber(cardNum)}
               />
               <TextInput
                 style={styles.input}
                 placeholder={"Card's Date " || cardDate}
-                autoCapitalize="none"
+           
                 keyboardType="phone-pad"
                 maxLength={5}
                 onChangeText={(text) => {
-                  SetCardDate(text);
+                  SetCreditCardDate(text);
                 }}
               />
 
@@ -507,7 +575,7 @@ const [customerReservation, SetCustomerReservation] = useState([])
               <TextInput
                 style={styles.input}
                 placeholder="cvv"
-                autoCapitalize="none"
+              
                 keyboardType="numeric"
                 maxLength={3}
                 onChangeText={(cvv) => SetCardCVC(cvv)}
@@ -772,6 +840,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingVertical: 10,
     borderRadius: 10,
+  }, 
+  underLineText: {
+ paddingLeft:40,
+ paddingTop:20,
+    fontSize: 22,
+    textDecorationLine: "underline",
+    color: "black",
+    fontWeight: "bold",
+   
+  },  
+  dialogContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

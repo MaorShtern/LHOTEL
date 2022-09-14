@@ -65,14 +65,14 @@ namespace DAL
                 {
                     employees.Add(new Employees()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
+                        EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
-                        Employee_Name = (string)reader["Employee_Name"],
-                        Phone_Number = (string)reader["Phone_Number"],
-                        Birth_Date = (DateTime)reader["Birth_Date"],
-                        Hourly_Wage = (int)reader["Hourly_Wage"],
+                        EmployeeName = (string)reader["Employee_Name"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        BirthDate = (DateTime)reader["Birth_Date"],
+                        HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        Employee_Code = (int)reader["Employee_Code"]
+                        EmployeeCode = (int)reader["Employee_Code"]
                     });
                 }
                 return employees;
@@ -104,14 +104,14 @@ namespace DAL
                 {
                     employee = new Employees()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
+                        EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
-                        Employee_Name = (string)reader["Employee_Name"],
-                        Phone_Number = (string)reader["Phone_Number"],
-                        Birth_Date = (DateTime)reader["Birth_Date"],
-                        Hourly_Wage = (int)reader["Hourly_Wage"],
+                        EmployeeName = (string)reader["Employee_Name"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        BirthDate = (DateTime)reader["Birth_Date"],
+                        HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        Employee_Code = (int)reader["Employee_Code"]
+                        EmployeeCode = (int)reader["Employee_Code"]
                     };
                 }
                 return employee;
@@ -142,14 +142,14 @@ namespace DAL
                 {
                     employee = new Employees()
                     {
-                        Employee_ID = (int)reader["Employee_ID"],
+                        EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
-                        Employee_Name = (string)reader["Employee_Name"],
-                        Phone_Number = (string)reader["Phone_Number"],
-                        Birth_Date = (DateTime)reader["Birth_Date"],
-                        Hourly_Wage = (int)reader["Hourly_Wage"],
+                        EmployeeName = (string)reader["Employee_Name"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        BirthDate = (DateTime)reader["Birth_Date"],
+                        HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        Employee_Code = (int)reader["Employee_Code"]
+                        EmployeeCode = (int)reader["Employee_Code"]
                     };
                 }
                 return employee;
@@ -169,11 +169,11 @@ namespace DAL
         {
             try
             {
-                if (GetEmployeeById(newEmployee.Employee_ID) == null)
+                if (GetEmployeeById(newEmployee.EmployeeID) == null)
                 {
-                    string str = $@"exec InsertEmployee {newEmployee.Employee_ID},'{newEmployee.Employee_Name}',
-'{newEmployee.Phone_Number}','{newEmployee.Birth_Date.ToString("yyyy - MM - dd")}',
-'{newEmployee.Description}',{newEmployee.Hourly_Wage},'{newEmployee.Address}'";
+                    string str = $@"exec InsertEmployee {newEmployee.EmployeeID},'{newEmployee.EmployeeName}',
+'{newEmployee.PhoneNumber}','{newEmployee.BirthDate:yyyy - MM - dd}',
+'{newEmployee.Description}',{newEmployee.HourlyWage},'{newEmployee.Address}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected >= 1)
@@ -196,13 +196,13 @@ namespace DAL
         {
             try
             {
-                Employees findEmployee = GetEmployeeById(employee.Employee_ID);
+                Employees findEmployee = GetEmployeeById(employee.EmployeeID);
                 if (findEmployee == null)
                 {
                     return false;
                 }
-                string str = $@"exec AlterEmployee {employee.Employee_ID},'{employee.Employee_Name}','{employee.Phone_Number}',
-        '{employee.Birth_Date.ToString("yyyy-MM-dd")}',{employee.Description},{employee.Hourly_Wage},'{employee.Address}'";
+                string str = $@"exec AlterEmployee {employee.EmployeeID},'{employee.EmployeeName}','{employee.PhoneNumber}',
+        '{employee.BirthDate:yyyy-MM-dd}',{employee.Description},{employee.HourlyWage},'{employee.Address}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

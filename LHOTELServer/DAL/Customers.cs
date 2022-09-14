@@ -19,19 +19,21 @@ namespace DAL
         public string CardHolderName { set; get; }
         public string CreditCardDate { set; get; }
         public int ThreeDigit { set; get; }
-        public string Credit_Card_Number { set; get; }
+        public string CreditCardNumber { set; get; }
 
        
 
 
+    }
+    public class CustomerDetails
+    {
+        public int CustomerID { set; get; }
+        public int CustomerType { set; get; }
+        public string FirstName { set; get; }
+        public string LastName { set; get; }
+        public string Mail { set; get; }
 
-
-
-
-
-
-
-
+        public string PhoneNumber { set; get; }
 
 
 

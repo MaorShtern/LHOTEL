@@ -13,6 +13,11 @@ namespace BLL
         //{
         //    return DALCustomers.GetAllCustomers();
         //}
+        public static CustomerDetails GetDBCustomerById(int id)
+        {
+            return DALCustomers.GetDBCustomerById(id);
+        }
+
         public static Customers GetCustomerByMailAndPassword(string mail, string password)
         {
             return DALCustomers.GetCustomerByMailAndPassword(mail, password);

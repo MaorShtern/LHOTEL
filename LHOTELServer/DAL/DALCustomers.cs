@@ -12,7 +12,42 @@ namespace DAL
 {
     public class DALCustomers
     {
+        public static CustomerDetails GetDBCustomerById(int id)
+        {
+            try
+            {
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetDBCustomerById {id}");
+                if (reader == null && !reader.HasRows)
+                {
+                    return null;
+                }
+                CustomerDetails customer = null;
+                while (reader.Read())
+                {
+                    customer = new CustomerDetails()
+                    {
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customer_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
 
+                        PhoneNumber = (string)reader["Phone_Number"],
+
+                    };
+                }
+                return customer;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
         public static Customers GetCustomerById(int id)
         {
             try
@@ -36,7 +71,7 @@ namespace DAL
                         CardHolderName = (string)reader["Card_Holder_Name"],
                         CreditCardDate = (string)reader["Credit_Card_Date"],
                         ThreeDigit = (int)reader["Three_Digit"],
-                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        CreditCardNumber = (string)reader["Credit_Card_Number"]
                     };
                 }
                 return customer;
@@ -79,7 +114,7 @@ namespace DAL
                             CardHolderName = (string)reader["Card_Holder_Name"],
                             CreditCardDate = (string)reader["Credit_Card_Date"],
                             ThreeDigit = (int)reader["Three_Digit"],
-                            Credit_Card_Number = (string)reader["Credit_Card_Number"]
+                            CreditCardNumber = (string)reader["Credit_Card_Number"]
                         };
                     }
                     return customer;
@@ -132,7 +167,7 @@ namespace DAL
                     string str = $@"exec AddNewCustomer {customer.CustomerID},
 1,'{customer.FirstName}','{customer.LastName}','{customer.Mail}',
 '{customer.Password}','{customer.PhoneNumber}','{customer.CardHolderName}',
-'{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
+'{customer.CreditCardDate}',{customer.ThreeDigit},'{customer.CreditCardNumber}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
                     if (rowsAffected == 1)
@@ -175,7 +210,7 @@ namespace DAL
                         CardHolderName = (string)reader["Card_Holder_Name"],
                         CreditCardDate = (string)reader["Credit_Card_Date"],
                         ThreeDigit = (int)reader["Three_Digit"],
-                        Credit_Card_Number = (string)reader["Credit_Card_Number"]
+                        CreditCardNumber = (string)reader["Credit_Card_Number"]
                     };
                 }
                 return customer;
@@ -203,7 +238,7 @@ namespace DAL
                 string str = $@"exec AlterCustomerById {customer.CustomerID},{customer.CustomerType},
         '{customer.FirstName}','{customer.LastName}','{customer.Mail}','{customer.Password}',
         '{customer.PhoneNumber}','{customer.CardHolderName}','{customer.CreditCardDate}'
-        ,{customer.ThreeDigit},'{customer.Credit_Card_Number}'";
+        ,{customer.ThreeDigit},'{customer.CreditCardNumber}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

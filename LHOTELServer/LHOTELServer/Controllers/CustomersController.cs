@@ -19,6 +19,24 @@ namespace LHOTELServer.Controllers
     [System.Web.Http.RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
+        
+         [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/GetDBCustomerById")]
+        public IHttpActionResult GetDBCustomerById([FromBody] JObject data)
+        {
+            try
+            {
+                int CustomerID = data["Customer_ID"].ToObject<int>();
+         
+
+                return Ok(BLLCustomers.GetDBCustomerById(CustomerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetCustomerByMailAndPassword")]

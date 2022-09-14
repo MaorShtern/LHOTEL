@@ -8,13 +8,13 @@ namespace DAL
 {
     public class RoomReservationUser:Customers
     {
-        public int Employee_ID { set; get; }
-        public int Counter_Single { set; get; }
-        public int Counter_Double { set; get; }
-        public int Counter_Suite { set; get; }
-        public DateTime Entry_Date { set; get; }
+        public int EmployeeID { set; get; }
+        public int CounterSingle { set; get; }
+        public int CounterDouble { set; get; }
+        public int CounterSuite { set; get; }
+        public DateTime EntryDate { set; get; }
         public DateTime ExitDate { set; get; }
        
-        public int Amount_Of_People { set; get; }
+        public int AmountOfPeople { set; get; }
     }
 }
