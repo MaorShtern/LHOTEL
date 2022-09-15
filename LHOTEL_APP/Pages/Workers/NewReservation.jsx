@@ -194,6 +194,7 @@ const [customerReservation, SetCustomerReservation] = useState([])
     setFirstName(user.FirstName);
       setLastName(user.LastName);
       setPhoneNumber(user.PhoneNumber);
+      myContext.setIsUserExist(true)  
       // SetCustomerType(user.CustomerType);
     
     }

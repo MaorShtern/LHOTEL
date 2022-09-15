@@ -23,8 +23,18 @@ export default function ShortCheckIn({ route, navigation }) {
   const myContext = useContext(AppContext);
 
   let { currReservation } = route.params;
-  const curr = currReservation[0];
   console.log(curr);
+
+  const curr = currReservation[0];
+  // useEffect(() => {
+  //   const focus = navigation.addListener("focus", () => {
+  //     setWorkerCode(1)
+  //     setPassword(0)
+  //     setId(0)
+  //   });
+    
+  // }, [navigation]);
+
   const CalcCost = () => {
     let total = 0;
     if (curr.BillNumber === undefined) {
@@ -260,14 +270,10 @@ const CheckIn_With_Existing_User = async()=>{
 
   const CheckIn = () => {
     {
-      if (curr.BillNumber === undefined) {
-        CheckIn_Without_Existing_User()
-
-      }else {
-        CheckIn_With_Existing_User()
-      }
+      myContext.isUserExist ? CheckIn_With_Existing_User(): CheckIn_Without_Existing_User()
+      // console.log( myContext.isUserExist );
       alert("You have checked in successfully !");
-navigation.navigate("CheckIn");
+// navigation.navigate("CheckIn");
 
 
     }

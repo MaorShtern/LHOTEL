@@ -87,12 +87,12 @@ export default function CheckOut() {
 
           <Icon name="person" size={18} style={{ padding: 4 }}>
             {" "}
-            {item.Amount_Of_People}
+            {item.AmountOfPeople}
           </Icon>
           </View>
           
           <View style={styles.BTNContainer}>
-          <TouchableOpacity style={styles.LogoutBtn} onPress ={()=> Checkout(item.Id,item.ExitDate)} >
+          <TouchableOpacity style={styles.LogoutBtn} onPress ={()=> Checkout(item.CustomerID,item.ExitDate)} >
                         <Text style={{ color: 'black' }}>Check out</Text>
                     </TouchableOpacity>
             {/* <TouchableOpacity >
@@ -103,12 +103,12 @@ export default function CheckOut() {
       </View>
     );
   };
-  const  Checkout = async (Id,ExitDate) =>{
+  const  Checkout = async (CustomerID,ExitDate) =>{
    
       const requestOptions = {
         method: 'PUT',
         body: JSON.stringify({
-          "id": Id,
+          "id":CustomerID,
           "Exit_Date": ExitDate
         }),
         headers: { 'Content-Type': 'application/json' }

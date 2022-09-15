@@ -8,15 +8,12 @@ import AppContext from './AppContext';
 
 export default function App() {
 
-
-  const [employee, setEmployee] = useState({}
-    // {Employee_ID :0,Description :"",Employee_Name: "",Phone_Number :"",Birth_Date :"",Hourly_Wage :0,
-    // Address :"",Employee_Code :0}
-    );
+  const [isUserExist, setIsUserExist] = useState(false);
+  const [employee, setEmployee] = useState({});
 
 
   const setEmployeeDB = (obj) => {
-    // console.log(obj);
+   
     setEmployee(obj)
   }
   
@@ -31,7 +28,9 @@ export default function App() {
 
   const userSettings = {
     employee:employee,
-    setEmployeeDB
+    isUserExist:isUserExist,
+    setEmployeeDB,
+    setIsUserExist
   };
   
   ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]'])

@@ -144,9 +144,10 @@ export default function Payment({ route, navigation }) {
       let result = await fetch('http://proj13.ruppin-tech.co.il/SaveRoomReservation', requestOptions);
       let customerResult = await result.json();
       if (customerResult)
-        // console.log(customerResult);
+
+        console.log(customerResult);
         navigation.navigate('ConfirmationPage', {
-          id: value.Id, the_data: the_data,
+          id: value.CustomerID, the_data: the_data,
           number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
           total: totalSum, Name: name, CardNum: cardNum
         })
@@ -158,33 +159,38 @@ export default function Payment({ route, navigation }) {
 
   const ConfirmInformation = () => {
 
+
     if (name.length > 1 && isValidCardDetails()) {
-      // console.log(user);
+      let counter_Single = the_data.filter((per) => per.type === "Single room")[0] === undefined ? 0: the_data.filter((per) => per.type === "Single room")[0].count 
+      let counter_Double =  the_data.filter((per) => per.type === "Double room")[0] === undefined ?0: the_data.filter((per) => per.type === "Double room")[0].count 
+     let counter_Suite = the_data.filter((per) => per.type === "Suite")[0].count  === undefined ?0: the_data.filter((per) => per.type === "Suite")[0].count
+    
+     // console.log(user);
       let customer = {
         calssName: Customer,
         fields: {
-          Id: user.customerID,
-          customerType: 1,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mail: user.mail,
-          password: user.password,
-          phoneNumber: user.phoneNumber,
-          Card_Holder_Name: name,
-          Card_Date: cardDate,
-          Three_Digit: cardCVC,
-          Credit_Card_Number: cardNum,
-          Employee_ID: -1,
-          Counter_Single: the_data.filter((per) => per.type === "Single room")[0].count,
-          Counter_Double: the_data.filter((per) => per.type === "Double room")[0].count,
-          Counter_Suite: the_data.filter((per) => per.type === "Suite")[0].count,
-          Entry_Date: entryDate,
+          CustomerID: user.CustomerID,
+          CustomerType: 1,
+          FirstName: user.FirstName,
+          LastName: user.LastName,
+          Mail: user.Mail,
+          Password: user.Password,
+          PhoneNumber: user.PhoneNumber,
+          CardHolderName: name,
+          CreditCardDate: cardDate,
+          ThreeDigit: cardCVC,
+          CreditCardNumber: cardNum,
+          EmployeeID: -1,
+          CounterSingle: counter_Single,
+          CounterDouble:counter_Double,
+          CounterSuite: counter_Suite,
+          EntryDate: entryDate,
           ExitDate: exitDate,
-          Amount_Of_People: amount_Of_People
+          AmountOfPeople: amount_Of_People
         }
       }
 
-      // console.log(customer);
+      console.log(customer);
       // navigation.navigate('ConfirmationPage', {
       //   id: newCustomer.customerID, the_data: the_data,
       //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,

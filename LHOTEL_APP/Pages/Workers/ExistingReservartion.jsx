@@ -39,7 +39,8 @@ const ReservationCheck = async ()=> {
   };
   let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
   let currReservation  = await result.json();
-  if (currReservation !== null) {
+  if (currReservation.length > 0) {
+console.log(currReservation);
     navigation.navigate("ShortCheckIn",{currReservation:currReservation})
     return
     
