@@ -1792,9 +1792,9 @@ create proc SaveRoomReservation
 as
 begin tran	
     
-	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number  --- הפעלת פרוצדורה המעדכנת פרטי כ.אשראי ביטחון של לקוח
-	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
-	DECLARE @date as date = GETDATE()
+	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number  ---הפעלת פרוצדורה המעדכנת פרטי כ.אשראי ביטחון של לקוח על פי ת.ז
+	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open') --- מציאת תאריך החשבונית על פי ת.ז לקוח וסטוטס חשבונית פתוחה
+	DECLARE @date as date = GETDATE() --  השגת התאריך הנוכחי
 
 	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')--- עדכון פרטים בחשבונית פתוחה במידה וקיימת אחרת יצירת חשבונית חדשה ללקוח
 		exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
@@ -1802,39 +1802,39 @@ begin tran
 		exec AlterBill @id, @Bill_Date ,@Employee_ID, @Credit_Card_Number,'Open'
 
 
-	set @Bill_Date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
-	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id and Bill_Status = 'Open')
+	set @Bill_Date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')--- מציאת תאריך החשבונית על פי ת.ז לקוח וסטוטס חשבונית פתוחה
+	DECLARE @bill_number as int = (select Bill_Number from Bill where Customer_ID = @id and Bill_Status = 'Open') --- מציאת מספר החשבונית על פי ת.ז לקוח וסטוטס חשבונית פתוחה
 	DECLARE @room_number as int
 
 
-	while @Counter_Single > 0           -----             הקצאה ושמירה של חדרים ללקוח לפי כמות החדרים שמעוניין , סוג ,כמות ובאם סטטוס החדר פנוי 
+	while @Counter_Single > 0    -----   הקצאה ושמירה של חדרים ללקוח לפי כמות החדרים שמעוניין , סוג ,כמות ובאם סטטוס החדר פנוי 
 
 		begin
-		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room')
-		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room') --- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים ליחיד שפנויים
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number) --- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' -- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Single = @Counter_Single - 1
 		end
 
-	while @Counter_Double > 0
+	while @Counter_Double > 0  -----   הקצאה ושמירה של חדרים ללקוח לפי כמות החדרים שמעוניין , סוג ,כמות ובאם סטטוס החדר פנוי 
 		begin
-		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Double room')
-		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Double room')--- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים לזוג שפנויים
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)--- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Double = @Counter_Double - 1
 		end
 
-	while @Counter_Suite > 0
+	while @Counter_Suite > 0  -----   הקצאה ושמירה של חדרים ללקוח לפי כמות החדרים שמעוניין , סוג ,כמות ובאם סטטוס החדר פנוי 
 		begin
-		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Suite')
-		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
-	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Suite')--- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים סוויטה שפנויים
+		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)--- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Suite = @Counter_Suite - 1
 		end
 
@@ -1916,11 +1916,11 @@ go
 
 
 create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
-on [Customers_Rooms] for update
+on [Customers_Rooms] for update -- כאשר מופעלת פעולת עידכון על הטבלה "חדרי לקוחות" בצע
 as
-	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied')
+	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied') --  אם קיים מספר חדר שהסטטוס שלו פנוי בצע
 	begin
-		insert [dbo].[Bill_Details]
+		insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
 			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,convert(time,getdate()),'Credit'  
 				from inserted
 	end
@@ -2056,7 +2056,8 @@ go
 --exec AddPurchases_Documentation 222 
 
 
-exec GetWorkersOnShift
+--exec GetWorkersOnShift
+
 
 create proc CheckOut      
 @id int,

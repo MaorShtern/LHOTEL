@@ -1,23 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-
 import Room from "../Class/Room";
-
 import AppContext from "../../AppContext";
 import CardRoom from "../Customer/CardRoom";
 import { useFocusEffect } from "@react-navigation/native";
-import {
-  ImageBackground,
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  StatusBar,
-  Switch,
-} from "react-native";
+import {ImageBackground,View,StyleSheet,Image,Text,TouchableOpacity,ScrollView,StatusBar,Switch,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { images } from "../../images";
 
 // import { Dropdown } from "react-native-element-dropdown";

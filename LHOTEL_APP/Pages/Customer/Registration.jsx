@@ -112,6 +112,7 @@ export default function Registration({ navigation }) {
         var Hashes = require('jshashes')
         let SHA1 = new Hashes.SHA1().b64_hmac(id, password) // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה 
 
+        //  יצירת אובייקט מהמחלקה "יוזר" אשר יכיל את כול פרטי המשתמש
         let user = {
             calssName: User,
             fields: {

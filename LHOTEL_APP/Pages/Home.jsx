@@ -1,12 +1,10 @@
 import { Animated,View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
-
-
 import React from "react";
 // import { BackgroundImage } from '@rneui/base';
 import { useState, useEffect, useContext } from "react";
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
-import WorkerMenu from "./Workers/WorkerMenu";
+// import WorkerMenu from "./Workers/WorkerMenu";
 import { LinearGradient } from "expo-linear-gradient";
 import AppContext from '../AppContext';
 import { ActivityIndicator } from "react-native";
@@ -60,8 +58,7 @@ export default function Home({ navigation }) {
   // }, [navigation]);
 
 
-  const LogIn = async () => {
-   
+  const LogIn = async () => { /// פונקציה אסינכרונית אשר מביאה לנו את פרטי העובד על פי ת.ז וסיסמה
     try {
       SetLoading(false)
       const requestOptions = {
@@ -70,21 +67,19 @@ export default function Home({ navigation }) {
           id: id,
           password: password,
         }),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }, // יצירת הבקשה בעזרת הפרמטרים שהמשתמש הזין למערכת
       };
       // console.log(requestOptions.body);
       let result = await fetch("http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword", requestOptions);
       let employee = await result.json();
-      if (employee === null) {
+      if (employee === null) { // אם לא מוחזר משתמש מהמסד הנתונים הצג הודעת שגיאה
         SetLoading(true)
         Alert.alert("No such user exists in the system");
         return
       }
-      myContext.setEmployeeDB(employee)
+      myContext.setEmployeeDB(employee) // שמור את פרטי המשתמש במשתנה גלובלי במערכת
       // navigation.navigate("Credit");
       navigation.navigate("WorkerMenu")
-   
-    
     }
     catch (error) {
       alert(error);

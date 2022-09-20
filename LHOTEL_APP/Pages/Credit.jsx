@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "./Class/Customer";
 import { CreditCardInput } from "react-native-credit-card-input-view";
@@ -14,8 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function Credit({ route, navigation }) {
- 
- 
+
+
   const myContext = useContext(AppContext);
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
 
@@ -67,8 +61,8 @@ export default function Credit({ route, navigation }) {
     // console.log(customer);
     isEmploeeConncted
       ? navigation.navigate("ShortCheckIn", {
-          currReservation: [customer.fields],
-        })
+        currReservation: [customer.fields],
+      })
       : SaveRoomReservation(customer);
   };
   //
@@ -145,12 +139,10 @@ export default function Credit({ route, navigation }) {
   // style={{ marginTop: 120 }}
   return (
     <View>
-      
-      {
-isEmploeeConncted ? null :<Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
-      }
-      
-      <View style={isEmploeeConncted ? styles.empstyleCard:styles.styleCard }>
+
+      {isEmploeeConncted ? null : <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
+
+      <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput
           requiresName={true}
           allowScroll={true}
@@ -206,11 +198,11 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 10,
   },
-  styleCard:{
-    paddingTop: 20 ,
-    
+  styleCard: {
+    paddingTop: 20,
+
   },
-  empstyleCard:{
+  empstyleCard: {
     paddingTop: 100
   },
   footerStyle: {

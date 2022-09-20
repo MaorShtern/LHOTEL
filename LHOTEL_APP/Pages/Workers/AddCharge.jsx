@@ -80,7 +80,7 @@ export default function AddCharge({ navigation }) {
 
     const AddChargeToDB = async () => {
         try {
-           
+
             let counter = 0
             for (let index = 0; index < productsToAdd.length; index++) {
                 // console.log(productsToAdd[index]);
@@ -126,29 +126,27 @@ export default function AddCharge({ navigation }) {
 
 
     const SavePurchase = () => {
-        if(CheckInput())
-        {
-        return Alert.alert(
-            "order",
-            "Are you sure you want to  add the selected products to your account?",
-            [
-                {
-                    text: "Yes",
-                    onPress: () => {
-                        // console.log(productsToAdd);
-                        AddChargeToDB()
-                        alert("The purchase was successfully registered")
-                        // navigation.goBack()
+        if (CheckInput()) {
+            return Alert.alert(
+                "order",
+                "Are you sure you want to  add the selected products to your account?",
+                [
+                    {
+                        text: "Yes",
+                        onPress: () => {
+                            // console.log(productsToAdd);
+                            AddChargeToDB()
+                            alert("The purchase was successfully registered")
+                            // navigation.goBack()
+                        },
                     },
-                },
-                {
-                    text: "No",
-                },
-            ]
-        );
+                    {
+                        text: "No",
+                    },
+                ]
+            );
         }
-        else
-        {
+        else {
             alert("The format is not filled correctly")
         }
     }
