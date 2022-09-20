@@ -54,8 +54,8 @@ export default function Tasks({ navigation }) {
     }
 
 
-    const Edite_Task_Details = (task_code) => {
-        let taskDetails = tasks.filter((per) => per.Task_Code === task_code)[0]
+    const EditTaskDetails = (taskcode) => {
+        let taskDetails = tasks.filter((task) => task.TaskCode === taskcode)[0]
         navigation.navigate('EditTasks', { taskDetails: taskDetails })
     }
 
@@ -69,10 +69,10 @@ export default function Tasks({ navigation }) {
                 listTemp = tasks
                 break;
             case "Today's tasks":
-                listTemp = tasks.filter((per) => per.Start_Date === moment(new Date()).format('YYYY-MM-DD'))
+                listTemp = tasks.filter((task) => task.StartDate === moment(new Date()).format('YYYY-MM-DD'))
                 break;
             case "Open Tasks":
-                listTemp = tasks.filter((per) => per.Task_Status === 'Open')
+                listTemp = tasks.filter((task) => task.TaskStatus === 'Open')
                 break;
             case "Add New Task":
                 navigation.navigate('EditTasks')
@@ -84,28 +84,28 @@ export default function Tasks({ navigation }) {
         SetTasksDisplay(listTemp)
     }
 
-    const MarkTaskAsDone = (task_Code) => {
+    const MarkTaskAsDone = (taskCode) => {
         // console.log("Task_Code to Add: " +Task_Code);
-        let newArrayTasks = tasksDisplay.filter((per) => per.Task_Code === task_Code)[0]
+        let newArrayTasks = tasksDisplay.filter((task) => task.TaskCode === taskCode)[0]
         let temp = [...taskToMarkAsDone, newArrayTasks]
         // console.log(JSON.stringify(temp));
         SetTaskToMarkAsDone(temp)
     }
 
-    const RemoveFromCheck = (task_Code) => {
+    const RemoveFromCheck = (taskCode) => {
         // console.log("Task_Code to remove: " + task_Code);
         // console.log(JSON.stringify(taskToMarkAsDone));
-        let newArrayTasks = taskToMarkAsDone.filter((per) => per.Task_Code !== task_Code)
+        let newArrayTasks = taskToMarkAsDone.filter((task) => task.TaskCode !== taskCode)
         // console.log(JSON.stringify(newArrayTasks));
         SetTaskToMarkAsDone(newArrayTasks)
     }
 
-    const DeleteTask = async (task_Code) => {
+    const DeleteTask = async (taskCode) => {
         try {
             SetLoading(false)
             const requestOptions = {
                 method: 'DELETE',
-                body: JSON.stringify({ task_code: task_Code }),
+                body: JSON.stringify({ taskcode: taskCode }),
                 headers: { 'Content-Type': 'application/json' }
             };
             // console.log(requestOptions.body);
@@ -132,7 +132,7 @@ export default function Tasks({ navigation }) {
                 console.log(taskToMarkAsDone[index]);
                 const requestOptions = {
                     method: 'Delete',
-                    body: JSON.stringify({ task_code: taskToMarkAsDone[index].Task_Code }),
+                    body: JSON.stringify({ task_code: taskToMarkAsDone[index].TaskCode }),
                     headers: { 'Content-Type': 'application/json' }
                 };
                 let result = await fetch('http://proj13.ruppin-tech.co.il/CloseTask', requestOptions);
@@ -161,10 +161,10 @@ export default function Tasks({ navigation }) {
     );
 
 
-    let tasksList = tasksDisplay.map((per) => <TasksCard key={per.Task_Code} Task_Code={per.Task_Code}
-        Employee_ID={per.Employee_ID} Task_Name={per.Task_Name} Room_Number={per.Room_Number}
-        Start_Date={moment(per.Start_Date).format("YYYY-MM-DD")} Start_Time={per.Start_Time} End_Time={per.End_Time}
-        Task_Status={per.Task_Status} Description={per.Description} Edite_Task_Details={Edite_Task_Details}
+    let tasksList = tasksDisplay.map((task) => <TasksCard key={task.TaskCode} TaskCode={task.TaskCode}
+        EmployeeID={task.EmployeeID} TaskName={task.TaskName} RoomNumber={task.RoomNumber}
+        StartDate={moment(task.StartDate).format("YYYY-MM-DD")} StartTime={task.StartTime} EndTime={task.EndTime}
+        TaskStatus={task.TaskStatus} Description={task.Description} EditTaskDetails={EditTaskDetails}
         MarkTaskAsDone={MarkTaskAsDone} RemoveFromCheck={RemoveFromCheck} DeleteTask={DeleteTask} />)
 
 

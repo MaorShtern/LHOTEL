@@ -10,7 +10,7 @@ export default function Payment({ route, navigation }) {
 
   let { the_data, number_Of_Nights, breakfast, entryDate, exitDate, amount_Of_People } = route.params
 
-  // console.log("the_data: " + JSON.stringify(the_data));
+
 
   const [totalSum, SetTotalSum] = useState(0)
   const [name, setName] = useState('')
@@ -19,7 +19,7 @@ export default function Payment({ route, navigation }) {
   const [cardCVC, SetCardCVC] = useState('')
 
   const [user, SetUser] = useState([])
-  // const [userDB, SetUserDB] = useState([])
+
 
 
 
@@ -93,48 +93,9 @@ export default function Payment({ route, navigation }) {
 
 
 
-  // const CustomerToDataBS = async (value) => {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     body: JSON.stringify(value),
-  //     headers: { 'Content-Type': 'application/json' }
-  //   };
-  //   let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers', requestOptions);
-  //   let customerResult = await result.json();
-
-  //   if (customerResult)
-  //     navigation.navigate('ConfirmationPage', {
-  //       id: value.customerID, the_data: the_data,
-  //       number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-  //       total: totalSum, Name: name, CardNum: cardNum
-  //     })
-  //   else
-  //     alert("CustomerToDataBS")
-
-  // }
-
-  // const cheackForUser = async (value) => {
-  //   console.log(value);
-  //   // const requestOptions = {
-  //   //   method: 'GET',
-  //   //   headers: { 'Content-Type': 'application/json' }
-  //   // };
-  //   // let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + value, requestOptions);
-  //   // let deleteResult = await result.json();
-
-  //   // if (deleteResult !== null) {
-
-  //   //   SetUserDB(deleteResult)
-  //   //   return
-  //   // }
-  //   // else {
-  //   //   cheackForUser(value)
-  //   // }
-  // }
-
 
   const SaveRoomReservation = async (value) => {
-    // console.log(JSON.stringify(value));
+   
     try {
       const requestOptions = {
         method: 'POST',
@@ -163,7 +124,7 @@ export default function Payment({ route, navigation }) {
     if (name.length > 1 && isValidCardDetails()) {
       let counter_Single = the_data.filter((per) => per.type === "Single room")[0] === undefined ? 0: the_data.filter((per) => per.type === "Single room")[0].count 
       let counter_Double =  the_data.filter((per) => per.type === "Double room")[0] === undefined ?0: the_data.filter((per) => per.type === "Double room")[0].count 
-     let counter_Suite = the_data.filter((per) => per.type === "Suite")[0].count  === undefined ?0: the_data.filter((per) => per.type === "Suite")[0].count
+     let counter_Suite = the_data.filter((per) => per.type === "Suite")[0] === undefined ?0: the_data.filter((per) => per.type === "Suite")[0].count
     
      // console.log(user);
       let customer = {
@@ -190,21 +151,14 @@ export default function Payment({ route, navigation }) {
         }
       }
 
-      console.log(customer);
-      // navigation.navigate('ConfirmationPage', {
-      //   id: newCustomer.customerID, the_data: the_data,
-      //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-      //   total: totalSum, Name: name, CardNum: cardNum
-      // })
-
-      // if (userDB !== null && userDB.length !== 0) {
+      
       SaveRoomReservation(customer.fields)
     }
     else
       Alert.alert("The card details are incorrect")
   }
 
-  // console.log(user.customerID);
+
 
 
 
@@ -229,6 +183,7 @@ export default function Payment({ route, navigation }) {
           <View style={{ height: 10 }}></View>
           <TextInput keyboardType='numeric' placeholder='cvv' style={styles.TextInput} onChangeText={(cvv) => SetCardCVC(cvv)}>{cardCVC}</TextInput>
         </View>
+        
         <View style={styles.ButtonContainer}>
           <TouchableOpacity style={styles.button} onPress={Delete} >
             <Text>DELETE</Text>

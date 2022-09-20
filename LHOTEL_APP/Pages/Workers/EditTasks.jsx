@@ -33,15 +33,15 @@ export default function EditTasks({ route, navigation }) {
 
     const [taskStatus, SetTaskStatus] = useState(false);
     const [task, SetTask] = useState({
-        Task_Code: null, Employee_ID: null, Task_Name: '', Room_Number: 0, Start_Time: moment(new Date()).format('HH:MM'),
-        Start_Date: moment(new Date()).format('YYYY-MM-DD'), End_Time: null, Task_Status: 'Open', Description: ''
+        TaskCode: null, EmployeeID: null, TaskName: '', RoomNumber: 0, StartTime: moment(new Date()).format('HH:MM'),
+        StartDate: moment(new Date()).format('YYYY-MM-DD'), EndTime: null, TaskStatus: 'Open', Description: ''
     })
 
 
     useEffect(() => {
         if (route.params !== undefined) {
             SetTask(route.params.taskDetails)
-            SetTaskStatus(route.params.taskDetails.Task_Status === 'Open' ? true : false)
+            SetTaskStatus(route.params.taskDetails.TaskStatus === 'Open' ? true : false)
         }
     }, [])
 
@@ -98,9 +98,9 @@ export default function EditTasks({ route, navigation }) {
     const HandelTaskStatus = () => {
         SetTaskStatus(!taskStatus)
         if (taskStatus !== true)
-            task.Task_Status = 'Open'
+            task.TaskStatus = 'Open'
         else
-            task.Task_Status = 'Close'
+            task.TaskStatus = 'Close'
     }
 
     const SaveTask = async () => {
@@ -125,32 +125,32 @@ alert(error)
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Tasks</Text>
-            {task.Task_Code !== null ?
+            {task.TaskCode !== null ?
                 <View>
-                    <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text>
+                    <Text style={styles.SumHeadLine}>Task number: {task.TaskCode}</Text>
                 </View> : null}
             {/* <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text> */}
             <View style={styles.DetailsContainer}>
                 <Text style={{ paddingLeft: 15 }}>Employee ID:</Text>
                 <TextInput
-                    label={JSON.stringify(task.Employee_ID)}
-                    placeholder={JSON.stringify(task.Employee_ID)}
+                    label={JSON.stringify(task.EmployeeID)}
+                    placeholder={JSON.stringify(task.EmployeeID)}
                     left={<TextInput.Icon name="account" />}
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
-                    onChangeText={(id) => task.Employee_ID = id}
+                    onChangeText={(id) => task.EmployeeID = id}
                 />
 
                 <Text style={{ paddingLeft: 15 }}>Room Number:</Text>
                 <TextInput
-                    label={JSON.stringify(task.Room_Number)}
-                    placeholder={JSON.stringify(task.Room_Number)}
+                    label={JSON.stringify(task.RoomNumber)}
+                    placeholder={JSON.stringify(task.RoomNumber)}
                     left={<TextInput.Icon name="" />}
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
-                    onChangeText={(room) => task.Room_Number = room}
+                    onChangeText={(room) => task.RoomNumber = room}
                 />
 
                 <View style={styles.container}>
@@ -167,7 +167,7 @@ alert(error)
 
                 <View >
                     <TouchableOpacity style={styles.button} onPress={showStartTime}>
-                        <Text>{"Start at: " + task.Start_Time}</Text>
+                        <Text>{"Start at: " + task.StartTime}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
                         isVisible={flagStartTime}
@@ -176,7 +176,7 @@ alert(error)
                         onCancel={hideStartTime}
                     />
                     <TouchableOpacity style={styles.button} onPress={showEndTime}>
-                        <Text>{"To Do By: " + task.End_Time}</Text>
+                        <Text>{"To Do By: " + task.EndTime}</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
                         isVisible={flagEndTime}

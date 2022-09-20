@@ -8,7 +8,9 @@ import AppContext from './AppContext';
 
 export default function App() {
 
+  const isIos = Platform.OS === 'ios' 
   const [isUserExist, setIsUserExist] = useState(false);
+  const [roomsFlags, setRoomsFlags] = useState({});
   const [employee, setEmployee] = useState({});
 
 
@@ -29,8 +31,11 @@ export default function App() {
   const userSettings = {
     employee:employee,
     isUserExist:isUserExist,
+    isIos:isIos,
+    roomsFlags:roomsFlags,
     setEmployeeDB,
-    setIsUserExist
+    setIsUserExist,
+    setRoomsFlags
   };
   
   ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]'])

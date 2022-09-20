@@ -6,44 +6,44 @@ import moment from 'moment/moment';
 export default function EMCard(props) {
 
 
-    let { Employee_ID, Description, Employee_Name, Phone_Number,
-        Birth_Date, Hourly_Wage, Address, Employee_Code } = props
+    let { EmployeeID, Description, EmployeeName, PhoneNumber,
+        BirthDate, HourlyWage, Address, EmployeeCode } = props
 
 
     const DeleteEmployee = () => {
-        props.DeleteEmployee(Employee_ID);
+        props.DeleteEmployee(EmployeeID);
     }
 
-    const EditeDetails = () =>{
-        props.EditeDetails(Employee_ID);
+    const EditDetails = () =>{
+        props.EditDetails(EmployeeID);
     }
 
 
     return (
         <View style={styles.card}>
             <View style={styles.details}>
-                <Text style={{ paddingRight: 20 }}>Name: {Employee_Name}</Text>
-                <Text >ID: {Employee_ID}</Text>
+                <Text style={{ paddingRight: 20 }}>Name: {EmployeeName}</Text>
+                <Text >ID: {EmployeeID}</Text>
             </View>
             <View style={styles.details}>
                 <Text style={{ paddingRight: 10 }}>Role: {Description}</Text>
-                <Text >Phone: {Phone_Number}</Text>
+                <Text >Phone: {PhoneNumber}</Text>
             </View>
 
             <View style={styles.details}>
-                <Text style={{ paddingRight: 20 }}>Birth Date: {moment(Birth_Date).format('YYYY-MM-DD')}</Text>
+                <Text style={{ paddingRight: 20 }}>Birth Date: {moment(BirthDate).format('YYYY-MM-DD')}</Text>
                 {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
             </View>
-            <Text style={{paddingLeft:5}}>Hourly Wage: {Hourly_Wage}</Text>
+            <Text style={{paddingLeft:5}}>Hourly Wage: {HourlyWage}</Text>
 
             <View style={styles.details}>
 
                 <Text style={{ paddingRight: 20 }}>Address: {Address}</Text>
-                <Text >Employee Code: {Employee_Code}</Text>
+                <Text >Employee Code: {EmployeeCode}</Text>
             </View>
 
             <View style={styles.BTNContainer}>
-                <TouchableOpacity onPress={EditeDetails}>
+                <TouchableOpacity onPress={EditDetails}>
                     <Image style={styles.BTNImages} source={images.edit} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={DeleteEmployee}>

@@ -1,3 +1,6 @@
+
+
+
 import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -105,9 +108,9 @@ export default function Registration({ navigation }) {
     // }
 
 
-    const CreateUser = () => {
+    const CreateUser = () => { // פונצקיה היוצרת אובייקט חדש מסוג משתמש ומחזירה אותו 
         var Hashes = require('jshashes')
-        let SHA1 = new Hashes.SHA1().b64_hmac(id, password)
+        let SHA1 = new Hashes.SHA1().b64_hmac(id, password) // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה 
 
         let user = {
             calssName: User,

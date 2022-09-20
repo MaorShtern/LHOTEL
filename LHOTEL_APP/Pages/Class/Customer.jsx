@@ -8,11 +8,19 @@ export default class Customer {
             this.FirstName = Customer.FirstName,
             this.LastName = Customer.LastName,
             this.Mail = Customer.Mail,
-            this.Password = Customer.password
+            this.Password = Customer.password,
             this.PhoneNumber = Customer.PhoneNumber,
             this.CardHolderName = Customer.CardHolderName,
-            this.CreditCardNumber = Customer.CreditCardNumber
+            this.CreditCardNumber = Customer.CreditCardNumber,
             this.CreditCardDate = Customer.CreditCardDate,
-            this.ThreeDigit = Customer.ThreeDigit
+            this.ThreeDigit = Customer.ThreeDigit,
+            this.AmountOfPeople = Reservation.AmountOfPeople,
+            this.EmployeeID = Reservation.EmployeeID,
+            this.CounterSingle = Reservation.CounterSingle,
+            this.CounterDouble = Reservation.CounterDouble,
+            this.CounterSuite = Reservation.CounterSuite,
+            this.ExitDate	= Reservation.ExitDate,
+            this.EntryDate = Reservation.EntryDate
+        
     }
 }

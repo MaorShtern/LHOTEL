@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class SQLConnection
+    public class SQLConnection // מחלקה לטובת התנהלות מסודרת ויעילה מול מסד הנתונים
     {
-        public static string conStr = @"data source=SQL5108.site4now.net;initial catalog=db_a79b5b_proj13;user id=db_a79b5b_proj13_admin;password=XXNEA6q6VbvATG6g";
-        public static SqlConnection sqlConnection = new SqlConnection(conStr);
+        public static string conStr = @"data source=SQL5108.site4now.net;initial catalog=db_a79b5b_proj13;user id=db_a79b5b_proj13_admin;password=XXNEA6q6VbvATG6g"; 
+        public static SqlConnection sqlConnection = new SqlConnection(conStr); // יצירת אובייקט חיבור למסד הנתונים 
 
 
-        public static void CloseDB()
+        public static void CloseDB() // פונקציה לסגירת החיבור עם מסד הנתונים 
         {
             try
             {
@@ -25,7 +25,7 @@ namespace DAL
             }
         }
 
-        public static void OpenDB()
+        public static void OpenDB() // פונקציה לפתיחת החיבור עם מסד הנתונים 
         {
             try
             {
@@ -37,7 +37,7 @@ namespace DAL
             }
         }
 
-        public static int ExeNonQuery(string str)
+        public static int ExeNonQuery(string str) //פונקציה להחזרת כמות השורות המושפעות בעקבות הרצה של הפקודה המתקבלת כפרמטר 
         {
             try
             {
@@ -54,7 +54,7 @@ namespace DAL
             }
         }
 
-        public static SqlDataReader ExcNQReturnReder(string command)
+        public static SqlDataReader ExcNQReturnReder(string command) //פונקציה להחזרת אובייקט המכיל נתונים בעקבות הרצה של הפקודה המתקבלת כפרמטר
         {
             try
             {

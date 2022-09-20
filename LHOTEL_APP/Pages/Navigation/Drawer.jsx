@@ -8,6 +8,7 @@ import Booking from "../Customer/Booking";
 import SaveRoom from "../Customer/SaveRoom";
 import Payment from "../Customer/Payment";
 import ConfirmationPage from "../Customer/ConfirmationPage";
+import Credit from "../Credit";
 // import RoomService from "../Customer/RoomService";
 // import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
@@ -68,14 +69,14 @@ export default function Drawer() {
         <drawer.Screen
           name="Booking"
           component={Booking}
-          options={{
-            headerTitle: "",
-            headerTintColor: "white",
-            headerMode: 'none',
-            headerStyle: {
-              backgroundColor: "#000",
-            },
-          }}
+          // options={{
+          //   headerTitle: "",
+          //   headerTintColor: "white",
+          //   headerMode: 'none',
+          //   headerStyle: {
+          //     backgroundColor: "#000",
+          //   },
+          // }}
         />
 
         {/* <drawer.Screen
@@ -100,17 +101,17 @@ export default function Drawer() {
             },
           }}
         /> */}
-         {/* <drawer.Screen
-          name="CheckIn"
-          component={CheckIn}
-          options={{
-            headerTitle: " ",
-            headerTintColor: "white",
-            headerStyle: {
-              backgroundColor: "#000",
-            },
+         <drawer.Screen
+          name="Credit"
+          component={Credit}
+          options={{ drawerItemStyle: { display: "none" },
+          headerTitle: "",
+          headerTintColor: "white",
+          headerMode: 'none',
+          headerStyle: {
+            backgroundColor: "#000",}
           }}
-        /> */}
+        />
         <drawer.Screen
           name="SaveRoom"
           component={SaveRoom}

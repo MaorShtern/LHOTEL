@@ -132,13 +132,11 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 35,
-   
-   
     zIndex: 1,
     fontWeight: 'bold',
-    bottom:40,
+    bottom: 40,
     color: 'white',
-    right: 10
+    paddingLeft:20
   },
   input: {
     marginHorizontal: 30,

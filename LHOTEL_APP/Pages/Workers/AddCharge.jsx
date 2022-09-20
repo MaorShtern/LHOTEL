@@ -32,13 +32,13 @@ import { images } from '../../images';
 // 8	4	Room	0.00	0.00
 
 const Products = [
-    { Id: 1, Product_Dec: "Coca cola", price: 15, Amount: 0 },
-    { Id: 2, Product_Dec: "Vodka", price: 35, Amount: 0 },
-    { Id: 3, Product_Dec: "Bamba", price: 20, Amount: 0 },
-    { Id: 4, Product_Dec: "Doritos", price: 20, Amount: 0 },
-    { Id: 5, Product_Dec: "Sprite", price: 15, Amount: 0 },
-    { Id: 6, Product_Dec: "Whiskey", price: 45, Amount: 0 },
-    { Id: 7, Product_Dec: "Chips", price: 20, Amount: 0 },]
+    { ProductCode: 1, ProductDec: "Coca cola", Price: 15, Amount: 0 },
+    { ProductCode: 2, ProductDec: "Vodka", Price: 35, Amount: 0 },
+    { ProductCode: 3, ProductDec: "Bamba", Price: 20, Amount: 0 },
+    { ProductCode: 4, ProductDec: "Doritos", Price: 20, Amount: 0 },
+    { ProductCode: 5, ProductDec: "Sprite", Price: 15, Amount: 0 },
+    { ProductCode: 6, ProductDec: "Whiskey", Price: 45, Amount: 0 },
+    { ProductCode: 7, ProductDec: "Chips", Price: 20, Amount: 0 },]
 
 
 export default function AddCharge({ navigation }) {
@@ -54,15 +54,15 @@ export default function AddCharge({ navigation }) {
 
 
     const AddAmount = (id, amount) => {
-        let product = productsToAdd.filter((prod) => prod.Id === id)
+        let product = productsToAdd.filter((prod) => prod.ProductCode === id)
         if (product.length === 0) {
-            product = Products.filter((prod) => prod.Id === id)[0]
+            product = Products.filter((prod) => prod.ProductCode === id)[0]
             product.Amount = amount
             let temp = [...productsToAdd, product]
             SetProductsToAdd(temp)
         }
         else {
-            product = productsToAdd.filter((prod) => prod.Id === id)[0]
+            product = productsToAdd.filter((prod) => prod.ProductCode === id)[0]
             product.Amount = amount
             // console.log(product);
         }
@@ -72,7 +72,7 @@ export default function AddCharge({ navigation }) {
     const Cal_Sum = () => {
         let sum = 0
         for (let index = 0; index < Products.length; index++) {
-            sum += (Products[index].Amount * Products[index].price)
+            sum += (Products[index].Amount * Products[index].Price)
         }
         SetSumTotal(sum)
     }
@@ -80,6 +80,7 @@ export default function AddCharge({ navigation }) {
 
     const AddChargeToDB = async () => {
         try {
+           
             let counter = 0
             for (let index = 0; index < productsToAdd.length; index++) {
                 // console.log(productsToAdd[index]);
@@ -88,11 +89,11 @@ export default function AddCharge({ navigation }) {
                 const requestOptions = {
                     method: 'POST',
                     body: JSON.stringify({
-                        Id: Number(id),
-                        Room_Number: Number(room_Number),
-                        Product_Dec: productsToAdd[index].Product_Dec,
+                        CustomerID: Number(id),
+                        RoomNumber: Number(room_Number),
+                        ProductDec: productsToAdd[index].ProductDec,
                         Amount: productsToAdd[index].Amount,
-                        Payment_Method: payment
+                        PaymentMethod: payment
                     }),
                     headers: { 'Content-Type': 'application/json' }
                 };
@@ -101,6 +102,7 @@ export default function AddCharge({ navigation }) {
                 let temp = await result.json();
                 if (temp) {
                     counter++
+                    alert(temp)
                     // GetAllTasksFromDB()
                 }
             }
@@ -135,7 +137,7 @@ export default function AddCharge({ navigation }) {
                     onPress: () => {
                         // console.log(productsToAdd);
                         AddChargeToDB()
-                        // alert("The purchase was successfully registered")
+                        alert("The purchase was successfully registered")
                         // navigation.goBack()
                     },
                 },
@@ -152,9 +154,9 @@ export default function AddCharge({ navigation }) {
     }
 
 
-    let listOfProducts = Products.map((per) => <ProductsCards key={per.Id} id={per.Id}
-        image={per.image} name={per.Product_Dec}
-        price={per.price} amountTaken={per.Amount}
+    let listOfProducts = Products.map((per) => <ProductsCards key={per.ProductCode} id={per.ProductCode}
+        image={per.image} name={per.ProductDec}
+        price={per.Price} amountTaken={per.Amount}
         AddAmount={AddAmount}
     />)
 

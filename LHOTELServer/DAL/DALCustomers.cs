@@ -135,14 +135,9 @@ namespace DAL
             try
             {
                 Customers customer = GetCustomerByMail(mail);
-                return customer;
                 bool verify = Verify(password, customer.Password);
-                if (customer != null  && verify)
-                {
-                    return customer;
-                }
-                else
-                    return null;
+                return customer != null && verify ? customer : null;
+             
             }
             catch (Exception e)
             {

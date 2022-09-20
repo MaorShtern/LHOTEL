@@ -138,7 +138,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     bottom: 40,
     color: 'white',
-    right: 10
+   paddingLeft:20
+    // position: 'absolute',
+
   },
   HeadLine: {
     fontSize: 40,

@@ -33,12 +33,12 @@ export default function UpdateDetails({ route, navigation }) {
         let dateString = moment(date).format('YYYY-MM-DD')
         // setFlagDate(date)
         // console.log(dateString);
-        employee.Birth_Date = dateString
+        employee.BirthDate = dateString
         hideDate()
     };
 
     const CheckDetails = () => {
-        if (employee.Employee_Name !== "" && employee.Hourly_Wage > 0 && employee.Phone_Number !== "")
+        if (employee.EmployeeName !== "" && employee.HourlyWage > 0 && employee.PhoneNumber !== "")
             return true
         else
             return false
@@ -99,17 +99,17 @@ export default function UpdateDetails({ route, navigation }) {
                 <View>
                     <Text style={{
                         alignSelf: "center", paddingBottom: 10, textDecorationLine: 'underline',
-                    }}>Employee ID: {employee.Employee_ID}</Text>
+                    }}>Employee ID: {employee.EmployeeID}</Text>
                 </View>
                 <View>
                     <Text style={{ paddingLeft: 15 }}>Employee Name:</Text>
                     <TextInput
-                        label={JSON.stringify(employee.Employee_Name)}
-                        placeholder={JSON.stringify(employee.Employee_Name)}
+                        label={JSON.stringify(employee.EmployeeName)}
+                        placeholder={JSON.stringify(employee.EmployeeName)}
                         left={<TextInput.Icon name="account" />}
                         mode="outlined"
                         style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(name) => employee.Employee_Name = name}
+                        onChangeText={(name) => employee.EmployeeName = name}
                     />
                 </View>
                 <View style={styles.container}>
@@ -128,13 +128,13 @@ export default function UpdateDetails({ route, navigation }) {
                 <View>
                     <Text style={{ paddingLeft: 15 }}>Phone Number:</Text>
                     <TextInput
-                        label={JSON.stringify(employee.Phone_Number)}
-                        placeholder={JSON.stringify(employee.Phone_Number)}
+                        label={JSON.stringify(employee.PhoneNumber)}
+                        placeholder={JSON.stringify(employee.PhoneNumber)}
                         left={<TextInput.Icon name="account" />}
                         keyboardType='numeric'
                         mode="outlined"
                         style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(number) => employee.Phone_Number = number}
+                        onChangeText={(number) => employee.PhoneNumber = number}
                     />
                 </View>
 
@@ -146,15 +146,15 @@ export default function UpdateDetails({ route, navigation }) {
                         onCancel={hideDate} />
                     <View style={{ height: 20 }}></View>
                     <TouchableOpacity style={styles.button} onPress={showDate}>
-                        <Text>{"Birth Date: " + moment(employee.Birth_Date).format('YYYY-MM-DD')}</Text>
+                        <Text>{"Birth Date: " + moment(employee.BirthDate).format('YYYY-MM-DD')}</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.counterStyle}>
                     <Counter
-                        initial={employee.Hourly_Wage}
-                        start={employee.Hourly_Wage}
-                        onChange={(count) => { employee.Hourly_Wage = count }}
+                        initial={employee.HourlyWage}
+                        start={employee.HourlyWage}
+                        onChange={(count) => { employee.HourlyWage = count }}
                     />
                     <Text style={{ paddingRight: 10 }}>Hourly_Wage: </Text>
                 </View>

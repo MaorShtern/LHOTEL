@@ -44,9 +44,9 @@ export default function EmployeesManagement({ navigation }) {
 
     const SerchEmployee = (value) => {
         setSearch(value)
-        let employee = DBemployees.filter((per) => per.Employee_Name === value)
+        let employee = DBemployees.filter((per) => per.EmployeeName === value)
         console.log(employee);
-        if (employee.length > 0 && employee[0].Employee_ID != -1) {
+        if (employee.length > 0 && employee[0].EmployeeID != -1) {
             SetEmployees(employee)
         }
         else {
@@ -95,7 +95,7 @@ export default function EmployeesManagement({ navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        let employee = employees.filter((per) => per.Employee_ID === value)[0].Employee_ID
+                        let employee = employees.filter((per) => per.EmployeeID === value)[0].EmployeeID
                         DeleteEmployeeFromDB(employee)
                         // let newArray = employees.filter((per) => per.Employee_ID !== value)
                         // SetEmployees(newArray)
@@ -106,9 +106,9 @@ export default function EmployeesManagement({ navigation }) {
         );
     }
 
-    const EditeDetails = (value) => {
+    const EditDetails = (value) => {
         // console.log(valuse);
-        let employee = employees.filter((per) => per.Employee_ID === value)[0]
+        let employee = employees.filter((per) => per.EmployeeID === value)[0]
         // console.log(JSON.stringify(employee));
         navigation.navigate('UpdateDetails', { employee: employee })
     }
@@ -122,11 +122,11 @@ export default function EmployeesManagement({ navigation }) {
         </View>
     );
 
-    let listEmployees = employees.map((item) => <EMCard key={item.Employee_ID}
-        Employee_ID={item.Employee_ID} Description={item.Description} Employee_Name={item.Employee_Name}
-        Phone_Number={item.Phone_Number} Birth_Date={item.Birth_Date} Hourly_Wage={item.Hourly_Wage}
-        Address={item.Address} Employee_Code={item.Employee_Code}
-        DeleteEmployee={DeleteEmployee} EditeDetails={EditeDetails} />)
+    let listEmployees = employees.map((item) => <EMCard key={item.EmployeeID}
+        EmployeeID={item.EmployeeID} Description={item.Description} EmployeeName={item.EmployeeName}
+        PhoneNumber={item.PhoneNumber} BirthDate={item.BirthDate} HourlyWage={item.HourlyWage}
+        Address={item.Address} EmployeeCode={item.EmployeeCode}
+        DeleteEmployee={DeleteEmployee} EditDetails={EditDetails} />)
 
 
     return (

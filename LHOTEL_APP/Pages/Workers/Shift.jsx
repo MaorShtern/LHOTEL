@@ -59,9 +59,9 @@ export default function Shift() {
         <View>
         </View>
         <View>
-          <Text>{item.Entrance_Time} </Text>
+          <Text>{item.EntranceTime} </Text>
           <Divider />
-          <Text>{item.Leaving_Time} </Text>
+          <Text>{item.LeavingTime} </Text>
           <Divider />
         </View>
         <View style={styles.verticleLine}></View>
@@ -72,8 +72,8 @@ export default function Shift() {
           <Divider />
         </View>
         <View>
-          <Text>{item.Employee_Name} </Text>
-          <Text>{item.Employee_ID} </Text>
+          <Text>{item.EmployeeName} </Text>
+          {/* <Text>{item.EmployeeID} </Text> */}
         </View>
       </View>
     );
@@ -81,7 +81,7 @@ export default function Shift() {
 
   const SerchEmployee = (value) => {
     setSearch(value);
-    let employee = empItems.filter((per) => per.Employee_Name === value);
+    let employee = empItems.filter((per) => per.EmployeeName === value);
     if (employee.length === 1) {
       setEmpItems(employee);
     } else {

@@ -8,67 +8,67 @@ import { images } from '../../images';
 export default function TasksCard(props) {
 
 
-    let { Task_Code, Employee_ID, Task_Name, Room_Number, Start_Date, Start_Time,
-        End_Time, Task_Status, Description } = props
+    let { TaskCode, EmployeeID, TaskName, RoomNumber, StartDate, StartTime,
+        EndTime, TaskStatus, Description } = props
 
 
     const [flag, SetFlag] = useState(false)
 
-    const Edite_Task_Details = (Task_Code) =>{
-        props.Edite_Task_Details(Task_Code)
+    const EditTaskDetails = (TaskCode) =>{
+        props.EditTaskDetails(TaskCode)
     }
 
     // console.log(flag);
-    const DeleteTask = (Task_Code) => {
-        props.DeleteTask(Task_Code)
+    const DeleteTask = (TaskCode) => {
+        props.DeleteTask(TaskCode)
     }
 
 
     const MarkTaskAsDone = () =>{
         SetFlag(!flag)
         if(!flag === true)
-            props.MarkTaskAsDone(Task_Code)
+            props.MarkTaskAsDone(TaskCode)
         else
-            props.RemoveFromCheck(Task_Code)
+            props.RemoveFromCheck(TaskCode)
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.Details}>
-                <Text>Employee ID: {Employee_ID}</Text>
+                <Text>Employee ID: {EmployeeID}</Text>
 
-                <Text>Task Code: {Task_Code}</Text>
+                <Text>Task Code: {TaskCode}</Text>
             </View>
 
             <View style={styles.containerTaskDedtails}>
                 <View style={styles.Details}>
-                    <Text style={{ padding: 5 }}>Room Number: {Room_Number}</Text>
-                    <Text>Start Date: {Task_Name}</Text>
+                    <Text style={{ padding: 5 }}>Room Number: {RoomNumber}</Text>
+                    <Text>Start Date: {TaskName}</Text>
                 </View>
 
                 <View style={styles.Details}>
-                    <Text>Start Date: {Start_Date}</Text>
-                    <Text>Start Time: {Start_Time}</Text>
+                    <Text>Start Date: {StartDate}</Text>
+                    <Text>Start Time: {StartTime}</Text>
                 </View>
 
                 <View style={styles.Details}>
-                    {End_Time === null ? <Text>End Time: null</Text> : <Text>End Time: {End_Time}</Text>}
-                    <Text>Task Status: {Task_Status}</Text>
+                    {EndTime === null ? <Text>End Time: null</Text> : <Text>End Time: {EndTime}</Text>}
+                    <Text>Task Status: {TaskStatus}</Text>
                 </View>
                 <Text style={{ padding: 5 }}>Description: {Description}</Text>
 
                 <View style={styles.BTNContainer}>
 
-                    <TouchableOpacity onPress={() => Edite_Task_Details(Task_Code)}>
+                    <TouchableOpacity onPress={() => EditTaskDetails(TaskCode)}>
                         <Image style={styles.BTNImages} source={images.edit} />
                     </TouchableOpacity>
                     <View style={styles.Checkbox}>
-                        {Task_Status === "Open" ?
+                        {TaskStatus === "Open" ?
                             <Checkbox label="Item" status={flag ? 'checked' : 'unchecked'}
                                 onPress={MarkTaskAsDone} />
                             : null}
                     </View>
-                    <TouchableOpacity onPress={() => DeleteTask(Task_Code)}>
+                    <TouchableOpacity onPress={() => DeleteTask(TaskCode)}>
                         <Image style={styles.BTNImages} source={images.trashCan} />
                     </TouchableOpacity>
 

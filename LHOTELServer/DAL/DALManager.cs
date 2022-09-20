@@ -29,7 +29,7 @@ namespace DAL
                         BirthDate = (DateTime)reader["Birth_Date"],
                         HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                        //Employee_Code = (int)reader["Employee_Code"]
+                     
                     });
                 }
                 return employees;
@@ -84,16 +84,17 @@ namespace DAL
         }
 
 
-        public static List<Shift> GetWorkersOnShift()
+        public static List<Shift> GetWorkersOnShift() // פונקציה המחזירה רשימה של משמרות 
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetWorkersOnShift");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetWorkersOnShift"); //השמת תוצאת הרצת הפרוצדורה
+                                                                                                  //באובייקט רידר 
                 if (reader == null || !reader.HasRows)
                     return null;
 
                 List<Shift> employees = new List<Shift>();
-                while (reader.Read())
+                while (reader.Read())//הגדרת רשימה מסוג משמרת ,יצירה והכנסה של אובייקטים מסוג משמרת מנתוני הרידר אליה 
                 {
 
                     employees.Add(new Shift()
@@ -108,14 +109,14 @@ namespace DAL
 
                     });
                 }
-                return employees;
+                return employees;//החזרה של הרשימה
             }
-            catch (Exception e)
+            catch (Exception e)// הצגת שגיאה במידה והתקבלה
             {
                 Console.WriteLine(e.Message);
                 return null;
             }
-            finally
+            finally//סגירת החיבור אל מסד הנתונים 
             {
                 SQLConnection.CloseDB();
             }

@@ -21,10 +21,10 @@ export default function AddEmployee({navigation}) {
     const [dropdown, setDropdown] = useState(null);
     const [id, SetId] = useState("")
     const [name, SetName] = useState("")
-    const [phone_Number, SetPhone_Number] = useState("")
+    const [phoneNumber, SetPhoneNumber] = useState("")
     const [date, SetDate] = useState("")
     const [description, SetDescription] = useState("General")
-    const [hourly_Wage, SetHourly_Wage] = useState(30)
+    const [hourlyWage, SetHourlyWage] = useState(30)
     const [address, SetAddress] = useState("")
 
 
@@ -45,7 +45,7 @@ export default function AddEmployee({navigation}) {
 
 
     const CheckValues = () => {
-        if (id !== "" && name !== "" && phone_Number !== ""
+        if (id !== "" && name !== "" && phoneNumber !== ""
             && date !== "" && address !== "")
             return true
         else
@@ -75,8 +75,8 @@ export default function AddEmployee({navigation}) {
     const Print = () => {
         if (CheckValues()) {
             let employee = {
-                Employee_ID: id, Employee_Name: name, Phone_Number: phone_Number, Birth_Date: date,
-                Description: description, Hourly_Wage: hourly_Wage, Address: address
+                EmployeeID: id, EmployeeName: name, PhoneNumber: phoneNumber, BirthDate: date,
+                Description: description, HourlyWage: hourlyWage, Address: address
             }
             AddEmployeeToDB(employee)
         }
@@ -112,7 +112,7 @@ export default function AddEmployee({navigation}) {
                 <View style={{ height: 10 }}></View>
                 <Text>Phone Number</Text>
                 <TextInput keyboardType="numeric" placeholder="Phone Number" style={styles.TextInput}
-                    onChangeText={(phone) => SetPhone_Number(phone)}>
+                    onChangeText={(phone) => SetPhoneNumber(phone)}>
                 </TextInput>
 
                 <View style={{ height: 10 }}></View>
@@ -145,7 +145,7 @@ export default function AddEmployee({navigation}) {
                     <Counter
                         initial={30}
                         start={30}
-                        onChange={(count) => { SetHourly_Wage(count) }} />
+                        onChange={(count) => { SetHourlyWage(count) }} />
                     <Text>Hourly Wage: </Text>
                 </View>
                 <View style={{ height: 10 }}></View>

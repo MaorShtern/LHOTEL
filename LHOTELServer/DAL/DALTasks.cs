@@ -49,27 +49,27 @@ namespace DAL
             }
         }
 
-        public static List<Task> GetTaskById(int id)
+        public static List<Task> GetTaskById(int id)// פונקציה המחזירה רשימת משימות של עובד 
         {
             try
             {
-                string str = $@"exec GetTask_ById {id}";
-                str = str.Replace("\r\n", string.Empty);
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder(str);
-                if (reader == null && !reader.HasRows)
+                string str = $@"exec GetTask_ById {id}";// הגדרת הפקודה להרצת הפרוצודורה הרלוונטית
+                str = str.Replace("\r\n", string.Empty);//סידור תחביר הפקודה ע"י מחיקה של רווחים וירידות שורה מיותרים
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder(str); // השמת הנתונים המוחזרים ממסד הנתונים בעקבות הרצת הפרוצדורה לאובייקט רידר
+                if (reader == null && !reader.HasRows)//הצגת הודעה מתאימה אם לא קיימים נתונים מוחזרים והחזרת NULL
                 {
                     Console.WriteLine("There is no such employee in the system");
                     return null;
                 }
                 List<Task> tasks = new List<Task>();
-                while (reader.Read())
+                while (reader.Read())//באם קיימים נתונים מוחזרים יצירת אובייקטי משימה מהם והכנסתם לרשימה 
                 {
                     tasks.Add(new Task()
                     {
                         TaskCode = (int)reader["Task_Code"],
                         EmployeeID = (int)reader["Employee_ID"],
                         TaskName = (string)reader["Task_Name"],
-                        RoomNumber = (reader["Room_Number"] != DBNull.Value)
+                        RoomNumber = (reader["Room_Number"] != DBNull.Value)// תנאי אם מקוצר לטובת השמת ערך דיפולטיבי במידה ולא קיים ערך
                         ? (int)reader["Room_Number"] : -1,
 
                         StartDate = (DateTime)reader["Start_Date"],
@@ -82,15 +82,15 @@ namespace DAL
                         Description = (string)reader["Description"]
                     });
                 }
-                return tasks;
+                return tasks;// החזרה של הרשימה 
 
             }
-            catch (Exception e)
+            catch (Exception e)  // הצגת שגיאה במידה והתקבלה
             {
                 Console.WriteLine(e.Message);
                 return null;
             }
-            finally
+            finally   //סגירת החיבור אל מסד הנתונים
             {
                 SQLConnection.CloseDB();
             }

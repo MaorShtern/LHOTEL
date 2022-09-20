@@ -1137,9 +1137,9 @@ begin tran
 commit tran
 go
 --exec GetAllShifts
---exec ClockIn 111, '15:33'
---exec ClockIn 222, '15:33'
---exec ClockIn 333, '15:33'
+--exec ClockIn 444, '15:33'
+--exec ClockIn 222, '12:00'
+--exec ClockIn 333, '08:56'
 
 
 create proc DeleteShift
@@ -1526,7 +1526,48 @@ go
 --exec DeleteBill 22,666,'2021-10-07','458026651478'
 --exec DeleteBill 23,888,'2022-12-05','458026651478'
 
+205420545
+444555534
+318088888
+444757575
+123456789
+121212129
+141414148
+808080808
+161616161
+363636363
+747474744
+158158158
+158158159
+124587096
+254789658
+555555555
+555555556
+555555567
+555555568
+555555569
+787899088
+205044788
+208785412
+208785416
+580854789
+206055477
+206055472
+206055899
+208065478
+205897546
+568976478
+568976428
+656564642
+206055899
+555555551
 
+DELETE FROM [dbo].[Bill] 
+	WHERE Customer_ID = 206055899
+	select * from [dbo].[Customers_Rooms]
+	select * FROM [dbo].[Bill]
+	select * FROM [dbo].[Employees]
+	select * from [dbo].[Customers]
 --  פרוצדורות חדרים שמורים ללקוחות
 -------------------------------------------------
 create proc GetCustomersRooms
@@ -1737,7 +1778,7 @@ SELECT * FROM  ReservationsDetails() order by Customer_ID
 --  פרוצדורה אשר מבצעת את שמירת החדרים ללקוח
 create proc SaveRoomReservation
 @id int,
-@Card_Holder_Name  nvarchar(30),
+@Card_Holder_Name  nvarchar(30),    -- יצירת פרמטרים הדרושים לביצוע הזמנה 
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
 @Credit_Card_Number nvarchar(16),
@@ -1751,11 +1792,11 @@ create proc SaveRoomReservation
 as
 begin tran	
     
-	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
+	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number  --- הפעלת פרוצדורה המעדכנת פרטי כ.אשראי ביטחון של לקוח
 	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')
 	DECLARE @date as date = GETDATE()
 
-	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')
+	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')--- עדכון פרטים בחשבונית פתוחה במידה וקיימת אחרת יצירת חשבונית חדשה ללקוח
 		exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
 	else
 		exec AlterBill @id, @Bill_Date ,@Employee_ID, @Credit_Card_Number,'Open'
@@ -1766,7 +1807,8 @@ begin tran
 	DECLARE @room_number as int
 
 
-	while @Counter_Single > 0
+	while @Counter_Single > 0           -----             הקצאה ושמירה של חדרים ללקוח לפי כמות החדרים שמעוניין , סוג ,כמות ובאם סטטוס החדר פנוי 
+
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room')
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)
@@ -1796,7 +1838,7 @@ begin tran
 		set @Counter_Suite = @Counter_Suite - 1
 		end
 
-	if (@@error !=0)
+	if (@@error !=0) ----הצגת הודעת שגיאה במידה ומתקבלת שגיאה  
 	begin
 		rollback tran
 		print 'error'
@@ -1873,7 +1915,7 @@ go
 --select * from  [dbo].[Purchases_Documentation]
 
 
-create trigger AddRoomToDetails
+create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
 on [Customers_Rooms] for update
 as
 	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied')
@@ -1937,11 +1979,11 @@ as
 commit tran
 go
 --exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
---select * from Customers
---select * from Bill
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Bill_Details]
---exec GetAllBill_Details
+select * from Customers
+select * from Bill
+select * from [dbo].[Customers_Rooms]
+select * from [dbo].[Bill_Details]
+exec GetAllBill_Details
 
 
 
@@ -2014,21 +2056,21 @@ go
 --exec AddPurchases_Documentation 222 
 
 
+exec GetWorkersOnShift
 
---  פרוצדורת צאק אווט
-create proc CheckOut
+create proc CheckOut      
 @id int,
-@Exit_Date date
+@Exit_Date date              --------- יצירת פרמטרים הדרושים לביצוע צ'ק אאוט ללקוח  
 as
 begin tran		
-	exec AddPurchases_Documentation @id 
+	exec AddPurchases_Documentation @id -----הרצה של פרוצדורה השומרת את כל הרכישות של הלקוח לפי ת.ז בטבלת תיעוד רכישות  
 	DECLARE @bill_Number AS int = (select Bill_Number from [dbo].[Customers_Rooms]
-	where [Customer_ID] = @id and Exit_Date = @Exit_Date GROUP BY Bill_Number)
+	where [Customer_ID] = @id and Exit_Date = @Exit_Date GROUP BY Bill_Number)  --- הצלבה של הנתונים שהתקבלו כקלט אל מול הנתונים השמורים במסד הנתונים ועדכון של סטטוס חשבונית סגור אם אומתו
 	UPDATE [dbo].[Bill] SET Bill_Status = 'Close'
 	where Customer_ID=@id and Bill_Number = @bill_Number and Bill_Status = 'Open'
-    exec DeleteBill_Detail @id,@bill_Number
+    exec DeleteBill_Detail @id,@bill_Number      ---- הרצה של פרוצדורות המוחקות נתוני לקוח בטבלאות הרלוונטיות
 	exec DeleteCustomerRoom @id , @bill_Number
-	if (@@error !=0)
+	if (@@error !=0) ----הצגת הודעת שגיאה במידה ומתקבלת שגיאה
 	begin
 		rollback tran
 		print 'error'

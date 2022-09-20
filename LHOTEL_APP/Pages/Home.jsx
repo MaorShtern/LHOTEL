@@ -1,4 +1,6 @@
-import { Animated, View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
+import { Animated,View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
+
+
 import React from "react";
 // import { BackgroundImage } from '@rneui/base';
 import { useState, useEffect, useContext } from "react";
@@ -17,9 +19,9 @@ export default function Home({ navigation }) {
 
   const [closeState, setCloseState] = useState(new Animated.Value(1));
   const [info, setInfo] = useState(false);
-  const [workerCode, setWorkerCode] = useState(1);
-  const [id, setId] = useState(0);
-  const [password, setPassword] = useState(0);
+
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
 
 
   const Spinner = () => (
@@ -30,15 +32,36 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     const focus = navigation.addListener("focus", () => {
-      setWorkerCode(1)
-      setPassword(0)
-      setId(0)
+      if(!info)  myContext.setEmployeeDB({})
+      setPassword('')
+      setId('')
+      console.log(myContext.employee);
+    
     });
     return focus;
   }, [navigation]);
 
 
+
+
+
+
+
+  // useEffect(() => {
+  //   const focus = navigation.addListener("focus", () => {
+  //     // console.log(JSON.stringify(myContext.employee));
+  //     // setWorkerCode(1)
+  //     setPassword('')
+  //     setId('')
+      
+    
+  //   });
+  //   return focus;
+  // }, [navigation]);
+
+
   const LogIn = async () => {
+   
     try {
       SetLoading(false)
       const requestOptions = {
@@ -58,7 +81,10 @@ export default function Home({ navigation }) {
         return
       }
       myContext.setEmployeeDB(employee)
-      navigation.navigate("WorkerMenu");
+      // navigation.navigate("Credit");
+      navigation.navigate("WorkerMenu")
+   
+    
     }
     catch (error) {
       alert(error);
@@ -83,8 +109,7 @@ export default function Home({ navigation }) {
   };
 
   const renderCurrentSelection = () => {
-    switch (workerCode) {
-      case 1:
+   
         return (
           <View style={styles.loginContainer}>
             <View style={styles.items}>
@@ -93,6 +118,7 @@ export default function Home({ navigation }) {
             <TextInput
               label="Employee ID"
               left={<TextInput.Icon name="account" />}
+              keyboardType="numeric"
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
               onChangeText={(id) => setId(id)}
@@ -103,9 +129,11 @@ export default function Home({ navigation }) {
             <TextInput
               label="Employee Code"
               left={<TextInput.Icon name="lock" />}
+              keyboardType="numeric"
               mode="outlined"
               style={{ margin: 10, paddingLeft: 3 }}
               value={password}
+            
               // onChangeText={myContext.setEmployeePassword}
               onChangeText={(code) => setPassword(code)}
             />
@@ -130,15 +158,15 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
           </View>
         );
-      case 2:
-        return (
-          <WorkerMenu
-            currentUserArr={currentUserArr}
-            setWorkerCode={setWorkerCode}
-            HandelNavigation={HandelNavigation}
-          />
-        );
-    }
+      // case 2:
+      //   return (
+      //     <WorkerMenu
+      //       currentUserArr={currentUserArr}
+        
+      //       HandelNavigation={HandelNavigation}
+      //     />
+      //   );
+    // }
   };
 
   const doAnimation = (btn, val, timer) => {
@@ -148,7 +176,7 @@ export default function Home({ navigation }) {
       useNativeDriver: false,
     }).start();
   };
-
+  // translucent={true} backgroundColor={"#fff"}  barStyle={"light-content"}
   return (
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor={"transparent"} />
@@ -291,7 +319,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 55,
-    // position: 'absolute',
+    position: 'absolute',
     // justifyContent: 'center',
     zIndex: 1,
     fontWeight: "bold",
@@ -407,6 +435,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 5,
     justifyContent: "center",
+    alignSelf:'center',
     marginTop: 20,
   },
 });

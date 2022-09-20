@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
 import ReservationCard from './ReservationCard'
 
-export default function ConfirmationPage({ route, navigation }) {
+export default function ConfirmationPage( { route, navigation }) {
 
+    // { route, navigation }
 
-
-    let { id, the_data, number_Of_Nights, breakfast,
-        entryDate, exitDate, total, Name, CardNum } = route.params
-
+    let {customer , the_data } = route.params
+    const curr = customer.fields
+console.log(curr);
 
     // const Delete = async () => {
     //     const requestOptions = {
@@ -29,9 +29,9 @@ export default function ConfirmationPage({ route, navigation }) {
     // }
 
 
-    let listCards = the_data.map((per) => <ReservationCard key={per.type} roomType={per.type} count={per.count}
-        pricePerNight={per.pricePerNight} entryDate={entryDate} exitDate={exitDate} breakfast={breakfast} />)
-
+    let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} count={room.count}
+        pricePerNight={room.pricePerNight} entryDate={curr.EntryDate} exitDate={curr.ExitDate} breakfast={true} />)
+       
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
@@ -41,11 +41,11 @@ export default function ConfirmationPage({ route, navigation }) {
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
-                    <Text>ID: {id}</Text>
-                    <Text>total Price: {total}$</Text>
-                    <Text>Cardholder's Name: {Name}</Text>
-                    <Text>Card Number: {CardNum}</Text>
-                    <Text>Number Of Nights : {number_Of_Nights}</Text>
+                    <Text>ID: {curr.CustomerID}</Text>
+                    <Text>total Price: $</Text>
+                    <Text>Cardholder's Name: {curr.CardHolderName}</Text>
+                    <Text>Card Number: {curr.CreditCardNumber}</Text>
+                    <Text>Number Of Nights : </Text>
                 </View>
             </View>
 

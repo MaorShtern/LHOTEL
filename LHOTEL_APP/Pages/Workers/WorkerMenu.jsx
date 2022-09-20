@@ -5,6 +5,7 @@ import moment from "moment/moment";
 import AppContext from "../../AppContext";
 
 
+
 const workerCardsArr = [
   { code: 999, Description: "General", title: "Exit shift", pic: images.exit_shift, routeNavigation: "" },
   { code: 999, Description: "General", title: "Enter shift", pic: images.enter_shift, routeNavigation: "" },
@@ -23,13 +24,14 @@ const WIDTH = Dimensions.get("window").width;
 
 export default function WorkerMenu({ navigation }) {
 
-  // const { employee } = route.params;
+  //  const { UserArr,HandelNavigation } = route.params;
 
   const myContext = useContext(AppContext);
   const myEmployee = myContext.employee
   const [currentUserArr, SetCurrentUserArr] = useState([]);
 
-  useEffect(() => { GetCardsByRole(); }, []);
+  useEffect(() => { GetCardsByRole(); 
+  }, []);
 
 
   const GetCardsByRole = () => {
@@ -65,7 +67,7 @@ export default function WorkerMenu({ navigation }) {
       const requestOptions = {
         method: 'PUT',
         body: JSON.stringify({
-          id: myEmployee.Employee_ID,
+          id: myEmployee.EmployeeID,
           time: today
         }),
         headers: { 'Content-Type': 'application/json' }
@@ -85,7 +87,7 @@ export default function WorkerMenu({ navigation }) {
       const requestOptions = {
         method: 'PUT',
         body: JSON.stringify({
-          id: myEmployee.Employee_ID,
+          id: myEmployee.EmployeeID,
           time: today
         }),
         headers: { 'Content-Type': 'application/json' }
