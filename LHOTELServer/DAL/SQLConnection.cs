@@ -65,10 +65,10 @@ namespace DAL
             }
             catch (Exception e)
             {
-                sqlConnection.Close();
-                Console.WriteLine(e.Message);
-                return null;
+                throw e;
             }
         }
+
+      
     }
 }

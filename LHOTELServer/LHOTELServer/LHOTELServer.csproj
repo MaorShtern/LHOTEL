@@ -178,6 +178,7 @@
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ReceptionistController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Global.asax.cs">
@@ -245,6 +246,7 @@
     <Folder Include="Views\Manager\" />
     <Folder Include="Views\Products\" />
     <Folder Include="Views\Receptionist\" />
+    <Folder Include="Views\Reports\" />
     <Folder Include="Views\Rooms\" />
     <Folder Include="Views\Tasks\" />
   </ItemGroup>
