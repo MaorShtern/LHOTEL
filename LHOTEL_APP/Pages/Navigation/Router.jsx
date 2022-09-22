@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React, { useContext } from 'react'
 import Home from '../Home';
 import Drawer from './Drawer';
 import Tasks from '../Workers/Tasks';
@@ -21,6 +21,7 @@ import NewReservation from '../Workers/NewReservation';
 import AddEmployee from '../Workers/AddEmployee';
 import Credit from '../Credit';
 import AppContext from '../../AppContext';
+import Reports from '../Workers/Reports';
 const Stack = createNativeStackNavigator();
 // options={{ headerShown: false }}
 
@@ -29,29 +30,30 @@ const Stack = createNativeStackNavigator();
 export default function Router() {
   const myContext = useContext(AppContext);
 
-  
+
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home}  options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Drawer" component={Drawer} options={{ headerShown: false }} />
-        <Stack.Screen name="Tasks" component={Tasks}  options={{headerShown: myContext.isIos }} />
-        <Stack.Screen name="WorkerMenu" component={WorkerMenu}  options={{headerShown: myContext.isIos }} />
-        <Stack.Screen name="CustomerHome" component={CustomerHome} options={{headerShown: myContext.isIos }} />
-        <Stack.Screen name="Registration" component={Registration} options={{ headerShown: myContext.isIos  }} />
-        <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} options={{ headerShown: myContext.isIos  }} />
-        <Stack.Screen name="EditTasks" component={EditTasks}  options={{ headerShown: myContext.isIos  }} />
-        <Stack.Screen name="Shift" component={Shift}  options={{headerShown: myContext.isIos  }} />
-        <Stack.Screen name="AddCharge" component={AddCharge} options={{ headerShown: myContext.isIos  }}/>
-        <Stack.Screen name="CheckIn" component={CheckIn}  options={{headerShown: myContext.isIos  }} />
-        <Stack.Screen name="CheckOut" component={CheckOut}  options={{headerShown: myContext.isIos }}  />
-        <Stack.Screen name="EmployeesManagement" component={EmployeesManagement} options={{ headerShown: myContext.isIos  }} />
-        <Stack.Screen name="UpdateDetails" component={UpdateDetails} options={{ headerShown: myContext.isIos  }} />
-        <Stack.Screen name="NewReservation" component={NewReservation} options={{ headerShown: myContext.isIos }}/>
-        <Stack.Screen name="ShortCheckIn" component={ShortCheckIn}  options={{  headerShown: myContext.isIos }} />
-        <Stack.Screen name="ExistingReservation" component={ExistingReservation}  options={{headerShown: myContext.isIos  }}/>
-        <Stack.Screen name="AddEmployee" component={AddEmployee} options={{headerShown: myContext.isIos  }} />
-        <Stack.Screen name="Credit" component={Credit}   options={{  headerShown: myContext.isIos }}/>
+        <Stack.Screen name="Tasks" component={Tasks} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="WorkerMenu" component={WorkerMenu} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="CustomerHome" component={CustomerHome} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Registration" component={Registration} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="ConfirmationPage" component={ConfirmationPage} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="EditTasks" component={EditTasks} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Shift" component={Shift} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="AddCharge" component={AddCharge} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="CheckIn" component={CheckIn} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="CheckOut" component={CheckOut} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="EmployeesManagement" component={EmployeesManagement} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="UpdateDetails" component={UpdateDetails} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="NewReservation" component={NewReservation} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="ShortCheckIn" component={ShortCheckIn} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="ExistingReservation" component={ExistingReservation} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="AddEmployee" component={AddEmployee} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Credit" component={Credit} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Reports" component={Reports} options={{ headerShown: myContext.isIos }} />
 
       </Stack.Navigator>
     </NavigationContainer>

@@ -1409,7 +1409,6 @@ go
 
 
 
-
 -- פרוצדורות חשבון ללקוח
 ---------------------------------------------------
 create proc GetAllBills
@@ -1734,6 +1733,7 @@ begin tran
 commit tran
 go
 -- exec GetTakenRooms
+
 
 
    
@@ -2404,6 +2404,9 @@ go
 --exec Income_And_Expenses
 --select * from [dbo].[Purchase_Of_Goods]
 --select * from dbo.Purchases_Documentation
+
+
+
 
 
 

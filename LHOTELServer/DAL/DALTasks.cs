@@ -114,7 +114,8 @@ namespace DAL
                     tasks.Add(new Task()
                     {
                         TaskCode = (int)reader["Task_Code"],
-                        EmployeeID = (int)reader["Employee_ID"],
+                        EmployeeID = (reader["Employee_ID"] != DBNull.Value)
+                        ? (int)reader["Employee_ID"] : -1,
                         TaskName = (string)reader["Task_Name"],
                         RoomNumber = (reader["Room_Number"] != DBNull.Value)
                         ? (int)reader["Room_Number"] : -1,

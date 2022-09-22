@@ -65,6 +65,7 @@
     "react-native-reanimated": "~2.8.0",
     "react-native-simple-dialogs": "^1.5.0",
     "react-native-simple-time-picker": "^1.3.11",
+    "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^9.2.0",
     "react-native-virtualized-view": "^1.0.0",
     "react-native-web": "0.17.7",

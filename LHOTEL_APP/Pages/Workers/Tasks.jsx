@@ -128,10 +128,11 @@ export default function Tasks({ navigation }) {
         try {
             SetLoading(false)
             let counter = 0
+
             for (let index = 0; index < taskToMarkAsDone.length; index++) {
-                console.log(taskToMarkAsDone[index]);
+                // console.log(taskToMarkAsDone[index]);
                 const requestOptions = {
-                    method: 'Delete',
+                    method: 'PUT',
                     body: JSON.stringify({ task_code: taskToMarkAsDone[index].TaskCode }),
                     headers: { 'Content-Type': 'application/json' }
                 };
@@ -142,11 +143,13 @@ export default function Tasks({ navigation }) {
                     // GetAllTasksFromDB()
                 }
             }
-            if (counter > 0)
+            if (counter > 1){
+                alert("All selected tasks have been successfully closed")
                 GetAllTasksFromDB()
+            }
         } catch (error) {
             alert(error)
-            SetLoading(false)
+            SetLoading(true)
         }
     }
 

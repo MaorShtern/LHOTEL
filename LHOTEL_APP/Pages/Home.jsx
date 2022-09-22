@@ -33,7 +33,7 @@ export default function Home({ navigation }) {
       if(!info)  myContext.setEmployeeDB({})
       setPassword('')
       setId('')
-      console.log(myContext.employee);
+      // console.log(myContext.employee);
     
     });
     return focus;

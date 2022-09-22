@@ -19,7 +19,7 @@ import { Checkbox } from "react-native-paper";
 import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
 
-export default function ShortCheckIn( { route, navigation }) {
+export default function ShortCheckIn({ route, navigation }) {
   // { route, navigation }
   const myContext = useContext(AppContext);
 
@@ -35,7 +35,7 @@ export default function ShortCheckIn( { route, navigation }) {
   //     setPassword(0)
   //     setId(0)
   //   });
-    
+
   // }, [navigation]);
 
   const CalcCost = () => {
@@ -85,7 +85,7 @@ export default function ShortCheckIn( { route, navigation }) {
       </>
     );
 
-   
+
     return (
       <View
         style={{
@@ -150,7 +150,7 @@ export default function ShortCheckIn( { route, navigation }) {
     );
   };
 
-  const CheckIn_Without_Existing_User = async()=>{ // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
+  const CheckIn_Without_Existing_User = async () => { // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
     // let newCustomer = {                           // יצירת אובייקט מסוג לקוח 
     //   className: Customer,
     //   fields: {
@@ -174,85 +174,85 @@ export default function ShortCheckIn( { route, navigation }) {
     //     EntryDate: curr.EntryDate,
     //   },
     // };
-   
-const requestOptions = { //API יצירת בקשת  
-  method: 'POST',        //לטובת יצירת  משתמש חדש שמירת הזמנתו וביצוע צ'ק אין
-  body: JSON.stringify(curr),
-  headers: { 'Content-Type': 'application/json' }
-};
-let result = await fetch('http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User', requestOptions);
-let reservationResult = await result.json();
 
-if (reservationResult)
+    const requestOptions = { //API יצירת בקשת  
+      method: 'POST',        //לטובת יצירת  משתמש חדש שמירת הזמנתו וביצוע צ'ק אין
+      body: JSON.stringify(curr),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User', requestOptions);
+    let reservationResult = await result.json();
+
+    if (reservationResult)
 console.log(reservationResult);
 
 
-}                                           
-const CheckIn_With_Existing_User = async()=>{  // פונצקיה לביצוע צ'ק אין ללקוח שקיים לו משתמש במערכת
-
-//  let customer = {                                 // יצירת אובייקט מסוג לקוח 
-//     className: Customer,
-//     fields: {
-//       CustomerID: curr.CustomerID,
-//       CustomerType: curr.CustomerType,
-//       CardHolderName: curr.CardHolderName,
-//       CreditCardNumber: curr.CreditCardNumber,
-//       CreditCardDate: curr.CreditCardDate,
-//       ThreeDigit: curr.ThreeDigit,
-//       AmountOfPeople: curr.AmountOfPeople,
-//       EmployeeID: curr.EmployeeID,
-//       CounterSingle: curr.CounterSingle,
-//       CounterDouble: curr.CounterDouble,
-//       CounterSuite: curr.CounterSuite,
-//       ExitDate: curr.ExitDate,
-//       EntryDate: curr.EntryDate,
-//     },
-//   };
-//  console.log(curr.fields);
-
-  const requestOptions = { // API  יצירת בקשת 
-    method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
-    body: JSON.stringify(curr),
-    headers: { "Content-Type": "application/json" },
-  };
-  let result = await fetch(
-    "http://proj13.ruppin-tech.co.il/"+(myContext.isUserExist? "CheckIn_With_Existing_User":"CheckIn_Without_Existing_User"),
-    requestOptions
-  );
-  let data = await result.json();
-  if (data !== null) {
-    console.log(JSON.stringify(data));
-
-    return;
-  }
 }
+  const CheckIn_With_Existing_User = async () => {  // פונצקיה לביצוע צ'ק אין ללקוח שקיים לו משתמש במערכת
+
+    //  let customer = {                                 // יצירת אובייקט מסוג לקוח 
+    //     className: Customer,
+    //     fields: {
+    //       CustomerID: curr.CustomerID,
+    //       CustomerType: curr.CustomerType,
+    //       CardHolderName: curr.CardHolderName,
+    //       CreditCardNumber: curr.CreditCardNumber,
+    //       CreditCardDate: curr.CreditCardDate,
+    //       ThreeDigit: curr.ThreeDigit,
+    //       AmountOfPeople: curr.AmountOfPeople,
+    //       EmployeeID: curr.EmployeeID,
+    //       CounterSingle: curr.CounterSingle,
+    //       CounterDouble: curr.CounterDouble,
+    //       CounterSuite: curr.CounterSuite,
+    //       ExitDate: curr.ExitDate,
+    //       EntryDate: curr.EntryDate,
+    //     },
+    //   };
+    //  console.log(curr.fields);
+
+    const requestOptions = { // API  יצירת בקשת 
+      method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
+      body: JSON.stringify(curr),
+      headers: { "Content-Type": "application/json" },
+    };
+    let result = await fetch(
+      "http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
+      requestOptions
+    );
+    let data = await result.json();
+    if (data !== null) {
+      // console.log(JSON.stringify(data));
+
+      return;
+    }
+  }
 
   const CheckIn = () => { // פונצקית צ'ק אין ראשית , בודקת אם קיים משתמש רשום בהתאם לערכו בגלובל סטייט
     {                     // ומפעילה את הפונקציית צ'ק אין הרלוונטית 
       // myContext.isUserExist ? CheckIn_With_Existing_User(): CheckIn_Without_Existing_User()
-     
+
       // alert("You have checked in successfully !");
 
-      currReservation.map((reservation)=>{
+      currReservation.map((reservation) => {
         CheckInRequest(reservation)
       })
       alert("You have checked in successfully !");
     }
   };
-  const CheckInRequest = async(value)=>{
+  const CheckInRequest = async (value) => {
     const requestOptions = { // API  יצירת בקשת 
       method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
       body: JSON.stringify(value),
       headers: { "Content-Type": "application/json" },
     };
     let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/"+(myContext.isUserExist? "CheckIn_With_Existing_User":"CheckIn_Without_Existing_User"),
+      "http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
       requestOptions
     );
     let data = await result.json();
     if (data !== null) {
-      console.log(JSON.stringify(data));
-  
+      // console.log(JSON.stringify(data));
+
       return;
     }
 
@@ -297,7 +297,7 @@ const CheckIn_With_Existing_User = async()=>{  // פונצקיה לביצוע צ
       <View style={{ flex: 1.5 }}>
         <View style={{ marginTop: 15, paddingHorizontal: 15 }}>
           <Text
-            style={{ fontSize: 20,  paddingBottom: 20 }}
+            style={{ fontSize: 20, paddingBottom: 20 }}
           >
             Customer's details{" "}
           </Text>
@@ -335,7 +335,7 @@ const CheckIn_With_Existing_User = async()=>{  // פונצקיה לביצוע צ
               {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421************</Text> */}
               {/* <Icon name="card" size={25} color="#a8a9ad" /> */}
             </View>
-            <Text style={{ padding: 10, fontSize: 18,  }}>
+            <Text style={{ padding: 10, fontSize: 18, }}>
               {" "}
               <Icon name="call" size={20} color="#a8a9ad" />
               {curr.PhoneNumber}

@@ -45,7 +45,7 @@ export default function EmployeesManagement({ navigation }) {
     const SerchEmployee = (value) => {
         setSearch(value)
         let employee = DBemployees.filter((per) => per.EmployeeName === value)
-        console.log(employee);
+        // console.log(employee);
         if (employee.length > 0 && employee[0].EmployeeID != -1) {
             SetEmployees(employee)
         }

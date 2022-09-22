@@ -11,7 +11,7 @@ const workerCardsArr = [
   { code: 999, Description: "General", title: "Enter shift", pic: images.enter_shift, routeNavigation: "" },
   { code: 1, Description: "Manager", title: "Employees Management", pic: images.workers_management, routeNavigation: "EmployeesManagement" },
   { code: 1, Description: "Manager", title: "Current Shift", pic: images.shift, routeNavigation: "Shift", },
-  { code: 1, Description: "Manager", title: "Reports", pic: images.reports, routeNavigation: "", },
+  { code: 1, Description: "Manager", title: "Reports", pic: images.reports, routeNavigation: "Reports", },
   { code: 2, Description: "Receptionist", title: "Add charge", pic: images.add_charge, routeNavigation: "AddCharge", },
   { code: 2, Description: "Receptionist", title: "Check In", pic: images.checkIn, routeNavigation: "CheckIn", },
   { code: 2, Description: "Receptionist", title: "Check Out", pic: images.checkOut, routeNavigation: "CheckOut", },
