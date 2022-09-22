@@ -28,7 +28,7 @@ namespace BLL
         }
         public static Customers GetCustomerByIDAndMail(int id, string mail)
         {
-            return DALCustomers.GetCustomerByIDAndMail(id , mail);
+            return DALCustomers.GetCustomerByIDAndMail(id, mail);
         }
         public static bool AlterCustomerById(Customers customer)
         {

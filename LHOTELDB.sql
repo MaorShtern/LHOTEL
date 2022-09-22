@@ -2383,11 +2383,15 @@ as
 begin tran		
 	
 	SELECT CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
-	, Sum([Sum_Total] * -1 ) as [Expens + / Profit -]  from [dbo].[Purchase_Of_Goods]
+	,CAST( Sum([Sum_Total] * -1 ) as float) as [Expens + / Profit -]  
+	
+	from [dbo].[Purchase_Of_Goods]
 	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 	union all 
 	select  CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
-	,Sum([Price_Per_Night]) as [Expens/Profit] from dbo.Purchases_Documentation
+	,CAST(Sum([Price_Per_Night])as float) as [Expens/Profit] 
+	
+	from dbo.Purchases_Documentation
 	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 	if (@@error !=0)
 	begin
@@ -2400,8 +2404,6 @@ go
 --exec Income_And_Expenses
 --select * from [dbo].[Purchase_Of_Goods]
 --select * from dbo.Purchases_Documentation
-
-
 
 
 

@@ -19,15 +19,15 @@ namespace LHOTELServer.Controllers
     [System.Web.Http.RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
-        
-         [System.Web.Http.HttpPost]
+
+        [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetDBCustomerById")]
         public IHttpActionResult GetDBCustomerById([FromBody] JObject data)
         {
             try
             {
                 int CustomerID = data["Customer_ID"].ToObject<int>();
-         
+
 
                 return Ok(BLLCustomers.GetDBCustomerById(CustomerID));
             }
@@ -90,7 +90,7 @@ namespace LHOTELServer.Controllers
         }
 
 
-        
+
 
 
         [System.Web.Http.HttpPut]
@@ -110,6 +110,6 @@ namespace LHOTELServer.Controllers
 
         //  האם אנחנו נירצה שהלקוח יוכל להוסיף חיוב לעצמו 
         //  או שהוא יוסיף את הבקשה לחיוב כמשימה ואז אחד העובדים יחייב אותו
-     
+
     }
 }

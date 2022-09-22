@@ -31,7 +31,7 @@ namespace BLL
 
         }
 
-        public static Income_And_Expenses Income_And_Expenses()
+        public static List<Income_And_Expenses> Income_And_Expenses()
         {
             return DALReports.Income_And_Expenses();
         }

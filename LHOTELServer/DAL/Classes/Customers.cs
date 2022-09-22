@@ -21,7 +21,7 @@ namespace DAL
         public int ThreeDigit { set; get; }
         public string CreditCardNumber { set; get; }
 
-       
+
 
 
     }

@@ -9,7 +9,7 @@ namespace DAL.Classes
     public class Income_And_Expenses
     {
         public string Date { get; set; }
-        public int Sum { get; set; }
+        public double Sum { get; set; }
 
 
     }

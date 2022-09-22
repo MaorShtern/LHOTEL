@@ -164,7 +164,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-       
+
         public static bool AddNewEmployee(Employees newEmployee)
         {
             try

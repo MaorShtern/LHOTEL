@@ -9,7 +9,7 @@ namespace DAL
 {
     public class SQLConnection // מחלקה לטובת התנהלות מסודרת ויעילה מול מסד הנתונים
     {
-        public static string conStr = @"data source=SQL5108.site4now.net;initial catalog=db_a79b5b_proj13;user id=db_a79b5b_proj13_admin;password=XXNEA6q6VbvATG6g"; 
+        public static string conStr = @"data source=SQL5108.site4now.net;initial catalog=db_a79b5b_proj13;user id=db_a79b5b_proj13_admin;password=XXNEA6q6VbvATG6g";
         public static SqlConnection sqlConnection = new SqlConnection(conStr); // יצירת אובייקט חיבור למסד הנתונים 
 
 
@@ -69,6 +69,6 @@ namespace DAL
             }
         }
 
-      
+
     }
 }

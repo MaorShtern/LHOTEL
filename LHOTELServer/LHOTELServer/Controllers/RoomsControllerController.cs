@@ -19,7 +19,7 @@ namespace LHOTELServer.Controllers
 
     public class RoomsController : ApiController
     {
-        
+
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetAvailableRooms")]
         public IHttpActionResult GetAvailableRooms()
@@ -108,7 +108,7 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
- 
+
 
 
         [System.Web.Http.HttpPut]
@@ -119,7 +119,7 @@ namespace LHOTELServer.Controllers
             {
                 string id = data["id"].ToObject<string>();
                 string exitDate = data["Exit_Date"].ToObject<string>();
-                return Ok(BLLRooms.CheckOut(id , exitDate));
+                return Ok(BLLRooms.CheckOut(id, exitDate));
             }
             catch (Exception e)
             {
@@ -129,6 +129,6 @@ namespace LHOTELServer.Controllers
 
 
 
-       
+
     }
 }

@@ -113,7 +113,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-      
+
         public static bool CheckOut(string id, string exitDate)
         {
             try

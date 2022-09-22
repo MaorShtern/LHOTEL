@@ -18,25 +18,25 @@ using Newtonsoft.Json.Linq;
 
 namespace LHOTELServer.Controllers
 {
-    
-    
-        [System.Web.Http.RoutePrefix("api/Receptionist")]
 
-        public class ReceptionistController : ApiController
+
+    [System.Web.Http.RoutePrefix("api/Receptionist")]
+
+    public class ReceptionistController : ApiController
+    {
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/GetTakenRooms")]
+        public IHttpActionResult GetTakenRooms()
         {
-            [System.Web.Http.HttpGet]
-            [System.Web.Http.Route("~/GetTakenRooms")]
-            public IHttpActionResult GetTakenRooms()
+            try
             {
-                try
-                {
-                    return Ok(DALReceptionist.GetTakenRooms());
-                }
-                catch (Exception)
-                {
-                    return BadRequest();
-                }
+                return Ok(BLLReceptionist.GetTakenRooms());
             }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetReservedRoomsByCustomerId")]
         public IHttpActionResult GetReservedRoomsByCustomerId([FromBody] JObject data)
@@ -44,7 +44,7 @@ namespace LHOTELServer.Controllers
             try
             {
                 int id = data["id"].ToObject<int>();
-                return Ok(DALReceptionist.GetReservedRoomsByCustomerId(id));
+                return Ok(BLLReceptionist.GetReservedRoomsByCustomerId(id));
             }
             catch (Exception)
             {

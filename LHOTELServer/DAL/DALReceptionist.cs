@@ -62,7 +62,7 @@ namespace DAL
                     return null;
                 }
 
-            
+
 
                 List<Reservation> reservations = new List<Reservation>();
                 while (reader.Read())

@@ -52,7 +52,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetWorkersOnShift")]
-        public IHttpActionResult GetWorkersOnShift()  
+        public IHttpActionResult GetWorkersOnShift()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        
+
         //  צריך לשנות את זה
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetEmployeeById")]
@@ -81,7 +81,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-      
+
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewEmployee")]

@@ -15,6 +15,6 @@ namespace DAL
         public string PaymentMethod { set; get; }
 
 
-   
+
     }
 }

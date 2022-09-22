@@ -17,6 +17,6 @@ namespace BLL
         {
             return DALReceptionist.GetReservedRoomsByCustomerId(id);
         }
-        
+
     }
 }

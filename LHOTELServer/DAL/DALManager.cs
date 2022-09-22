@@ -29,7 +29,7 @@ namespace DAL
                         BirthDate = (DateTime)reader["Birth_Date"],
                         HourlyWage = (int)reader["Hourly_Wage"],
                         Address = (string)reader["Address"],
-                     
+
                     });
                 }
                 return employees;
@@ -68,7 +68,7 @@ namespace DAL
                         LeavingTime = (reader["Leaving_Time"] != DBNull.Value)
                         ? (string)reader["Leaving_Time"] : null
 
-                });
+                    });
                 }
                 return employees;
             }

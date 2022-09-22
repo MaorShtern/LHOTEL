@@ -8,7 +8,7 @@ namespace DAL.Classes
 {
     public class ProductPurchase
     {
-        public string Product_Code { get; set; }
+        public int Product_Code { get; set; }
         public string Product_Name { get; set; }
         public int Amount { get; set; }
         public string Category { get; set; }

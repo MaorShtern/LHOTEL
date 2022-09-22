@@ -60,7 +60,8 @@ namespace DAL
                 Customers customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers(){
+                    customer = new Customers()
+                    {
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customer_Type"],
                         FirstName = (string)reader["First_Name"],
@@ -99,25 +100,25 @@ namespace DAL
 
                 //bool verified = Verify(password, (string)reader["Password"]);
 
-                    Customers customer = null;
-                    while (reader.Read())
+                Customers customer = null;
+                while (reader.Read())
+                {
+                    customer = new Customers()
                     {
-                        customer = new Customers()
-                        {
-                            CustomerID = (int)reader["Customer_ID"],
-                            CustomerType = (int)reader["Customer_Type"],
-                            FirstName = (string)reader["First_Name"],
-                            LastName = (string)reader["Last_Name"],
-                            Mail = (string)reader["Mail"],
-                            Password = (string)reader["Password"],
-                            PhoneNumber = (string)reader["Phone_Number"],
-                            CardHolderName = (string)reader["Card_Holder_Name"],
-                            CreditCardDate = (string)reader["Credit_Card_Date"],
-                            ThreeDigit = (int)reader["Three_Digit"],
-                            CreditCardNumber = (string)reader["Credit_Card_Number"]
-                        };
-                    }
-                    return customer;
+                        CustomerID = (int)reader["Customer_ID"],
+                        CustomerType = (int)reader["Customer_Type"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        Password = (string)reader["Password"],
+                        PhoneNumber = (string)reader["Phone_Number"],
+                        CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardDate = (string)reader["Credit_Card_Date"],
+                        ThreeDigit = (int)reader["Three_Digit"],
+                        CreditCardNumber = (string)reader["Credit_Card_Number"]
+                    };
+                }
+                return customer;
             }
             catch (Exception e)
             {
@@ -137,7 +138,7 @@ namespace DAL
                 Customers customer = GetCustomerByMail(mail);
                 bool verify = Verify(password, customer.Password);
                 return customer != null && verify ? customer : null;
-             
+
             }
             catch (Exception e)
             {

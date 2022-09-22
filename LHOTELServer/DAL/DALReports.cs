@@ -119,7 +119,7 @@ namespace DAL
                 {
                     product = new ProductPurchase()
                     {
-                        Product_Code = (string)reader["Product_Code"],
+                        Product_Code = (int)reader["Product_Code"],
                         Product_Name = (string)reader["Product_Name"],
                         Amount = (int)reader["Amount"],
                         Category = (string)reader["Category"],
@@ -137,7 +137,7 @@ namespace DAL
             }
         }
 
-        public static Income_And_Expenses Income_And_Expenses()
+        public static List<Income_And_Expenses> Income_And_Expenses()
         {
             try
             {
@@ -146,16 +146,16 @@ namespace DAL
                 {
                     return null;
                 }
-                Income_And_Expenses product = null;
+                List<Income_And_Expenses> report = new List<Income_And_Expenses>();
                 while (reader.Read())
                 {
-                    product = new Income_And_Expenses()
+                    report.Add(new Income_And_Expenses()
                     {
                         Date = (string)reader["Date"],
-                        Sum = (int)reader["[Expens + / Profit -]"],
-                    };
+                        Sum = (double)reader["Expens + / Profit -"],
+                    });
                 }
-                return product;
+                return report;
             }
             catch (Exception e)
             {

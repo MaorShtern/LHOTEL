@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-     public class Number_Of_Visitors_Per_Month
+    public class Number_Of_Visitors_Per_Month
     {
         public string Date { get; set; }
         public string Month_Name { get; set; }
