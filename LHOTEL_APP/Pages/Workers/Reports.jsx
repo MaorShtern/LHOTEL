@@ -1,175 +1,115 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { ActivityIndicator } from "react-native";
+import { Dropdown } from 'react-native-element-dropdown';
+import { TextInput } from "react-native-paper";
+import { images } from '../../images';
 
 
 
-const tableHead = ['Amount', 'Month_Name', 'Date']
-const tableData = [['3', 'September', '2022-9']]
+const RequestType = [
+    { label: "Number Of Visitors Per Month", value: "Number_Of_Visitors_Per_Month" },
+    { label: 'Amount Of Products Purchased In The Store', value: 'Amount_Of_Products_Purchased_In_The_Store' },
+    { label: 'Number Of Tasks Per Month', value: 'Number_of_tasks_per_month' },
+    { label: 'Product Purchase By Name', value: 'ProductPurchaseByName' },
+    { label: 'Income And Expenses', value: 'Income_And_Expenses' },
 
+];
 
-
-// const TempHead = ['Room number', 'type', 'price', 'details']
-// const TempData = [
-//     [3, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [5, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [7, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [8, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [9, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [10, 'Single room', 100, 'A personal room adapted for a single person'],
-//     [13, 'Double room', 300, 'A double room suitable for two people'],
-//     [14, 'Double room', 300, 'A double room suitable for two people'],
-//     [15, 'Double room', 300, 'A double room suitable for two people'],
-//     [16, 'Double room', 300, 'A double room suitable for two people'],
-//     [18, 'Double room', 300, 'A double room suitable for two people'],
-//     [19, 'Double room', 300, 'A double room suitable for two people'],
-//     [25, 'Suite', 500, 'A suite designed to accommodate an amount of about 3 to 10 people'],
-//     [26, 'Suite', 500, 'A suite designed to accommodate an amount of about 3 to 10 people'],
-//     [28, 'Suite', 500, 'A suite designed to accommodate an amount of about 3 to 10 people'],
-//     [29, 'Suite', 500, 'A suite designed to accommodate an amount of about 3 to 10 people'],
-//     [30, 'Suite', 500, 'A suite designed to accommodate an amount of about 3 to 10 people'],
-
-// ]
 
 
 export default function Reports() {
 
-    const [loading, SetLoading] = useState(false)
-    const [visitorsPerMonth, SetVisitorsPerMonth] = useState([])
-    const [productsPurchased, SetProductsPurchased] = useState([])
-    const [tasksPerMonth, SetTasksPerMonth] = useState([])
-    const [incomeAndExpenses, SetIncomeAndExpenses] = useState([])
+    const [loading, SetLoading] = useState(true)
+
+    const [tableData, SetTableData] = useState([])
     const [product, SetProduct] = useState('')
-
-    useEffect(() => { GetVisitors_Per_Month(); }, [])
-
-
-    // useEffect(() => {GetVisitors_Per_Month(); GetProducts_Purchased();
-    //     GetTasksPerMonth(); GetIncome_And_Expenses()}, [])
-
-
-
-    const GetVisitors_Per_Month = async () => {
-        try {
-            const requestOptions = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/Number_Of_Visitors_Per_Month', requestOptions);
-            let temp = await result.json();
-            // console.log(temp);
-            if (temp !== null) {
-                SetVisitorsPerMonth(temp)
-                SetLoading(true)
-                return
-            }
-            // GetVisitors_Per_Month()
-        } catch (error) {
-            alert(error)
-            SetLoading(true)
-        }
-    }
-
-    const GetProducts_Purchased = async () => {
-        try {
-            const requestOptions = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/Amount_Of_Products_Purchased_In_The_Store', requestOptions);
-            let temp = await result.json();
-            /// console.log(temp);
-            if (temp !== null) {
-                // let keys = temp.map((per) => Object.keys(per))[0]
-                // console.log(keys);
-                SetProductsPurchased(temp);
-                SetLoading(true)
-                return
-            }
-        } catch (error) {
-
-        }
-    }
-
-
-    const GetTasksPerMonth = async () => {
-        try {
-            const requestOptions = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/Number_of_tasks_per_month', requestOptions);
-            let temp = await result.json();
-            // console.log(temp);
-            if (temp !== null) {
-                // SetProductsPurchased(temp);
-                SetLoading(true)
-                return
-            }
-        } catch (error) {
-            alert(error)
-            SetLoading(true)
-        }
-    }
-
-    const GetIncome_And_Expenses = async () => {
-        try {
-            const requestOptions = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/Income_And_Expenses', requestOptions);
-            let temp = await result.json();
-            // console.log(temp);
-            if (temp !== null) {
-                console.log(temp);
-                SetLoading(true)
-                return
-            }
-        } catch (error) {
-            alert(error)
-
-        }
-    }
-
-
-
-    const GetProductPurchaseByName = async (name) => {
-        try {
-            const requestOptions = {
-                method: 'GET',
-                body: JSON.stringify({
-                    name: name
-                }),
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/ProductPurchaseByName', requestOptions);
-            let temp = await result.json();
-            // console.log(temp);
-            if (temp !== null) {
-                console.log(temp);
-                SetLoading(true)
-                return
-            }
-        } catch (error) {
-            alert(error)
-
-        }
-    }
-
-
+    const [dropdown, setDropdown] = useState(null);
+    const [request, SetRequest] = useState(false)
 
 
     const Spinner = () => (
-        
+
         <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" />
         </View>
     );
 
 
-    // console.log(JSON.stringify(productsPurchased));
+    const GetTableFromDB = async (value) => {
+        try {
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch(`http://proj13.ruppin-tech.co.il/${value}`, requestOptions);
+            let temp = await result.json();
+            // console.log(temp);
+            if (temp !== null) {
+                SetTableData(temp)
+                SetLoading(true)
+                return
+            }
+            // GetVisitors_Per_Month()
+        } catch (error) {
+            alert(error)
+        }
+        SetLoading(true)
+
+    }
+
+
+    const GetTableProductPurchaseByName = async () => {
+        try {
+            SetLoading(false)
+            const requestOptions = {
+                method: 'PUT',
+                body: JSON.stringify({
+                    name: product
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/ProductPurchaseByName', requestOptions);
+            let temp = await result.json();
+            if (temp !== null) {
+                SetTableData([temp])
+                SetLoading(true)
+                return
+            }
+        } catch (error) {
+            alert(error)
+        }
+        SetLoading(true)
+    }
+
+
+    const CreateTableData = () => {
+        // console.log(JSON.stringify(tableData));
+        return (
+            <View>
+                <View style={styles.tableContainer}>
+                    <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+                        <Row data={tableData.map((per) => Object.keys(per))[0]} style={styles.head} textStyle={styles.text} />
+                        <Rows data={tableData.map((per) => Object.values(per))} textStyle={styles.text} />
+                    </Table>
+                </View>
+            </View>
+        )
+    }
+
+
+
+
+    const HandelRequest = (request) => {
+        SetLoading(false)
+        SetRequest(request.value)
+        if (request !== undefined && request.value !== 'ProductPurchaseByName') {
+                GetTableFromDB(request.value)
+        }
+        SetLoading(true)
+
+    }
 
 
     return (
@@ -179,43 +119,43 @@ export default function Reports() {
             </View>
 
 
-            <View style={styles.items}>
-                {loading ? (
+            <View style={{ padding: 10 }}>
+                <Dropdown
+                    style={styles.dropdown}
+                    data={RequestType}
+                    searchPlaceholder="Search"
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Select a report to view"
+                    value={dropdown}
+                    onChange={request => {
+                        HandelRequest(request)
+                    }}
+                />
+            </View>
 
+            <View style={styles.items}>
+                {loading ? <CreateTableData /> : <Spinner />}
+            </View>
+
+            <View style={styles.items}>
+                {request === 'ProductPurchaseByName' ? (
                     <View>
-                        <View style={styles.tableContainer}>
-                            <Text style={styles.tableHeader}>Number Of Tasks Per Month</Text>
-                            <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-                                <Row data={visitorsPerMonth.map((per) => Object.keys(per))[0]} style={styles.head} textStyle={styles.text} />
-                                <Rows data={visitorsPerMonth.map((per) => Object.values(per))} textStyle={styles.text} />
-                            </Table>
-                        </View>
-                        <View style={{ height: 20 }}></View>
-                        <View style={styles.tableContainer}>
-                            <Text style={styles.tableHeader}>Amount Of Products Purchased In The Store</Text>
-                            <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-                                <Row data={productsPurchased.map((per) => Object.keys(per))[0]} style={styles.head} textStyle={styles.text} />
-                                <Rows data={productsPurchased.map((per) => Object.values(per))} textStyle={styles.text} />
-                            </Table>
+                        <Text style={styles.tableHeader}>Enter the product name</Text>
+                        <TextInput style={{ margin: 10, paddingLeft: 3 }}
+                            onChangeText={(product) => SetProduct(product)}
+                        ></TextInput>
+                        <View style={styles.button}>
+                            <TouchableOpacity onPress={GetTableProductPurchaseByName}>
+                                <Image style={styles.save} source={images.save} />
+                            </TouchableOpacity>
                         </View>
                     </View>
-
-                ) : <Spinner />}
+                ) : null}
             </View>
-
-
-
-            {/* <View style={styles.tableContainer}>
-                <Text style={styles.tableHeader}>Number Of Tasks Per Month</Text>
-                <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-                    <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-                    <Rows data={tableData} textStyle={styles.text} />
-                </Table>
-            </View>
-            <View style={{ height: 20 }}></View> */}
-
         </ScrollView>
     )
+
 }
 
 
@@ -242,11 +182,28 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#fff'
     },
+    dropdown: {
+        backgroundColor: 'white',
+        borderBottomColor: 'gray',
+        borderBottomWidth: 0.5,
+        marginTop: 20,
+    },
     head: {
         height: 60,
         backgroundColor: '#f1f8ff'
     },
     text: {
         margin: 6
-    }
+    },
+    button: {
+        width: 50,
+        alignSelf: "center",
+        alignItems: "center",
+    },
+    save: {
+        width: 50,
+        height: 50,
+
+    },
+
 })  

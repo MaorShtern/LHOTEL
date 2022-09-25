@@ -78,7 +78,7 @@ namespace DAL
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec Number_Of_Visitors_Per_Month");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec Number_of_tasks_per_month");
                 if (reader == null && !reader.HasRows)
                 {
                     return null;

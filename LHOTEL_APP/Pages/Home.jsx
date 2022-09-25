@@ -60,6 +60,11 @@ export default function Home({ navigation }) {
 
   const LogIn = async () => { /// פונקציה אסינכרונית אשר מביאה לנו את פרטי העובד על פי ת.ז וסיסמה
     try {
+      if(id === '' || password === '')
+      {
+        alert('It is mandatory to fill in an ID card and employee code')
+        return
+      }
       SetLoading(false)
       const requestOptions = {
         method: "POST",

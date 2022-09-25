@@ -28,9 +28,9 @@ namespace LHOTELServer.Controllers
             {
                 return Ok(BLLReports.Number_Of_Visitors_Per_Month());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -43,9 +43,9 @@ namespace LHOTELServer.Controllers
             {
                 return Ok(BLLReports.Amount_Of_Products_Purchased_In_The_Store());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -58,9 +58,9 @@ namespace LHOTELServer.Controllers
             {
                 return Ok(BLLReports.Number_of_tasks_per_month());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -73,9 +73,9 @@ namespace LHOTELServer.Controllers
                 string name = data["name"].ToObject<string>();
                 return Ok(BLLReports.ProductPurchaseByName(name));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -87,9 +87,9 @@ namespace LHOTELServer.Controllers
             {
                 return Ok(BLLReports.Income_And_Expenses());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
     }

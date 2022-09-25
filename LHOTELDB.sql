@@ -2374,7 +2374,7 @@ if (@@error !=0)
 	end
 commit tran
 go
---exec ProductPurchaseByName 'Bamba'
+--exec ProductPurchaseByName 'Whiskey'
 --select * from [dbo].[Purchases_Documentation]
 
 
