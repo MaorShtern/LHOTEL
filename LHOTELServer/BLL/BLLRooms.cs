@@ -26,9 +26,9 @@ namespace BLL
         //{
         //    return DALRooms.CheckIn(roomReservation);
         //}
-        public static bool CheckIn(string id, string entryDate)
+        public static bool CheckIn(string id, string exitDate)
         {
-            return DALRooms.CheckIn(id, entryDate);
+            return DALRooms.CheckIn(id, exitDate);
         }
         //public static bool CheckIn(RoomReservation roomReservation)
         //{

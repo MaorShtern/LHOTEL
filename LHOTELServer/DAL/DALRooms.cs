@@ -164,15 +164,25 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec CheckIn_Without_Existing_User {reservation.CustomerID},
-'{reservation.FirstName}','{reservation.LastName}','{reservation.Mail}',
-'{reservation.PhoneNumber}','{reservation.CardHolderName}',
+                string str = $@"exec CheckIn_Without_Existing_User {reservation.CustomerID}
+,'{reservation.CardHolderName}',
 '{reservation.CreditCardDate}',{reservation.ThreeDigit},
 '{reservation.CreditCardNumber}',{reservation.EmployeeID},
 {reservation.CounterSingle},{reservation.CounterDouble},
 {reservation.CounterSuite},
 '{reservation.EntryDate:yyyy-MM-dd}',
 '{reservation.ExitDate:yyyy-MM-dd}',{reservation.AmountOfPeople},{reservation.Breakfast}";
+
+//                string str = $@"exec CheckIn_Without_Existing_User {reservation.CustomerID},
+//'{reservation.FirstName}','{reservation.LastName}','{reservation.Mail}',
+//'{reservation.PhoneNumber}'
+//,'{reservation.CardHolderName}',
+//'{reservation.CreditCardDate}',{reservation.ThreeDigit},
+//'{reservation.CreditCardNumber}',{reservation.EmployeeID},
+//{reservation.CounterSingle},{reservation.CounterDouble},
+//{reservation.CounterSuite},
+//'{reservation.EntryDate:yyyy-MM-dd}',
+//'{reservation.ExitDate:yyyy-MM-dd}',{reservation.AmountOfPeople},{reservation.Breakfast}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 return result > 1;

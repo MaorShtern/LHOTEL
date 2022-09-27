@@ -25,14 +25,8 @@ namespace DAL
         public int CustomerType { set; get; }
         public DateTime EntryDate { set; get; }
         public DateTime ExitDate { set; get; }
- public int AmountOfPeople { set; get; }
+        public int AmountOfPeople { set; get; }
         public bool Breakfast { set; get; }
         public string RoomStatus { set; get; }
-
-
-
     }
- 
-        
-
 }

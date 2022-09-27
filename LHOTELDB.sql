@@ -193,7 +193,8 @@ create table Bill_Details
 	Purchase_Date Date NOT NULL,
 	Product_Code int NOT NULL,
 	Amount int NOT NULL,
-	Purchase_Time time,
+	Purchase_Time date,
+	Breakfast BIT NOT NULL DEFAULT 0,
 	Payment_Method nvarchar(20) NOT NULL,
 	CONSTRAINT [Fk_Product_Code] FOREIGN KEY (Product_Code) REFERENCES Products (Product_Code),
 	CONSTRAINT Room_Number FOREIGN KEY (Room_Number) REFERENCES Customers_Rooms (Room_Number)
@@ -255,6 +256,7 @@ create table Purchases_Documentation
 	Room_Type nvarchar(30),
 	Price_Per_Night int,
 	Amount_Of_People int,
+	Breakfast BIT NOT NULL DEFAULT 0,
 	Number_Of_Nights int,
 	Payment_Method nvarchar(30),
 	Purchase_Date date,
@@ -1725,7 +1727,7 @@ go
 --exec AlterCustomerRoom 24,57,15584444,'2022-09-15','2022-09-20','2022-09-30',4,1,Reserved
 --exec AlterCustomerRoom 1,4,666,'2022-09-11','2022-08-22','2022-08-24',5,1,'Occupied'
 
-select * from Bill_Details where  Customer_ID = 666
+--select * from Bill_Details where  Customer_ID = 666
 
 
 --  מביא את החדרים שתאריך היציאה שלהם גדול מהתאריך של היום
@@ -1764,6 +1766,7 @@ go
 
 --SELECT * FROM  AvailableRooms() order by Room_Number
 
+
 alter FUNCTION ReservationsDetails()
 returns @Temp TABLE (Bill_Number int ,Bill_Date Date,Customer_ID int,Customers_Type int ,First_Name nvarchar(30),Last_Name nvarchar(30),Mail nvarchar(100) , Phone_Number nvarchar(30) ,
 Entry_Date Date,Exit_Date Date,Amount_Of_People int,Breakfast Bit,Room_Number int,Price_Per_Night int,Room_Status nvarchar(30))                     
@@ -1781,7 +1784,7 @@ FROM     dbo.Bill INNER JOIN
 	end
 go
 
-SELECT * FROM  ReservationsDetails() order by Customer_ID 
+--SELECT * FROM  ReservationsDetails() order by Customer_ID 
 --SELECT * FROM  ReservationsDetails() WHERE Customer_ID  = 666
 
 
@@ -1859,37 +1862,26 @@ begin tran
 	end
 commit tran
 go
---exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
---exec SaveRoomReservation 222,'חגחגגיי','12/31',458,'4580111122223333',-1,1,2,3,'2022 - 09 - 14','2022 - 09 - 28',5
+--exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
---select * from [dbo].[Purchases_Documentation]
-    --"id": 666,
-    --"Card_Holder_Name": "mmm",
-    --"Card_Date": "12/29",
-    --"Three_Digit": 912,
-    --"Credit_Card_Number": "4580111133335555",
-    --"Employee_ID": 111,
-    --"Counter_Single" :1,
-    --"Counter_Double": 1,
-    --"Counter_Suite": 1,
-    --"Entry_Date": "2022-08-22",
-    --"exitDate": "2022-08-24",
-    --"Amount_Of_People": 5 
---	SELECT Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
---FROM     dbo.Customers_Rooms
---GROUP BY Room_Number, Bill_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
-	
+    --"CustomerID": 666,
+    --"CardHolderName": "mmm",
+    --"CreditCardDate": "12/29",
+    --"ThreeDigit": 912,
+    --"CreditCardNumber": "4580111133335555",
+    --"EmployeeID": 111,
+    --"CounterSingle" :1,
+    --"CounterDouble": 1,
+    --"CounterSuite": 1,
+    --"EntryDate": "2022-08-22",
+    --"ExitDate": "2022-08-24",
+    --"AmountOfPeople": 5 ,
+    --"Breakfast":true
 
 
---SELECT Room_Number, COUNT(Bill_Number) AS Expr1, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
---FROM     dbo.Customers_Rooms
---GROUP BY Room_Number, Customer_ID, Bill_Date, Entry_Date, Exit_Date, Amount_Of_People, Room_Status
-
---select * from Customers_Rooms
-
-alter proc Room_Resit      
+create proc Room_Resit      
 @id int
 as
 begin tran		
@@ -1906,13 +1898,11 @@ begin tran
 			dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
 	WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
 	union all
-	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
-	dbo.Bill_Details.Room_Number, dbo.Products.Description,dbo.Products.Price_Per_Unit, 
-	dbo.Products.Discount_Percentage, dbo.Bill_Details.Amount,dbo.Bill_Details.Payment_Method,
-	dbo.Bill_Details.Purchase_Date,dbo.Bill_Details.Product_Code
-	FROM     dbo.Bill_Details INNER JOIN
-   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number INNER JOIN
-   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Breakfast, 
+           dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Purchase_Time, dbo.Bill_Details.Product_Code
+			FROM  dbo.Bill_Details INNER JOIN
+                  dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN
+                  dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number
 	where (dbo.Bill_Details.Product_Code != 8 and dbo.Bill_Details.Customer_ID = @id)
 	if (@@error !=0)
 	begin
@@ -1930,20 +1920,21 @@ go
 
 
 
-alter trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
+
+create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
 on [Customers_Rooms] for update -- כאשר מופעלת פעולת עידכון על הטבלה "חדרי לקוחות" בצע
 as
 	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied') --  אם קיים מספר חדר שהסטטוס שלו פנוי בצע
 	begin
 		insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
-			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,convert(time,getdate()),'Credit'
+			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,getdate(),Breakfast ,'Credit'
 			 from inserted
-			  IF exists(select Breakfast from inserted where [Breakfast] = 1) 
-                BEGIN
-                 insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
-                 select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,5,1,convert(time,getdate()),'Credit'
-	             from inserted
-                END
+			  --IF exists(select Breakfast from inserted where [Breakfast] = 1) 
+     --           BEGIN
+     --            insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
+     --            select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,9,1,convert(time,getdate()),'Credit'
+	    --         from inserted
+     --           END
 
 	end
 go
@@ -1970,7 +1961,7 @@ begin tran
 commit tran
 go
 
---  exec CheckIn 222 , '2022-09-14'
+--  exec CheckIn 666 , '2022-08-22'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
 
@@ -2072,8 +2063,8 @@ create proc AddPurchases_Documentation
 @id int
 as
 --print(@id)
---exec Room_Resit @id
-	insert into [dbo].[Purchases_Documentation] exec Room_Resit @id
+--exec Room_Resit 222
+	insert into [dbo].[Purchases_Documentation] exec Room_Resit 666
 go
 --exec AddPurchases_Documentation 222 
 
@@ -2105,7 +2096,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
--- exec CheckOut 315201913, '2022-09-30'
+-- exec CheckOut 666, '2022-08-24'
 
 
 
@@ -2158,8 +2149,6 @@ as
 begin tran	
 		DECLARE @Purchase_Date as date =  GETDATE()
 
-	DECLARE @Purchase_Time as time = (select convert(time, getdate(), 108) )
-
 	DECLARE @bill_number as int = (select Bill_Number from  [dbo].[Customers_Rooms] 
 	where [Customer_ID] = @id and Room_Number = @Room_Number)
 
@@ -2168,8 +2157,11 @@ begin tran
 
 	DECLARE @Product_Code as int = (select [Product_Code] from [dbo].[Products] where [Description] = @Product_Dec)
 
+
 	insert [dbo].[Bill_Details]
-	values (@bill_number,@id, @bill_date,@Room_Number, @Purchase_Date, @Product_Code, @Amount,@Purchase_Time,@Payment_Method)
+	values (@bill_number,@id, @bill_date,@Room_Number, @Purchase_Date, @Product_Code, @Amount,getdate(),
+	(select  TOP 1 [Breakfast] from [dbo].[Bill_Details] 
+	where [Customer_ID] = 666 ),@Payment_Method)
 
 	if (@@error !=0)
 	begin
@@ -2181,7 +2173,8 @@ commit tran
 go
 
 --exec AddNewBill_Detail 315201913,13,'Vodka',6,'Cash'
---exec AddNewBill_Detail 222,11,'Coca cola',9,'Credit'
+--exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
+
 
 
 
