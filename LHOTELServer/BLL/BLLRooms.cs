@@ -44,7 +44,7 @@ namespace BLL
             return DALRooms.CheckIn_With_Existing_User(reservation);
 
         }
-        public static bool CheckIn_Without_Existing_User(NewReservation reservation)
+        public static bool CheckIn_Without_Existing_User(ReservationWithoutExistingUser reservation)
         {
             return DALRooms.CheckIn_Without_Existing_User(reservation);
 

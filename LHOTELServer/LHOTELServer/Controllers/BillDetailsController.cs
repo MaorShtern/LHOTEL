@@ -17,6 +17,22 @@ namespace LHOTELServer.Controllers
     public class BillDetailsController : ApiController
     {
 
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("~/GetRoomResit")]
+        public IHttpActionResult GetRoomResit([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLBill_Details.GetRoomResit(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddCharge")]
         public IHttpActionResult AddCharge([FromBody] Charge charge)

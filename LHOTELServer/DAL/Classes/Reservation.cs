@@ -34,6 +34,20 @@ namespace DAL
 
     }
 
+
+    public class ReservationWithoutExistingUser : NewReservation
+    {
+        public string FirstName { set; get; }
+        public string LastName { set; get; }
+        public string Mail { set; get; }
+        public string PhoneNumber { set; get; }
+        public string Password { set; get; }
+        public int CustomerType { set; get; }
+
+    }
+
+
+
     public class ExistingReservation : Reservation
     {
         public int BillNumber { set; get; }

@@ -80,7 +80,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/CheckIn_Without_Existing_User")]
-        public IHttpActionResult CheckIn_Without_Existing_User([FromBody] NewReservation reservation)
+        public IHttpActionResult CheckIn_Without_Existing_User([FromBody] ReservationWithoutExistingUser reservation)
         {
             try
             {

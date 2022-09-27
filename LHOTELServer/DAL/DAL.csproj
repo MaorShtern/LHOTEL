@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Reservation.cs" />
-    <Compile Include="Classes\RoomReservationUser.cs" />
+    <Compile Include="Classes\RoomResit.cs" />
     <Compile Include="DALBillDetails.cs" />
     <Compile Include="Classes\Charge.cs" />
     <Compile Include="Classes\Amount_Of_Products_Purchased_In_The_Store.cs" />
@@ -69,7 +69,6 @@
     <Compile Include="Classes\Number_Of_Visitors_Per_Month.cs" />
     <Compile Include="Classes\ProductPurchase.cs" />
     <Compile Include="Classes\Product.cs" />
-    <Compile Include="Classes\RoomReservation.cs" />
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Shift.cs" />
     <Compile Include="Classes\Task.cs" />

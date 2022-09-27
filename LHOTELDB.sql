@@ -1533,48 +1533,8 @@ go
 --exec DeleteBill 22,666,'2021-10-07','458026651478'
 --exec DeleteBill 23,888,'2022-12-05','458026651478'
 
-205420545
-444555534
-318088888
-444757575
-123456789
-121212129
-141414148
-808080808
-161616161
-363636363
-747474744
-158158158
-158158159
-124587096
-254789658
-555555555
-555555556
-555555567
-555555568
-555555569
-787899088
-205044788
-208785412
-208785416
-580854789
-206055477
-206055472
-206055899
-208065478
-205897546
-568976478
-568976428
-656564642
-206055899
-555555551
 
-DELETE FROM [dbo].[Bill] 
-	WHERE Customer_ID = 206055899
-	select * from [dbo].[Customers_Rooms]
-	select * FROM [dbo].[Bill]
-	select * FROM [dbo].[Employees]
-	select * from [dbo].[Customers]
+
 --  פרוצדורות חדרים שמורים ללקוחות
 -------------------------------------------------
 create proc GetCustomersRooms
@@ -1767,7 +1727,7 @@ go
 --SELECT * FROM  AvailableRooms() order by Room_Number
 
 
-alter FUNCTION ReservationsDetails()
+create FUNCTION ReservationsDetails()
 returns @Temp TABLE (Bill_Number int ,Bill_Date Date,Customer_ID int,Customers_Type int ,First_Name nvarchar(30),Last_Name nvarchar(30),Mail nvarchar(100) , Phone_Number nvarchar(30) ,
 Entry_Date Date,Exit_Date Date,Amount_Of_People int,Breakfast Bit,Room_Number int,Price_Per_Night int,Room_Status nvarchar(30))                     
 as
@@ -1913,7 +1873,7 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 666
+--exec Room_Resit 315201913
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
@@ -1978,10 +1938,13 @@ create proc CheckIn_With_Existing_User
 @Counter_Suite int,
 @Entry_Date date,
 @Exit_Date date,
-@Amount_Of_People int
+@Amount_Of_People int,
+@Breakfast Bit
 as
 	begin tran	
-		exec SaveRoomReservation @id ,@Card_Holder_Name ,@Credit_Card_Date ,@Three_Digit ,@Credit_Card_Number ,@Employee_ID ,@Counter_Single ,@Counter_Double ,@Counter_Suite ,@Entry_Date ,@Exit_Date ,@Amount_Of_People 
+		exec SaveRoomReservation @id ,@Card_Holder_Name ,@Credit_Card_Date ,@Three_Digit 
+		,@Credit_Card_Number ,@Employee_ID ,@Counter_Single ,@Counter_Double ,@Counter_Suite 
+		,@Entry_Date ,@Exit_Date ,@Amount_Of_People ,@Breakfast
 		exec CheckIn @id , @Entry_Date
 	if (@@error !=0)
 	begin
@@ -1991,7 +1954,7 @@ as
 	end
 commit tran
 go
---exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5
+--exec CheckIn_With_Existing_User 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
 --select * from Customers
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
@@ -2004,6 +1967,7 @@ create proc CheckIn_Without_Existing_User
 @First_Name nvarchar(30),
 @Last_Name nvarchar(30),
 @Mail nvarchar(100),
+@Password nvarchar(30),
 @Phone_Number nvarchar(30) ,
 @Card_Holder_Name  nvarchar(30),
 @Credit_Card_Date nvarchar(5),
@@ -2015,15 +1979,16 @@ create proc CheckIn_Without_Existing_User
 @Counter_Suite int,
 @Entry_Date date,
 @Exit_Date date,
-@Amount_Of_People int
+@Amount_Of_People int,
+@Breakfast Bit
 as
 begin tran	
-		exec AddNewCustomer @id,1,@First_Name,@Last_Name,@Mail,@id,@Phone_Number,@Card_Holder_Name,
+		exec AddNewCustomer @id,1,@First_Name,@Last_Name,@Mail,@Password,@Phone_Number,@Card_Holder_Name,
 		@Credit_Card_Date,@Three_Digit,@Credit_Card_Number
 
 		exec SaveRoomReservation @id ,@Card_Holder_Name ,@Credit_Card_Date ,@Three_Digit 
 		,@Credit_Card_Number ,@Employee_ID ,@Counter_Single ,@Counter_Double ,@Counter_Suite ,@Entry_Date
-		,@Exit_Date ,@Amount_Of_People 
+		,@Exit_Date ,@Amount_Of_People ,@Breakfast
 
 		exec CheckIn @id , @Entry_Date
 	if (@@error !=0)
@@ -2034,27 +1999,34 @@ begin tran
 	end
 commit tran
 go
---exec CheckIn_Without_Existing_User 315201913,'maor','shtern','maor@gmail.com','0524987762','aaa','02/28'
---,569,'4580111122223333',111,1,1,1,'2022-09-21','2022-09-30',5
 
-   --"CustomerID": 666,
-   -- "CustomerType":1,
-   -- "FirstName":"firstName",
-   -- "LastName":"lastName",
-   --  "Mail":"firstName",
-   -- "Password":"lastName",
-   -- "PhoneNumber":"0526211881",
-   -- "CardHolderName": "mmm",
-   -- "CreditCardDate": "12/29",
-   -- "ThreeDigit": 912,
-   -- "Credit_Card_Number": "4580111133335555",
-   -- "Employee_ID": 111,
-   -- "Counter_Single" :1,
-   -- "Counter_Double": 1,
-   -- "Counter_Suite": 1,
-   -- "Entry_Date": "2022-08-22",
-   -- "exitDate": "2022-08-24",
-   -- "Amount_Of_People": 5 
+
+--exec CheckIn_Without_Existing_User 315201913,'maor','shtern','maor@gmail.com','0000','0526211881','mmm','12/29',
+--912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,True
+  --"CustomerID": 315201913,
+  --  "CustomerType":1,
+  --  "FirstName":"maor",
+  --  "LastName":"shtern",
+  --  "Mail":"maor@gmail.com",
+  --  "PhoneNumber":"0526211881",
+  --  "CardHolderName": "mmm",
+  --  "CreditCardDate": "12/29",
+  --  "ThreeDigit": 912,
+  --  "CreditCardNumber": "4580111133335555",
+  --  "EmployeeID": 111,
+  --  "CounterSingle" :1,
+  --  "CounterDouble": 1,
+  --  "CounterSuite": 1,
+  --  "EntryDate": "2022-08-22",
+  --  "ExitDate": "2022-08-24",
+  --  "AmountOfPeople": 5 ,
+  --  "Breakfast":true
+
+-- select * from [dbo].[Customers]
+--select * from Bill
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+
 
 
 
@@ -2096,7 +2068,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
--- exec CheckOut 666, '2022-08-24'
+-- exec CheckOut 315201913, '2022-08-24'
 
 
 
@@ -2161,7 +2133,7 @@ begin tran
 	insert [dbo].[Bill_Details]
 	values (@bill_number,@id, @bill_date,@Room_Number, @Purchase_Date, @Product_Code, @Amount,getdate(),
 	(select  TOP 1 [Breakfast] from [dbo].[Bill_Details] 
-	where [Customer_ID] = 666 ),@Payment_Method)
+	where [Customer_ID] = @id ),@Payment_Method)
 
 	if (@@error !=0)
 	begin
@@ -2172,9 +2144,14 @@ begin tran
 commit tran
 go
 
---exec AddNewBill_Detail 315201913,13,'Vodka',6,'Cash'
---exec AddNewBill_Detail 666,11,'Coca cola',9,'Credit'
-
+--exec AddNewBill_Detail 315201913,21,'Coca cola',9,'Cash'
+   --"CustomerID":315201913, 
+   -- "RoomNumber":21,
+   -- "ProductDec":"Coca cola",
+   -- "Amount":9,
+   -- "PaymentMethod":"Cash"
+--select * from [dbo].[Bill_Details]
+--exec Room_Resit 315201913
 
 
 
