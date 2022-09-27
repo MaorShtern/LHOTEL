@@ -20,10 +20,9 @@ import { CustomCard } from "./CustomCard";
 export default function ExistingReservation({ route, navigation }) {
 
   let {Id} = route.params
-  // useEffect =()=>{  console. log("fsfsdf"),[]}
+  
   const [id, setId] = useState(Id)
-  // const [currentReservation, setCurrentReservation] = useState([])
-  // useEffect(() => { FetchData() }, []);
+ 
 
  
 

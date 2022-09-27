@@ -9,7 +9,7 @@ namespace DAL
 {
     public class DALRooms
     {
-        public static List<Rooms> GetAvailableRooms()
+        public static List<Room> GetAvailableRooms()
         {
             try
             {
@@ -18,10 +18,10 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Rooms> rooms = new List<Rooms>();
+                List<Room> rooms = new List<Room>();
                 while (reader.Read())
                 {
-                    rooms.Add(new Rooms()
+                    rooms.Add(new Room()
                     {
                         RoomNumber = (int)reader["Room_Number"],
                         RoomType = (string)reader["Room_Type"],
@@ -68,24 +68,23 @@ namespace DAL
             }
         }
 
-        public static bool SaveRoomReservation(RoomReservation roomReservation)
+        public static bool SaveRoomReservation(NewReservation roomReservation)
         {
             try
             {
                 string str = $@"exec SaveRoomReservation {roomReservation.CustomerID},'{roomReservation.CardHolderName}'
-                ,'{roomReservation.CardDate}',{roomReservation.ThreeDigit},'{roomReservation.CreditCardNumber}'
+                ,'{roomReservation.CreditCardDate}',{roomReservation.ThreeDigit},'{roomReservation.CreditCardNumber}'
                 ,{roomReservation.EmployeeID},{roomReservation.CounterSingle},{roomReservation.CounterDouble}
                 ,{roomReservation.CounterSuite},'{roomReservation.EntryDate:yyyy - MM - dd}'
-                ,'{roomReservation.ExitDate:yyyy - MM - dd}',{roomReservation.AmountOfPeople}";
+                ,'{roomReservation.ExitDate:yyyy - MM - dd}',{roomReservation.AmountOfPeople},{roomReservation.Breakfast}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result > 1;
 
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -100,12 +99,12 @@ namespace DAL
                 string str = $@"exec CheckIn {id},'{entryDate}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result > 1;
+
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -121,12 +120,12 @@ namespace DAL
                 string str = $@"exec CheckOut {id},'{exitDate}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result > 1;
+
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -135,23 +134,23 @@ namespace DAL
             }
         }
 
-        public static bool CheckIn_With_Existing_User(RoomReservation roomReservation)
+        public static bool CheckIn_With_Existing_User(NewReservation reservation)
         {
             try
             {
-                string str = $@"exec CheckIn_With_Existing_User {roomReservation.CustomerID},'{roomReservation.CardHolderName}'
-,'{roomReservation.CardDate}',{roomReservation.ThreeDigit},'{roomReservation.CreditCardNumber}'
-,{roomReservation.EmployeeID},{roomReservation.CounterSingle},{roomReservation.CounterDouble},
-{roomReservation.CounterSuite},'{roomReservation.EntryDate:yyyy - MM - dd}'
-,'{roomReservation.ExitDate:yyyy - MM - dd}',{roomReservation.AmountOfPeople}";
+                string str = $@"exec CheckIn_With_Existing_User {reservation.CustomerID},'{reservation.CardHolderName}'
+,'{reservation.CreditCardDate}',{reservation.ThreeDigit},'{reservation.CreditCardNumber}'
+,{reservation.EmployeeID},{reservation.CounterSingle},{reservation.CounterDouble},
+{reservation.CounterSuite},'{reservation.EntryDate:yyyy - MM - dd}'
+,'{reservation.ExitDate:yyyy - MM - dd}',{reservation.AmountOfPeople},{reservation.Breakfast}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result > 1;
+
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -161,27 +160,27 @@ namespace DAL
         }
 
 
-        public static bool CheckIn_Without_Existing_User(RoomReservationUser roomReservationUser)
+        public static bool CheckIn_Without_Existing_User(NewReservation reservation)
         {
             try
             {
-                string str = $@"exec CheckIn_Without_Existing_User {roomReservationUser.CustomerID},
-'{roomReservationUser.FirstName}','{roomReservationUser.LastName}','{roomReservationUser.Mail}',
-'{roomReservationUser.PhoneNumber}','{roomReservationUser.CardHolderName}',
-'{roomReservationUser.CreditCardDate}',{roomReservationUser.ThreeDigit},
-'{roomReservationUser.CreditCardNumber}',{roomReservationUser.EmployeeID},
-{roomReservationUser.CounterSingle},{roomReservationUser.CounterDouble},
-{roomReservationUser.CounterSuite},
-'{roomReservationUser.EntryDate:yyyy-MM-dd}',
-'{roomReservationUser.ExitDate:yyyy-MM-dd}',{roomReservationUser.AmountOfPeople}";
+                string str = $@"exec CheckIn_Without_Existing_User {reservation.CustomerID},
+'{reservation.FirstName}','{reservation.LastName}','{reservation.Mail}',
+'{reservation.PhoneNumber}','{reservation.CardHolderName}',
+'{reservation.CreditCardDate}',{reservation.ThreeDigit},
+'{reservation.CreditCardNumber}',{reservation.EmployeeID},
+{reservation.CounterSingle},{reservation.CounterDouble},
+{reservation.CounterSuite},
+'{reservation.EntryDate:yyyy-MM-dd}',
+'{reservation.ExitDate:yyyy-MM-dd}',{reservation.AmountOfPeople},{reservation.Breakfast}";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result > 1;
+
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -190,4 +189,5 @@ namespace DAL
             }
         }
     }
+
 }

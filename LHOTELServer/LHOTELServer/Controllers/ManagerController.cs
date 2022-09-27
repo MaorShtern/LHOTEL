@@ -85,7 +85,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewEmployee")]
-        public IHttpActionResult AddNewEmployee([FromBody] Employees employee)
+        public IHttpActionResult AddNewEmployee([FromBody] Employee employee)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/AlterEmployeeById")]
-        public IHttpActionResult AlterEmployeeById([FromBody] Employees employee)
+        public IHttpActionResult AlterEmployeeById([FromBody] Employee employee)
         {
             try
             {

@@ -9,34 +9,37 @@ namespace DAL
 {
     public class DALReceptionist
     {
-        public static List<TakenRoom> GetTakenRooms()
+        public static List<BookedRoom> GetBookedRooms()
         {
             try
             {
 
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetTakenRooms");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder(@"exec GetBookedRooms");
                 if (reader == null || !reader.HasRows)
                     return null;
 
 
-                List<TakenRoom> takenRooms = new List<TakenRoom>();
+                List<BookedRoom> BookedRooms = new List<BookedRoom>();
                 while (reader.Read())
                 {
-
-                    takenRooms.Add(new TakenRoom()
+                   BookedRooms.Add(new BookedRoom()
                     {
+
+                        RoomNumber = (int)reader["Room_Number"],
+                        BillNumber = (int)reader["Bill_Number"],
                         CustomerID = (int)reader["Customer_ID"],
-                        Room_Number = (int)reader["Room_Number"],
+                        BillDate = (DateTime)reader["Bill_Date"],
                         EntryDate = (DateTime)reader["Entry_Date"],
                         ExitDate = (DateTime)reader["Exit_Date"],
                         AmountOfPeople = (int)reader["Amount_Of_People"],
-                        BillNumber = (int)reader["Bill_Number"],
-                        BillDate = (DateTime)reader["Bill_Date"]
+                        Breakfast = (bool)reader["Breakfast"],
+
+
 
 
                     });
                 }
-                return takenRooms;
+                return BookedRooms;
             }
             catch (Exception e)
             {
@@ -52,7 +55,7 @@ namespace DAL
 
         }
 
-        public static List<Reservation> GetReservedRoomsByCustomerId(int id)
+        public static List<ExistingReservation> GetReservedRoomsByCustomerId(int id)
         {
             try
             {
@@ -64,10 +67,10 @@ namespace DAL
 
 
 
-                List<Reservation> reservations = new List<Reservation>();
+                List<ExistingReservation> CustomerReservations = new List<ExistingReservation>();
                 while (reader.Read())
                 {
-                    reservations.Add(new Reservation()
+                    CustomerReservations.Add(new ExistingReservation()
                     {
                         BillNumber = (int)reader["Bill_Number"],
                         BillDate = (DateTime)reader["Bill_Date"],
@@ -80,6 +83,7 @@ namespace DAL
                         EntryDate = (DateTime)reader["Entry_Date"],
                         ExitDate = (DateTime)reader["Exit_Date"],
                         AmountOfPeople = (int)reader["Amount_Of_People"],
+                        Breakfast = (bool)reader["Breakfast"],
                         RoomNumber = (int)reader["Room_Number"],
                         PricePerNight = (int)reader["Price_Per_Night"],
                         RoomStatus = (string)reader["Room_Status"],
@@ -87,7 +91,7 @@ namespace DAL
                     });
 
                 }
-                return reservations;
+                return CustomerReservations;
             }
             catch (Exception e)
             {

@@ -75,7 +75,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddNewCustomer")]
-        public IHttpActionResult AddNewCustomer([FromBody] Customers customer)
+        public IHttpActionResult AddNewCustomer([FromBody] Customer customer)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/AlterCustomerById")]
-        public IHttpActionResult AlterCustomerById([FromBody] Customers customer)
+        public IHttpActionResult AlterCustomerById([FromBody] Customer customer)
         {
             try
             {

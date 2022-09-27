@@ -151,43 +151,48 @@ export default function NewReservation({ navigation }) {
     }
   };
 
-  const GetCustomerReservation = async () => {
-    const requestOptions = {
-      method: "POST",
-      body: JSON.stringify({
-        id: customerReservation.customerID,
-      }),
-      headers: { "Content-Type": "application/json" },
-    };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId",
-      requestOptions
-    );
-    let currReservation = await result.json();
-    if (currReservation !== null) {
-      navigation.navigate("ShortCheckIn", { currReservation: currReservation });
-      return;
-    } else alert("ERROR");
-  };
+  // const GetCustomerReservation = async () => {
+  //   const requestOptions = {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       id: customerReservation.customerID,
+  //     }),
+  //     headers: { "Content-Type": "application/json" },
+  //   };
+  //   let result = await fetch(
+  //     "http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId",
+  //     requestOptions
+  //   );
+  //   let currReservation = await result.json();
+  //   if (currReservation !== null) {
+  //     navigation.navigate("ShortCheckIn", { currReservation: currReservation });
+  //     return;
+  //   } else alert("ERROR");
+  // };
 
   const ConfirmInformation = () => {
-    let customerDetails = {
+   
+    let newReservation = {
       CustomerID: CustomerID,
+      EmployeeID: myContext.employee.EmployeeID,
       CustomerType: 1,
       FirstName: FirstName,
       LastName: LastName,
       Mail: Mail,
       PhoneNumber: PhoneNumber,
-      AmountOfPeople: AmountOfPeople,
-      EmployeeID: myContext.employee.EmployeeID,
+      EntryDate: entryDate,
+      ExitDate: exitDate,
       CounterSingle: single,
       CounterDouble: double,
       CounterSuite: suite,
-      ExitDate: exitDate,
-      EntryDate: entryDate,
+      AmountOfPeople: AmountOfPeople,
+      Breakfast : breakfast
+    
+ 
+    
     };
 
-    navigation.navigate("Credit", { customerDetails: customerDetails });
+    navigation.navigate("Credit", { ReservationDetails: newReservation });
   };
 
   const FetchData = async () => {

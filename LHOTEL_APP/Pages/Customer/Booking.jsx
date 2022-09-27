@@ -23,7 +23,7 @@ export default function Booking({ navigation }) {
   const [doubleFlag, setDouble] = useState(false)
   const [suiteFlag, setSuite] = useState(false)
   const [number_Of_Nights, setNumber_Of_Nights] = useState(0)
-  const [breakfast, setreakfast] = useState(false);
+  const [breakfast, setBreakfast] = useState(false);
 
   const [AmountOfPeople, setAmountOfPeople] = useState(0);
 
@@ -117,7 +117,7 @@ export default function Booking({ navigation }) {
 
   const Delete = () => {
     setNumber_Of_Nights(0)
-    setreakfast(false);
+    setBreakfast(false);
     setSingle(false)
     setDouble(false)
     setSuite(false)
@@ -286,7 +286,7 @@ export default function Booking({ navigation }) {
         <View style={{ height: 10 }}></View>
 
         <View style={styles.switchContainer}>
-          <Switch onValueChange={() => { setreakfast(!breakfast) }} value={breakfast} />
+          <Switch onValueChange={() => { setBreakfast(!breakfast) }} value={breakfast} />
           <Text>Include breakfast?</Text>
         </View>
         <View style={{ height: 10 }}></View>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class AddCharge
+    public class Charge
     {
         public int CustomerID { set; get; }
         public int RoomNumber { set; get; }

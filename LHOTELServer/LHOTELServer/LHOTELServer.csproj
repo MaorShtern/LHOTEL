@@ -155,16 +155,16 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\CustomersControllerController.cs" />
-    <Compile Include="Controllers\EmployeesControllerController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Bill_DetailsController.cs" />
-    <Compile Include="Controllers\ManagerControllerController.cs" />
-    <Compile Include="Controllers\ProductsControllerController.cs" />
-    <Compile Include="Controllers\ReceptionistControllerController.cs" />
-    <Compile Include="Controllers\ReportsControllerController.cs" />
-    <Compile Include="Controllers\RoomsControllerController.cs" />
-    <Compile Include="Controllers\TasksControllerController.cs" />
+    <Compile Include="Controllers\BillDetailsController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\ReceptionistController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

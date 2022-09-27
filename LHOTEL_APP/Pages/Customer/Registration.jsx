@@ -114,7 +114,7 @@ export default function Registration({ navigation }) {
 
         //  יצירת אובייקט מהמחלקה "יוזר" אשר יכיל את כול פרטי המשתמש
         let user = {
-            calssName: User,
+            className: User,
             fields: {
                 CustomerID: id,
                 FirstName: first_name,

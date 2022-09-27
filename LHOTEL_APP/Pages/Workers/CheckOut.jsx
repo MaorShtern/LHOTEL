@@ -25,7 +25,7 @@ export default function CheckOut() {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/GetTakenRooms', requestOptions);
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetBookedRooms', requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
      setReservationItems(rooms)

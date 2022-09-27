@@ -9,9 +9,9 @@ namespace BLL
 {
     public class BLLBill_Details
     {
-        public static bool AddCharge(AddCharge addCharge)
+        public static bool AddCharge(Charge charge)
         {
-            return DALBill_Details.AddCharge(addCharge);
+            return DALBillDetails.AddCharge(charge);
         }
     }
 }

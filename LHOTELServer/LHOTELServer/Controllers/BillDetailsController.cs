@@ -14,16 +14,16 @@ namespace LHOTELServer.Controllers
 {
     [System.Web.Http.RoutePrefix("api/Bill_Details")]
 
-    public class Bill_DetailsController : ApiController
+    public class BillDetailsController : ApiController
     {
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/AddCharge")]
-        public IHttpActionResult AddCharge([FromBody] AddCharge addCharge)
+        public IHttpActionResult AddCharge([FromBody] Charge charge)
         {
             try
             {
-                return Ok(BLLBill_Details.AddCharge(addCharge));
+                return Ok(BLLBill_Details.AddCharge(charge));
             }
             catch (Exception e)
             {

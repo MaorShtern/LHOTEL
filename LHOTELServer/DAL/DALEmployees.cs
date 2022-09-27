@@ -16,13 +16,14 @@ namespace DAL
                 string str = $@"exec ClockIn {id},'{time}'";
                 str = str.Replace("\r\n", string.Empty);
                 int rowsAffected = SQLConnection.ExeNonQuery(str);
-                if (rowsAffected >= 1)
-                    return true;
-                return false;
+                return rowsAffected >= 1;
+                   
+         
             }
 
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -38,13 +39,12 @@ namespace DAL
                 string str = $@"exec ClockOut {id}, '{time}'";
                 str = str.Replace("\r\n", string.Empty);
                 int rowsAffected = SQLConnection.ExeNonQuery(str);
-                if (rowsAffected >= 1)
-                    return true;
-                return false;
+                return rowsAffected >= 1;
             }
 
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             finally
@@ -52,7 +52,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-        public static List<Employees> GetAllEmployees()
+        public static List<Employee> GetAllEmployees()
         {
             try
             {
@@ -60,10 +60,10 @@ namespace DAL
                 if (reader == null || !reader.HasRows)
                     return null;
 
-                List<Employees> employees = new List<Employees>();
+                List<Employee> employees = new List<Employee>();
                 while (reader.Read())
                 {
-                    employees.Add(new Employees()
+                    employees.Add(new Employee()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
@@ -88,7 +88,7 @@ namespace DAL
             }
         }
 
-        public static Employees GetEmployeeById(int id)
+        public static Employee GetEmployeeById(int id)
         {
             try
             {
@@ -99,10 +99,10 @@ namespace DAL
                     Console.WriteLine("There is no such employee in the system");
                     return null;
                 }
-                Employees employee = null;
+                Employee employee = null;
                 while (reader.Read())
                 {
-                    employee = new Employees()
+                    employee = new Employee()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
@@ -126,7 +126,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-        public static Employees GetEmployeeByIdAndPassword(int id, int password)
+        public static Employee GetEmployeeByIdAndPassword(int id, int password)
         {
             try
             {
@@ -137,10 +137,10 @@ namespace DAL
                     Console.WriteLine("There is no such employee in the system");
                     return null;
                 }
-                Employees employee = null;
+                Employee employee = null;
                 while (reader.Read())
                 {
-                    employee = new Employees()
+                    employee = new Employee()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
@@ -165,7 +165,7 @@ namespace DAL
             }
         }
 
-        public static bool AddNewEmployee(Employees newEmployee)
+        public static bool AddNewEmployee(Employee newEmployee)
         {
             try
             {
@@ -176,8 +176,8 @@ namespace DAL
 '{newEmployee.Description}',{newEmployee.HourlyWage},'{newEmployee.Address}'";
                     str = str.Replace("\r\n", string.Empty);
                     int rowsAffected = SQLConnection.ExeNonQuery(str);
-                    if (rowsAffected >= 1)
-                        return true;
+                    return rowsAffected >= 1;
+                      
                 }
                 return false;
             }
@@ -192,11 +192,11 @@ namespace DAL
             }
         }
 
-        public static bool AlterEmployeeById(Employees employee)
+        public static bool AlterEmployeeById(Employee employee)
         {
             try
             {
-                Employees findEmployee = GetEmployeeById(employee.EmployeeID);
+                Employee findEmployee = GetEmployeeById(employee.EmployeeID);
                 if (findEmployee == null)
                 {
                     return false;
@@ -205,9 +205,8 @@ namespace DAL
         '{employee.BirthDate:yyyy-MM-dd}',{employee.Description},{employee.HourlyWage},'{employee.Address}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result == 1)
-                    return true;
-                return false;
+                return result == 1;
+                  
             }
             catch (Exception e)
             {
@@ -224,16 +223,15 @@ namespace DAL
         {
             try
             {
-                Employees findEmployee = GetEmployeeById(id);
+                Employee findEmployee = GetEmployeeById(id);
                 if (findEmployee == null)
                 {
                     return false;
                 }
                 string str = $@"exec DeleteEmployeeById {id}";
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result >= 1)
-                    return true;
-                return false;
+                return result >= 1;
+                    
             }
             catch (Exception e)
             {

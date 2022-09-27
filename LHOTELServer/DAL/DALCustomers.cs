@@ -12,7 +12,7 @@ namespace DAL
 {
     public class DALCustomers
     {
-        public static CustomerDetails GetDBCustomerById(int id)
+        public static User GetDBCustomerById(int id)
         {
             try
             {
@@ -21,10 +21,10 @@ namespace DAL
                 {
                     return null;
                 }
-                CustomerDetails customer = null;
+                User user = null;
                 while (reader.Read())
                 {
-                    customer = new CustomerDetails()
+                    user = new User()
                     {
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customer_Type"],
@@ -36,7 +36,7 @@ namespace DAL
 
                     };
                 }
-                return customer;
+                return user;
             }
             catch (Exception e)
             {
@@ -48,7 +48,7 @@ namespace DAL
                 SQLConnection.CloseDB();
             }
         }
-        public static Customers GetCustomerById(int id)
+        public static Customer GetCustomerById(int id)
         {
             try
             {
@@ -57,10 +57,10 @@ namespace DAL
                 {
                     return null;
                 }
-                Customers customer = null;
+                Customer customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers()
+                    customer = new Customer()
                     {
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customer_Type"],
@@ -70,9 +70,10 @@ namespace DAL
                         Password = (string)reader["Password"],
                         PhoneNumber = (string)reader["Phone_Number"],
                         CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardNumber = (string)reader["Credit_Card_Number"],
                         CreditCardDate = (string)reader["Credit_Card_Date"],
                         ThreeDigit = (int)reader["Three_Digit"],
-                        CreditCardNumber = (string)reader["Credit_Card_Number"]
+                       
                     };
                 }
                 return customer;
@@ -88,7 +89,7 @@ namespace DAL
             }
         }
 
-        public static Customers GetCustomerByMail(string mail)
+        public static Customer GetCustomerByMail(string mail)
         {
             try
             {
@@ -100,10 +101,10 @@ namespace DAL
 
                 //bool verified = Verify(password, (string)reader["Password"]);
 
-                Customers customer = null;
+                Customer customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers()
+                    customer = new Customer()
                     {
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customer_Type"],
@@ -113,9 +114,10 @@ namespace DAL
                         Password = (string)reader["Password"],
                         PhoneNumber = (string)reader["Phone_Number"],
                         CardHolderName = (string)reader["Card_Holder_Name"],
+                        CreditCardNumber = (string)reader["Credit_Card_Number"],
                         CreditCardDate = (string)reader["Credit_Card_Date"],
                         ThreeDigit = (int)reader["Three_Digit"],
-                        CreditCardNumber = (string)reader["Credit_Card_Number"]
+                       
                     };
                 }
                 return customer;
@@ -131,11 +133,11 @@ namespace DAL
             }
         }
 
-        public static Customers GetCustomerByMailAndPassword(string mail, string password)
+        public static Customer GetCustomerByMailAndPassword(string mail, string password)
         {
             try
             {
-                Customers customer = GetCustomerByMail(mail);
+                Customer customer = GetCustomerByMail(mail);
                 bool verify = Verify(password, customer.Password);
                 return customer != null && verify ? customer : null;
 
@@ -152,7 +154,7 @@ namespace DAL
         }
 
 
-        public static bool AddNewCustomer(Customers customer)
+        public static bool AddNewCustomer(Customer customer)
         {
             try
             {
@@ -182,7 +184,7 @@ namespace DAL
             }
         }
 
-        public static Customers GetCustomerByIDAndMail(int id, string mail)
+        public static Customer GetCustomerByIDAndMail(int id, string mail)
         {
             try
             {
@@ -191,10 +193,10 @@ namespace DAL
                 {
                     return null;
                 }
-                Customers customer = null;
+                Customer customer = null;
                 while (reader.Read())
                 {
-                    customer = new Customers()
+                    customer = new Customer()
                     {
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customer_Type"],
@@ -222,11 +224,11 @@ namespace DAL
             }
         }
 
-        public static bool AlterCustomerById(Customers customer)
+        public static bool AlterCustomerById(Customer customer)
         {
             try
             {
-                Customers findCustomer = GetCustomerById(customer.CustomerID);
+                Customer findCustomer = GetCustomerById(customer.CustomerID);
                 if (findCustomer == null)
                 {
                     return false;
@@ -237,9 +239,8 @@ namespace DAL
         ,{customer.ThreeDigit},'{customer.CreditCardNumber}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
-                if (result == 1)
-                    return true;
-                return false;
+                return result == 1;
+                   
             }
             catch (Exception e)
             {

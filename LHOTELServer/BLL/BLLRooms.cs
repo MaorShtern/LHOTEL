@@ -9,13 +9,13 @@ namespace BLL
 {
     public class BLLRooms
     {
-        public static List<Rooms> GetAvailableRooms()
+        public static List<Room> GetAvailableRooms()
         {
             return DALRooms.GetAvailableRooms();
         }
-        public static bool SaveRoomReservation(RoomReservation roomReservation)
+        public static bool SaveRoomReservation(NewReservation reservation)
         {
-            return DALRooms.SaveRoomReservation(roomReservation);
+            return DALRooms.SaveRoomReservation(reservation);
         }
         public static List<int> FindCustomerRoomByID(int id)
         {
@@ -39,14 +39,14 @@ namespace BLL
             return DALRooms.CheckOut(id, exitDate);
 
         }
-        public static bool CheckIn_With_Existing_User(RoomReservation roomReservation)
+        public static bool CheckIn_With_Existing_User(NewReservation reservation)
         {
-            return DALRooms.CheckIn_With_Existing_User(roomReservation);
+            return DALRooms.CheckIn_With_Existing_User(reservation);
 
         }
-        public static bool CheckIn_Without_Existing_User(RoomReservationUser roomReservationUser)
+        public static bool CheckIn_Without_Existing_User(NewReservation reservation)
         {
-            return DALRooms.CheckIn_Without_Existing_User(roomReservationUser);
+            return DALRooms.CheckIn_Without_Existing_User(reservation);
 
         }
     }

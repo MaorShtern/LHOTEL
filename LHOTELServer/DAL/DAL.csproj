@@ -57,19 +57,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DALBill_Details.cs" />
-    <Compile Include="Classes\AddCharge.cs" />
+    <Compile Include="Classes\Reservation.cs" />
+    <Compile Include="Classes\RoomReservationUser.cs" />
+    <Compile Include="DALBillDetails.cs" />
+    <Compile Include="Classes\Charge.cs" />
     <Compile Include="Classes\Amount_Of_Products_Purchased_In_The_Store.cs" />
-    <Compile Include="Classes\Customers.cs" />
-    <Compile Include="Classes\Employees.cs" />
+    <Compile Include="Classes\Customer.cs" />
+    <Compile Include="Classes\Employee.cs" />
     <Compile Include="Classes\Income_And_Expenses.cs" />
     <Compile Include="Classes\Number_of_tasks_per_month.cs" />
     <Compile Include="Classes\Number_Of_Visitors_Per_Month.cs" />
     <Compile Include="Classes\ProductPurchase.cs" />
-    <Compile Include="Classes\Products.cs" />
+    <Compile Include="Classes\Product.cs" />
     <Compile Include="Classes\RoomReservation.cs" />
-    <Compile Include="Classes\RoomReservationUser.cs" />
-    <Compile Include="Classes\Rooms.cs" />
+    <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Shift.cs" />
     <Compile Include="Classes\Task.cs" />
     <Compile Include="DALCustomers.cs" />

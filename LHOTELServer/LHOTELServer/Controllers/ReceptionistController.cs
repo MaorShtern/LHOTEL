@@ -25,12 +25,12 @@ namespace LHOTELServer.Controllers
     public class ReceptionistController : ApiController
     {
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetTakenRooms")]
+        [System.Web.Http.Route("~/GetBookedRooms")]
         public IHttpActionResult GetTakenRooms()
         {
             try
             {
-                return Ok(BLLReceptionist.GetTakenRooms());
+                return Ok(BLLReceptionist.GetBookedRooms());
             }
             catch (Exception)
             {

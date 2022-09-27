@@ -9,7 +9,7 @@ namespace DAL
 {
     public class DALManager
     {
-        public static List<Employees> GetAllEmployees()
+        public static List<Employee> GetAllEmployees()
         {
             try
             {
@@ -17,10 +17,10 @@ namespace DAL
                 if (reader == null || !reader.HasRows)
                     return null;
 
-                List<Employees> employees = new List<Employees>();
+                List<Employee> employees = new List<Employee>();
                 while (reader.Read())
                 {
-                    employees.Add(new Employees()
+                    employees.Add(new Employee()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         Description = (string)reader["Description"],
@@ -53,11 +53,11 @@ namespace DAL
                 if (reader == null || !reader.HasRows)
                     return null;
 
-                List<Shift> employees = new List<Shift>();
+                List<Shift> employeesShifts = new List<Shift>();
                 while (reader.Read())
                 {
 
-                    employees.Add(new Shift()
+                    employeesShifts.Add(new Shift()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         EmployeeCode = (int)reader["Employee_Code"],
@@ -70,7 +70,7 @@ namespace DAL
 
                     });
                 }
-                return employees;
+                return employeesShifts;
             }
             catch (Exception e)
             {
@@ -93,11 +93,11 @@ namespace DAL
                 if (reader == null || !reader.HasRows)
                     return null;
 
-                List<Shift> employees = new List<Shift>();
+                List<Shift> employeesShifts = new List<Shift>();
                 while (reader.Read())//הגדרת רשימה מסוג משמרת ,יצירה והכנסה של אובייקטים מסוג משמרת מנתוני הרידר אליה 
                 {
 
-                    employees.Add(new Shift()
+                    employeesShifts.Add(new Shift()
                     {
                         EmployeeID = (int)reader["Employee_ID"],
                         EmployeeCode = (int)reader["Employee_Code"],
@@ -109,7 +109,7 @@ namespace DAL
 
                     });
                 }
-                return employees;//החזרה של הרשימה
+                return employeesShifts;//החזרה של הרשימה
             }
             catch (Exception e)// הצגת שגיאה במידה והתקבלה
             {

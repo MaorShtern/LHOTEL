@@ -52,11 +52,11 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/SaveRoomReservation")]
-        public IHttpActionResult SaveRoomReservation([FromBody] RoomReservation roomReservation)
+        public IHttpActionResult SaveRoomReservation([FromBody] NewReservation reservation)
         {
             try
             {
-                return Ok(BLLRooms.SaveRoomReservation(roomReservation));
+                return Ok(BLLRooms.SaveRoomReservation(reservation));
             }
             catch (Exception e)
             {
@@ -66,11 +66,11 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/CheckIn_With_Existing_User")]
-        public IHttpActionResult CheckIn_With_Existing_User([FromBody] RoomReservation roomReservation)
+        public IHttpActionResult CheckIn_With_Existing_User([FromBody] NewReservation reservation)
         {
             try
             {
-                return Ok(BLLRooms.CheckIn_With_Existing_User(roomReservation));
+                return Ok(BLLRooms.CheckIn_With_Existing_User(reservation));
             }
             catch (Exception e)
             {
@@ -80,11 +80,11 @@ namespace LHOTELServer.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/CheckIn_Without_Existing_User")]
-        public IHttpActionResult CheckIn_Without_Existing_User([FromBody] RoomReservationUser roomReservationUser)
+        public IHttpActionResult CheckIn_Without_Existing_User([FromBody] NewReservation reservation)
         {
             try
             {
-                return Ok(BLLRooms.CheckIn_Without_Existing_User(roomReservationUser));
+                return Ok(BLLRooms.CheckIn_Without_Existing_User(reservation));
             }
             catch (Exception e)
             {

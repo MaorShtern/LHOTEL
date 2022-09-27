@@ -17,25 +17,25 @@ namespace BLL
         {
             return DALEmployees.ClockOut(id, time);
         }
-        public static List<Employees> GetAllEmployees()
+        public static List<Employee> GetAllEmployees()
         {
             return DALEmployees.GetAllEmployees();
         }
 
-        public static bool AddNewEmployee(Employees newEmployee)
+        public static bool AddNewEmployee(Employee newEmployee)
         {
             return DALEmployees.AddNewEmployee(newEmployee);
         }
 
-        public static Employees GetEmployeeById(int id)
+        public static Employee GetEmployeeById(int id)
         {
             return DALEmployees.GetEmployeeById(id);
         }
-        public static Employees GetEmployeeByIdAndPassword(int id, int password)
+        public static Employee GetEmployeeByIdAndPassword(int id, int password)
         {
             return DALEmployees.GetEmployeeByIdAndPassword(id, password);
         }
-        public static bool AlterEmployeeById(Employees employee)
+        public static bool AlterEmployeeById(Employee employee)
         {
             return DALEmployees.AlterEmployeeById(employee);
         }

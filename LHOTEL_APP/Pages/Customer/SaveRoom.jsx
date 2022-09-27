@@ -113,7 +113,7 @@ export default function SaveRoom({ route, navigation }) {
       if (user !== null) {
         // console.log("user: " + user);
         SetUser(JSON.parse(user));
-        // Calculate_Final_Amount()
+      //  Calculate_Final_Amount()
       }
     } catch (e) {
       alert(e);
@@ -158,8 +158,9 @@ export default function SaveRoom({ route, navigation }) {
   //   console.log("sum"+ sum);
   //   return data
   // }
-  const CreateUser =()=>{
-    let newCustomer = {
+  const CreateReservation =()=>{
+    
+    let newReservation = {
       CustomerID: user.CustomerID,
       CustomerType: 1,
       FirstName: user.FirstName,
@@ -167,14 +168,15 @@ export default function SaveRoom({ route, navigation }) {
       Mail: user.Mail,
       Password: user.Password,
       PhoneNumber: user.PhoneNumber,
+      EntryDate: entryDate,
+      ExitDate: exitDate,
       CounterSingle: single,
       CounterDouble: double,
       CounterSuite: suite,
-      EntryDate: entryDate,
-      ExitDate: exitDate,
       AmountOfPeople: amountOfPeople,
+      Breakfast : breakfast
     };
-    return newCustomer
+    return newReservation
   }
   const GoToPayment = () => {
     readData()
@@ -212,45 +214,11 @@ export default function SaveRoom({ route, navigation }) {
 
       sum += tempToatal;
     }
-    // console.log("the_data:" + JSON.stringify(the_data));
+   
 
-    // let newCustomer = {
-    //   CustomerID: user.CustomerID,
-    //   CustomerType: 1,
-    //   FirstName: user.FirstName,
-    //   LastName: user.LastName,
-    //   Mail: user.Mail,
-    //   Password: user.Password,
-    //   PhoneNumber: user.PhoneNumber,
-    //   CounterSingle: single,
-    //   CounterDouble: double,
-    //   CounterSuite: suite,
-    //   EntryDate: entryDate,
-    //   ExitDate: exitDate,
-    //   AmountOfPeople: amount_Of_People,
-    // };
-
-    //    let newCustomer = {
-
-    //     CustomerID: CustomerID,
-    //     CustomerType: 1,
-    //     FirstName: FirstName,
-    //     LastName: LastName,
-    //     Mail: Mail,
-    //     PhoneNumber: PhoneNumber,
-    //     AmountOfPeople: AmountOfPeople,
-    //     EmployeeID: myContext.employee.EmployeeID,
-    //     CounterSingle: single,
-    //     CounterDouble: double,
-    //     CounterSuite: suite,
-    //     ExitDate: exitDate,
-    //     EntryDate: entryDate,
-
-    // };
-
-    let customer = CreateUser()
+    let reservation = CreateReservation()
     navigation.navigate("Credit", {
-      customerDetails: customer,the_data:the_data,totalSum:sum
+      ReservationDetails: reservation,the_data:the_data,totalSum:sum
     
     });
 

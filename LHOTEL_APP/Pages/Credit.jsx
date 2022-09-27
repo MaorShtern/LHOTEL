@@ -12,8 +12,8 @@ export default function Credit({ route, navigation }) {
 
   const myContext = useContext(AppContext);
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
-
-  let { customerDetails } = route.params;
+  
+  let { ReservationDetails } = route.params;
 
   const [form, SetForm] = useState({});
 
@@ -57,86 +57,50 @@ export default function Credit({ route, navigation }) {
 
   // }
   const ConfirmInformation = () => {
-    let customer = createUser();
+    let reservation = createCustomerReservation();
     // console.log(customer);
     isEmploeeConncted
       ? navigation.navigate("ShortCheckIn", {
-        currReservation: [customer.fields],
+        currReservation: [reservation.fields],
       })
-      : SaveRoomReservation(customer);
+      : SaveRoomReservation(reservation);
   };
   //
-  const createUser = () => {
+  const createCustomerReservation = () => {
     let newCustomer = {
       className: Customer,
       fields: {
-        CustomerID: customerDetails.CustomerID,
-        CustomerType: customerDetails.CustomerType,
-        FirstName: customerDetails.FirstName,
-        LastName: customerDetails.LastName,
-        Mail: customerDetails.Mail,
-        PhoneNumber: customerDetails.PhoneNumber,
+        CustomerID: ReservationDetails.CustomerID,
+        CustomerType: ReservationDetails.CustomerType,
+        FirstName: ReservationDetails.FirstName,
+        LastName: ReservationDetails.LastName,
+        Mail: ReservationDetails.Mail,
+        PhoneNumber: ReservationDetails.PhoneNumber,
+        EmployeeID: isEmploeeConncted ? ReservationDetails.EmployeeID : -1,
+        EntryDate: ReservationDetails.EntryDate,
+        ExitDate: ReservationDetails.ExitDate,
+        CounterSingle: ReservationDetails.CounterSingle,
+        CounterDouble: ReservationDetails.CounterDouble,
+        CounterSuite: ReservationDetails.CounterSuite,
+        AmountOfPeople: ReservationDetails.AmountOfPeople,
+        Breakfast : ReservationDetails.Breakfast ,
         CardHolderName: form.values.name,
         CreditCardNumber: form.values.number.replace(/ /g, ""),
         CreditCardDate: form.values.expiry,
         ThreeDigit: form.values.cvc,
-        AmountOfPeople: customerDetails.AmountOfPeople,
-        EmployeeID: isEmploeeConncted ? customerDetails.EmployeeID : -1,
-        CounterSingle: customerDetails.CounterSingle,
-        CounterDouble: customerDetails.CounterDouble,
-        CounterSuite: customerDetails.CounterSuite,
-        ExitDate: customerDetails.ExitDate,
-        EntryDate: customerDetails.EntryDate,
+       
+       
+      
       },
     };
     return newCustomer;
-    navigation.navigate("ShortCheckIn", {
-      currReservation: [newCustomer.fields],
-    });
-    console.log("new cast using emloeey " + JSON.stringify(newCustomer.fields));
+  
   };
-  // const ConfirmInformation2 = () => {
-
-  //   // const { the_data, number_Of_Nights, breakfast, entryDate, exitDate, amount_Of_People } = route.params
-
-  //   //   let counter_Single = the_data.filter((per) => per.type === "Single room")[0] === undefined ? 0: the_data.filter((per) => per.type === "Single room")[0].count
-  //   //   let counter_Double =  the_data.filter((per) => per.type === "Double room")[0] === undefined ?0: the_data.filter((per) => per.type === "Double room")[0].count
-  //   //  let counter_Suite = the_data.filter((per) => per.type === "Suite")[0] === undefined ?0: the_data.filter((per) => per.type === "Suite")[0].count
-
-  //    // console.log(user);
-  //     // let customer = {
-  //     //  className: Customer,
-  //     //   fields: {
-  //     //     CustomerID: user.CustomerID,
-  //     //     CustomerType: 1,
-  //     //     FirstName: user.FirstName,
-  //     //     LastName: user.LastName,
-  //     //     Mail: user.Mail,
-  //     //     Password: user.Password,
-  //     //     PhoneNumber: user.PhoneNumber,
-  //     //     CardHolderName: form.values.name,
-  //     //     CreditCardNumber: form.values.number.replace(/ /g, ''),
-  //     //     CreditCardDate: form.values.expiry,
-  //     //     ThreeDigit: form.values.cvc,
-  //     //     EmployeeID: -1,
-  //     //     CounterSingle: counter_Single,
-  //     //     CounterDouble:counter_Double,
-  //     //     CounterSuite: counter_Suite,
-  //     //     EntryDate: entryDate,
-  //     //     ExitDate: exitDate,
-  //     //     AmountOfPeople: amount_Of_People
-  //     //   }
-
-  //     // }
-  //     // console.log("new cast using customer "+ customer.fields);
-
-  //     // SaveRoomReservation(customer.fields)
-  //   }
+ 
 
   let { totalSum } = route.params;
 
-  // console.log(totalSum);
-  // style={{ marginTop: 120 }}
+ 
   return (
     <View>
 

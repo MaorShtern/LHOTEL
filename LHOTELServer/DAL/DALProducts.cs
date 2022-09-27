@@ -9,7 +9,7 @@ namespace DAL
 {
     public class DALProducts
     {
-        public static List<Products> GetAllProducts()
+        public static List<Product> GetAllProducts()
         {
             try
             {
@@ -18,14 +18,14 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Products> products = new List<Products>();
+                List<Product> products = new List<Product>();
                 while (reader.Read())
                 {
-                    products.Add(new Products()
+                    products.Add(new Product()
                     {
                         ProductCode = (int)reader["Product_Code"],
                         CategoryNumber = (int)reader["Category_Number"],
-                        Description = (string)reader["Description"],
+                        ProductName = (string)reader["Description"],
                         PricePerUnit = (decimal)reader["Price_Per_Unit"],
                         DiscountPercentage = (decimal)reader["Discount_Percentage"]
                     });
@@ -39,7 +39,7 @@ namespace DAL
             }
         }
 
-        public static Products GetProductById(int id)
+        public static Product GetProductById(int id)
         {
             try
             {
@@ -48,14 +48,14 @@ namespace DAL
                 {
                     return null;
                 }
-                Products product = null;
+                Product product = null;
                 while (reader.Read())
                 {
-                    product = new Products()
+                    product = new Product()
                     {
                         ProductCode = (int)reader["Product_Code"],
                         CategoryNumber = (int)reader["Category_Number"],
-                        Description = (string)reader["Description"],
+                          ProductName = (string)reader["Description"],
                         PricePerUnit = (decimal)reader["Price_Per_Unit"],
                         DiscountPercentage = (decimal)reader["Discount_Percentage"]
                     };

@@ -9,11 +9,11 @@ namespace BLL
 {
     public class BLLProducts
     {
-        public static List<Products> GetProducts()
+        public static List<Product> GetProducts()
         {
             return DALProducts.GetAllProducts();
         }
-        public static Products GetProductById(int id)
+        public static Product GetProductById(int id)
         {
             return DALProducts.GetProductById(id);
         }

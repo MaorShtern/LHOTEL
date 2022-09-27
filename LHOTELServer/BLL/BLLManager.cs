@@ -10,7 +10,7 @@ namespace BLL
 {
     public class BLLManager
     {
-        public static List<Employees> GetAllEmployees()
+        public static List<Employee> GetAllEmployees()
         {
             return DALManager.GetAllEmployees();
         }

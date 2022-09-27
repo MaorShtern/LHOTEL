@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class RoomReservationUser : Customers
-    {
-        public int EmployeeID { set; get; }
-        public int CounterSingle { set; get; }
-        public int CounterDouble { set; get; }
-        public int CounterSuite { set; get; }
-        public DateTime EntryDate { set; get; }
-        public DateTime ExitDate { set; get; }
+    //    public class RoomReservationUser : Customers
+    //    {
+    //        public int EmployeeID { set; get; }
+    //        public int CounterSingle { set; get; }
+    //        public int CounterDouble { set; get; }
+    //        public int CounterSuite { set; get; }
+    //        public DateTime EntryDate { set; get; }
+    //        public DateTime ExitDate { set; get; }
 
-        public int AmountOfPeople { set; get; }
-    }
+    //        public int AmountOfPeople { set; get; }
+    //    }
 }

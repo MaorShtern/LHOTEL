@@ -9,11 +9,11 @@ namespace BLL
 {
     public class BLLReceptionist
     {
-        public static List<TakenRoom> GetTakenRooms()
+        public static List<BookedRoom> GetBookedRooms()
         {
-            return DALReceptionist.GetTakenRooms();
+            return DALReceptionist.GetBookedRooms();
         }
-        public static List<Reservation> GetReservedRoomsByCustomerId(int id)
+        public static List<ExistingReservation> GetReservedRoomsByCustomerId(int id)
         {
             return DALReceptionist.GetReservedRoomsByCustomerId(id);
         }

@@ -19,9 +19,6 @@ import {
 } from "react-native-cards";
 
 import { useState, useEffect } from "react";
-// import single_room from '../assets/images/single-room.jpg'
-// import double_room from '../assets/images/double-room.jpg'
-// import suites_room from '../assets/images/suites-room.jpg'
 
 export default function CardRoom(props) {
   useEffect(() => {
@@ -65,19 +62,7 @@ export default function CardRoom(props) {
           />
         </View>
         <CardAction separator={false} inColumn={false}>
-          {/* <View style={styles.ButtonContainer}>
-                  <Counter start={0} max={count + 1} style={styles.counter} onChange={SetCount.bind(this)} />
-               </View> */}
-          {/* <CardButton
-        onPress={() => {}}
-        title="Share"
-        color="#FEB557"
-      />
-      <CardButton
-        onPress={() => {}}
-        title="Explore"
-        color="#FEB557"
-      /> */}
+          
         </CardAction>
       </Card>
       <View style={{ marginVertical: 30 }}>

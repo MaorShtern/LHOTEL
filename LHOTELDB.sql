@@ -46,6 +46,7 @@ create table Category
 )
 go
 
+select* from Category
 
 create table Products
 (
@@ -173,6 +174,7 @@ create table Customers_Rooms
 	Entry_Date Date NOT NULL,
 	Exit_Date Date NOT NULL,
 	Amount_Of_People int NOT NULL,
+	Breakfast BIT NOT NULL DEFAULT 0,
 	Room_Status nvarchar(30) NOT NULL,
 	CONSTRAINT [PK_Room_Number2] PRIMARY KEY (Room_Number),
 	CONSTRAINT [Fk_Room_Number] FOREIGN KEY (Room_Number) REFERENCES Rooms (Room_Number),
@@ -300,6 +302,7 @@ go
 --insert [dbo].[Category] values(1,'Alcohol')
 --insert [dbo].[Category] values(2,'Snack')
 --insert [dbo].[Category] values(3,'Sweet Drink')
+--insert [dbo].[Category] values(5,'Breakfast')
 
 --select * from [dbo].[Tasks_Types]
 --insert [dbo].[Tasks_Types] values(1,'Room Cleaning')
@@ -745,6 +748,7 @@ update [dbo].[Category]
 	end
 commit tran
 go
+
 -- exec AlterCategory 1,'Sweet Drink'
 
 
@@ -806,6 +810,8 @@ go
 --6	2	Whiskey	45.00	0.00
 --7	3	Chips	20.00	0.00
 --8	4	Room	0.00	0.00
+--9	5	Breakfast	70.00	0.00
+
 
 ----------------------------------------------
 create proc AlterProductById
@@ -1618,11 +1624,12 @@ create proc AddNewCustomerRooms
 @Entry_Date date,
 @Exit_Date date,
 @Amount_Of_People int,
+@Breakfast Bit,
 @Room_Status nvarchar(30)
 as
 	begin tran
 		insert [dbo].[Customers_Rooms] 
-			values(@Room_Number,@Bill_Number,@Customer_ID,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Room_Status)
+			values(@Room_Number,@Bill_Number,@Customer_ID,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,@Room_Status)
 	if(@@error !=0)
 	begin
 		rollback tran
@@ -1688,6 +1695,7 @@ create proc AlterCustomerRoom
 @Entry_Date date,
 @Exit_Date date,
 @Amount_Of_People int,
+@Breakfast Bit,
 @Room_Status nvarchar(30)
 as
 begin tran	
@@ -1698,8 +1706,10 @@ begin tran
 	[Customer_ID] = @Customer_ID,
 	[Bill_Date] =@Bill_Date,
 	[Amount_Of_People] = @Amount_Of_People,
+    [Breakfast]= @Breakfast,
 	[Bill_Number] = @Bill_Number,
 	[Room_Status] = @Room_Status
+
 	WHERE  	[Room_Number] = @Room_Number
 	if (@@error !=0)
 	begin
@@ -1712,8 +1722,10 @@ go
 --exec GetCustomersRooms
 --exec AlterCustomerRoom 8,8,888,'2022-12-06','2022-12-09','2022-09-15',2	,'Reserved'
 --exec AlterCustomerRoom 27,16,747474744,'2022-09-13','2022-09-29','2022-10-06'1,'Reserved'
+--exec AlterCustomerRoom 24,57,15584444,'2022-09-15','2022-09-20','2022-09-30',4,1,Reserved
+--exec AlterCustomerRoom 1,4,666,'2022-09-11','2022-08-22','2022-08-24',5,1,'Occupied'
 
-
+select * from Bill_Details where  Customer_ID = 666
 
 
 --  מביא את החדרים שתאריך היציאה שלהם גדול מהתאריך של היום
@@ -1754,13 +1766,13 @@ go
 
 alter FUNCTION ReservationsDetails()
 returns @Temp TABLE (Bill_Number int ,Bill_Date Date,Customer_ID int,Customers_Type int ,First_Name nvarchar(30),Last_Name nvarchar(30),Mail nvarchar(100) , Phone_Number nvarchar(30) ,
-Entry_Date Date,Exit_Date Date,Amount_Of_People int,Room_Number int,Price_Per_Night int,Room_Status nvarchar(30))                     
+Entry_Date Date,Exit_Date Date,Amount_Of_People int,Breakfast Bit,Room_Number int,Price_Per_Night int,Room_Status nvarchar(30))                     
 as
 	begin
 		insert @Temp
 
 SELECT dbo.Bill.Bill_Number, dbo.Bill.Bill_Date, dbo.Customers.Customer_ID, dbo.Customers.Customer_Type, dbo.Customers.First_Name, dbo.Customers.Last_Name, dbo.Customers.Mail, dbo.Customers.Phone_Number, 
-                  dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People, dbo.Rooms.Room_Number, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Room_Status
+                  dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date, dbo.Customers_Rooms.Amount_Of_People,dbo.Customers_Rooms.Breakfast, dbo.Rooms.Room_Number, dbo.Rooms.Price_Per_Night, dbo.Customers_Rooms.Room_Status
 FROM     dbo.Bill INNER JOIN
                   dbo.Customers ON dbo.Bill.Customer_ID = dbo.Customers.Customer_ID INNER JOIN
                   dbo.Customers_Rooms ON dbo.Bill.Bill_Number = dbo.Customers_Rooms.Bill_Number AND dbo.Bill.Customer_ID = dbo.Customers_Rooms.Customer_ID AND dbo.Bill.Bill_Date = dbo.Customers_Rooms.Bill_Date INNER JOIN
@@ -1788,7 +1800,8 @@ create proc SaveRoomReservation
 @Counter_Suite int,
 @Entry_Date date,
 @Exit_Date date,
-@Amount_Of_People int
+@Amount_Of_People int,
+@Breakfast Bit
 as
 begin tran	
     
@@ -1812,9 +1825,9 @@ begin tran
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Single room') --- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים ליחיד שפנויים
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number) --- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
-			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
+			exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' -- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved' -- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Single = @Counter_Single - 1
 		end
 
@@ -1822,9 +1835,9 @@ begin tran
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Double room')--- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים לזוג שפנויים
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)--- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
-	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved' ---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Double = @Counter_Double - 1
 		end
 
@@ -1832,9 +1845,9 @@ begin tran
 		begin
 		set @room_number = (SELECT MIN(Room_Number) AS Room_Number FROM dbo.AvailableRooms() WHERE  Room_Type = 'Suite')--- מציאת מספר החדר הכי נמוך מתוך רשימה של חדרים סוויטה שפנויים
 		IF NOT EXISTS(select Room_Number from [dbo].[Customers_Rooms] where Room_Number = @room_number)--- אם החדר אינו מופיע ברשימת החדרים של לקוחות בצע
-	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
+	exec AddNewCustomerRooms @room_number, @bill_number,@id,@Bill_Date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved'---  הפעל את הפרוצדורה מוסיפה אותו לטבלה
 		else
-			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
+			exec AlterCustomerRoom @room_number, @bill_number,@id,@date,@Entry_Date,@Exit_Date,@Amount_Of_People,@Breakfast,'Reserved'-- אחרת הפעל את הפרוצדורה המשנה את הפרטים שלו
 		set @Counter_Suite = @Counter_Suite - 1
 		end
 
@@ -1876,7 +1889,7 @@ go
 
 --select * from Customers_Rooms
 
-create proc Room_Resit      
+alter proc Room_Resit      
 @id int
 as
 begin tran		
@@ -1885,7 +1898,7 @@ begin tran
   where Customer_ID = @id and Bill_Status = 'Open')
 	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
 	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
-	dbo.Customers_Rooms.Amount_Of_People,
+	dbo.Customers_Rooms.Amount_Of_People,dbo.Customers_Rooms.Breakfast,
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
 	dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Purchase_Date,dbo.Bill_Details.Product_Code
 	FROM     dbo.Customers_Rooms INNER JOIN
@@ -1910,21 +1923,28 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 315201913
+--exec Room_Resit 666
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
 
 
 
-create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
+alter trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
 on [Customers_Rooms] for update -- כאשר מופעלת פעולת עידכון על הטבלה "חדרי לקוחות" בצע
 as
 	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied') --  אם קיים מספר חדר שהסטטוס שלו פנוי בצע
 	begin
 		insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
-			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,convert(time,getdate()),'Credit'  
-				from inserted
+			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,convert(time,getdate()),'Credit'
+			 from inserted
+			  IF exists(select Breakfast from inserted where [Breakfast] = 1) 
+                BEGIN
+                 insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
+                 select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,5,1,convert(time,getdate()),'Credit'
+	             from inserted
+                END
+
 	end
 go
 
@@ -2278,7 +2298,7 @@ go
 --exec Number_Of_Visitors_Per_Month
 --select * from [dbo].[Purchases_Documentation]
 
-
+select * from Bill_Details  where Customer_ID =666
 
 create proc Amount_Of_Products_Purchased_In_The_Store
 as

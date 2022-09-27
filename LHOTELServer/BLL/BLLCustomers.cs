@@ -13,24 +13,24 @@ namespace BLL
         //{
         //    return DALCustomers.GetAllCustomers();
         //}
-        public static CustomerDetails GetDBCustomerById(int id)
+        public static User GetDBCustomerById(int id)
         {
             return DALCustomers.GetDBCustomerById(id);
         }
 
-        public static Customers GetCustomerByMailAndPassword(string mail, string password)
+        public static Customer GetCustomerByMailAndPassword(string mail, string password)
         {
             return DALCustomers.GetCustomerByMailAndPassword(mail, password);
         }
-        public static bool AddNewCustomer(Customers customer)
+        public static bool AddNewCustomer(Customer customer)
         {
             return DALCustomers.AddNewCustomer(customer);
         }
-        public static Customers GetCustomerByIDAndMail(int id, string mail)
+        public static Customer GetCustomerByIDAndMail(int id, string mail)
         {
             return DALCustomers.GetCustomerByIDAndMail(id, mail);
         }
-        public static bool AlterCustomerById(Customers customer)
+        public static bool AlterCustomerById(Customer customer)
         {
             return DALCustomers.AlterCustomerById(customer);
         }
