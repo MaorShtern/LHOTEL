@@ -105,8 +105,8 @@ namespace DAL
                         Description = (string)reader["Description"],
                         Date = (DateTime)reader["Date"],
                         EntranceTime = (string)reader["Entrance_Time"],
-                        LeavingTime = null
-
+                        LeavingTime = (reader["Leaving_Time"] != DBNull.Value)
+                        ? (string)reader["Leaving_Time"] : null
                     });
                 }
                 return employeesShifts;//החזרה של הרשימה

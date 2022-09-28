@@ -1151,6 +1151,7 @@ go
 --exec ClockIn 333, '08:56'
 
 
+
 create proc DeleteShift
 @Employee_ID int,
 @Entrance_Time datetime
@@ -1172,11 +1173,11 @@ go
 
 create proc ClockOut
 @Employee_ID int,
-@Entry_Time nvarchar(5)
+@Leaving_Time nvarchar(5)
 as
 begin tran
 	update [dbo].[Shifts]
-	set [Leaving_Time] = @Entry_Time
+	set [Leaving_Time] = @Leaving_Time
 	where Employee_ID = @Employee_ID and [Leaving_Time] IS NULL
 	if (@@error !=0)
 	begin
@@ -1186,7 +1187,7 @@ begin tran
 	end
 commit tran
 go
---exec ClockOut -1 
+--exec ClockOut 222 ,'12:00'
 -- select * from [dbo].[Shifts]
 
 
@@ -1324,7 +1325,7 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 111,'Change of towels','',null,'13:00',2
+--exec AddNewTask 222,'Change of towels','',null,'13:00',2
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
 --exec ClockIn 111,'11:00' 

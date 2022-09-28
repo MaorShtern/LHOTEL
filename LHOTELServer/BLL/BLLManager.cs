@@ -14,10 +14,11 @@ namespace BLL
         {
             return DALManager.GetAllEmployees();
         }
-        public static List<Shift> GetAllEmployeesOnShift()
+        public static List<Shift> GetAllShift()
         {
             return DALManager.GetAllShift();
         }
+
         public static List<Shift> GetWorkersOnShift()
         {
             return DALManager.GetWorkersOnShift();

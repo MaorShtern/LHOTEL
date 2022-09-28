@@ -41,7 +41,7 @@ namespace LHOTELServer.Controllers
         {
             try
             {
-                return Ok(DALManager.GetAllShift());
+                return Ok(BLLManager.GetAllShift());
             }
             catch (Exception)
             {
@@ -56,7 +56,7 @@ namespace LHOTELServer.Controllers
         {
             try
             {
-                return Ok(DALManager.GetWorkersOnShift());
+                return Ok(BLLManager.GetWorkersOnShift());
             }
             catch (Exception)
             {
@@ -65,7 +65,6 @@ namespace LHOTELServer.Controllers
         }
 
 
-        //  צריך לשנות את זה
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetEmployeeById")]
         public IHttpActionResult GetEmployeeById([FromBody] JObject data)

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import CustomerHome from "../Customer/CustomerHome";
@@ -9,6 +9,7 @@ import SaveRoom from "../Customer/SaveRoom";
 import Payment from "../Customer/Payment";
 import ConfirmationPage from "../Customer/ConfirmationPage";
 import Credit from "../Credit";
+import AppContext from "../../AppContext";
 // import RoomService from "../Customer/RoomService";
 // import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
@@ -16,6 +17,8 @@ import Credit from "../Credit";
 const drawer = createDrawerNavigator();
 
 export default function Drawer() {
+
+  const myContext = useContext(AppContext);
 
 
   return (
@@ -66,18 +69,23 @@ export default function Drawer() {
             },
           }}
         /> */}
-        <drawer.Screen
+        {JSON.stringify(myContext.user) !== '{}'? 
+        (<drawer.Screen
           name="Booking"
           component={Booking}
-          // options={{
-          //   headerTitle: "",
-          //   headerTintColor: "white",
-          //   headerMode: 'none',
-          //   headerStyle: {
-          //     backgroundColor: "#000",
-          //   },
-          // }}
-        />
+        />) : null}
+        {/* // <drawer.Screen
+        //   name="Booking"
+        //   component={Booking}
+        //   // options={{
+        //   //   headerTitle: "",
+        //   //   headerTintColor: "white",
+        //   //   headerMode: 'none',
+        //   //   headerStyle: {
+        //   //     backgroundColor: "#000",
+        //   //   },
+        //   // }}
+        // /> */}
 
         {/* <drawer.Screen
           name="Room Service"

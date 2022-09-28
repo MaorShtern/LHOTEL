@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { User } from '../Class/User'
+import { ActivityIndicator } from "react-native";
 
 
 export default function Registration({ navigation }) {
 
-
+    const [loading, SetLoading] = useState(true)
     const [id, setId] = useState('')
     const [first_name, setFirst_name] = useState('')
     const [last_name, setLast_name] = useState('')
@@ -22,13 +23,19 @@ export default function Registration({ navigation }) {
             Alert.alert("The passwords are Invalid")
             return true
         }
-
     }
+
+    const Spinner = () => (
+        <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" />
+        </View>
+    );
 
 
     const Save_User = async () => {
         try {
             if (CheackFields) {
+                SetLoading(false)
                 let user = CreateUser()
                 user = JSON.stringify(user.fields)
                 // console.log(user)
@@ -39,6 +46,7 @@ export default function Registration({ navigation }) {
                 };
                 let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewCustomer', requestOptions);
                 if (result) {
+                    SetLoading(true)
                     alert("User successfully added")
                     navigation.navigate('Login')
                 }
@@ -46,6 +54,7 @@ export default function Registration({ navigation }) {
         } catch (error) {
             alert(error)
         }
+        SetLoading(true)
     }
 
 
@@ -89,6 +98,9 @@ export default function Registration({ navigation }) {
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Registration</Text>
+            <View >
+                {loading ? null : <Spinner />}
+            </View>
             <View style={styles.label}>
 
                 <TextInput value={id} keyboardType='numeric' placeholder="User's ID" style={styles.TextInput}
@@ -154,6 +166,14 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         height: 50,
         padding: 10,
+    },
+    container: {
+        flex: 1,
+    },
+    horizontal: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
     },
     ButtonContainer: {
         flexDirection: 'row',

@@ -1,39 +1,52 @@
 import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity } from "react-native";
-import React, { useState, useEffect,useContext } from "react";
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useState, useEffect, useContext } from "react";
+import { ActivityIndicator } from "react-native";
 import AppContext from "../../AppContext";
 
 export default function Login({ navigation }) {
 
   const [id, setID] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, SetLoading] = useState(true)
   const myContext = useContext(AppContext);
 
 
   const FetchUserFromDB = async (hashPassword) => {
-
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        "id": id,
-        "password": hashPassword
-      }),
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
-    let user = await result.json();
-    // console.log(JSON.stringify(user));
-    if (user !== null) {
+    try {
+      SetLoading(false)
+      const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({
+          "id": id,
+          "password": hashPassword
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword', requestOptions);
+      let user = await result.json();
       // console.log(JSON.stringify(user));
-      myContext.setUserDB(user)
-      navigation.navigate('Home')
-      return
+      if (user !== null) {
+        // console.log(JSON.stringify(user));
+        SetLoading(true)
+        myContext.setUserDB(user)
+        navigation.navigate('Home')
+        return
+      }
+      else {
+        alert("There is no registered user in the system")
+      }
+    } catch (error) {
+      alert(error)
     }
-    else {
-      alert("There is no registered user in the system")
-    }
+    SetLoading(true)
   }
 
+
+  const Spinner = () => (
+    <View style={[styles.container, styles.horizontal]}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
 
 
   // const saveUser = async (value) => {
@@ -74,9 +87,12 @@ export default function Login({ navigation }) {
   return (
     <View>
       <Text style={styles.HeadLine}>Login</Text>
+      <View style={{ paddingTop: 10 }}>
+        {loading ? null : <Spinner />}
+      </View>
       <View style={styles.label}>
         <Text style={styles.Text}>ID: </Text>
-        <TextInput  keyboardType='numeric' onChangeText={(id) => setID(id)} style={styles.TextInput}></TextInput>
+        <TextInput keyboardType='numeric' onChangeText={(id) => setID(id)} style={styles.TextInput}></TextInput>
       </View>
       <View style={styles.label}>
         <Text style={styles.Text}>Password: </Text>
@@ -90,10 +106,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity>
           <Text style={styles.button} onPress={LogIn} >SUBMIT</Text>
         </TouchableOpacity>
-
       </View>
-
-
     </View>
   );
 }
@@ -135,6 +148,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     padding: 10,
     borderRadius: 10
-
+  },
+  container: {
+    flex: 1,
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
   },
 });

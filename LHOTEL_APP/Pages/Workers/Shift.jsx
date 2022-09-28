@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView, } from "react-native";
 import { Divider } from "react-native-paper";
-import { SearchBar } from "react-native-elements";
 import { ActivityIndicator } from "react-native";
 
 
 export default function Shift() {
 
-  const [DBShifts, SetDBShifts] = useState()
   const [empItems, setEmpItems] = useState([]);
-  const [search, setSearch] = useState('');
   const [loading, SetLoading] = useState(false)
 
 
@@ -25,23 +22,16 @@ export default function Shift() {
       let result = await fetch('http://proj13.ruppin-tech.co.il/GetWorkersOnShift', requestOptions);
       let temp = await result.json();
       if (temp !== null) {
-        SetDBShifts(temp)
         setEmpItems(temp)
         SetLoading(true)
         return
       }
-      else
-        getDBProducts()
 
     } catch (error) {
       alert(error)
     }
     SetLoading(true)
-
-    // SetLoading(false)
   }
-  // GetTakenRooms
-  // select * from Customers_Rooms
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
@@ -73,20 +63,9 @@ export default function Shift() {
         </View>
         <View>
           <Text>{item.EmployeeName} </Text>
-          {/* <Text>{item.EmployeeID} </Text> */}
         </View>
       </View>
     );
-  };
-
-  const SerchEmployee = (value) => {
-    setSearch(value);
-    let employee = empItems.filter((per) => per.EmployeeName === value);
-    if (employee.length === 1) {
-      setEmpItems(employee);
-    } else {
-      setEmpItems(DBShifts);
-    }
   };
 
   let listEmployees = empItems.map((item, index) => (<GetEmployeeCard key={index} item={item} />));
@@ -97,14 +76,6 @@ export default function Shift() {
 
       <Text style={styles.sectionTitle}>Today's shift</Text>
 
-      {/* <SearchBar
-        round={true}
-        lightTheme={true}
-        placeholder="search worker..."
-        onChangeText={SerchEmployee}
-        value={search}
-      /> */}
-
       <ScrollView style={styles.tasksWrapper}
         contentContainerStyle={{
           flexGrow: 1,
@@ -114,7 +85,6 @@ export default function Shift() {
         <View style={styles.items}>
           {loading ? listEmployees : <Spinner />}
         </View>
-        {/* <View style={styles.items}>{listEmployees}</View> */}
       </ScrollView>
     </View>
   );
