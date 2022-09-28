@@ -44,10 +44,9 @@ namespace LHOTELServer.Controllers
         {
             try
             {
-                string mail = data["mail"].ToObject<string>();
+                int id = data["id"].ToObject<int>();
                 string password = data["password"].ToObject<string>();
-
-                return Ok(BLLCustomers.GetCustomerByMailAndPassword(mail, password));
+                return Ok(BLLCustomers.GetCustomerByMailAndPassword(id, password));
             }
             catch (Exception e)
             {

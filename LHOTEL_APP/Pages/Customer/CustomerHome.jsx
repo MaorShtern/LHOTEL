@@ -2,8 +2,8 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, StatusBar } from 'react-native';
 import CarouselImages from './CarouselImages';
 import { images } from "../../images";
-import { useState, useEffect } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {  useContext } from "react";
+import AppContext from "../../AppContext";
 
 
 const fullAddress = "חדרה"
@@ -16,48 +16,18 @@ const url = Platform.select({
 
 export default function CustomerHome({ route, navigation }) {
 
+    const myContext = useContext(AppContext);
+    const user = myContext.user
 
-    const [user, SetUser] = useState([])
-
-
-    // console.log("user: " + JSON.stringify(user));
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            GetConnectedUser();
-        });
-        return unsubscribe;
-    }, [navigation]);
-
-
-
-    const GetConnectedUser = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@user');
-            if (value !== null) {
-                SetUser(JSON.parse(value))
-            }
-        }
-        catch (e) {
-            alert(e)
-        }
-    }
 
     const LogOutUser = async () => {
-        try {
-            SetUser([])
-            await AsyncStorage.setItem('@user', JSON.stringify([]), () => {
-            });
-        }
-        catch (error) {
-            Alert.alert(error)
-        }
+        myContext.setUserDB({})
     }
 
 
     return (
         <ScrollView><StatusBar  translucent={true} backgroundColor={'transparent'}  />
-            {user.length === undefined ?
+            {user.FirstName !== undefined ?
                 (<View style={styles.userContainer}>
                     <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
                         <Text style={{ color: 'white' }}>Log out</Text>

@@ -1,15 +1,10 @@
-
-
-
 import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { User } from '../Class/User'
 
 
 export default function Registration({ navigation }) {
 
-    const [arrUsers, setArrUsers] = useState([])
 
     const [id, setId] = useState('')
     const [first_name, setFirst_name] = useState('')
@@ -33,84 +28,34 @@ export default function Registration({ navigation }) {
 
     const Save_User = async () => {
         try {
-            let user = CreateUser()
-            user = JSON.stringify(user.fields)
-            console.log(user)
-            const requestOptions = {
-                method: 'POST',
-                body: user,
-                headers: { 'Content-Type': 'application/json' }
-            };
-            let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewCustomer', requestOptions);
-            if(result)
-            {
-                alert("User successfully added")
-                navigation.navigate('Login')
+            if (CheackFields) {
+                let user = CreateUser()
+                user = JSON.stringify(user.fields)
+                // console.log(user)
+                const requestOptions = {
+                    method: 'POST',
+                    body: user,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewCustomer', requestOptions);
+                if (result) {
+                    alert("User successfully added")
+                    navigation.navigate('Login')
+                }
             }
-
         } catch (error) {
             alert(error)
         }
-
     }
 
-
-    // const Save_User = () => {
-    //     if (CheackFields()) {
-
-    //         let array = getData()
-    //         let new_user = CreateUser()
-    //         if (array === null) {
-    //             setArrUsers([])
-    //         }
-    //         else {
-    //             setArrUsers(array)
-    //         }
-
-    //         let new_Array = [...arrUsers, new_user.fields]
-
-    //         setArrUsers(new_Array)
-
-    //         saveData(new_Array)
-
-    //     }
-
-
-    //     else
-    //         Alert.alert("All fields must be filled")
-    // }
-
-
-    // const saveData = async (new_Array) => {
-    //     try {
-
-    //         await AsyncStorage.setItem('@storage_Key_0', JSON.stringify(new_Array), () => {
-    //             Alert.alert("Data Saved")
-    //             navigation.navigate('Login')
-    //         });
-
-    //     }
-    //     catch (error) {
-    //         Alert.alert(error)
-    //     }
-    // }
-
-
-
-
-    // const getData = async () => {
-    //     // try {
-    //     //     const jsonValue = await AsyncStorage.getItem('@storage_Key_0')
-    //     //     return jsonValue != null ? JSON.parse(jsonValue) : null;
-    //     // } catch (error) {
-    //     //     Alert.alert(error)
-    //     // }
-    // }
 
 
     const CreateUser = () => { // פונצקיה היוצרת אובייקט חדש מסוג משתמש ומחזירה אותו 
         var Hashes = require('jshashes')
         let SHA1 = new Hashes.SHA1().b64_hmac(id, password) // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה 
+
+        // let bcrypt = require('bcryptjs');
+        // let hash = bcrypt.hashSync(password , 10);
 
         //  יצירת אובייקט מהמחלקה "יוזר" אשר יכיל את כול פרטי המשתמש
         let user = {
@@ -120,13 +65,12 @@ export default function Registration({ navigation }) {
                 FirstName: first_name,
                 LastName: last_name,
                 Mail: email,
-                password: SHA1,
+                Password: SHA1,
                 PhoneNumber: phone
             }
         }
         return user
     }
-
 
 
 

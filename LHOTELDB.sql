@@ -46,7 +46,7 @@ create table Category
 )
 go
 
-select* from Category
+
 
 create table Products
 (
@@ -347,7 +347,7 @@ go
 
 
 
-alter proc GetEmployeeById
+create proc GetEmployeeById
 @id int
 as
 begin tran
@@ -543,7 +543,7 @@ begin tran
 	end
 commit tran
 go
- exec GetDBCustomerById 7878
+ --exec GetDBCustomerById 7878
 
 
 
@@ -612,13 +612,15 @@ go
 --exec AddNewCustomer 111,1,'aaa','aaa','aaa@gmail.com','aaa','0524987762','aaa','02/28',569,'4580111122223333'
 --exec AddNewCustomer 222,2,'bbb','bbb','bbb@gmail.com','bbb','0501264859','bbb','02/28',781,'4580211122223333'
 --exec AddNewCustomer 333,3,'ccc','ccc','ccc@gmail.com','ccc','0541528971','ccc','02/28',569,'4580311122223333'
---exec AddNewCustomer 444,2,'ddd','ddd','ddd@gmail.com','ddd','0526487912','ddd','02/28',212,'4580411122223333'
---exec AddNewCustomer 555,1,'eee','eee','eee@gmail.com','eee','0500123889','eee','02/28',954,'4580511122223333'
---exec AddNewCustomer 666,2,'fff','fff','fff@gmail.com','fff','0531528966','fff','02/28',856,'4580611122223333'
---exec AddNewCustomer 777,2,'ggg','ggg','ggg@gmail.com','ggg','0531528966','ggg','02/28',569,'4580711122223333'
---exec AddNewCustomer 888,3,'hhh','hhh','hhh@gmail.com','hhh','0576488918','hhh','02/28',381,'4580811122223333'
 --exec AddNewCustomer 999,1,'mmm','mmm','mmm@gmail.com','mmm','0526159848','','',-1,''
-
+--{
+--    "CustomerID":"91598872",
+--    "FirstName":"Yafit",
+--    "LastName":"Yona",
+--    "Mail":"Yafit@gmail.com",
+--    "password":"123456789",
+--    "PhoneNumber":"05449856363"
+--}
 
 
 
@@ -688,13 +690,12 @@ go
 --exec UpdateCustomerCredit 999,'mmm','02/28',123,'21312'
 
 
---drop proc DeleteCustomerById
---create proc DeleteCustomerById
---@id int
---as
---	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
---go
---exec DeleteCustomerById 315201913 
+create proc DeleteCustomerById
+@id int
+as
+	DELETE FROM [dbo].[Customers] WHERE [Customer_ID] = @id
+go
+--exec DeleteCustomerById 91598872 
 
 
 
@@ -1113,7 +1114,7 @@ begin tran
 	FROM dbo.Shifts INNER JOIN dbo.Employees 
 	ON dbo.Shifts.Employee_ID = dbo.Employees.Employee_ID INNER JOIN
     dbo.Employees_Types ON dbo.Employees.Worker_Code = dbo.Employees_Types.Worker_Code
-	where dbo.Shifts.Date =	 FORMAT(getdate(), 'yyyy-MM-dd') and  dbo.Shifts.Leaving_Time is null
+	where dbo.Shifts.Date =	 FORMAT(getdate(), 'yyyy-MM-dd') 
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1169,7 +1170,7 @@ go
 
 
 
-alter proc ClockOut
+create proc ClockOut
 @Employee_ID int,
 @Entry_Time nvarchar(5)
 as
@@ -2251,10 +2252,10 @@ go
 create proc Number_Of_Visitors_Per_Month
 as
 	begin tran		
-		select  CAST(YEAR(Bill_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Bill_Date) AS VARCHAR(2)) as Date
+		select  CAST(YEAR(Bill_Date) AS VARCHAR(4)) as Date
 		,DATENAME(MONTH,Bill_Date) as Month_Name,Count(Bill_Date)AS Amount from [dbo].[Purchases_Documentation]
 		where [Product_Code] = 8
-		GROUP by  CAST(YEAR(Bill_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Bill_Date) AS VARCHAR(2)),
+		GROUP by  CAST(YEAR(Bill_Date) AS VARCHAR(4)),
 		DATENAME(MONTH,Bill_Date)
 		order by Amount
 	if (@@error !=0)
@@ -2268,7 +2269,8 @@ go
 --exec Number_Of_Visitors_Per_Month
 --select * from [dbo].[Purchases_Documentation]
 
-select * from Bill_Details  where Customer_ID =666
+--select * from Bill_Details  where Customer_ID =666
+
 
 create proc Amount_Of_Products_Purchased_In_The_Store
 as
@@ -2299,25 +2301,25 @@ go
 
 
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',25,'Suite',500,5,2,'Credit','2022-08-22',8)
+--values(4,'315201913','2022-09-21',21,'Suite',500,5,1,2,'Credit','2022-08-22',8)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Double room',300,5,2,'Credit','2022-08-22',8)
+--values(1,'315201913','2022-09-21',11,'Double room',300,5,1,2,'Credit','2022-08-22',8)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',3,'Single room',100,5,2,'Credit','2022-08-22',8)
+--values(1,'315201913','2022-09-21',1,'Single room',100,5,1,2,'Credit','2022-08-22',8)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Vodka',35,5,6,'Credit','2022-08-22',2)
+--values(1,'315201913','2022-09-21',13,'Vodka',35,5,1,6,'Credit','2022-08-22',2)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Coca cola',15,5,20,'Credit','2022-08-22',1)
+--values(1,'315201913','2022-09-21',13,'Coca cola',15,5,1,20,'Credit','2022-08-22',1)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Doritos',20,2,30,'Credit','2022-07-22',4)
+--values(1,'315201913','2022-09-21',13,'Doritos',20,2,1,30,'Credit','2022-07-22',4)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Sprite',15,2,6,'Credit','2022-08-22',5)
+--values(1,'315201913','2022-09-21',13,'Sprite',15,2,1,6,'Credit','2022-08-22',5)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Whiskey',45,2,50,'Credit','2022-08-22',6)
+--values(1,'315201913','2022-09-21',13,'Whiskey',45,2,1,50,'Credit','2022-08-22',6)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Chips',20,2,6,'Credit','2022-08-22',7)
+--values(1,'315201913','2022-09-21',13,'Chips',20,2,1,6,'Credit','2022-08-22',7)
 --insert dbo.Purchases_Documentation 
---values(65,'315201913','2022-09-21',13,'Bamba',20,2,19,'Credit','2022-08-22',3)
+--values(1,'315201913','2022-09-21',13,'Bamba',20,2,1,19,'Credit','2022-08-22',3)
 
 
 
@@ -2346,16 +2348,16 @@ create proc ProductPurchaseByName
 @Description nvarchar(30)
 as
 begin tran		
-		SELECT dbo.Purchases_Documentation.Product_Code,
-		dbo.Purchases_Documentation.Room_Type as Product_Name, 
-		sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount, 
-		dbo.Category.Description as Category
-		FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
-		ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
-		ON dbo.Products.Category_Number = dbo.Category.Category_Number
-		WHERE  (dbo.Purchases_Documentation.Room_Type = @Description)
-		GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type,
-		dbo.Purchases_Documentation.Number_Of_Nights, dbo.Category.Description
+	SELECT dbo.Purchases_Documentation.Product_Code, 
+	dbo.Purchases_Documentation.Room_Type as Product_Name,
+	sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
+	dbo.Category.Description AS Category
+	FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
+	ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
+	ON dbo.Products.Category_Number = dbo.Category.Category_Number
+	WHERE  (dbo.Products.Description = @Description)
+	GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type, dbo.Purchases_Documentation.Number_Of_Nights, dbo.Products.Description, dbo.Category.Description
+
 if (@@error !=0)
 	begin
 		rollback tran
@@ -2364,8 +2366,9 @@ if (@@error !=0)
 	end
 commit tran
 go
---exec ProductPurchaseByName 'Whiskey'
+--exec ProductPurchaseByName 'Vodka'
 --select * from [dbo].[Purchases_Documentation]
+
 
 
 create proc Income_And_Expenses

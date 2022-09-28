@@ -1,7 +1,6 @@
 import Router from './Pages/Navigation/Router'
 import { LogBox } from 'react-native'
 import ignoreWarnings from 'ignore-warnings';
-
 import { useState} from "react";
 import AppContext from './AppContext';
 
@@ -12,11 +11,14 @@ export default function App() {
   const [isUserExist, setIsUserExist] = useState(false);
   const [roomsFlags, setRoomsFlags] = useState({});
   const [employee, setEmployee] = useState({});
-
+  const [user, SetUser] = useState({})
 
   const setEmployeeDB = (obj) => {
-   
     setEmployee(obj)
+  }
+
+  const setUserDB = (obj) => {
+    SetUser(obj)
   }
   
 //   const setEmployeeId = (id) => {
@@ -30,10 +32,12 @@ export default function App() {
 
   const userSettings = {
     employee:employee,
+    user:user,
     isUserExist:isUserExist,
     isIos:isIos,
     roomsFlags:roomsFlags,
     setEmployeeDB,
+    setUserDB,
     setIsUserExist,
     setRoomsFlags
   };

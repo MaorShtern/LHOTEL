@@ -133,13 +133,19 @@ namespace DAL
             }
         }
 
-        public static Customer GetCustomerByMailAndPassword(string mail, string password)
+        public static Customer GetCustomerByMailAndPassword(int id, string password)
         {
             try
             {
-                Customer customer = GetCustomerByMail(mail);
-                bool verify = Verify(password, customer.Password);
-                return customer != null && verify ? customer : null;
+                Customer customer = GetCustomerById(id);
+                //bool verify = Verify(password, customer.Password);
+                //string passwordHash = HashPassword(customer.Password);
+
+
+                if (customer != null && password == customer.Password)
+                    return customer;
+                else
+                    return null;
 
             }
             catch (Exception e)
