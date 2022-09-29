@@ -26,7 +26,7 @@ namespace LHOTELServer.Controllers
     {
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("~/GetBookedRooms")]
-        public IHttpActionResult GetTakenRooms()
+        public IHttpActionResult GetBookedRooms()
         {
             try
             {

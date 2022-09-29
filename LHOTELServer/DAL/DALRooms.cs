@@ -160,7 +160,7 @@ namespace DAL
         }
 
 
-        public static bool CheckIn_Without_Existing_User(ReservationWithoutExistingUser reservation)
+        public static bool CheckIn_Without_Existing_User(NewReservation reservation)
         {
             try
             {

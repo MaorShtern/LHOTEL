@@ -22,7 +22,7 @@ namespace DAL
                 List<BookedRoom> BookedRooms = new List<BookedRoom>();
                 while (reader.Read())
                 {
-                   BookedRooms.Add(new BookedRoom()
+                    BookedRooms.Add(new BookedRoom()
                     {
 
                         RoomNumber = (int)reader["Room_Number"],
@@ -76,10 +76,10 @@ namespace DAL
                         BillDate = (DateTime)reader["Bill_Date"],
                         CustomerID = (int)reader["Customer_ID"],
                         CustomerType = (int)reader["Customers_Type"],
-                        //FirstName = (string)reader["First_Name"],
-                        //LastName = (string)reader["Last_Name"],
-                        //Mail = (string)reader["Mail"],
-                        //PhoneNumber = (string)reader["Phone_Number"],
+                        FirstName = (string)reader["First_Name"],
+                        LastName = (string)reader["Last_Name"],
+                        Mail = (string)reader["Mail"],
+                        PhoneNumber = (string)reader["Phone_Number"],
                         EntryDate = (DateTime)reader["Entry_Date"],
                         ExitDate = (DateTime)reader["Exit_Date"],
                         AmountOfPeople = (int)reader["Amount_Of_People"],
