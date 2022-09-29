@@ -1,15 +1,20 @@
 
 export default class Reservation {
 
-//     constructor(Reservation) {
-//         this.Customer = Reservation.customer,
-//         this.AmountOfPeople = Reservation.AmountOfPeople,
-//         this.EmployeeID = Reservation.EmployeeID
-//         this.CounterSingle = Reservation.CounterSingle
-//         this.CounterDouble = Reservation.CounterDouble
-//         this.CounterSuite = Reservation.CounterSuite
-//         this.ExitDate	= Reservation.ExitDate,
-//         this.EntryDate = Reservation.EntryDate
+    constructor(Reservation) {
+        this.CustomerID = Reservation.CustomerID,
+        this.CardHolderName = Reservation.CardHolderName,
+        this.CreditCardDate = Reservation.CreditCardDate,
+        this.ThreeDigit = Reservation.ThreeDigit,
+        this.CreditCardNumber = Reservation.CreditCardNumber,
+        this.EmployeeID = Reservation.EmployeeID,
+        this.AmountOfPeople = Reservation.AmountOfPeople,
+       this.CounterSingle = Reservation.CounterSingle,
+        this.CounterDouble = Reservation.CounterDouble,
+        this.CounterSuite = Reservation.CounterSuite,
+        this.EntryDate = Reservation.EntryDate,
+        this.ExitDate	= Reservation.ExitDate,
+      this.Breakfast = Reservation.Breakfast
         
-// }
+}
 }

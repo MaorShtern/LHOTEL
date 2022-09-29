@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { TextInput } from "react-native-paper";
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, Dimensions, Animated, ScrollView, StatusBar, Switch, ImageBackground, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,9 +6,18 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { images } from "../../images";
 import { Checkbox } from "react-native-paper";
 import moment from "moment";
-export default function CheckIn({ route, navigation }) {
-  // let { id } = route.params;
+import AppContext from "../../AppContext";
+import { useFocusEffect } from "@react-navigation/native";
 
+export default function CheckIn({ route, navigation }) {
+  const myContext = useContext(AppContext);
+  // let { id } = route.params;
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      myContext.setIsUserExist(false)
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

@@ -1,7 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import { StyleSheet, View, Image, TouchableOpacity, FlatList, Alert, } from "react-native";
+
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -18,16 +26,7 @@ export default function ShortCheckIn({ route, navigation }) {
   let { currReservation } = route.params;
 
   const curr = currReservation[0];
-  // console.log("curr:  " + JSON.stringify(curr));
-  // console.log(curr);
-  // useEffect(() => {
-  //   const focus = navigation.addListener("focus", () => {
-  //     setWorkerCode(1)
-  //     setPassword(0)
-  //     setId(0)
-  //   });
-
-  // }, [navigation]);
+  console.log(curr);
 
   const CalcCost = () => {
     let total = 0;
@@ -76,7 +75,6 @@ export default function ShortCheckIn({ route, navigation }) {
       </>
     );
 
-
     return (
       <View
         style={{
@@ -95,7 +93,7 @@ export default function ShortCheckIn({ route, navigation }) {
             {curr.BillNumber === undefined ? null : "No : " + curr.BillNumber}
           </Text>
         </View>
-        <View style={{ paddingTop: 10, }}>
+        <View style={{ paddingTop: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>
             <Image style={styles.icon} source={images.calendar} />
             {" " +
@@ -141,78 +139,126 @@ export default function ShortCheckIn({ route, navigation }) {
     );
   };
 
-
-
   const CheckIn_Without_Existing_User = async () => {
+    // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
     try {
-      console.log("jkdbhjbvhdv");
+      let newCustomer = {
+        // יצירת אובייקט מסוג לקוח
+        className: Customer,
+        fields: {
+          CustomerID: curr.CustomerID,
+          CustomerType: curr.CustomerType,
+          FirstName: curr.FirstName,
+          LastName: curr.LastName,
+          Mail: curr.Mail,
+          Password: curr.CustomerID,
+          PhoneNumber: curr.PhoneNumber,
+          CardHolderName: curr.CardHolderName,
+          CreditCardNumber: curr.CreditCardNumber,
+          CreditCardDate: curr.CreditCardDate,
+          ThreeDigit: curr.ThreeDigit,
+          EmployeeID: curr.EmployeeID,
+          AmountOfPeople: curr.AmountOfPeople,
+          Breakfast: curr.Breakfast,
+          CounterSingle: curr.CounterSingle,
+          CounterDouble: curr.CounterDouble,
+          CounterSuite: curr.CounterSuite,
+          ExitDate: curr.ExitDate,
+          EntryDate: curr.EntryDate
+        },
+      };
+     
 
+    
+      let theCustomer = JSON.stringify(newCustomer.fields)
+     
+      const requestOptions = {
+        method: 'POST',
+        body: theCustomer,
+        headers: { 'Content-Type': 'application/json' }
+    };
+      
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User", requestOptions);
+      let reservationResult = await result.json();
+      if (reservationResult) {
+        console.log(reservationResult);
+        alert("You have checked in successfully !");
+      }
+      navigation.navigate("CheckIn");
     } catch (error) {
-      alert(error)
+      alert(error);
     }
-  }
-
-  const CheckInDB = async () => {
-    try {
-      console.log(curr);
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-
-
-  const CheckIn = async () => {
-    if (myContext.isUserExist)
-      CheckInDB()
-    else
-      CheckIn_Without_Existing_User()
-
-
-    // {
-    //   try {
-    //     // if (!myContext.isUserExist()) {
-    //     //   return
-    //     // }
-    //     const requestOptions = { // API  יצירת בקשת 
-    //       method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
-    //       body: JSON.stringify(value),
-    //       headers: { "Content-Type": "application/json" },
-    //     };
-    //     console.log(requestOptions.body);
-    //     // let result = await fetch("http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ?
-    //     //  "CheckIn" : "CheckIn_Without_Existing_User", requestOptions))
-    //     // let data = await result.json();
-    //     // console.log(data);
-    //   } catch (error) {
-    //     alert(error)
-    //   }
-    //   // currReservation.map((reservation) => {CheckInRequest(reservation)})
-    //   // alert("You have checked in successfully !");
-    //   // navigation.navigate("CheckIn")
-    // }
   };
+  const CheckIn_With_Existing_User = async () => {
+    try {
+      let reservation = {
+        // יצירת אובייקט מסוג לקוח
+        className: Reservation,
+        fields: {
+          CustomerID: curr.CustomerID,
+          Breakfast: curr.Breakfast,
+          CardHolderName: curr.CardHolderName,
+          CreditCardNumber: curr.CreditCardNumber,
+          CreditCardDate: curr.CreditCardDate,
+          ThreeDigit: curr.ThreeDigit,
+          AmountOfPeople: curr.AmountOfPeople,
+          EmployeeID: curr.EmployeeID,
+          CounterSingle: curr.CounterSingle,
+          CounterDouble: curr.CounterDouble,
+          CounterSuite: curr.CounterSuite,
+          ExitDate: curr.ExitDate,
+          EntryDate: curr.EntryDate,
+        },
+      };
 
+      const requestOptions = {
+        method: "POST",
+        body: JSON.stringify(reservation.fields),
+        headers: { "Content-Type": "application/json" },
+      };
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/CheckIn_With_Existing_User",
+        requestOptions
+      );
+      let customerResult = await result.json();
+      if (customerResult) {
+        console.log(customerResult);
+        alert("You have checked in successfully !");
+      }
+      navigation.navigate("CheckIn");
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const CheckInWithExistingReservation = async () => {
+    try {
+      const requestOptions = {
+        method: "PUT",
+        body: JSON.stringify({
+          "id": curr.CustomerID,
+          "Entry_Date": curr.EntryDate,
+        }),
+        headers: { "Content-Type": "application/json" },
+      };
+      let result = await fetch("http://proj13.ruppin-tech.co.il/CheckIn", requestOptions);
+      let customerResult = await result.json();
+      if (customerResult !==null) {
+        console.log(customerResult);
 
-
-  // const CheckInRequest = async (value) => {
-  //   const requestOptions = { // API  יצירת בקשת 
-  //     method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
-  //     body: JSON.stringify(value),
-  //     headers: { "Content-Type": "application/json" },
-  //   };
-  //   let result = await fetch("http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
-  //     requestOptions
-  //   );
-  //   let data = await result.json();
-  //   if (data !== null) {
-  //     // console.log(JSON.stringify(data));
-
-  //     return;
-  //   }}
-
-
-
+        alert("You have checked in successfully !");
+      }
+      navigation.navigate("CheckIn");
+    } catch (error) {
+      alert(error);
+    }
+  };
+console.log(myContext.isUserExist);
+  const CheckIn = () => {
+    if (curr.BillNumber !== undefined) CheckInWithExistingReservation();
+    else if (myContext.isUserExist) CheckIn_With_Existing_User();
+    else CheckIn_Without_Existing_User();
+  };
 
   return (
     <View style={styles.container}>
@@ -253,9 +299,7 @@ export default function ShortCheckIn({ route, navigation }) {
 
       <View style={{ flex: 1.5 }}>
         <View style={{ marginTop: 15, paddingHorizontal: 15 }}>
-          <Text
-            style={{ fontSize: 20, paddingBottom: 20 }}
-          >
+          <Text style={{ fontSize: 20, paddingBottom: 20 }}>
             Customer's details{" "}
           </Text>
 
@@ -292,7 +336,7 @@ export default function ShortCheckIn({ route, navigation }) {
               {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421************</Text> */}
               {/* <Icon name="card" size={25} color="#a8a9ad" /> */}
             </View>
-            <Text style={{ padding: 10, fontSize: 18, }}>
+            <Text style={{ padding: 10, fontSize: 18 }}>
               {" "}
               <Icon name="call" size={20} color="#a8a9ad" />
               {curr.PhoneNumber}

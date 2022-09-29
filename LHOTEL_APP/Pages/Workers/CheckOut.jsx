@@ -1,6 +1,6 @@
 import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList} from "react-native";
 import React, { useState ,useEffect} from "react";
-import { Checkbox } from "react-native-paper";
+import { Divider } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
@@ -36,7 +36,29 @@ export default function CheckOut() {
     FetchData()
 
   }
+  const renderItem = ({ item }) => (
+    <>
+      <Divider
+        style={{
+          width: 2,
+          height: "70%",
+          marginRight: 10,
+          alignSelf: "center",
+        }}
+      />
 
+      <Text
+        style={{
+          fontSize: 17,
+          paddingHorizontal: 5,
+          marginRight: 10,
+          paddingBottom: 5,
+        }}
+      >
+        Room : {item.RoomNumber}
+      </Text>
+    </>
+  );
 
   const SerchReservation = (value) => {
  
@@ -80,11 +102,16 @@ export default function CheckOut() {
           <View style={{ flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",paddingHorizontal:10}}>
-          <Text style={{ padding: 4,fontSize: 18 }}>
+          {/* <Text style={{ padding: 4,fontSize: 18 }}>
           Room : {item.RoomNumber}
 
-          </Text>
-
+          </Text> */}
+ <FlatList
+                data={DBreservationItems}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={3}
+              />
           <Icon name="person" size={18} style={{ padding: 4 }}>
             {" "}
             {item.AmountOfPeople}
@@ -124,6 +151,21 @@ export default function CheckOut() {
 
   
   }
+// const func = ()=>{
+//   let rooms = []
+//   DBreservationItems.map((room) =>
+//   rooms.push({
+//         type: per.RoomType,
+//         allrooms: rooms.filter((room) => room.RoomType === per.RoomType).length,
+//         details: per.Details,
+//         pricePerNight: per.PricePerNight,
+//       })
+//   rooms .push()
+// }
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.SearchbarContainer}>
