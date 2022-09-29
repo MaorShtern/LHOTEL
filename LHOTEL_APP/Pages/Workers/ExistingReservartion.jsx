@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  ImageBackground,
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { ImageBackground, View, StyleSheet, Image, Text, TouchableOpacity, FlatList, } from "react-native";
 import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { images } from "../../images";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomCard } from "./CustomCard";
@@ -19,34 +10,31 @@ import { CustomCard } from "./CustomCard";
 
 export default function ExistingReservation({ route, navigation }) {
 
-  let {Id} = route.params
-  
+  let { Id } = route.params
+
   const [id, setId] = useState(Id)
- 
 
- 
 
-const ReservationCheck = async ()=> {
+  const ReservationCheck = async () => {
 
-  const requestOptions = {
-    method: 'POST',
-    body: JSON.stringify({
-      "id": id,
-     
-    }),
-    headers: { 'Content-Type': 'application/json' }
-  };
-  let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
-  let currReservation  = await result.json();
-  if (currReservation.length > 0) {
-console.log(currReservation);
-    navigation.navigate("ShortCheckIn",{currReservation:currReservation})
-    return
-    
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        "id": id,
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
+    let currReservation = await result.json();
+    if (currReservation.length > 0) {
+      console.log(currReservation);
+      navigation.navigate("ShortCheckIn", { currReservation: currReservation })
+      return
+
+    }
+    else alert("No matching Reservation for the ID you entered")
+
   }
-  else alert("No matching Reservation for the ID you entered")
- 
-} 
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -70,10 +58,10 @@ console.log(currReservation);
 
           <TextInput
             style={styles.input}
-  
+
             autoCapitalize="none"
             keyboardType="numeric"
-            onChangeText={(id) =>setId(id)}
+            onChangeText={(id) => setId(id)}
             value={id}
           />
 
@@ -109,7 +97,7 @@ console.log(currReservation);
               </Text>
             </LinearGradient>
           </TouchableOpacity>
-          
+
         </View>
       </View>
     </View>
@@ -117,7 +105,7 @@ console.log(currReservation);
 }
 
 const styles = StyleSheet.create({
- 
+
   bottomview: {
     flex: 4,
     backgroundColor: "#fff",
@@ -135,7 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     bottom: 40,
     color: 'white',
-    paddingLeft:20
+    paddingLeft: 20
   },
   input: {
     marginHorizontal: 30,

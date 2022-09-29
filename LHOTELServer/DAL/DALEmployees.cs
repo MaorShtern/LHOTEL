@@ -201,8 +201,9 @@ namespace DAL
                 {
                     return false;
                 }
-                string str = $@"exec AlterEmployee {employee.EmployeeID},'{employee.EmployeeName}','{employee.PhoneNumber}',
-        '{employee.BirthDate:yyyy-MM-dd}',{employee.Description},{employee.HourlyWage},'{employee.Address}'";
+                string str = $@"exec AlterEmployee {employee.EmployeeID},
+'{employee.EmployeeName}','{employee.PhoneNumber}','{employee.BirthDate:yyyy-MM-dd}',
+'{employee.Description}',{employee.HourlyWage},'{employee.Address}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 return result == 1;

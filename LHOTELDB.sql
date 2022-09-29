@@ -466,7 +466,7 @@ commit tran
 go
 
 --exec AlterEmployee 999,'ccc','0563211948','2022 - 08 - 15','Manager',40,'dgdbbd'
-
+--select * from [dbo].[Employees]
 
 
 ---------------------------------------------------------
@@ -1325,10 +1325,11 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 222,'Change of towels','',null,'13:00',2
+--exec AddNewTask 222,'Room Cleaning','',null,'13:00',2	
+
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
---exec ClockIn 111,'11:00' 
+--exec ClockIn 222,'11:00' 
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
@@ -1373,7 +1374,8 @@ go
 --exec GetAllTasks
 --exec GetAllShifts
 --exec AlterTask 5,111,'Room Cleaning',null,'2022-09-06','13:00','14:00','Close','chips and coke for room 30'
---exec AlterTask 5,222,'Room Cleaning',10,'2022-09-12','06:35','09:40','Open','Igjvibk rbkcrcxe'
+--select * from [dbo].[Employees_Tasks]
+--exec AlterTask 13,222,'Room Cleaning',2,'2022-09-29','13:00',NULL,'Open',null	
 
 
 create proc DeleteTask
@@ -1825,9 +1827,14 @@ begin tran
 commit tran
 go
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
+--select * from [dbo].[Customers]
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
+
+--select * from [dbo].[Employees]
+--select * from [dbo].[Employees_Types]
+--select * from [dbo].[Employees_Tasks]
     --"CustomerID": 666,
     --"CardHolderName": "mmm",
     --"CreditCardDate": "12/29",
@@ -1875,7 +1882,7 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 315201913
+--exec Room_Resit 91598872
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
@@ -1923,9 +1930,11 @@ begin tran
 commit tran
 go
 
---  exec CheckIn 666 , '2022-08-22'
+-- exec CheckIn 91598872 , '2022-09-09'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
 
 
 create proc CheckIn_With_Existing_User
@@ -2070,7 +2079,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
--- exec CheckOut 315201913, '2022-08-24'
+-- exec CheckOut 91598872, '2022-10-13'
 
 
 
@@ -2147,6 +2156,7 @@ commit tran
 go
 
 --exec AddNewBill_Detail 315201913,21,'Coca cola',9,'Cash'
+
    --"CustomerID":315201913, 
    -- "RoomNumber":21,
    -- "ProductDec":"Coca cola",

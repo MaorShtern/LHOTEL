@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Customer from "./Class/Customer";
 import { CreditCardInput } from "react-native-credit-card-input-view";
 import AppContext from "../AppContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -12,41 +12,37 @@ export default function Credit({ route, navigation }) {
 
   const myContext = useContext(AppContext);
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
-  
+
   let { ReservationDetails } = route.params;
 
   const [form, SetForm] = useState({});
 
   const onChange = (form) => {
     SetForm(form);
-   
   };
 
   const SaveRoomReservation = async (value) => {
-    let { the_data ,totalSum} = route.params;
-    console.log(totalSum);
+    let { the_data, totalSum } = route.params;
+    // console.log(totalSum);
     try {
       // console.log(totalSum);
       navigation.navigate("ConfirmationPage", {
         customer: value,
         the_data: the_data,
-        totalSum:totalSum
+        totalSum: totalSum
       });
       const requestOptions = {
         method: "POST",
         body: JSON.stringify(value.fields),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/SaveRoomReservation",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/SaveRoomReservation", requestOptions);
       let customerResult = await result.json();
       if (customerResult)
         navigation.navigate("ConfirmationPage", {
           customer: value,
           the_data: the_data,
-          totalSum:totalSum
+          totalSum: totalSum
         });
       // console.log(customerResult);
       // navigation.navigate('ConfirmationPage', {
@@ -64,11 +60,11 @@ export default function Credit({ route, navigation }) {
   //    ConfirmInformation():ConfirmInformation2()
 
   // }
-// console.log(ReservationDetails);
-  const CheckFields = () => {}
+  // console.log(ReservationDetails);
+  // const CheckFields = () => { }
   const ConfirmInformation = () => {
-    console.log(form);
-    if(!form.valid){
+    // console.log(form);
+    if (!form.valid) {
       alert("Incorrect credit card details")
       return
     }
@@ -82,8 +78,8 @@ export default function Credit({ route, navigation }) {
   };
   //
   const createCustomerReservation = () => {
-    
-    let newCustomer = {
+
+    let newReservation = {
       className: Customer,
       fields: {
         CustomerID: ReservationDetails.CustomerID,
@@ -99,29 +95,26 @@ export default function Credit({ route, navigation }) {
         CounterDouble: ReservationDetails.CounterDouble,
         CounterSuite: ReservationDetails.CounterSuite,
         AmountOfPeople: ReservationDetails.AmountOfPeople,
-        Breakfast : ReservationDetails.Breakfast ,
-        NumberOfNights:ReservationDetails.NumberOfNights,
+        Breakfast: ReservationDetails.Breakfast,
+        NumberOfNights: ReservationDetails.NumberOfNights,
         CardHolderName: form.values.name,
         CreditCardNumber: form.values.number.replace(/ /g, ""),
         CreditCardDate: form.values.expiry,
         ThreeDigit: form.values.cvc,
-       
-       
-      
       },
     };
-    return newCustomer;
-  
+    return newReservation;
+
   };
- 
+
 
   let { totalSum } = route.params;
 
- 
+
   return (
     <View>
 
-       <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
+      <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
 
       <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput
@@ -168,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-   
+
   },
 
   TextInput: {

@@ -15,12 +15,12 @@ import moment from "moment";
 import AppContext from "../../AppContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { images } from "../../images";
-
 import { TextInput } from "react-native-paper";
 
 export default function Booking({ navigation }) {
+
   const myContext = useContext(AppContext);
-  const [showDropDown, setShowDropDown] = useState(false);
+  // const [showDropDown, setShowDropDown] = useState(false);
 
   const [flagEnrty, setFlagEntry] = useState(false);
   const [flagExit, setFlagExit] = useState(false);
@@ -76,15 +76,13 @@ export default function Booking({ navigation }) {
   //   return unsubscribe;
   // }, [navigation]);
   useEffect(() => {
-   
+
     if (
       moment(entryDate).isBefore(moment(), "day") ||
       moment(exitDate).isSame(entryDate, "day") ||
       moment(exitDate).isBefore(entryDate, "day")
     ) {
       setNumber_Of_Nights(0);
-    
-
       return;
     }
     if (!isEntryModalOpened && isExitModalOpened) {
@@ -101,10 +99,8 @@ export default function Booking({ navigation }) {
       SetIsExitModalOpened(false);
       SetIsEntryModalOpened(false);
       setAmountOfPeople(0)
-     
-
       myContext.setRoomsFlags({
-        "Single room":0,
+        "Single room": 0,
         "Double room": 0,
         "Suite": 0,
       });
@@ -126,7 +122,7 @@ export default function Booking({ navigation }) {
   };
 
   const ChaeckAll = () => {
-    if (number_Of_Nights === 0 ||!(AmountOfPeople > 0 && AmountOfPeople <= 10)) {
+    if (number_Of_Nights === 0 || !(AmountOfPeople > 0 && AmountOfPeople <= 10)) {
       Alert.alert("Some fields are not filled in Properly");
       return;
     }
@@ -139,7 +135,7 @@ export default function Booking({ navigation }) {
 
       // myContext.setRoomsFlags(rooms_flags);
       navigation.navigate("SaveRoom", {
-        rooms_flags:rooms_flags,
+        rooms_flags: rooms_flags,
         number_Of_Nights: number_Of_Nights,
         breakfast: breakfast,
         entryDate: entryDate,
@@ -253,7 +249,12 @@ export default function Booking({ navigation }) {
         </View>
         <View style={{ height: 10 }}></View>
 
-        <View style={styles.ButtonContainer}>
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding:10
+        }}>
           <TouchableOpacity style={styles.button} onPress={Delete}>
             <Text>DELETE</Text>
           </TouchableOpacity>
@@ -322,15 +323,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 50,
     padding: 10,
-  },
-
-  ButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingLeft: 70,
-    paddingRight: 70,
-    paddingTop: 10,
   },
 
   Text: {

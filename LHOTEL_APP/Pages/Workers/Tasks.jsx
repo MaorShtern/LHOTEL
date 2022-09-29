@@ -38,15 +38,12 @@ export default function Tasks({ navigation }) {
             };
             let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllTasks', requestOptions);
             let temp = await result.json();
-            // console.log(temp);
+            console.log(temp);
             if (temp !== null) {
                 SetTasks(temp)
                 SetTasksDisplay(temp)
                 SetLoading(true)
-                return
             }
-            else
-                GetAllTasksFromDB()
         } catch (error) {
             alert(error)
             SetLoading(true)
@@ -126,9 +123,13 @@ export default function Tasks({ navigation }) {
 
     const CloseTask = async () => {
         try {
+            if(taskToMarkAsDone.length === 0 )
+            {
+                alert("No tasks have been selected for execution")
+                return
+            }
             SetLoading(false)
             let counter = 0
-
             for (let index = 0; index < taskToMarkAsDone.length; index++) {
                 // console.log(taskToMarkAsDone[index]);
                 const requestOptions = {
@@ -143,6 +144,7 @@ export default function Tasks({ navigation }) {
                     // GetAllTasksFromDB()
                 }
             }
+            console.log(counter > 1 );
             if (counter > 1){
                 alert("All selected tasks have been successfully closed")
                 GetAllTasksFromDB()
@@ -151,6 +153,7 @@ export default function Tasks({ navigation }) {
             alert(error)
             SetLoading(true)
         }
+        SetLoading(true)
     }
 
 

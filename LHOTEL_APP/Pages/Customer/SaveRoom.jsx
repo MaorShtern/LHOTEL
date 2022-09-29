@@ -1,13 +1,5 @@
-import {
-  View,
-  ScrollView,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Button
-} from "react-native";
-import React, { useEffect, useState ,useContext} from "react";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Alert, Button } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
 import { ActivityIndicator } from "react-native";
 import CardRoom from "./CardRoom";
 import moment from "moment";
@@ -23,7 +15,7 @@ export default function SaveRoom({ route, navigation }) {
     exitDate,
     amountOfPeople,
   } = route.params;
-const user =  myContext.user
+  const user = myContext.user
   // console.log("rooms_flags :" + rooms_flags);
   // console.log("number_Of_Nights :" + number_Of_Nights);
   // console.log("breakfast :" + breakfast);
@@ -48,9 +40,9 @@ const user =  myContext.user
   };
 
   useEffect(() => {
-   
+
     const unsubscribe = navigation.addListener("focus", () => {
-   
+
       SetLoading(false)
       FetchData()
       //  readData()
@@ -97,8 +89,8 @@ const user =  myContext.user
           (elem) => elem.type === ele.type && elem.type === ele.type
         )
     );
-   
-// console.log(flags);
+
+    // console.log(flags);
     let array = [];
     // console.log("list" + JSON.stringify(list));
     for (const [key, value] of Object.entries(rooms_flags)) {
@@ -126,9 +118,7 @@ const user =  myContext.user
   //   }
   // };
 
-  const CreateReservation =()=>{
-  
-    
+  const CreateReservation = () => {
     let newReservation = {
       CustomerID: user.CustomerID,
       CustomerType: 1,
@@ -143,27 +133,26 @@ const user =  myContext.user
       CounterDouble: double,
       CounterSuite: suite,
       AmountOfPeople: amountOfPeople,
-      NumberOfNights :number_Of_Nights,
-       Breakfast : breakfast
+      NumberOfNights: number_Of_Nights,
+      Breakfast: breakfast
     };
     // console.log(newReservation);
     return newReservation
   }
   const GoToPayment = () => {
- 
-    if (Object.keys(user).length === 0 )
-    {
+
+    if (Object.keys(user).length === 0) {
       toggleModal()
       return
     }
-    
+
     let rooms_amounts = {
       "Single room": single,
       "Double room": double,
       Suite: suite,
     };
-    
-  
+
+
     let the_data = [];
     for (const [key, value] of Object.entries(rooms_amounts)) {
       for (let i = 0; i < arrRoomsData.length; i++) {
@@ -190,15 +179,15 @@ const user =  myContext.user
 
       sum += tempToatal;
     }
-   
+
 
     let reservation = CreateReservation()
-console.log(reservation);
+    console.log(reservation);
     navigation.navigate("Credit", {
-      ReservationDetails: reservation,the_data:the_data,totalSum:sum
+      ReservationDetails: reservation, the_data: the_data, totalSum: sum
     });
 
- 
+
   };
 
   const SetCount = (number, roomType) => {
@@ -229,26 +218,26 @@ console.log(reservation);
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Choose a room</Text>
-     
-   
+
+
       <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 1,
-   
-  backgroundColor : "#90A9A4",   
-  
-  width: '90%',  
-  borderRadius:10,  
-  borderWidth: 1,  
-  borderColor: '#fff',    
-  marginVertical: 150,  
-  alignSelf:'center'   }}>
-          <Text style = {{fontSize:30,paddingVertical:50, width:180,alignSelf:'center', textAlign:'center'}}>Please log in to continue placing the order</Text>
-  <View style = {{flexDirection:'row' ,justifyContent:'space-evenly',paddingVertical:50,}}>
-  <Button title="go to login" onPress={GoToLogin} />
-  <Button title="cancel" onPress={toggleModal} />
-          
-  </View>
-          
+        <View style={{
+          flex: 1,
+          backgroundColor: "#90A9A4",
+          width: '90%',
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#fff',
+          marginVertical: 150,
+          alignSelf: 'center'
+        }}>
+          <Text style={{ fontSize: 30, paddingVertical: 50, width: 180, alignSelf: 'center', textAlign: 'center' }}>Please log in to continue placing the order</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 50, }}>
+            <Button title="go to login" onPress={GoToLogin} />
+            <Button title="cancel" onPress={toggleModal} />
+
+          </View>
+
         </View>
       </Modal>
       <View>{loading ? roomsList : <Spinner />}</View>
@@ -259,7 +248,7 @@ console.log(reservation);
           </TouchableOpacity>
         ) : null}
 
-      
+
       </View>
     </ScrollView>
   );
@@ -312,15 +301,15 @@ const styles = StyleSheet.create({
 
 // export default function SaveRoom({ route, navigation }) {
 
-//   let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate,amount_Of_People } = route.params 
+//   let { rooms_flags, number_Of_Nights, breakfast, entryDate, exitDate,amount_Of_People } = route.params
 
 
 
-//   // console.log("rooms_flags :" + rooms_flags); 
-//   // console.log("number_Of_Nights :" + number_Of_Nights); 
-//   // console.log("breakfast :" + breakfast); 
-//   // console.log("entryDate :" + entryDate); 
-//   // console.log("exitDate :" + exitDate); 
+//   // console.log("rooms_flags :" + rooms_flags);
+//   // console.log("number_Of_Nights :" + number_Of_Nights);
+//   // console.log("breakfast :" + breakfast);
+//   // console.log("entryDate :" + entryDate);
+//   // console.log("exitDate :" + exitDate);
 
 
 

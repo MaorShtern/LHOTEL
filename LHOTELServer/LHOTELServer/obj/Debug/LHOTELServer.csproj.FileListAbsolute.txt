@@ -294,3 +294,4 @@ C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELSe
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\LHOTELServer\obj\Debug\LHOTELServer.csproj.CopyComplete

@@ -86,29 +86,33 @@ export default function AddCharge({ navigation }) {
                 // console.log(productsToAdd[index]);
                 // Products[index].Room_Number = room_Number
                 // Products[index].Payment_Method = payment
-                const requestOptions = {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        CustomerID: Number(id),
-                        RoomNumber: Number(room_Number),
-                        ProductDec: productsToAdd[index].ProductDec,
-                        Amount: productsToAdd[index].Amount,
-                        PaymentMethod: payment
-                    }),
-                    headers: { 'Content-Type': 'application/json' }
-                };
-                // console.log(requestOptions.body);        
-                let result = await fetch('http://proj13.ruppin-tech.co.il/AddCharge', requestOptions);
-                let temp = await result.json();
-                if (temp) {
-                    counter++
-                    alert(temp)
-                    // GetAllTasksFromDB()
+                if (productsToAdd[index].Amount > 0) {
+                    const requestOptions = {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            CustomerID: Number(id),
+                            RoomNumber: Number(room_Number),
+                            ProductDec: productsToAdd[index].ProductDec,
+                            Amount: productsToAdd[index].Amount,
+                            PaymentMethod: payment
+                        }),
+                        headers: { 'Content-Type': 'application/json' }
+                    };
+                    // console.log(requestOptions.body);
+                    let result = await fetch('http://proj13.ruppin-tech.co.il/AddCharge', requestOptions);
+                    let temp = await result.json();
+                    if (temp) {
+                        counter++
+                        // GetAllTasksFromDB()
+                    }
                 }
             }
             if (counter > 0) {
                 alert("The purchase was successfully registered")
                 navigation.goBack()
+            }
+            else{
+                alert("The purchase has not been made")
             }
         } catch (error) {
             alert(error)
@@ -136,7 +140,7 @@ export default function AddCharge({ navigation }) {
                         onPress: () => {
                             // console.log(productsToAdd);
                             AddChargeToDB()
-                            alert("The purchase was successfully registered")
+                            // alert("The purchase was successfully registered")
                             // navigation.goBack()
                         },
                     },

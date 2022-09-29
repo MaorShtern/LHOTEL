@@ -55,6 +55,7 @@ export default function UpdateDetails({ route, navigation }) {
                 body: JSON.stringify(employee),
                 headers: { 'Content-Type': 'application/json' }
             };
+            // console.log(requestOptions.body);
             let result = await fetch('http://proj13.ruppin-tech.co.il/AlterEmployeeById', requestOptions);
             if (result) {
                 alert("Employee details have been saved successfully")

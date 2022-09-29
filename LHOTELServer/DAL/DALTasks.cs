@@ -32,7 +32,8 @@ namespace DAL
                         EndTime = (reader["End_Time"] != DBNull.Value)
                         ? (string)reader["End_Time"] : null,
                         TaskStatus = (string)reader["Task_Status"],
-                        Description = (string)reader["Description"]
+                        Description = (reader["Description"] != DBNull.Value)
+                        ? (string)reader["Description"] : null
                     });
                 }
                 return tasks;

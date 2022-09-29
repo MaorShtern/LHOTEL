@@ -10,8 +10,6 @@ export default function Payment({ route, navigation }) {
 
   let { the_data, number_Of_Nights, breakfast, entryDate, exitDate, amount_Of_People } = route.params
 
-
-
   const [totalSum, SetTotalSum] = useState(0)
   const [name, setName] = useState('')
   const [cardNum, setCardNum] = useState('')
@@ -19,8 +17,6 @@ export default function Payment({ route, navigation }) {
   const [cardCVC, SetCardCVC] = useState('')
 
   const [user, SetUser] = useState([])
-
-
 
 
   useEffect(() => {
@@ -163,7 +159,6 @@ export default function Payment({ route, navigation }) {
 
 
   return (
-    <View>
       <ScrollView>
         <Text style={styles.HeadLine}>Payment</Text>
         <Text style={styles.Sum}>Total to pay:  {JSON.stringify(totalSum)}$</Text>
@@ -194,7 +189,6 @@ export default function Payment({ route, navigation }) {
         </View>
 
       </ScrollView>
-    </View>
   )
 }
 
