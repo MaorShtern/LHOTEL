@@ -80,7 +80,8 @@ namespace DAL
                         ? (string)reader["End_Time"] : null,
 
                         TaskStatus = (string)reader["Task_Status"],
-                        Description = (string)reader["Description"]
+                        Description = (reader["Description"] != DBNull.Value)
+                        ? (string)reader["Description"] : null,
                     });
                 }
                 return tasks;// החזרה של הרשימה 
@@ -127,7 +128,8 @@ namespace DAL
                         ? (string)reader["End_Time"] : null,
 
                         TaskStatus = (string)reader["Task_Status"],
-                        Description = (string)reader["Description"]
+                        Description = (reader["Description"] != DBNull.Value)
+                        ?(string)reader["Description"] : null,
                     });
                 }
                 return tasks;
@@ -148,11 +150,8 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewTask {task.EmployeeID},'{task.TaskName}','{task.Description}',";
-                if (task.RoomNumber != 0)
-                    str += $"{task.RoomNumber}";
-                else
-                    str += "null";
+                string str = $@"exec AddNewTask {task.EmployeeID},{task.RoomNumber},'{task.TaskName}',
+'{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)
@@ -205,13 +204,9 @@ namespace DAL
                     return false;
                 }
 
-                string str = $@"exec AlterTask {task.TaskCode},{task.EmployeeID},'{task.TaskName}',";
-                if (task.RoomNumber != 0)
-                    str += $"{task.RoomNumber}";
-                else
-                    str += "null";
-                str += $@",'{task.StartDate:yyyy - MM - dd}','{task.StartTime}','{task.EndTime}',
-'{task.TaskStatus}','{task.Description}'";
+                string str = $@"exec AlterTask {task.TaskCode},{task.EmployeeID},{task.RoomNumber},
+'{task.TaskName}','{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
+               
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

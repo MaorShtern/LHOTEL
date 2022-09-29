@@ -150,7 +150,7 @@ export default function NewReservation({ navigation }) {
       myContext.setIsUserExist(true); //עדכון סטטוס משתמש אם קיים בסטייט הגלובאלי
     }
   };
-console.log(number_Of_Nights);
+// console.log(number_Of_Nights);
   // const GetCustomerReservation = async () => {
   //   const requestOptions = {
   //     method: "POST",

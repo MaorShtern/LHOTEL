@@ -1291,31 +1291,33 @@ go
 
 
 
-create proc AddNewTask
+alter proc AddNewTask
 @Employee_ID int, 
+@Room_Number int,
 @Task_Name nvarchar(30),
-@Description nvarchar(30),
-@Start_Date date,
 @start_Time nvarchar(5),
-@Room_Number int
+@end_Time nvarchar(5),
+@status nvarchar(10),
+@Description nvarchar(30)
 as
 begin tran
 
-	if(@Start_Date is null)
+	declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+
+	if(@end_Time = '')
 	begin
-		Set @Start_Date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
-	end
-	--declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
-	if(@start_Time is null)
+		Set @end_Time = null
+	end 
+	if(@Description = '')
 	begin
-		Set @start_Time = (SELECT CONVERT(VARCHAR(8), GETDATE(), 108))
+		Set @Description = null
 	end 
 
 	declare @number int = (select [Task_Number] from [dbo].[Tasks_Types]where [Task_Name] = @Task_Name)
 
 		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@number,@Room_Number ,@Start_Date,
-		@start_Time,null,'Open', @Description)
+		values (@Employee_ID,@number,@Room_Number ,@Date,
+		@start_Time,@end_Time,@status, @Description)
 	if (@@error !=0)
 	begin
 		rollback tran
@@ -1325,7 +1327,7 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 222,'Room Cleaning','',null,'13:00',2	
+--exec AddNewTask 222,2,'Room Cleaning','13:00',null,'Close',''	
 
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
@@ -1338,28 +1340,37 @@ go
 
 
 
-create proc AlterTask
+alter proc AlterTask
 @Tasks_Code int,
 @Employee_ID int, 
-@Task_Name nvarchar(30),
 @Room_Number int,
-@Start_Date date,
+@Task_Name nvarchar(30),
 @Start_Time time(7) ,
-@End_Date time(7),
+@End_Time time(7),
 @Task_Status nvarchar(30),
 @Description nvarchar(30)
 as
 begin tran
+
 	declare @number int = (select [Task_Number] from [dbo].[Tasks_Types]where [Task_Name] = @Task_Name)
+
+	if(@End_Time = '')
+	begin
+		Set @End_Time = null
+	end
+	if(@Description = '')
+	begin
+		Set @Description = null
+	end 
 
 	UPDATE [dbo].[Employees_Tasks]
 	SET 
 	[Employee_ID] = @Employee_ID ,
 	[Task_Number] = @number ,
 	[Room_Number] = @Room_Number,
-	[Start_Date] = @Start_Date,
+	[Start_Date] = (SELECT FORMAT (getdate(), 'yyyy-MM-dd')),
 	[Start_Time] = @Start_Time,
-	[End_Time]=@End_Date,
+	[End_Time]= @End_Time,
 	[Task_Status]=@Task_Status,
 	[Description]=@Description
 	WHERE [Task_Code] = @Tasks_Code
@@ -1375,7 +1386,8 @@ go
 --exec GetAllShifts
 --exec AlterTask 5,111,'Room Cleaning',null,'2022-09-06','13:00','14:00','Close','chips and coke for room 30'
 --select * from [dbo].[Employees_Tasks]
---exec AlterTask 13,222,'Room Cleaning',2,'2022-09-29','13:00',NULL,'Open',null	
+--exec AlterTask 13,222,'Room Cleaning',2,'13:00',NULL,'Open',null	
+
 
 
 create proc DeleteTask
@@ -1393,7 +1405,7 @@ begin tran
 commit tran
 go
 --select * from [Employees_Tasks]
---exec DeleteTask 4
+--exec DeleteTask 23
 --exec DeleteTask {code}
 
 
@@ -1850,6 +1862,8 @@ go
     --"Breakfast":true
 
 
+	--exec GetReservedRoomsByCustomerId 666
+
 create proc Room_Resit      
 @id int
 as
@@ -1890,7 +1904,7 @@ go
 
 
 
-create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
+alter trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
 on [Customers_Rooms] for update -- כאשר מופעלת פעולת עידכון על הטבלה "חדרי לקוחות" בצע
 as
 	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied') --  אם קיים מספר חדר שהסטטוס שלו פנוי בצע
@@ -1898,13 +1912,6 @@ as
 		insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
 			select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,8,1,getdate(),Breakfast ,'Credit'
 			 from inserted
-			  --IF exists(select Breakfast from inserted where [Breakfast] = 1) 
-     --           BEGIN
-     --            insert [dbo].[Bill_Details]  --- הוסף לטבלת "פירטי החשבונית" את השדות הרלוונטים 
-     --            select Bill_Number, Customer_ID, Bill_Date, Room_Number,Entry_Date,9,1,convert(time,getdate()),'Credit'
-	    --         from inserted
-     --           END
-
 	end
 go
 
@@ -1930,7 +1937,7 @@ begin tran
 commit tran
 go
 
--- exec CheckIn 91598872 , '2022-09-09'
+-- exec CheckIn 666 , '2022-08-22'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
 --select * from [dbo].[Customers_Rooms]
@@ -2079,7 +2086,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
--- exec CheckOut 91598872, '2022-10-13'
+-- exec CheckOut 666, '2022-08-24'
 
 
 

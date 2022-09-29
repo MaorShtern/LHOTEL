@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import { images } from '../../images';
 
 
-
 const RequestType = [
     { label: "Room Cleaning", value: "Room Cleaning" },
     { label: 'Room Service', value: 'Room Service' },
@@ -28,7 +27,6 @@ export default function EditTasks({ route, navigation }) {
     const [dropdown, setDropdown] = useState(null);
     const [flagStartTime, setFlagStartTime] = useState(false);
     const [flagEndTime, setFlagEndTime] = useState(false);
-
 
 
     const [taskStatus, SetTaskStatus] = useState(false);
@@ -75,24 +73,23 @@ export default function EditTasks({ route, navigation }) {
         else stringTime += time.getMinutes();
 
         return stringTime
-        // task.Start_Time = stringTime
-        // hideStartTime()
+ 
     };
 
     const handelTimeStart = (time) => {
         let stringTime = handleTime(time)
-        task.Start_Time = stringTime
+        task.StartTime = stringTime
         hideStartTime()
     }
 
     const handelTimeEnd = (time) => {
         let stringTime = handleTime(time)
-        task.End_Time = stringTime
+        task.EndTime = stringTime
         hideEndTime()
     }
 
     const HandelRequest = (request) => {
-        task.Task_Name = request
+        task.TaskName = request
     }
 
     const HandelTaskStatus = () => {
@@ -103,7 +100,15 @@ export default function EditTasks({ route, navigation }) {
             task.TaskStatus = 'Close'
     }
 
-    const SaveTask = async () => {
+    const CheckValues = () => {
+        if (task.EmployeeID !== null && task.RoomNumber > 0 && task.TaskName !== '')
+            return true
+        else
+            return false
+    }
+
+
+    const AlterTask = async () => {
         try {
             const requestOptions = {
                 method: 'PUT',
@@ -112,6 +117,31 @@ export default function EditTasks({ route, navigation }) {
             };
             // console.log(requestOptions.body);
             let result = await fetch('http://proj13.ruppin-tech.co.il/AlterTask', requestOptions);
+            if (result) {
+                alert("Task details successfully saved")
+                navigation.goBack()
+            }
+
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+
+    const AddNewTask = async () => {
+        try {
+            if(!CheckValues())
+            {
+                alert("The fields are not filled correctly")
+                return
+            }
+            const requestOptions = {
+                method: 'POST',
+                body: JSON.stringify(task),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            // console.log(requestOptions.body);
+            let result = await fetch('http://proj13.ruppin-tech.co.il/AddNewTask', requestOptions);
             if (result) {
                 alert("Task details successfully saved")
                 navigation.goBack()
@@ -212,12 +242,13 @@ export default function EditTasks({ route, navigation }) {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                 }}>
-                    <TouchableOpacity style={styles.button} onPress={SaveTask}>
+                    <TouchableOpacity style={styles.button}
+                        onPress={task.TaskCode !== null ? AlterTask : AddNewTask} >
                         <Image style={styles.save} source={images.save} />
                     </TouchableOpacity>
                 </View>
             </View>
-        </ScrollView>
+        </ScrollView >
     )
 }
 

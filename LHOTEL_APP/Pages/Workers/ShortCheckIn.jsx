@@ -1,15 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, FlatList, Alert, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -25,9 +17,8 @@ export default function ShortCheckIn({ route, navigation }) {
 
   let { currReservation } = route.params;
 
-
   const curr = currReservation[0];
-  console.log(curr);
+  // console.log("curr:  " + JSON.stringify(curr));
   // console.log(curr);
   // useEffect(() => {
   //   const focus = navigation.addListener("focus", () => {
@@ -150,114 +141,79 @@ export default function ShortCheckIn({ route, navigation }) {
     );
   };
 
-  const CheckIn_Without_Existing_User = async () => { // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
-    // let newCustomer = {                           // יצירת אובייקט מסוג לקוח 
-    //   className: Customer,
-    //   fields: {
-    //     CustomerID: curr.CustomerID,
-    //     CustomerType: curr.CustomerType,
-    //     FirstName: curr.FirstName,
-    //     LastName: curr.LastName,
-    //     Mail: curr.Mail,
-    //     Password : curr.CustomerID,
-    //     PhoneNumber:  curr.PhoneNumber,
-    //     CardHolderName: curr.CardHolderName,
-    //     CreditCardNumber: curr.CreditCardNumber,
-    //     CreditCardDate: curr.CreditCardDate,
-    //     ThreeDigit: curr.ThreeDigit,
-    //     EmployeeID: curr.EmployeeID,            
-    //     AmountOfPeople: curr.AmountOfPeople,
-    //     CounterSingle: curr.CounterSingle,
-    //     CounterDouble: curr.CounterDouble,
-    //     CounterSuite: curr.CounterSuite,
-    //     ExitDate: curr.ExitDate,
-    //     EntryDate: curr.EntryDate,
-    //   },
-    // };
-
-    const requestOptions = { //API יצירת בקשת  
-      method: 'POST',        //לטובת יצירת  משתמש חדש שמירת הזמנתו וביצוע צ'ק אין
-      body: JSON.stringify(curr),
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User', requestOptions);
-    let reservationResult = await result.json();
-
-    if (reservationResult)
-console.log(reservationResult);
 
 
-}
-  const CheckIn_With_Existing_User = async () => {  // פונצקיה לביצוע צ'ק אין ללקוח שקיים לו משתמש במערכת
+  const CheckIn_Without_Existing_User = async () => {
+    try {
+      console.log("jkdbhjbvhdv");
 
-    //  let customer = {                                 // יצירת אובייקט מסוג לקוח 
-    //     className: Customer,
-    //     fields: {
-    //       CustomerID: curr.CustomerID,
-    //       CustomerType: curr.CustomerType,
-    //       CardHolderName: curr.CardHolderName,
-    //       CreditCardNumber: curr.CreditCardNumber,
-    //       CreditCardDate: curr.CreditCardDate,
-    //       ThreeDigit: curr.ThreeDigit,
-    //       AmountOfPeople: curr.AmountOfPeople,
-    //       EmployeeID: curr.EmployeeID,
-    //       CounterSingle: curr.CounterSingle,
-    //       CounterDouble: curr.CounterDouble,
-    //       CounterSuite: curr.CounterSuite,
-    //       ExitDate: curr.ExitDate,
-    //       EntryDate: curr.EntryDate,
-    //     },
-    //   };
-    //  console.log(curr.fields);
-
-    const requestOptions = { // API  יצירת בקשת 
-      method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
-      body: JSON.stringify(curr),
-      headers: { "Content-Type": "application/json" },
-    };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
-      requestOptions
-    );
-    let data = await result.json();
-    if (data !== null) {
-      // console.log(JSON.stringify(data));
-
-      return;
+    } catch (error) {
+      alert(error)
     }
   }
 
-  const CheckIn = () => { // פונצקית צ'ק אין ראשית , בודקת אם קיים משתמש רשום בהתאם לערכו בגלובל סטייט
-    {                     // ומפעילה את הפונקציית צ'ק אין הרלוונטית 
-      // myContext.isUserExist ? CheckIn_With_Existing_User(): CheckIn_Without_Existing_User()
-
-      // alert("You have checked in successfully !");
-
-      currReservation.map((reservation) => {
-        CheckInRequest(reservation)
-      })
-      alert("You have checked in successfully !");
-      navigation.navigate("CheckIn")
+  const CheckInDB = async () => {
+    try {
+      console.log(curr);
+    } catch (error) {
+      alert(error)
     }
+  }
+
+
+
+  const CheckIn = async () => {
+    if (myContext.isUserExist)
+      CheckInDB()
+    else
+      CheckIn_Without_Existing_User()
+
+
+    // {
+    //   try {
+    //     // if (!myContext.isUserExist()) {
+    //     //   return
+    //     // }
+    //     const requestOptions = { // API  יצירת בקשת 
+    //       method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
+    //       body: JSON.stringify(value),
+    //       headers: { "Content-Type": "application/json" },
+    //     };
+    //     console.log(requestOptions.body);
+    //     // let result = await fetch("http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ?
+    //     //  "CheckIn" : "CheckIn_Without_Existing_User", requestOptions))
+    //     // let data = await result.json();
+    //     // console.log(data);
+    //   } catch (error) {
+    //     alert(error)
+    //   }
+    //   // currReservation.map((reservation) => {CheckInRequest(reservation)})
+    //   // alert("You have checked in successfully !");
+    //   // navigation.navigate("CheckIn")
+    // }
   };
-  const CheckInRequest = async (value) => {
-    const requestOptions = { // API  יצירת בקשת 
-      method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
-      body: JSON.stringify(value),
-      headers: { "Content-Type": "application/json" },
-    };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
-      requestOptions
-    );
-    let data = await result.json();
-    if (data !== null) {
-      // console.log(JSON.stringify(data));
 
-      return;
-    }
 
-  }
+
+  // const CheckInRequest = async (value) => {
+  //   const requestOptions = { // API  יצירת בקשת 
+  //     method: "POST",         //לטובת יצירת  לקוח חדש שמירת הזמנתו וביצוע צ'ק אין
+  //     body: JSON.stringify(value),
+  //     headers: { "Content-Type": "application/json" },
+  //   };
+  //   let result = await fetch("http://proj13.ruppin-tech.co.il/" + (myContext.isUserExist ? "CheckIn_With_Existing_User" : "CheckIn_Without_Existing_User"),
+  //     requestOptions
+  //   );
+  //   let data = await result.json();
+  //   if (data !== null) {
+  //     // console.log(JSON.stringify(data));
+
+  //     return;
+  //   }}
+
+
+
+
   return (
     <View style={styles.container}>
       {/* Header */}

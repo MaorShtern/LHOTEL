@@ -3,8 +3,8 @@ import { ImageBackground, View, StyleSheet, Image, Text, TouchableOpacity, FlatL
 import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
-import { Ionicons } from "@expo/vector-icons";
-import { CustomCard } from "./CustomCard";
+// import { Ionicons } from "@expo/vector-icons";
+// import { CustomCard } from "./CustomCard";
 
 
 
@@ -27,7 +27,7 @@ export default function ExistingReservation({ route, navigation }) {
     let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
     let currReservation = await result.json();
     if (currReservation.length > 0) {
-      console.log(currReservation);
+      // console.log(currReservation);
       navigation.navigate("ShortCheckIn", { currReservation: currReservation })
       return
 
