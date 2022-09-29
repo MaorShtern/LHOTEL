@@ -81,7 +81,7 @@ export default function CheckOut() {
     alignItems: "center",
     justifyContent: "space-between",paddingHorizontal:10}}>
           <Text style={{ padding: 4,fontSize: 18 }}>
-          Room : {item.Room_Number}
+          Room : {item.RoomNumber}
 
           </Text>
 

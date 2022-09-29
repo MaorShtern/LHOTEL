@@ -14,7 +14,7 @@ export default function Credit({ route, navigation }) {
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
 
   let { ReservationDetails } = route.params;
-
+console.log(ReservationDetails.NumberOfNights);
   const [form, SetForm] = useState({});
 
   const onChange = (form) => {
@@ -113,8 +113,8 @@ export default function Credit({ route, navigation }) {
 
   return (
     <View>
-
-      <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
+{isEmploeeConncted ? null:   <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
+    
 
       <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput

@@ -237,6 +237,7 @@ console.log(reservationResult);
         CheckInRequest(reservation)
       })
       alert("You have checked in successfully !");
+      navigation.navigate("CheckIn")
     }
   };
   const CheckInRequest = async (value) => {

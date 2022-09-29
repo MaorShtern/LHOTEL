@@ -150,7 +150,7 @@ export default function NewReservation({ navigation }) {
       myContext.setIsUserExist(true); //עדכון סטטוס משתמש אם קיים בסטייט הגלובאלי
     }
   };
-
+console.log(number_Of_Nights);
   // const GetCustomerReservation = async () => {
   //   const requestOptions = {
   //     method: "POST",
@@ -186,11 +186,25 @@ export default function NewReservation({ navigation }) {
       CounterDouble: double,
       CounterSuite: suite,
       AmountOfPeople: AmountOfPeople,
-      Breakfast : breakfast
-    
+      Breakfast : breakfast,
+      NumberOfNights :number_Of_Nights
  
     
     };
+    // let rooms_amounts = {
+    //   "Single room": [single,100],
+    //   "Double room": [double,300],
+    //   "Suite": [suite,500],
+    // };
+    // for (const [key, value] of Object.entries(rooms_amounts)) {
+    //   for (let i = 0; i < arrRoomsData.length; i++) {
+    //     if (arrRoomsData[i].type === key) {
+    //       if (arrRoomsData[i].count < value) {
+    //         Alert.alert("Some fields are not filled in Properly");
+    //         return;
+    //       }
+    //     }
+        
     // let sum = 0
     // for (let i = 0; i < the_data.length; i++) {
     //   let pricePerNight = the_data[i].pricePerNight;
@@ -235,6 +249,7 @@ export default function NewReservation({ navigation }) {
     }
   };
   const BilldData = (rooms) => {
+    console.log(rooms);
     let temp = [];
     rooms.map((room) => {
       let tempRoom = {
@@ -271,7 +286,7 @@ export default function NewReservation({ navigation }) {
         roomType={room.RoomType}
         details={room.Details}
         count={room.count}
-        PricePerNight={room.PricePerNight}
+        pricePerNight={room.PricePerNight}
       />
     );
   });
