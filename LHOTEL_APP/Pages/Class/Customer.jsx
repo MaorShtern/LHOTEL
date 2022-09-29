@@ -18,6 +18,7 @@ export default class Customer {
             this.CounterSuite = Customer.CounterSuite,
             this.AmountOfPeople = Customer.AmountOfPeople,
             this.Breakfast  = Customer.Breakfast,
+          this.NumberOfNights = Customer.NumberOfNights,
             this.CardHolderName = Customer.CardHolderName,
             this.CreditCardNumber = Customer.CreditCardNumber,
             this.CreditCardDate = Customer.CreditCardDate,

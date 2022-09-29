@@ -24,7 +24,7 @@ export default function CardRoom(props) {
   useEffect(() => {
     SetCount(0);
   }, []);
-  let { roomType, details, count, PricePerNight } = props;
+  let { roomType, details, count, pricePerNight } = props;
 
   const [counter, SetCounter] = useState(0);
 
@@ -51,7 +51,7 @@ export default function CardRoom(props) {
       <Card>
         <CardImage source={roomType_arr[roomType]} title={roomType} />
 
-        <CardTitle subtitle={"Price per night : " + PricePerNight + " $"} />
+        <CardTitle subtitle={"Price per night : " + pricePerNight + " $"} />
         <CardContent text={details} />
         <View style={styles.ButtonContainer}>
           <Counter
@@ -73,27 +73,7 @@ export default function CardRoom(props) {
         ) : null}
       </View>
     </View>
-    // <View style={{ paddingBottom: 10 }}>
-    //     <View style={styles.card}>
-    //         <View >
-    //             <Image style={styles.image} source={roomType_arr[roomType]}></Image>
-    //         </View>
-    //         <Text style={styles.RoomType}>{roomType}</Text>
-    //         <View style={styles.ButtonContainer}>
-    //             <Counter start={0} max={count + 1} style={styles.counter} onChange={SetCount.bind(this)} />
-    //             <View style={{ width: 70 }}></View>
-    //             <TouchableOpacity style={styles.button} onPress={() => ShowDetails()}>
-    //                 <Text>Show Details</Text>
-    //             </TouchableOpacity>
-    //         </View>
-    //         <View>
-    //             <View style={{ height: 10 }} ></View>
-    //             {!CheakCounter() ? (
-    //                 <Text style={styles.alerts}>*There are no available rooms in this amount*</Text>)
-    //                 : null}
-    //         </View>
-    //     </View>
-    // </View>
+    
   );
 }
 

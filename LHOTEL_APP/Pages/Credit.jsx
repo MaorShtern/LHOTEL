@@ -19,12 +19,19 @@ export default function Credit({ route, navigation }) {
 
   const onChange = (form) => {
     SetForm(form);
+   
   };
 
   const SaveRoomReservation = async (value) => {
-    let { the_data } = route.params;
-    // console.log(the_data);
+    let { the_data ,totalSum} = route.params;
+    console.log(totalSum);
     try {
+      // console.log(totalSum);
+      navigation.navigate("ConfirmationPage", {
+        customer: value,
+        the_data: the_data,
+        totalSum:totalSum
+      });
       const requestOptions = {
         method: "POST",
         body: JSON.stringify(value.fields),
@@ -39,8 +46,9 @@ export default function Credit({ route, navigation }) {
         navigation.navigate("ConfirmationPage", {
           customer: value,
           the_data: the_data,
+          totalSum:totalSum
         });
-      console.log(customerResult);
+      // console.log(customerResult);
       // navigation.navigate('ConfirmationPage', {
       //   id: value.CustomerID, the_data: the_data,
       //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
@@ -56,7 +64,14 @@ export default function Credit({ route, navigation }) {
   //    ConfirmInformation():ConfirmInformation2()
 
   // }
+// console.log(ReservationDetails);
+  const CheckFields = () => {}
   const ConfirmInformation = () => {
+    console.log(form);
+    if(!form.valid){
+      alert("Incorrect credit card details")
+      return
+    }
     let reservation = createCustomerReservation();
     // console.log(customer);
     isEmploeeConncted
@@ -67,6 +82,7 @@ export default function Credit({ route, navigation }) {
   };
   //
   const createCustomerReservation = () => {
+    
     let newCustomer = {
       className: Customer,
       fields: {
@@ -84,6 +100,7 @@ export default function Credit({ route, navigation }) {
         CounterSuite: ReservationDetails.CounterSuite,
         AmountOfPeople: ReservationDetails.AmountOfPeople,
         Breakfast : ReservationDetails.Breakfast ,
+        NumberOfNights:ReservationDetails.NumberOfNights,
         CardHolderName: form.values.name,
         CreditCardNumber: form.values.number.replace(/ /g, ""),
         CreditCardDate: form.values.expiry,
@@ -104,7 +121,7 @@ export default function Credit({ route, navigation }) {
   return (
     <View>
 
-      {isEmploeeConncted ? null : <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
+       <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
 
       <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput
@@ -151,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-    textDecorationLine: "underline",
+   
   },
 
   TextInput: {

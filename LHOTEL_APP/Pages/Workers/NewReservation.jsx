@@ -191,7 +191,14 @@ export default function NewReservation({ navigation }) {
  
     
     };
+    // let sum = 0
+    // for (let i = 0; i < the_data.length; i++) {
+    //   let pricePerNight = the_data[i].pricePerNight;
+    //   let count = the_data[i].count;
+    //   let tempToatal = pricePerNight * count
 
+    //   sum += tempToatal;
+    // }
     navigation.navigate("Credit", { ReservationDetails: newReservation });
   };
 

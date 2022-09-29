@@ -7,10 +7,10 @@ export default function ConfirmationPage( { route, navigation }) {
 
     // { route, navigation }
 
-    let {customer , the_data } = route.params
+    let {customer ,totalSum, the_data } = route.params
     const curr = customer.fields
-console.log(curr);
-
+// console.log(curr);
+console.log(totalSum);
     // const Delete = async () => {
     //     const requestOptions = {
     //         method: 'DELETE',
@@ -27,10 +27,10 @@ console.log(curr);
     //     }
 
     // }
-
+ 
 
     let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} count={room.count}
-        pricePerNight={room.pricePerNight} entryDate={curr.EntryDate} exitDate={curr.ExitDate} breakfast={true} />)
+        pricePerNight={room.pricePerNight} entryDate={curr.EntryDate} exitDate={curr.ExitDate} breakfast={room.B} />)
        
     return (
         <ScrollView>
@@ -42,10 +42,12 @@ console.log(curr);
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
                     <Text>ID: {curr.CustomerID}</Text>
-                    <Text>total Price: $</Text>
+                    <Text>total Price: {totalSum}$</Text>
+                    <Text>Amount Of People : {curr.AmountOfPeople}</Text>
+                    <Text>Number Of Nights : {curr.NumberOfNights}</Text>
                     <Text>Cardholder's Name: {curr.CardHolderName}</Text>
                     <Text>Card Number: {curr.CreditCardNumber}</Text>
-                    <Text>Number Of Nights : </Text>
+                    
                 </View>
             </View>
 

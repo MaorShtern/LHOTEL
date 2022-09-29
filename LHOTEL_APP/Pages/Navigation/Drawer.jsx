@@ -69,23 +69,23 @@ export default function Drawer() {
             },
           }}
         /> */}
-        {JSON.stringify(myContext.user) !== '{}'? 
+        {/* {JSON.stringify(myContext.user) !== '{}'? 
         (<drawer.Screen
           name="Booking"
           component={Booking}
-        />) : null}
-        {/* // <drawer.Screen
-        //   name="Booking"
-        //   component={Booking}
-        //   // options={{
-        //   //   headerTitle: "",
-        //   //   headerTintColor: "white",
-        //   //   headerMode: 'none',
-        //   //   headerStyle: {
-        //   //     backgroundColor: "#000",
-        //   //   },
-        //   // }}
-        // /> */}
+        />) : null} */}
+       <drawer.Screen
+          name="Booking"
+          component={Booking}
+          options={{
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+          }}
+        />
 
         {/* <drawer.Screen
           name="Room Service"
