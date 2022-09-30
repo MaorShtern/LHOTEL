@@ -90,16 +90,11 @@ export default function CheckOut() {
 
 
 
+
   // console.log(DBreservationItems);
 
 
   const CheckOutCard = ({ item, index }) => {
-
-
-    // console.log(item);
-
-    // console.log(item.RoomNumber)
-    // let roomsNumbers = item.map((per) => <renderItem item={per.RoomNumber} />)
 
     return (
       <View style={styles.container}>
@@ -141,14 +136,12 @@ export default function CheckOut() {
 
           </Text> */}
 
-
-
-            {/* <FlatList
+            <FlatList
               data={DBreservationItems}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={3}
-            /> */}
+            />
 
             {/* <Icon name="person" size={18} style={{ padding: 4 }}>
               {" "}
