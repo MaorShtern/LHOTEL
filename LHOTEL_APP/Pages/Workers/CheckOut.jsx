@@ -29,8 +29,9 @@ export default function CheckOut() {
     let rooms = await result.json();
     if (rooms !== null) {
       let roomsData = BilldReservationItemsData(rooms)
-      setReservationItems(rooms)
-      SetDBReservationItems(rooms)
+      // console.log(roomsData);
+      setReservationItems(roomsData)
+      SetDBReservationItems(roomsData)
       return
     }
     FetchData()
@@ -41,37 +42,22 @@ export default function CheckOut() {
 
     let temp = []
     for (let index = 0; index < data.length; index++) {
-      // console.log(data[index]);
       let object = temp.filter((per) => per.CustomerID === data[index].CustomerID)
       if (object.length === 0) {
         temp.push(data[index])
       }
       else {
-        // console.log("object " + object[0].RoomNumber);
-
-        let rooms = []
-        // console.log(object[0].RoomNumber.length);
-        // if (object[0].RoomNumber.length === undefined || object[0].RoomNumber.length <= 0) {
-        //   // console.log(object[0].RoomNumber.length === undefined);
-        //   rooms = [object[0].RoomNumber, data[index]['RoomNumber']]
-        // }
-        // else {
-        //   rooms.push(data[index]['RoomNumber'])
-        // }
-
-        // // let rooms = object[0].RoomNumber
-        // console.log(rooms);
-        // object[0].RoomNumber = rooms
-        //  object.RoomNumber.push(data[index].RoomNumber)
+        if (object[0].RoomNumber.length === undefined) {
+          let rooms = [object[0].RoomNumber, data[index]['RoomNumber']]
+          object[0].RoomNumber = rooms
+        }
+        else {
+          // console.log(data[index].RoomNumber);
+          object[0].RoomNumber.push(data[index].RoomNumber)
+        }
       }
     }
-    // console.log(temp);
-    // console.log(temp.map((per) => per.CustomerID === data.CustomerID));
-    // if(temp.map((per) => per.id === data.id) !== null)
-    // {
-
-    // }
-
+    return temp
   }
 
 
