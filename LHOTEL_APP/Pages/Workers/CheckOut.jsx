@@ -63,23 +63,9 @@ export default function CheckOut() {
 
   const renderItem = ({ item }) => (
     <>
-      <Divider
-        style={{
-          width: 2,
-          height: "70%",
-          marginRight: 10,
-          alignSelf: "center",
-        }}
-      />
+      <Divider style={{ width: 2, height: "70%", marginRight: 10, alignSelf: "center", }} />
 
-      <Text
-        style={{
-          fontSize: 17,
-          paddingHorizontal: 5,
-          marginRight: 10,
-          paddingBottom: 5,
-        }}
-      >
+      <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
         Room : {item.RoomNumber}
       </Text>
     </>
@@ -104,8 +90,17 @@ export default function CheckOut() {
 
 
 
+  // console.log(DBreservationItems);
+
 
   const CheckOutCard = ({ item, index }) => {
+
+
+    // console.log(item);
+
+    // console.log(item.RoomNumber)
+    // let roomsNumbers = item.map((per) => <renderItem item={per.RoomNumber} />)
+
     return (
       <View style={styles.container}>
         <View style={styles.Details}>
@@ -145,12 +140,16 @@ export default function CheckOut() {
           Room : {item.RoomNumber}
 
           </Text> */}
-            <FlatList
+
+
+
+            {/* <FlatList
               data={DBreservationItems}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={3}
-            />
+            /> */}
+
             {/* <Icon name="person" size={18} style={{ padding: 4 }}>
               {" "}
               {item.AmountOfPeople}
@@ -203,7 +202,8 @@ export default function CheckOut() {
   // }
 
 
-
+  // let cards = reservationItems.map((per) => CheckOutCard(per))
+  // console.log("reservationItems : ---   "+ reservationItems);
 
   return (
     <View style={styles.container}>
