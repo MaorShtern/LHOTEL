@@ -1,5 +1,5 @@
-import {View,Text,StyleSheet,Image,TouchableOpacity,Dimensions,ScrollView,FlatList} from "react-native";
-import React, { useState ,useEffect} from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
 import { Divider } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -16,7 +16,7 @@ export default function CheckOut() {
   const [DBreservationItems, SetDBReservationItems] = useState([])
   const [reservationItems, setReservationItems] = useState([]);
   const [search, setSearch] = useState("");
- 
+
   useEffect(() => { FetchData() }, []);
 
 
@@ -28,14 +28,53 @@ export default function CheckOut() {
     let result = await fetch('http://proj13.ruppin-tech.co.il/GetBookedRooms', requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
-     setReservationItems(rooms)
-     SetDBReservationItems(rooms)
-    console.log(rooms);
+      let roomsData = BilldReservationItemsData(rooms)
+      setReservationItems(rooms)
+      SetDBReservationItems(rooms)
       return
     }
     FetchData()
+  }
+
+  const BilldReservationItemsData = (data) => {
+    // console.log(data);
+
+    let temp = []
+    for (let index = 0; index < data.length; index++) {
+      // console.log(data[index]);
+      let object = temp.filter((per) => per.CustomerID === data[index].CustomerID)
+      if (object.length === 0) {
+        temp.push(data[index])
+      }
+      else {
+        // console.log("object " + object[0].RoomNumber);
+
+        let rooms = []
+        // console.log(object[0].RoomNumber.length);
+        // if (object[0].RoomNumber.length === undefined || object[0].RoomNumber.length <= 0) {
+        //   // console.log(object[0].RoomNumber.length === undefined);
+        //   rooms = [object[0].RoomNumber, data[index]['RoomNumber']]
+        // }
+        // else {
+        //   rooms.push(data[index]['RoomNumber'])
+        // }
+
+        // // let rooms = object[0].RoomNumber
+        // console.log(rooms);
+        // object[0].RoomNumber = rooms
+        //  object.RoomNumber.push(data[index].RoomNumber)
+      }
+    }
+    // console.log(temp);
+    // console.log(temp.map((per) => per.CustomerID === data.CustomerID));
+    // if(temp.map((per) => per.id === data.id) !== null)
+    // {
+
+    // }
 
   }
+
+
   const renderItem = ({ item }) => (
     <>
       <Divider
@@ -60,20 +99,25 @@ export default function CheckOut() {
     </>
   );
 
+
+
   const SerchReservation = (value) => {
- 
+
     // console.log(value);
     setSearch(value);
     let occupiedReservation = reservationItems.filter(
       (reservation) => reservation.CustomerID == value
     );
-    console.log(occupiedReservation);
+    // console.log(occupiedReservation);
     if (occupiedReservation.length > 0) {
       setReservationItems(occupiedReservation);
     } else {
       setReservationItems(DBreservationItems);
     }
   };
+
+
+
 
   const CheckOutCard = ({ item, index }) => {
     return (
@@ -85,43 +129,52 @@ export default function CheckOut() {
           <Text style={{ fontSize: 16 }}>No : {item.BillNumber}</Text>
         </View>
         <View style={styles.containerTaskDedtails}>
-          <Text
-            style={{ padding:10,alignSelf:'flex-end', fontSize: 18 }}
-          >
-            ID : {item.CustomerID}
+          <View style={styles.IDIconContain}>
+            <Text
+              style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}
+            >
+              ID : {item.CustomerID}
+              <Icon name="person" size={18} style={{ padding: 4 }}>
+                {" "}
+                {item.AmountOfPeople}
+              </Icon>
+            </Text>
+          </View>
+
+          <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}>
+            FROM :
+            {moment(new Date(item.EntryDate)).format("DD.MM.YYYY")}
           </Text>
-          <Text style={{padding:10,alignSelf:'flex-end', fontSize: 18 }}>
-            FROM :  
-          {moment(new Date(item.EntryDate)).format("DD.MM.YYYY")}
-          </Text>
-          <Text style={{ padding:10,alignSelf:'flex-end', fontSize: 18 }}>
-            TO :  
+          <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}>
+            TO :
             {
               moment(new Date(item.ExitDate)).format("DD.MM.YYYY")}
           </Text>
-          <View style={{ flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",paddingHorizontal:10}}>
-          {/* <Text style={{ padding: 4,fontSize: 18 }}>
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between", paddingHorizontal: 10
+          }}>
+            {/* <Text style={{ padding: 4,fontSize: 18 }}>
           Room : {item.RoomNumber}
 
           </Text> */}
- <FlatList
-                data={DBreservationItems}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={3}
-              />
-          <Icon name="person" size={18} style={{ padding: 4 }}>
-            {" "}
-            {item.AmountOfPeople}
-          </Icon>
+            <FlatList
+              data={DBreservationItems}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={3}
+            />
+            {/* <Icon name="person" size={18} style={{ padding: 4 }}>
+              {" "}
+              {item.AmountOfPeople}
+            </Icon> */}
           </View>
-          
+
           <View style={styles.BTNContainer}>
-          <TouchableOpacity style={styles.LogoutBtn} onPress ={()=> Checkout(item.CustomerID,item.ExitDate)} >
-                        <Text style={{ color: 'black' }}>Check out</Text>
-                    </TouchableOpacity>
+            <TouchableOpacity style={styles.LogoutBtn} onPress={() => Checkout(item.CustomerID, item.ExitDate)} >
+              <Text style={{ color: 'black' }}>Check out</Text>
+            </TouchableOpacity>
             {/* <TouchableOpacity >
               <Image style={styles.BTNImages} source={images.exit_shift} />
             </TouchableOpacity> */}
@@ -130,38 +183,38 @@ export default function CheckOut() {
       </View>
     );
   };
-  const  Checkout = async (CustomerID,ExitDate) =>{
-   
-      const requestOptions = {
-        method: 'PUT',
-        body: JSON.stringify({
-          "id":CustomerID,
-          "Exit_Date": ExitDate
-        }),
-        headers: { 'Content-Type': 'application/json' }
-      };
-      let result = await fetch('http://proj13.ruppin-tech.co.il/CheckOut', requestOptions);
-      let rooms = await result.json();
-      if (rooms) {
-       alert("You have successfully checked out !!!")
-       FetchData()
-        return
-      }
-  
+  const Checkout = async (CustomerID, ExitDate) => {
 
-  
+    const requestOptions = {
+      method: 'PUT',
+      body: JSON.stringify({
+        "id": CustomerID,
+        "Exit_Date": ExitDate
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+    let result = await fetch('http://proj13.ruppin-tech.co.il/CheckOut', requestOptions);
+    let rooms = await result.json();
+    if (rooms) {
+      alert("You have successfully checked out !!!")
+      FetchData()
+      return
+    }
+
+
+
   }
-// const func = ()=>{
-//   let rooms = []
-//   DBreservationItems.map((room) =>
-//   rooms.push({
-//         type: per.RoomType,
-//         allrooms: rooms.filter((room) => room.RoomType === per.RoomType).length,
-//         details: per.Details,
-//         pricePerNight: per.PricePerNight,
-//       })
-//   rooms .push()
-// }
+  // const func = ()=>{
+  //   let rooms = []
+  //   DBreservationItems.map((room) =>
+  //   rooms.push({
+  //         type: per.RoomType,
+  //         allrooms: rooms.filter((room) => room.RoomType === per.RoomType).length,
+  //         details: per.Details,
+  //         pricePerNight: per.PricePerNight,
+  //       })
+  //   rooms .push()
+  // }
 
 
 
@@ -258,7 +311,10 @@ const styles = StyleSheet.create({
   containerTaskDedtails: {
     borderColor: "black",
     borderWidth: 1,
+    // flexDirection: "row",
+    // justifyContent: "space-between",
   },
+
 
   Details: {
     flex: 1,
@@ -284,7 +340,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
-    height:  numColumns,
+    height: numColumns,
     flex: 1,
     margin: 10,
   },
@@ -307,5 +363,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5
-},
+  },
 });

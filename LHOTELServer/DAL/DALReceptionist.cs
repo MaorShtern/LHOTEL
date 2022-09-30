@@ -22,6 +22,7 @@ namespace DAL
                 List<BookedRoom> BookedRooms = new List<BookedRoom>();
                 while (reader.Read())
                 {
+           
                     BookedRooms.Add(new BookedRoom()
                     {
 
@@ -33,10 +34,6 @@ namespace DAL
                         ExitDate = (DateTime)reader["Exit_Date"],
                         AmountOfPeople = (int)reader["Amount_Of_People"],
                         Breakfast = (bool)reader["Breakfast"],
-
-
-
-
                     });
                 }
                 return BookedRooms;

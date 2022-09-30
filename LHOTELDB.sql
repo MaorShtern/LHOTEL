@@ -1327,11 +1327,11 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 222,2,'Room Cleaning','13:00',null,'Close',''	
+--exec AddNewTask 333,2,'Room Cleaning','13:00',null,'Close',''	
 
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
---exec ClockIn 222,'11:00' 
+--exec ClockIn 333,'11:00' 
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
@@ -1977,7 +1977,6 @@ go
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
---select * from [dbo].[Purchases_Documentation]
 
 
 create proc CheckIn_Without_Existing_User

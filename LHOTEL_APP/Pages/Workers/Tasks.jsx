@@ -7,12 +7,12 @@ import moment from 'moment';
 import AppContext from "../../AppContext";
 
 
-const RequestType = [
-    { label: "All Task", value: "All Task" },
-    { label: "Today's tasks", value: "Today's tasks" },
-    { label: 'Open Tasks', value: 'Open Tasks' },
-    { label: 'Add New Task', value: 'Add New Task' },
-];
+// const RequestType = [
+//     { label: "All Task", value: "All Task" },
+//     { label: "Today's tasks", value: "Today's tasks" },
+//     { label: 'Open Tasks', value: 'Open Tasks' },
+//     { label: 'Add New Task', value: 'Add New Task' },
+// ];
 
 
 export default function Tasks({ navigation }) {
@@ -25,9 +25,47 @@ export default function Tasks({ navigation }) {
     const [tasksDisplay, SetTasksDisplay] = useState([])
     const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([])
     const [loading, SetLoading] = useState(false)
+    const [requestType , SetRequestType] = useState([
+        { label: "All Task", value: "All Task" },
+        { label: "Today's tasks", value: "Today's tasks" },
+        { label: 'Open Tasks', value: 'Open Tasks' },
+        { label: 'Add New Task', value: 'Add New Task' },
+    ])
 
 
-    useEffect(() => GetAllTasksFromDB(), [])
+    useEffect(() => {
+        if (myEmployee.Description === 'Manager')
+            GetAllTasksFromDB()
+        else
+            GetTasksByID()
+    }, [])
+
+
+    const GetTasksByID = async () => {
+        try {
+            const requestOptions = {
+                method: 'POST',
+                body: JSON.stringify({
+                    id:myEmployee.EmployeeID
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            let result = await fetch('http://proj13.ruppin-tech.co.il/GetTaskById', requestOptions);
+            let temp = await result.json();
+            // console.log(temp);
+            if (temp !== null) {
+                SetTasks(temp)
+                SetTasksDisplay(temp)
+                // console.log(requestType);
+                let newRequest = requestType.filter((per) => per.label !==  'Add New Task')
+                SetRequestType(newRequest)
+                SetLoading(true)
+            }
+        } catch (error) {
+            alert(error)
+            SetLoading(true)
+        }
+    }
 
 
     const GetAllTasksFromDB = async () => {
@@ -38,7 +76,7 @@ export default function Tasks({ navigation }) {
             };
             let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllTasks', requestOptions);
             let temp = await result.json();
-            console.log(temp);
+            // console.log(temp);
             if (temp !== null) {
                 SetTasks(temp)
                 SetTasksDisplay(temp)
@@ -82,18 +120,13 @@ export default function Tasks({ navigation }) {
     }
 
     const MarkTaskAsDone = (taskCode) => {
-        // console.log("Task_Code to Add: " +Task_Code);
         let newArrayTasks = tasksDisplay.filter((task) => task.TaskCode === taskCode)[0]
         let temp = [...taskToMarkAsDone, newArrayTasks]
-        // console.log(JSON.stringify(temp));
         SetTaskToMarkAsDone(temp)
     }
 
     const RemoveFromCheck = (taskCode) => {
-        // console.log("Task_Code to remove: " + task_Code);
-        // console.log(JSON.stringify(taskToMarkAsDone));
         let newArrayTasks = taskToMarkAsDone.filter((task) => task.TaskCode !== taskCode)
-        // console.log(JSON.stringify(newArrayTasks));
         SetTaskToMarkAsDone(newArrayTasks)
     }
 
@@ -102,7 +135,8 @@ export default function Tasks({ navigation }) {
             SetLoading(false)
             const requestOptions = {
                 method: 'DELETE',
-                body: JSON.stringify({ taskcode: taskCode }),
+                body: JSON.stringify({ 
+                    task_code: taskCode }),
                 headers: { 'Content-Type': 'application/json' }
             };
             // console.log(requestOptions.body);
@@ -123,8 +157,7 @@ export default function Tasks({ navigation }) {
 
     const CloseTask = async () => {
         try {
-            if(taskToMarkAsDone.length === 0 )
-            {
+            if (taskToMarkAsDone.length === 0) {
                 alert("No tasks have been selected for execution")
                 return
             }
@@ -144,8 +177,8 @@ export default function Tasks({ navigation }) {
                     // GetAllTasksFromDB()
                 }
             }
-            console.log(counter > 1 );
-            if (counter > 1){
+            // console.log(counter > 1);
+            if (counter > 1) {
                 alert("All selected tasks have been successfully closed")
                 GetAllTasksFromDB()
             }
@@ -177,43 +210,35 @@ export default function Tasks({ navigation }) {
 
     // console.log(JSON.stringify(tasks));
 
-    let role = 'Manager'
+    // let role = 'Manager'
 
-    if (role === 'Manager') {
-        return (
-            <ScrollView>
-                <Text style={styles.HeadLine}>All Tasks</Text>
-                <View style={styles.container}>
-                    <Dropdown
-                        style={styles.dropdown}
-                        data={RequestType}
-                        searchPlaceholder="Search"
-                        labelField="label"
-                        valueField="value"
-                        placeholder="Task Request"
-                        value={dropdown}
-                        onChange={request => { HandelRequest(request.value) }} />
-                </View>
-                <View style={styles.SaveContainer}>
-                    <TouchableOpacity style={styles.Save} onPress={CloseTask}>
-                        <Text>Save the tasks marked as "Done"</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.items}>
-                    {loading ? tasksList : <Spinner />}
-                </View>
 
-            </ScrollView>
+    return (
+        <ScrollView>
+            <Text style={styles.HeadLine}>All Tasks</Text>
+            <View style={styles.container}>
+                <Dropdown
+                    style={styles.dropdown}
+                    data={requestType}
+                    searchPlaceholder="Search"
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Task Request"
+                    value={dropdown}
+                    onChange={request => { HandelRequest(request.value) }} />
+            </View>
+            <View style={styles.SaveContainer}>
+                <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+                    <Text>Save the tasks marked as "Done"</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.items}>
+                {loading ? tasksList : <Spinner />}
+            </View>
 
-        )
-    }
-    else {
-        return (
-            <ScrollView>
-                <Text>thrthrtbnt</Text>
-            </ScrollView>
-        )
-    }
+        </ScrollView>
+
+    )
 }
 
 const styles = StyleSheet.create({

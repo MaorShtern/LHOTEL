@@ -36,7 +36,7 @@ namespace LHOTELServer.Controllers
 
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/GetTaskById")]
         public IHttpActionResult GetTaskById([FromBody] JObject data)
         {
