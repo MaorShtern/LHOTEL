@@ -28,6 +28,9 @@ export default function CheckOut() {
     let result = await fetch('http://proj13.ruppin-tech.co.il/GetBookedRooms', requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
+      // console.log(rooms);
+      // setReservationItems(rooms)
+      // SetDBReservationItems(rooms)
       let roomsData = BilldReservationItemsData(rooms)
       // console.log(roomsData);
       setReservationItems(roomsData)
@@ -61,16 +64,27 @@ export default function CheckOut() {
   }
 
 
-  const renderItem = ({ item }) => (
-    <>
-      <Divider style={{ width: 2, height: "70%", marginRight: 10, alignSelf: "center", }} />
 
-      <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-        Room : {item.RoomNumber}
-      </Text>
+  const RenderItem = ({ item}) => {
+  
+
+    return(
+      <>
+    
+  {
+    item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+    Room : {item.RoomNumber}
+  </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+    Room : {roomNumber}
+  </Text>)
+  }
+      
     </>
-  );
+    )
 
+  }
+   
+ 
 
 
   const SerchReservation = (value) => {
@@ -90,11 +104,9 @@ export default function CheckOut() {
 
 
 
-
-  // console.log(DBreservationItems);
-
-
   const CheckOutCard = ({ item, index }) => {
+
+
 
     return (
       <View style={styles.container}>
@@ -105,57 +117,46 @@ export default function CheckOut() {
           <Text style={{ fontSize: 16 }}>No : {item.BillNumber}</Text>
         </View>
         <View style={styles.containerTaskDedtails}>
-          <View style={styles.IDIconContain}>
-            <Text
-              style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}
-            >
-              ID : {item.CustomerID}
-              <Icon name="person" size={18} style={{ padding: 4 }}>
+          <View style={{flexDirection: "row",
+     alignItems: "center",
+  justifyContent: "space-between", }}>
+         <Icon name="person" size={18} style={{ padding: 4 }}>
                 {" "}
                 {item.AmountOfPeople}
               </Icon>
+            <Text
+              style={{ padding: 10,  fontSize: 18 }}
+            >
+              ID : {item.CustomerID}
+             
             </Text>
+       
           </View>
 
           <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}>
-            FROM :
+            FROM  :  {" "}
             {moment(new Date(item.EntryDate)).format("DD.MM.YYYY")}
           </Text>
           <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}>
-            TO :
+            TO  : {" "}
             {
               moment(new Date(item.ExitDate)).format("DD.MM.YYYY")}
           </Text>
           <View style={{
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-between", paddingHorizontal: 10
+           paddingHorizontal: 10
           }}>
-            {/* <Text style={{ padding: 4,fontSize: 18 }}>
-          Room : {item.RoomNumber}
-
-          </Text> */}
-
-            <FlatList
-              data={DBreservationItems}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              numColumns={3}
-            />
-
-            {/* <Icon name="person" size={18} style={{ padding: 4 }}>
-              {" "}
-              {item.AmountOfPeople}
-            </Icon> */}
+            
+          <RenderItem item ={item}/>
+     
           </View>
 
           <View style={styles.BTNContainer}>
             <TouchableOpacity style={styles.LogoutBtn} onPress={() => Checkout(item.CustomerID, item.ExitDate)} >
               <Text style={{ color: 'black' }}>Check out</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity >
-              <Image style={styles.BTNImages} source={images.exit_shift} />
-            </TouchableOpacity> */}
+         
           </View>
         </View>
       </View>
@@ -293,7 +294,11 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     // justifyContent: "space-between",
   },
-
+  // IDIconContain:{
+  //   flexDirection: "row",
+  //   alignItems: "flex-end",
+  //   justifyContent: "space-between", 
+  // },
 
   Details: {
     flex: 1,
