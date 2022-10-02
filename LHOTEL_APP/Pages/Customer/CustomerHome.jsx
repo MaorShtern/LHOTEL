@@ -32,7 +32,7 @@ export default function CustomerHome({ route, navigation }) {
                     <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
                         <Text style={{ color: 'white' }}>Log out</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: 'white' }} >Username: {user.FirstName} {user.LastName}</Text>
+                    <Text style={{ color: 'white' }} >Hello , {user.FirstName} {user.LastName}</Text>
                     {/* <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text> */}
 
                 </View>)

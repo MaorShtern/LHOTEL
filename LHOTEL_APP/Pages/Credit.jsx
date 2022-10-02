@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-nat
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "./Class/Customer";
 import { CreditCardInput } from "react-native-credit-card-input-view";
+import { useFocusEffect } from "@react-navigation/native";
 import AppContext from "../AppContext";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -14,26 +15,31 @@ export default function Credit({ route, navigation }) {
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
 
   let { ReservationDetails } = route.params;
-console.log(ReservationDetails.NumberOfNights);
+
   const [form, SetForm] = useState({});
 
   const onChange = (form) => {
     SetForm(form);
   };
+ 
+  useFocusEffect(
+    React.useCallback(() => {
+      SetForm({});
+     
+    }, [])
+  );
 
   const SaveRoomReservation = async (value) => {
     let { the_data, totalSum } = route.params;
-    // console.log(totalSum);
-    try {
-      // console.log(totalSum);
-      navigation.navigate("ConfirmationPage", {
-        customer: value,
-        the_data: the_data,
-        totalSum: totalSum
-      });
+    var Hashes = require('jshashes')
+
+     try {
+      let reservation = value.fields;
+    let SHA1Card = new Hashes.SHA1().b64_hmac(reservation.CustomerID, reservation.CreditCardNumber)
+    reservation.CreditCardNumber = SHA1Card
       const requestOptions = {
         method: "POST",
-        body: JSON.stringify(value.fields),
+        body: JSON.stringify(reservation),
         headers: { "Content-Type": "application/json" },
       };
       let result = await fetch("http://proj13.ruppin-tech.co.il/SaveRoomReservation", requestOptions);
@@ -44,24 +50,13 @@ console.log(ReservationDetails.NumberOfNights);
           the_data: the_data,
           totalSum: totalSum
         });
-      // console.log(customerResult);
-      // navigation.navigate('ConfirmationPage', {
-      //   id: value.CustomerID, the_data: the_data,
-      //   number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
-      //   total: totalSum, Name: name, CardNum: cardNum
-      // })
+     
     } catch (error) {
       alert(error);
     }
   };
 
-  // const ContinueOptions =()=>{
-  //    isEmploeeConncted ?
-  //    ConfirmInformation():ConfirmInformation2()
-
-  // }
-  // console.log(ReservationDetails);
-  // const CheckFields = () => { }
+ 
   const ConfirmInformation = () => {
     // console.log(form);
     if (!form.valid) {
@@ -103,13 +98,15 @@ console.log(ReservationDetails.NumberOfNights);
         ThreeDigit: form.values.cvc,
       },
     };
+
     return newReservation;
+  
 
   };
 
 
-  let { totalSum } = route.params;
 
+  let {totalSum } = route.params;
 
   return (
     <View>
@@ -126,15 +123,10 @@ console.log(ReservationDetails.NumberOfNights);
           onChange={onChange}
           useVertical={true}
         />
-        {/* <Text style={{ fontSize: 16, color: "#444", fontWeight: "bold" }}>
-            SUBMIT
-          </Text>
-          <Text style={{ fontSize: 16, color: "#444", fontWeight: "bold" }}>
-            SUBMIT
-          </Text> */}
+      
       </View>
 
-      <View style={styles.footerStyle}>
+      <View  style={isEmploeeConncted ? styles.empfooterStyle : styles.cusfooterStyle} >
         <TouchableOpacity style={styles.footerButtonOne}>
           <Text style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}>
             DELETE
@@ -179,12 +171,18 @@ const styles = StyleSheet.create({
   empstyleCard: {
     paddingTop: 100
   },
-  footerStyle: {
+  empfooterStyle : {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: 650,
+    paddingTop: 550,
     position: "absolute",
     // paddingTop: 15,
+  },
+  cusfooterStyle:{
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 590,
+    position: "absolute",
   },
   footerButtonOne: {
     backgroundColor: "#656255",

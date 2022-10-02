@@ -120,10 +120,10 @@ export default function NewReservation({ navigation }) {
     setExitDate(moment(entryDate).add(1, "days").toDate());
   };
 
-  const CheckCardDate = () => {
-    const CardDateRegex = /^(0[1-9]|1[0-2])\/([2][2-9])$/;
-    return CardDateRegex.test(CreditCardDate);
-  };
+  // const CheckCardDate = () => {
+  //   const CardDateRegex = /^(0[1-9]|1[0-2])\/([2][2-9])$/;
+  //   return CardDateRegex.test(CreditCardDate);
+  // };
 
   const GetDBCustomerById = async () => {
     // פונקציה אסינכרונית לטובת קבלת נתוני משתמש לפי ת.ז המתקבל במידה וקיים
@@ -150,25 +150,7 @@ export default function NewReservation({ navigation }) {
       myContext.setIsUserExist(true); //עדכון סטטוס משתמש אם קיים בסטייט הגלובאלי
     }
   };
-// console.log(number_Of_Nights);
-  // const GetCustomerReservation = async () => {
-  //   const requestOptions = {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       id: customerReservation.customerID,
-  //     }),
-  //     headers: { "Content-Type": "application/json" },
-  //   };
-  //   let result = await fetch(
-  //     "http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId",
-  //     requestOptions
-  //   );
-  //   let currReservation = await result.json();
-  //   if (currReservation !== null) {
-  //     navigation.navigate("ShortCheckIn", { currReservation: currReservation });
-  //     return;
-  //   } else alert("ERROR");
-  // };
+
 
   const ConfirmInformation = () => {
    
@@ -191,28 +173,7 @@ export default function NewReservation({ navigation }) {
  
     
     };
-    // let rooms_amounts = {
-    //   "Single room": [single,100],
-    //   "Double room": [double,300],
-    //   "Suite": [suite,500],
-    // };
-    // for (const [key, value] of Object.entries(rooms_amounts)) {
-    //   for (let i = 0; i < arrRoomsData.length; i++) {
-    //     if (arrRoomsData[i].type === key) {
-    //       if (arrRoomsData[i].count < value) {
-    //         Alert.alert("Some fields are not filled in Properly");
-    //         return;
-    //       }
-    //     }
-        
-    // let sum = 0
-    // for (let i = 0; i < the_data.length; i++) {
-    //   let pricePerNight = the_data[i].pricePerNight;
-    //   let count = the_data[i].count;
-    //   let tempToatal = pricePerNight * count
-
-    //   sum += tempToatal;
-    // }
+  
     navigation.navigate("Credit", { ReservationDetails: newReservation });
   };
 
@@ -477,80 +438,7 @@ export default function NewReservation({ navigation }) {
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
-              {/* <Text style={styles.SubHeadLine}>Enter payment information</Text> */}
-
-              {/* <TextInput
-                style={styles.input}
-                placeholder="Cardholder's name"
-          
-                onChangeText={(name) => setHolderName(name)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Card's Number"
-          
-                keyboardType="numeric"
-                onChangeText={(cardNum) => setCreditCardNumber(cardNum)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"Card's Date " || cardDate}
            
-                keyboardType="phone-pad"
-                maxLength={5}
-                onChangeText={(text) => {
-                  SetCreditCardDate(text);
-                }}
-              />
-
-              <View>
-                {!CheckCardDate() ? (
-                  <Text style={styles.alerts}>
-                    *The card DATE is incorrect*
-                  </Text>
-                ) : null}
-              </View>
-              <TextInput
-                style={styles.input}
-                placeholder="cvv"
-              
-                keyboardType="numeric"
-                maxLength={3}
-                onChangeText={(cvv) => SetCardCVC(cvv)}
-              /> */}
-              {/* <TouchableOpacity
-                style={styles.footerButtonOne}
-                onPress={() => ConfirmInformation()}
-              >
-                <Text
-                  style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}
-                >
-                  CONTINUE
-                </Text>
-              </TouchableOpacity> */}
-              {/* <View style={styles.footerStyle}>
-                
-                <TouchableOpacity
-                  style={styles.footerButtonOne}
-                  onPress={Delete}
-                >
-                  <Text
-                    style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}
-                  >
-                    DELETE
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.footerButtonTwo}
-                  onPress={() => ConfirmInformation()}
-                >
-                  <Text
-                    style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}
-                  >
-                    SUBMIT
-                  </Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           </ScrollView>
         </View>

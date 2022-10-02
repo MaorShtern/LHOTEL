@@ -81,6 +81,7 @@ export default function ShortCheckIn({ route, navigation }) {
           marginHorizontal: 10,
           paddingTop: 10,
           height: 200 + (Math.ceil(currReservation.length / 3) - 1) * 25,
+          alignItems:'flex-end'
         }}
       >
         <View style={styles.Details}>
@@ -111,6 +112,7 @@ export default function ShortCheckIn({ route, navigation }) {
               paddingHorizontal: 5,
               paddingTop: 10,
               fontSize: 17,
+              alignSelf:'flex-end'
             }}
           >
             {curr.AmountOfPeople} adults
@@ -138,9 +140,11 @@ export default function ShortCheckIn({ route, navigation }) {
       </View>
     );
   };
-
+ // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
   const CheckIn_Without_Existing_User = async () => {
-    // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
+    var Hashes = require('jshashes')
+        let SHA1Pass = new Hashes.SHA1().b64_hmac(curr.CustomerID, curr.CustomerID)
+        let SHA1Card = new Hashes.SHA1().b64_hmac(curr.CustomerID, curr.CreditCardNumber)
     try {
       let newCustomer = {
         // יצירת אובייקט מסוג לקוח
@@ -151,10 +155,10 @@ export default function ShortCheckIn({ route, navigation }) {
           FirstName: curr.FirstName,
           LastName: curr.LastName,
           Mail: curr.Mail,
-          Password: curr.CustomerID,
+          Password: SHA1Pass,
           PhoneNumber: curr.PhoneNumber,
           CardHolderName: curr.CardHolderName,
-          CreditCardNumber: curr.CreditCardNumber,
+          CreditCardNumber: SHA1Card ,
           CreditCardDate: curr.CreditCardDate,
           ThreeDigit: curr.ThreeDigit,
           EmployeeID: curr.EmployeeID,
@@ -299,7 +303,7 @@ console.log(myContext.isUserExist);
 
       <View style={{ flex: 1.5 }}>
         <View style={{ marginTop: 15, paddingHorizontal: 15 }}>
-          <Text style={{ fontSize: 20, paddingBottom: 20 }}>
+          <Text style={{ fontSize: 20, paddingBottom: 20 ,alignSelf:'flex-end'}}>
             Customer's details{" "}
           </Text>
 
@@ -336,7 +340,7 @@ console.log(myContext.isUserExist);
               {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421************</Text> */}
               {/* <Icon name="card" size={25} color="#a8a9ad" /> */}
             </View>
-            <Text style={{ padding: 10, fontSize: 18 }}>
+            <Text style={{ padding: 10, fontSize: 18 ,alignSelf:'flex-end'}}>
               {" "}
               <Icon name="call" size={20} color="#a8a9ad" />
               {curr.PhoneNumber}

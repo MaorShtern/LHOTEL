@@ -242,18 +242,19 @@ export default function Booking({ navigation }) {
           />
           <Text>Include breakfast?</Text>
         </View>
-        <View style={{ height: 10 }}></View>
+   
 
         <View style={{
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          padding:10
+          padding:10,
+          marginTop:20
         }}>
           <TouchableOpacity style={styles.button} onPress={Delete}>
             <Text>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={ChaeckAll}>
+          <TouchableOpacity style={styles.button2} onPress={ChaeckAll}>
             <Text>SUBMIT</Text>
           </TouchableOpacity>
         </View>
@@ -283,8 +284,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderColor: "black",
-    borderRadius: 15,
-    borderWidth: 2,
+    borderRadius: 10,
+    borderWidth: 1,
     padding: 10,
   },
 
@@ -292,16 +293,27 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
-  button: {
-    backgroundColor: "gray",
-    padding: 10,
-    borderRadius: 10,
-  },
+  button:
+  {
+      backgroundColor: '#C0C0C0',
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      borderRadius: 5,
 
+  },
+  button2:
+  {
+      backgroundColor: 'rgba(35,100,168, 0.4)',
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      borderRadius: 5,
+      
+      fontWeight:'500'
+  },
   RadioCheckbox: {
     borderColor: "black",
-    borderRadius: 15,
-    borderWidth: 2,
+    borderRadius: 10,
+    borderWidth: 1,
     padding: 10,
   },
 

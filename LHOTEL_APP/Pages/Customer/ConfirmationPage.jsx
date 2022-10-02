@@ -10,7 +10,7 @@ export default function ConfirmationPage( { route, navigation }) {
     let {customer ,totalSum, the_data } = route.params
     const curr = customer.fields
 // console.log(curr);
-console.log(totalSum);
+console.log(curr);
     // const Delete = async () => {
     //     const requestOptions = {
     //         method: 'DELETE',
@@ -41,16 +41,16 @@ console.log(totalSum);
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
-                    <Text>ID: {curr.CustomerID}</Text>
-                    <Text>total Price: {totalSum}$</Text>
-                    <Text>Amount Of People : {curr.AmountOfPeople}</Text>
-                    <Text>Number Of Nights : {curr.NumberOfNights}</Text>
-                    <Text>Cardholder's Name: {curr.CardHolderName}</Text>
-                    <Text>Card Number: {curr.CreditCardNumber}</Text>
+                    <Text style={styles.textStyle}>ID : {curr.CustomerID}</Text>
+                    <Text style={styles.textStyle}>total Price : {totalSum}$</Text>
+                    <Text style={styles.textStyle}>Amount Of People : {curr.AmountOfPeople}</Text>
+                    <Text style={styles.textStyle}>Number Of Nights : {curr.NumberOfNights}</Text>
+                    <Text style={styles.textStyle}>Cardholder's Name: {curr.CardHolderName}</Text>
+                    <Text style={styles.textStyle}>Card Number: ****************</Text>
                     
                 </View>
             </View>
-
+            {/* curr.CreditCardNumber.slice(-4) */}
 
             <View style={styles.ButtonContainer}>
                 {/* <TouchableOpacity style={styles.button} onPress={Delete}>
@@ -94,32 +94,32 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingTop: 5
     },
-    appButtonContainer: {
-        elevation: 8,
-        backgroundColor: "#009688",
-        borderRadius: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 12
-    },
+ 
     pay: {
         textDecorationLine: 'underline',
         alignSelf: 'center',
         fontSize: 15
     },
     OrderDetails: {
-        width: 300,
-        backgroundColor: 'gray',
+        width: 350,
+        backgroundColor: '#C0C0C0',
         alignSelf: 'center',
         alignItems: 'flex-end',
         padding: 20,
         margin: 5
     },
+    textStyle:{
+        fontSize: 16,
+        paddingVertical:2,
+      
+       },
     button:
     {
         backgroundColor: 'gray',
-        padding: 10,
+        paddingHorizontal:20,
+        paddingVertical:10,
         borderRadius: 10,
-        alignItems: 'center'
+   
 
     },
 })

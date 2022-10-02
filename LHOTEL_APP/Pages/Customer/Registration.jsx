@@ -17,10 +17,15 @@ export default function Registration({ navigation }) {
 
 
     const CheackFields = () => {
-        if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 || last_name.length == 0 || !email.includes('@gmail.com') || phone.length == 0)
-            return false
-        else {
+      
+        if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 || last_name.length == 0 || !email.includes('@gmail.com') || phone.length < 3)
+        {
             Alert.alert("The passwords are Invalid")
+            return false
+        }
+   
+        else {
+       
             return true
         }
     }
@@ -34,7 +39,7 @@ export default function Registration({ navigation }) {
 
     const Save_User = async () => {
         try {
-            if (CheackFields) {
+            if (CheackFields()) {
                 SetLoading(false)
                 let user = CreateUser()
                 user = JSON.stringify(user.fields)
@@ -133,10 +138,10 @@ export default function Registration({ navigation }) {
             </View>
             <View style={styles.ButtonContainer}>
                 <TouchableOpacity>
-                    <Text style={styles.button} onPress={Delete} >Delete</Text>
+                    <Text style={styles.button} onPress={Delete} >DELETE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Text style={styles.button} onPress={Save_User} >SUBMIT</Text>
+                    <Text style={styles.button2} onPress={Save_User} >SUBMIT</Text>
                 </TouchableOpacity>
 
             </View>
@@ -160,12 +165,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     TextInput: {
-        flexDirection: 'row',
-        borderColor: 'black',
-        borderRadius: 15,
-        borderWidth: 2,
         height: 50,
-        padding: 10,
+        marginVertical: 2,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        borderWidth: 1.3,
+    
+        borderRadius: 5,
+      
     },
     container: {
         flex: 1,
@@ -179,15 +186,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 70,
-        paddingRight: 70,
-        paddingTop: 20
+        paddingHorizontal: 30,
+        paddingTop: 20,
+        
     },
     button:
     {
-        backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 10
+        backgroundColor: '#C0C0C0',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 5,
 
+    },
+    button2:
+    {
+        backgroundColor: 'rgba(35,100,168, 0.4)',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 5,
+        
+        fontWeight:'500'
     },
 });

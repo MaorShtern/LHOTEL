@@ -157,7 +157,7 @@ export default function SaveRoom({ route, navigation }) {
     for (const [key, value] of Object.entries(rooms_amounts)) {
       for (let i = 0; i < arrRoomsData.length; i++) {
         if (arrRoomsData[i].type === key) {
-          if (arrRoomsData[i].count < value || value == 0) {
+          if (arrRoomsData[i].count < value) {
             Alert.alert("Some fields are not filled in Properly");
             return;
           }
@@ -179,7 +179,7 @@ export default function SaveRoom({ route, navigation }) {
 
       sum += tempToatal;
     }
-
+   
 
     let reservation = CreateReservation()
     console.log(reservation);

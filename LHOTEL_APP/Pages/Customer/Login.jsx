@@ -91,11 +91,11 @@ export default function Login({ navigation }) {
         {loading ? null : <Spinner />}
       </View>
       <View style={styles.label}>
-        <Text style={styles.Text}>ID: </Text>
+        <Text style={styles.Text}>ID : </Text>
         <TextInput keyboardType='numeric' onChangeText={(id) => setID(id)} style={styles.TextInput}></TextInput>
       </View>
       <View style={styles.label}>
-        <Text style={styles.Text}>Password: </Text>
+        <Text style={styles.Text}>Password : </Text>
         <TextInput onChangeText={(password) => setPassword(password)} secureTextEntry={true} style={styles.TextInput}></TextInput>
       </View>
 
@@ -104,7 +104,7 @@ export default function Login({ navigation }) {
           <Text style={styles.button} onPress={Delete} >DELETE</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.button} onPress={LogIn} >SUBMIT</Text>
+          <Text style={styles.button2} onPress={LogIn} >SUBMIT</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -124,30 +124,42 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   TextInput: {
-    flexDirection: 'row',
-    borderColor: 'black',
-    borderRadius: 15,
-    borderWidth: 2,
-    height: 50,
-    padding: 10
+   height: 50,
+    marginVertical: 2,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderWidth: 1,
+
+    borderRadius: 10,
+   
   },
   Text: {
     fontSize: 15,
     fontWeight: "bold",
+    paddingLeft:8
   },
   ButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingLeft: 70,
-    paddingRight: 70,
-    paddingTop: 10
+  padding:30
   },
   button:
   {
-    backgroundColor: 'gray',
-    padding: 10,
-    borderRadius: 10
+      backgroundColor: '#C0C0C0',
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      borderRadius: 5,
+
+  },
+  button2:
+  {
+      backgroundColor: 'rgba(35,100,168, 0.4)',
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      borderRadius: 5,
+      
+      fontWeight:'500'
   },
   container: {
     flex: 1,

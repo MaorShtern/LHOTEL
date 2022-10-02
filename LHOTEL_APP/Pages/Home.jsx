@@ -91,22 +91,7 @@ export default function Home({ navigation }) {
     }
     SetLoading(true)
   };
-  // const LogIn = async () => {
-  //   let employee = employees.filter(
-  //     (emp) => emp.Employee_ID == id && emp.Employee_Code == password
-  //   )[0];
-
-  //   console.log(employee);
-  //   if (employee !== undefined) {
-  //     let role = employee.Description;
-  //     navigation.navigate("WorkerMenu", {role: role });
-  //   } else Alert.alert("No such user exists in the system");
-  // };
-
-  const HandelNavigation = (route) => {
-    // console.log(route);
-    navigation.navigate(route);
-  };
+ 
 
   const renderCurrentSelection = () => {
    
@@ -134,7 +119,7 @@ export default function Home({ navigation }) {
               style={{ margin: 10, paddingLeft: 3 }}
               value={password}
             
-              // onChangeText={myContext.setEmployeePassword}
+              secureTextEntry={true}
               onChangeText={(code) => setPassword(code)}
             />
 
