@@ -28,8 +28,8 @@ export default function EmployeesManagement({ navigation }) {
             let result = await fetch('http://proj13.ruppin-tech.co.il/GetAllEmployees', requestOptions);
             let temp = await result.json();
             if (temp !== null) {
-                SetDBEmployees(temp)
-                SetEmployees(temp)
+                SetDBEmployees(temp.filter((employee) => employee.EmployeeID !== -1))
+                SetEmployees(temp.filter((employee) => employee.EmployeeID !== -1))
                 SetLoading(true)
                 return
             }
@@ -44,9 +44,9 @@ export default function EmployeesManagement({ navigation }) {
 
     const SerchEmployee = (value) => {
         setSearch(value)
-        let employee = DBemployees.filter((per) => per.EmployeeName === value)
+        let employee = DBemployees.filter((employee) => employee.EmployeeName === value)
         // console.log(employee);
-        if (employee.length > 0 && employee[0].EmployeeID != -1) {
+        if (employee.length > 0 ) {
             SetEmployees(employee)
         }
         else {
@@ -95,7 +95,7 @@ export default function EmployeesManagement({ navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        let employee = employees.filter((per) => per.EmployeeID === value)[0].EmployeeID
+                        let employee = employees.filter((employee) => employee.EmployeeID === value)[0].EmployeeID
                         DeleteEmployeeFromDB(employee)
                         // let newArray = employees.filter((per) => per.Employee_ID !== value)
                         // SetEmployees(newArray)
@@ -108,7 +108,7 @@ export default function EmployeesManagement({ navigation }) {
 
     const EditDetails = (value) => {
         // console.log(valuse);
-        let employee = employees.filter((per) => per.EmployeeID === value)[0]
+        let employee = employees.filter((employee) => employee.EmployeeID === value)[0]
         // console.log(JSON.stringify(employee));
         navigation.navigate('UpdateDetails', { employee: employee })
     }
@@ -130,9 +130,9 @@ export default function EmployeesManagement({ navigation }) {
 
 
     return (
-        <ScrollView>
+        <View>
             <Text style={styles.HeadLine}>Employees Management</Text>
-            <View style={{ padding: 10 }}>
+            <View style={{ paddingVertical: 10 }}>
                 <SearchBar
                     round={true}
                     lightTheme={true}
@@ -146,11 +146,11 @@ export default function EmployeesManagement({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>
-                <View style={styles.items}>
+                <ScrollView style={styles.items}>
                     {loading ? listEmployees : <Spinner />}
-                </View>
+                </ScrollView>
             </View>
-        </ScrollView>
+        </View>
     )
 }
 
@@ -159,11 +159,11 @@ const styles = StyleSheet.create({
     HeadLine: {
         fontSize: 40,
         fontWeight: "bold",
-        paddingTop: 20,
+        paddingTop: 40,
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-        textDecorationLine: 'underline',
+    
     },
     container: {
         padding: 10,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        backgroundColor: "gray",
+        backgroundColor: "#C0C0C0",
         borderRadius:10,
 
     }

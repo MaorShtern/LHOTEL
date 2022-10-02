@@ -8,7 +8,7 @@
 SET DATEFORMAT dmy;  
 GO
 
-
+select * from Customer
 
 create table Employees_Types
 (
@@ -2340,13 +2340,12 @@ go
 
 
 
-
 create proc Number_of_tasks_per_month
 as
 begin tran		
-	SELECT CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)) as Date
-	,DATENAME(MONTH,Start_Date) as Month_Name, count(MONTH(Start_Date)) as Amount FROM Employees_Tasks 
-	GROUP by CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)),
+	SELECT CAST(YEAR(Start_Date) AS VARCHAR(4))  as Year
+	,DATENAME(MONTH,Start_Date) as Month, count(MONTH(Start_Date)) as Amount FROM Employees_Tasks 
+	GROUP by CAST(YEAR(Start_Date) AS VARCHAR(4)) ,
 	DATENAME(MONTH,Start_Date)
 	if (@@error !=0)
 	begin
@@ -2356,17 +2355,32 @@ begin tran
 	end
 commit tran
 go
+
+
+--create proc Number_of_tasks_per_month
+--as
+--begin tran		
+--	SELECT CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)) as Date
+--	,DATENAME(MONTH,Start_Date) as Month_Name, count(MONTH(Start_Date)) as Amount FROM Employees_Tasks 
+--	GROUP by CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)),
+--	DATENAME(MONTH,Start_Date)
+--	if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 --exec Number_of_tasks_per_month
 --select * from Employees_Tasks
 
-
-
-create proc ProductPurchaseByName
+alter proc ProductPurchaseByName
 @Description nvarchar(30)
 as
 begin tran		
-	SELECT dbo.Purchases_Documentation.Product_Code, 
-	dbo.Purchases_Documentation.Room_Type as Product_Name,
+	SELECT dbo.Purchases_Documentation.Product_Code as Code, 
+	dbo.Purchases_Documentation.Room_Type as Product,
 	sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
 	dbo.Category.Description AS Category
 	FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
@@ -2383,6 +2397,33 @@ if (@@error !=0)
 	end
 commit tran
 go
+
+
+
+
+
+--create proc ProductPurchaseByName
+--@Description nvarchar(30)
+--as
+--begin tran		
+--	SELECT dbo.Purchases_Documentation.Product_Code, 
+--	dbo.Purchases_Documentation.Room_Type as Product_Name,
+--	sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
+--	dbo.Category.Description AS Category
+--	FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
+--	ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
+--	ON dbo.Products.Category_Number = dbo.Category.Category_Number
+--	WHERE  (dbo.Products.Description = @Description)
+--	GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type, dbo.Purchases_Documentation.Number_Of_Nights, dbo.Products.Description, dbo.Category.Description
+
+--if (@@error !=0)
+--	begin
+--		rollback tran
+--		print 'error'
+--		return
+--	end
+--commit tran
+--go
 --exec ProductPurchaseByName 'Vodka'
 --select * from [dbo].[Purchases_Documentation]
 

@@ -10,7 +10,7 @@ namespace DAL
 {
     public class DALReports
     {
-        public static List<Number_Of_Visitors_Per_Month> Number_Of_Visitors_Per_Month()
+        public static List<Report> Number_Of_Visitors_Per_Month()
         {
             try
             {
@@ -19,13 +19,13 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Number_Of_Visitors_Per_Month> report = new List<Number_Of_Visitors_Per_Month>();
+                List<Report> report = new List<Report>();
                 while (reader.Read())
                 {
-                    report.Add(new Number_Of_Visitors_Per_Month()
+                    report.Add(new Report()
                     {
-                        Date = (string)reader["Date"],
-                        Month_Name = (string)reader["Month_Name"],
+                        Year = (string)reader["Year"],
+                        Month = (string)reader["Month"],
                         Amount = (int)reader["Amount"]
                     });
                 }
@@ -41,7 +41,7 @@ namespace DAL
             }
         }
 
-        public static List<Amount_Of_Products_Purchased_In_The_Store> Amount_Of_Products_Purchased_In_The_Store()
+        public static List<ProductReport> Amount_Of_Products_Purchased_In_The_Store()
         {
             try
             {
@@ -50,13 +50,13 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Amount_Of_Products_Purchased_In_The_Store> report = new List<Amount_Of_Products_Purchased_In_The_Store>();
+                List<ProductReport> report = new List<ProductReport>();
                 while (reader.Read())
                 {
-                    report.Add(new Amount_Of_Products_Purchased_In_The_Store()
+                    report.Add(new ProductReport()
                     {
-                        Product_Code = (int)reader["Product_Code"],
-                        Product_Name = (string)reader["Product_Name"],
+                        Code = (int)reader["Code"],
+                        Product = (string)reader["Product"],
                         Amount = (int)reader["Amount"],
                         Category = (string)reader["Category"]
 
@@ -74,7 +74,7 @@ namespace DAL
             }
         }
 
-        public static List<Number_of_tasks_per_month> Number_of_tasks_per_month()
+        public static List<Report> Number_of_tasks_per_month()
         {
             try
             {
@@ -83,13 +83,13 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Number_of_tasks_per_month> report = new List<Number_of_tasks_per_month>();
+                List<Report> report = new List<Report>();
                 while (reader.Read())
                 {
-                    report.Add(new Number_of_tasks_per_month()
+                    report.Add(new Report()
                     {
-                        Date = (string)reader["Date"],
-                        Month_Name = (string)reader["Month_Name"],
+                        Year = (string)reader["Year"],
+                        Month = (string)reader["Month"],
                         Amount = (int)reader["Amount"]
                     });
                 }
@@ -105,7 +105,7 @@ namespace DAL
             }
         }
 
-        public static ProductPurchase ProductPurchaseByName(string name)
+        public static ProductReport ProductPurchaseByName(string name)
         {
             try
             {
@@ -114,13 +114,13 @@ namespace DAL
                 {
                     return null;
                 }
-                ProductPurchase product = null;
+                ProductReport product = null;
                 while (reader.Read())
                 {
-                    product = new ProductPurchase()
+                    product = new ProductReport()
                     {
-                        Product_Code = (int)reader["Product_Code"],
-                        Product_Name = (string)reader["Product_Name"],
+                        Code = (int)reader["Code"],
+                        Product = (string)reader["Product"],
                         Amount = (int)reader["Amount"],
                         Category = (string)reader["Category"],
                     };
@@ -137,7 +137,7 @@ namespace DAL
             }
         }
 
-        public static List<Income_And_Expenses> Income_And_Expenses()
+        public static List<IncomeVsExpense> Income_And_Expenses()
         {
             try
             {
@@ -146,10 +146,10 @@ namespace DAL
                 {
                     return null;
                 }
-                List<Income_And_Expenses> report = new List<Income_And_Expenses>();
+                List<IncomeVsExpense> report = new List<IncomeVsExpense>();
                 while (reader.Read())
                 {
-                    report.Add(new Income_And_Expenses()
+                    report.Add(new IncomeVsExpense()
                     {
                         Date = (string)reader["Date"],
                         Sum = (double)reader["Expens + / Profit -"],

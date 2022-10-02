@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class Number_Of_Visitors_Per_Month
-    {
-        public string Date { get; set; }
-        public string Month_Name { get; set; }
-        public int Amount { get; set; }
+    //public class Number_Of_Visitors_Per_Month
+    //{
+    //    public string Date { get; set; }
+    //    public string Month_Name { get; set; }
+    //    public int Amount { get; set; }
 
-    }
+    //}
 }

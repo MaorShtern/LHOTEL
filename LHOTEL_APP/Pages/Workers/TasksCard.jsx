@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { Checkbox } from 'react-native-paper';
 import { images } from '../../images';
+import { fontSize } from '@mui/system';
 
 
 
@@ -31,31 +32,38 @@ export default function TasksCard(props) {
         else
             props.RemoveFromCheck(TaskCode)
     }
-
+   
     return (
-        <View style={styles.container}>
+        <View style={{ backgroundColor: TaskStatus==='Open'? 'rgba(35,100,168, 0.4)': '#C0C0C0',
+        borderBottomColor: 'black',
+        borderRadius: 5,
+        margin: 10,}}>
             <View style={styles.Details}>
-                <Text>Employee ID: {EmployeeID}</Text>
-
-                <Text>Task Code: {TaskCode}</Text>
+          
+            <Text>{StartDate}</Text>
+                <Text>No: {TaskCode}</Text>
             </View>
 
             <View style={styles.containerTaskDedtails}>
                 <View style={styles.Details}>
-                    <Text style={{ padding: 5 }}>Room Number: {RoomNumber}</Text>
-                    <Text>Start Date: {TaskName}</Text>
+                    <Text style={{fontWeight:'bold'}}>Room : {RoomNumber}</Text>
+                    <Text style={{fontWeight:'bold'}}>Task : {TaskName}</Text>
+                   
                 </View>
 
                 <View style={styles.Details}>
-                    <Text>Start Date: {StartDate}</Text>
-                    <Text>Start Time: {StartTime}</Text>
+                    {/* <Text>Start Date: {StartDate}</Text> */}
+                    <Text>Employee ID: {EmployeeID}</Text>
+                    <Text>Status: {TaskStatus}</Text>
+               
+                    
                 </View>
 
                 <View style={styles.Details}>
-                    {EndTime === null ? <Text>End Time: null</Text> : <Text>End Time: {EndTime}</Text>}
-                    <Text>Task Status: {TaskStatus}</Text>
+                    {EndTime === null ? <Text>End Time : </Text> : <Text>End Time : {EndTime}</Text>}
+                    <Text>Start Time : {StartTime}</Text>
                 </View>
-                <Text style={{ padding: 5 }}>Description: {Description}</Text>
+                <Text style={{ padding: 5 }}>Description : {Description}</Text>
 
                 <View style={styles.BTNContainer}>
 
@@ -82,16 +90,19 @@ export default function TasksCard(props) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 5,
-        backgroundColor: 'green',
+        // padding: 5,
+        backgroundColor: '#D9E7E2',
         borderBottomColor: 'black',
         borderRadius: 5,
-        margin: 10
+        margin: 10,
+        
 
     },
     containerTaskDedtails: {
         borderColor: 'black',
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor:'white',
+   
     },
 
     Details: {

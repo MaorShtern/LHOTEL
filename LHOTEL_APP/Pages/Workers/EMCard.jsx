@@ -21,26 +21,29 @@ export default function EMCard(props) {
 
     return (
         <View style={styles.card}>
+            <Text >Employee Code: {EmployeeCode}</Text>
             <View style={styles.details}>
-                <Text style={{ paddingRight: 20 }}>Name: {EmployeeName}</Text>
+                <Text >Name: {EmployeeName}</Text>
                 <Text >ID: {EmployeeID}</Text>
             </View>
             <View style={styles.details}>
-                <Text style={{ paddingRight: 10 }}>Role: {Description}</Text>
+          
                 <Text >Phone: {PhoneNumber}</Text>
+                <Text>Role: {Description}</Text>
             </View>
 
             <View style={styles.details}>
-                <Text style={{ paddingRight: 20 }}>Birth Date: {moment(BirthDate).format('YYYY-MM-DD')}</Text>
-                {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
-            </View>
             <Text style={{paddingLeft:5}}>Hourly Wage: {HourlyWage}</Text>
-
-            <View style={styles.details}>
-
-                <Text style={{ paddingRight: 20 }}>Address: {Address}</Text>
-                <Text >Employee Code: {EmployeeCode}</Text>
+                <Text >Birth Date: {moment(BirthDate).format('DD/MM/YYYY')}</Text>
+                {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
+               
             </View>
+         
+
+           
+
+                <Text style ={{padding:5}}>Address: {Address}</Text>
+    
 
             <View style={styles.BTNContainer}>
                 <TouchableOpacity onPress={EditDetails}>
@@ -69,9 +72,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     details: {
-        flexDirection: "row-reverse",
-        alignItems: 'center',
-        padding: 5
+        flexDirection: "row",
+        // alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
+        paddingHorizontal: 5
+
     },
     BTNContainer: {
         flex: 1,

@@ -18,12 +18,12 @@ export default function ProductsCards(props) {
 
     return (
         <View style={styles.card}>
-            <View>
+            
                 <View style={styles.layout}>
-                    <Text >{name} </Text>
-                    <Text >price: {price}</Text>
+                    <Text style={{alignSelf:'flex-end',padding:3,fontSize:16,fontWeight:'400'}}>{name} </Text>
+                    <Text style={{alignSelf:'flex-end',padding:5}}> $ {price}</Text>
                 </View>
-            </View>
+           
             <View style={styles.counterStyle}>
                 <Counter
                     initial={start}
@@ -49,10 +49,11 @@ const styles = StyleSheet.create({
         marginRight: 50
     },
     card: {
-        backgroundColor: 'grey',
-        borderColor: 'black',
-        borderRadius: 5,
-        borderWidth: 1,
+    backgroundColor: 'rgba(35,100,168, 0.1)',
+        // borderColor: 'black',
+     
+        borderBottomWidth : 0.4,
+    //   bborderWidth: 0.2,
         padding:10,
         flex: 1,
         flexDirection: "row-reverse",
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     layout: {
-        flex: 1,
+        // flex: 1,
         flexDirection: "column",
         // justifyContent: "space-between",
         // alignItems: "center",

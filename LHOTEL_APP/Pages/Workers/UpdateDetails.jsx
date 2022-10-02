@@ -99,19 +99,71 @@ export default function UpdateDetails({ route, navigation }) {
             <View style={styles.DetailsContainer}>
                 <View>
                     <Text style={{
-                        alignSelf: "center", paddingBottom: 10, textDecorationLine: 'underline',
-                    }}>Employee ID: {employee.EmployeeID}</Text>
+                        alignSelf: "center", paddingBottom: 10, textDecorationLine: 'underline',fontSize:18,
+                    }}>Employee ID : {employee.EmployeeID}</Text>
                 </View>
                 <View>
-                    <Text style={{ paddingLeft: 15 }}>Employee Name:</Text>
+                    <Text > Full Name :</Text>
                     <TextInput
                         label={JSON.stringify(employee.EmployeeName)}
                         placeholder={JSON.stringify(employee.EmployeeName)}
-                        left={<TextInput.Icon name="account" />}
+                   
                         mode="outlined"
-                        style={{ margin: 5, paddingLeft: 3 }}
+                     
                         onChangeText={(name) => employee.EmployeeName = name}
                     />
+                </View>
+                <View style ={{paddingTop:10}}>
+                    <Text >Phone Number :</Text>
+                    <TextInput
+                        label={JSON.stringify(employee.PhoneNumber)}
+                        placeholder={JSON.stringify(employee.PhoneNumber)}
+       
+                        keyboardType='numeric'
+                        mode="outlined"
+                       
+                        onChangeText={(number) => employee.PhoneNumber = number}
+                    />
+                </View>
+                <View style ={{paddingTop:10}}>
+                    <Text style={{ paddingLeft: 5 }}>Address :</Text>
+                    <TextInput
+                        label={JSON.stringify(employee.Address)}
+                        placeholder={JSON.stringify(employee.Address)}
+                      
+                        mode="outlined"
+                        
+                        onChangeText={(address) => employee.Address = address}
+                    />
+                </View>
+               
+              
+
+                <View>
+                    <DateTimePickerModal
+                        isVisible={flagDate}
+                        mode="date"
+                        onConfirm={handleDate}
+                        onCancel={hideDate} />
+                     <TouchableOpacity style={styles.input} onPress={showDate}>
+            <View style={styles.ButtonContainer}>
+              <Text>{" Birth Date : " + moment(employee.BirthDate).format('DD/MM/YYYY')}</Text>
+
+              <Image
+                style={{ width: 30, height: 30 }}
+                source={images.calendar}
+              />
+            </View>
+          </TouchableOpacity>
+        
+                </View>
+                <View style={styles.counterStyle}>
+                    <Counter
+                        initial={employee.HourlyWage}
+                        start={employee.HourlyWage}
+                        onChange={(count) => { employee.HourlyWage = count }}
+                    />
+                    <Text style={{ paddingRight: 10 }}>Hourly Wage : </Text>
                 </View>
                 <View style={styles.container}>
                     <Dropdown
@@ -126,51 +178,9 @@ export default function UpdateDetails({ route, navigation }) {
                     />
                 </View>
 
-                <View>
-                    <Text style={{ paddingLeft: 15 }}>Phone Number:</Text>
-                    <TextInput
-                        label={JSON.stringify(employee.PhoneNumber)}
-                        placeholder={JSON.stringify(employee.PhoneNumber)}
-                        left={<TextInput.Icon name="account" />}
-                        keyboardType='numeric'
-                        mode="outlined"
-                        style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(number) => employee.PhoneNumber = number}
-                    />
-                </View>
+                
 
-                <View>
-                    <DateTimePickerModal
-                        isVisible={flagDate}
-                        mode="date"
-                        onConfirm={handleDate}
-                        onCancel={hideDate} />
-                    <View style={{ height: 20 }}></View>
-                    <TouchableOpacity style={styles.button} onPress={showDate}>
-                        <Text>{"Birth Date: " + moment(employee.BirthDate).format('YYYY-MM-DD')}</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.counterStyle}>
-                    <Counter
-                        initial={employee.HourlyWage}
-                        start={employee.HourlyWage}
-                        onChange={(count) => { employee.HourlyWage = count }}
-                    />
-                    <Text style={{ paddingRight: 10 }}>Hourly_Wage: </Text>
-                </View>
-
-                <View>
-                    <Text style={{ paddingLeft: 15 }}>Address:</Text>
-                    <TextInput
-                        label={JSON.stringify(employee.Address)}
-                        placeholder={JSON.stringify(employee.Address)}
-                        left={<TextInput.Icon name="account" />}
-                        mode="outlined"
-                        style={{ margin: 5, paddingLeft: 3 }}
-                        onChangeText={(address) => employee.Address = address}
-                    />
-                </View>
+            
 
                 <View style={{
                     flex: 1,
@@ -192,18 +202,18 @@ const styles = StyleSheet.create({
     HeadLine: {
         fontSize: 40,
         fontWeight: "bold",
-        paddingTop: 20,
+        paddingTop: 40,
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-        textDecorationLine: 'underline',
+        
     },
     SumHeadLine: {
         fontSize: 15,
         alignItems: "center",
         textAlign: "center",
         padding: 20,
-        textDecorationLine: 'underline',
+      
     },
     DetailsContainer: {
         paddingHorizontal: 24,
@@ -221,9 +231,10 @@ const styles = StyleSheet.create({
     },
     button:
     {
-        backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 10
+        backgroundColor: "rgba(35,100,168, 0.4)",
+        padding: 15,
+        borderRadius: 10,
+        margin: 5,
 
     },
     save: {
@@ -239,5 +250,20 @@ const styles = StyleSheet.create({
         // borderColor:"black",
         // borderWidth:1,
     },
+    input: {
+        height: 70,
+        marginVertical: 10,
+        paddingVertical: 30,
+        paddingHorizontal: 10,
+        borderWidth: 0.6,
+        justifyContent: "center",
+      },
+      ButtonContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        // paddingHorizontal:70,
+        // paddingVertical:90,
+      },
 
 })

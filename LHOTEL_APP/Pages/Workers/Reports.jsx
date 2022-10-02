@@ -99,7 +99,7 @@ export default function Reports() {
     }
 
 
-
+    // textStyle={styles.text}
 
     const HandelRequest = (request) => {
         SetLoading(false)
@@ -167,13 +167,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-        textDecorationLine: 'underline',
+   
     },
     tableContainer: {
         padding: 10
     },
     tableHeader: {
-        textDecorationLine: 'underline',
+       fontWeight:'bold',
+       fontSize:17,
+       marginTop:10,
         padding: 5,
     },
     container: {

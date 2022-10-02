@@ -98,12 +98,7 @@ export default function Booking({ navigation }) {
     React.useCallback(() => {
       SetIsExitModalOpened(false);
       SetIsEntryModalOpened(false);
-      setAmountOfPeople(0)
-      myContext.setRoomsFlags({
-        "Single room": 0,
-        "Double room": 0,
-        "Suite": 0,
-      });
+     
     }, [])
   );
 
