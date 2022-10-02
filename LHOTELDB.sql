@@ -2459,6 +2459,17 @@ go
 
 
 
+--select * from [dbo].[Bill]
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+--select * from [dbo].[Employees]
+--select * from [dbo].[Shifts]
+--select * from [dbo].[Employees_Tasks]
+--select * from [dbo].[Customers]
+--select * from [dbo].[Purchases_Documentation]
+
+
+
 
 
 --drop proc Regulation_Quantity_Of_Products_Purchased
