@@ -20,7 +20,7 @@ export default function Registration({ navigation }) {
       
         if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 || last_name.length == 0 || !email.includes('@gmail.com') || phone.length < 3)
         {
-            Alert.alert("The passwords are Invalid")
+            Alert.alert("Data entry error")
             return false
         }
    

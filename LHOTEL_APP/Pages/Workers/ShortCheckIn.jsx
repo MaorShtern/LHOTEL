@@ -81,7 +81,7 @@ export default function ShortCheckIn({ route, navigation }) {
           marginHorizontal: 10,
           paddingTop: 10,
           height: 200 + (Math.ceil(currReservation.length / 3) - 1) * 25,
-          alignItems:'flex-end'
+          
         }}
       >
         <View style={styles.Details}>
@@ -94,7 +94,7 @@ export default function ShortCheckIn({ route, navigation }) {
             {curr.BillNumber === undefined ? null : "No : " + curr.BillNumber}
           </Text>
         </View>
-        <View style={{ paddingTop: 10 }}>
+        <View style={{ paddingTop: 10,alignSelf:'flex-end' }}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>
             <Image style={styles.icon} source={images.calendar} />
             {" " +
