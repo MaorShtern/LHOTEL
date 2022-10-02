@@ -130,7 +130,7 @@ export default function EmployeesManagement({ navigation }) {
 
 
     return (
-        <View>
+        <ScrollView>
             <Text style={styles.HeadLine}>Employees Management</Text>
             <View style={{ paddingVertical: 10 }}>
                 <SearchBar
@@ -150,7 +150,7 @@ export default function EmployeesManagement({ navigation }) {
                     {loading ? listEmployees : <Spinner />}
                 </ScrollView>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
