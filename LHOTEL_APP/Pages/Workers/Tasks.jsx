@@ -6,12 +6,6 @@ import TasksCard from "./TasksCard";
 import moment from "moment";
 import AppContext from "../../AppContext";
 
-// const RequestType = [
-//     { label: "All Task", value: "All Task" },
-//     { label: "Today's tasks", value: "Today's tasks" },
-//     { label: 'Open Tasks', value: 'Open Tasks' },
-//     { label: 'Add New Task', value: 'Add New Task' },
-// ];
 
 export default function Tasks({ navigation }) {
   const myContext = useContext(AppContext);
@@ -29,9 +23,13 @@ export default function Tasks({ navigation }) {
   ]);
 
   useEffect(() => {
-    if (myEmployee.Description === "Manager") GetAllTasksFromDB();
-    else GetTasksByID();
+    if (myEmployee.Description === "Manager")
+      GetAllTasksFromDB();
+    else
+      GetTasksByID();
   }, []);
+
+
 
   const GetTasksByID = async () => {
     try {
@@ -42,10 +40,7 @@ export default function Tasks({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetTaskById",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetTaskById", requestOptions);
       let temp = await result.json();
       // console.log(temp);
       if (temp !== null) {
@@ -64,16 +59,14 @@ export default function Tasks({ navigation }) {
     }
   };
 
+
   const GetAllTasksFromDB = async () => {
     try {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetAllTasks",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetAllTasks",requestOptions);
       let temp = await result.json();
       // console.log(temp);
       if (temp !== null) {
@@ -118,19 +111,17 @@ export default function Tasks({ navigation }) {
   };
 
   const MarkTaskAsDone = (taskCode) => {
-    let newArrayTasks = tasksDisplay.filter(
-      (task) => task.TaskCode === taskCode
-    )[0];
+    let newArrayTasks = tasksDisplay.filter((task) => task.TaskCode === taskCode)[0];
     let temp = [...taskToMarkAsDone, newArrayTasks];
     SetTaskToMarkAsDone(temp);
   };
 
+
   const RemoveFromCheck = (taskCode) => {
-    let newArrayTasks = taskToMarkAsDone.filter(
-      (task) => task.TaskCode !== taskCode
-    );
+    let newArrayTasks = taskToMarkAsDone.filter((task) => task.TaskCode !== taskCode);
     SetTaskToMarkAsDone(newArrayTasks);
   };
+
 
   const DeleteTask = async (taskCode) => {
     try {
@@ -143,10 +134,7 @@ export default function Tasks({ navigation }) {
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/DeleteTask",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/DeleteTask", requestOptions);
       let temp = await result.json();
       // console.log(temp);
       if (temp) {
@@ -177,10 +165,8 @@ export default function Tasks({ navigation }) {
           }),
           headers: { "Content-Type": "application/json" },
         };
-        let result = await fetch(
-          "http://proj13.ruppin-tech.co.il/CloseTask",
-          requestOptions
-        );
+        // console.log(requestOptions.body);
+        let result = await fetch("http://proj13.ruppin-tech.co.il/CloseTask", requestOptions);
         let temp = await result.json();
         if (temp) {
           counter++;
@@ -200,8 +186,6 @@ export default function Tasks({ navigation }) {
   };
 
   // console.log(JSON.stringify(taskToMarkAsDone));
-
-  console.log();
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>

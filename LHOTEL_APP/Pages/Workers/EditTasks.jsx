@@ -115,7 +115,7 @@ export default function EditTasks({ route, navigation }) {
                 body: JSON.stringify(task),
                 headers: { 'Content-Type': 'application/json' }
             };
-            // console.log(requestOptions.body);
+            console.log(requestOptions.body);
             let result = await fetch('http://proj13.ruppin-tech.co.il/AlterTask', requestOptions);
             if (result) {
                 alert("Task details successfully saved")

@@ -35,7 +35,6 @@ C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELSer
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Release\BLL.csproj.CoreCompileInputs.cache
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Release\BLL.dll
 C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Release\BLL.pdb
-C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Release\BLL.csproj.CopyComplete
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Release\BLL.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Release\BLL.pdb
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\bin\Release\DAL.dll

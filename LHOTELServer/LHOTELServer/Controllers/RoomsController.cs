@@ -34,7 +34,7 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/FindCustomerRoomByID")]
         public IHttpActionResult FindCustomerRoomByID([FromBody] JObject data)
         {

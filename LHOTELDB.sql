@@ -246,7 +246,7 @@ create table Employees_Tasks
 go
 
 
---drop table Purchases_Documentation
+
 create table Purchases_Documentation
 (
 	Bill_Number int,
@@ -1389,7 +1389,6 @@ go
 --exec AlterTask 13,222,'Room Cleaning',2,'13:00',NULL,'Open',null	
 
 
-
 create proc DeleteTask
 @Tasks_Code int
 as
@@ -1584,13 +1583,7 @@ commit tran
 go 
 
 
---exec GetReservedRoomsByCustomerId 747474744
-
-
-
-
-
-
+--exec GetReservedRoomsByCustomerId 666
 
 
 
@@ -1663,7 +1656,7 @@ begin tran
 commit tran
 go
 --select * from [Customers_Rooms]
--- exec FindCustomerRoomByID 222
+-- exec FindCustomerRoomByID 111111116
 
 
 create proc AlterCustomerRoom
@@ -2163,7 +2156,6 @@ commit tran
 go
 
 --exec AddNewBill_Detail 315201913,21,'Coca cola',9,'Cash'
-
    --"CustomerID":315201913, 
    -- "RoomNumber":21,
    -- "ProductDec":"Coca cola",
@@ -2216,6 +2208,28 @@ begin tran
 commit tran
 go
  --exec AlterBill_Detail 1,2,10,'2021-12-12','13:00','Cash'
+
+
+-- drop function GetAllCustomersHistory
+--alter function GetAllCustomersHistory(@id int)
+--RETURNS @temp TABLE (Bill_Number int, Customer_ID int, Bill_Date Date, Room_Number int,
+--		Room_Type nvarchar(30), Price_Per_Night decimal(9,2),Amount_Of_People int, Breakfast bit,
+--		Number_Of_Nights int, Payment_Method  nvarchar(20), Purchase_Date Date, Product_Code int )
+--as
+--begin
+--	insert @temp select * from dbo.Purchases_Documentation where [Customer_ID] = @id
+--	insert  @temp EXECUTE  Room_Resit @id	
+--	RETURN
+--end
+
+
+--SELECT * FROM GetAllCustomersHistory (666) 
+--select * from [dbo].[Bill]
+--select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Bill_Details]
+--select * from [dbo].[Purchases_Documentation]
+--EXECUTE  Room_Resit 666
+
 
 
 
