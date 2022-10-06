@@ -21,11 +21,11 @@ export default function Credit({ route, navigation }) {
   const onChange = (form) => {
     SetForm(form);
   };
- 
+
   useFocusEffect(
     React.useCallback(() => {
       SetForm({});
-     
+
     }, [])
   );
 
@@ -33,10 +33,10 @@ export default function Credit({ route, navigation }) {
     let { the_data, totalSum } = route.params;
     var Hashes = require('jshashes')
 
-     try {
+    try {
       let reservation = value.fields;
-    let SHA1Card = new Hashes.SHA1().b64_hmac(reservation.CustomerID, reservation.CreditCardNumber)
-    reservation.CreditCardNumber = SHA1Card
+      let SHA1Card = new Hashes.SHA1().b64_hmac(reservation.CustomerID, reservation.CreditCardNumber)
+      reservation.CreditCardNumber = SHA1Card
       const requestOptions = {
         method: "POST",
         body: JSON.stringify(reservation),
@@ -50,13 +50,13 @@ export default function Credit({ route, navigation }) {
           the_data: the_data,
           totalSum: totalSum
         });
-     
+
     } catch (error) {
       alert(error);
     }
   };
 
- 
+
   const ConfirmInformation = () => {
     // console.log(form);
     if (!form.valid) {
@@ -100,18 +100,18 @@ export default function Credit({ route, navigation }) {
     };
 
     return newReservation;
-  
+
 
   };
 
 
 
-  let {totalSum } = route.params;
+  let { totalSum } = route.params;
 
   return (
     <View>
-{isEmploeeConncted ? null:   <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
-    
+      {isEmploeeConncted ? null : <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
+
 
       <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput
@@ -123,10 +123,10 @@ export default function Credit({ route, navigation }) {
           onChange={onChange}
           useVertical={true}
         />
-      
+
       </View>
 
-      <View  style={isEmploeeConncted ? styles.empfooterStyle : styles.cusfooterStyle} >
+      <View style={isEmploeeConncted ? styles.empfooterStyle : styles.cusfooterStyle} >
         <TouchableOpacity style={styles.footerButtonOne}>
           <Text style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}>
             DELETE
@@ -171,14 +171,14 @@ const styles = StyleSheet.create({
   empstyleCard: {
     paddingTop: 100
   },
-  empfooterStyle : {
+  empfooterStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 550,
     position: "absolute",
     // paddingTop: 15,
   },
-  cusfooterStyle:{
+  cusfooterStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 590,

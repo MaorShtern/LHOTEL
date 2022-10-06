@@ -30,9 +30,9 @@ namespace BLL
             return DALTasks.AddNewTask(task);
         }
 
-        public static bool CloseTask(int code)
+        public static bool CloseTask(int code, string endTime)
         {
-            return DALTasks.CloseTask(code);
+            return DALTasks.CloseTask(code, endTime);
         }
         public static bool AlterTask(Task task)
         {

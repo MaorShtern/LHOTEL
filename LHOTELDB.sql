@@ -8,7 +8,7 @@
 SET DATEFORMAT dmy;  
 GO
 
-select * from Customer
+
 
 create table Employees_Types
 (
@@ -1411,12 +1411,14 @@ go
 
 
 create proc CloseTask
-@Task_Code int
+@Task_Code int,
+@time nvarchar(5)
 as
 begin tran
 	UPDATE [dbo].[Employees_Tasks]
 	SET 
-	[Task_Status]='Close'
+	[Task_Status]='Close',
+	[End_Time] = @time
 	WHERE [Task_Code] = @Task_Code
 	if (@@error !=0)
 	begin
@@ -1427,9 +1429,8 @@ begin tran
 commit tran
 go
 
---exec CloseTask 6
+--exec CloseTask 25, '14:00'
 --select * from [dbo].[Employees_Tasks]
-
 
 
 

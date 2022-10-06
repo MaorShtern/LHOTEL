@@ -170,7 +170,7 @@ namespace DAL
         }
 
 
-        public static bool CloseTask(int code)
+        public static bool CloseTask(int code, string endTime)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace DAL
                 {
                     return false;
                 }
-                string str = $@"exec CloseTask {code}";
+                string str = $@"exec CloseTask {code}, '{endTime}'";
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result >= 1)
                     return true;

@@ -102,7 +102,7 @@ export default function Payment({ route, navigation }) {
       let customerResult = await result.json();
       if (customerResult)
 
-        console.log(customerResult);
+        // console.log(customerResult);
         navigation.navigate('ConfirmationPage', {
           id: value.CustomerID, the_data: the_data,
           number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,

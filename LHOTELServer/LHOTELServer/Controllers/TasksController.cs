@@ -102,7 +102,8 @@ namespace LHOTELServer.Controllers
             try
             {
                 int code = data["task_code"].ToObject<int>();
-                return Ok(BLLTasks.CloseTask(code));
+                string endTime = data["end_time"].ToObject<string>();
+                return Ok(BLLTasks.CloseTask(code, endTime));
             }
             catch (Exception e)
             {

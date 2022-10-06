@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { ActivityIndicator } from "react-native";
@@ -60,7 +53,7 @@ export default function Tasks({ navigation }) {
         SetTasksDisplay(temp);
         // console.log(requestType);
         let newRequest = requestType.filter(
-          ( request) =>  request.label !== "Add New Task"
+          (request) => request.label !== "Add New Task"
         );
         SetRequestType(newRequest);
         SetLoading(true);
@@ -178,7 +171,10 @@ export default function Tasks({ navigation }) {
         // console.log(taskToMarkAsDone[index]);
         const requestOptions = {
           method: "PUT",
-          body: JSON.stringify({ task_code: taskToMarkAsDone[index].TaskCode }),
+          body: JSON.stringify({
+            task_code: taskToMarkAsDone[index].TaskCode,
+            end_time: moment(new Date()).format('HH:MM')
+          }),
           headers: { "Content-Type": "application/json" },
         };
         let result = await fetch(
@@ -204,6 +200,8 @@ export default function Tasks({ navigation }) {
   };
 
   // console.log(JSON.stringify(taskToMarkAsDone));
+
+  console.log();
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
@@ -237,28 +235,28 @@ export default function Tasks({ navigation }) {
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>All Tasks</Text>
-    
-        <Dropdown
-          style={styles.dropdown}
-          data={requestType}
-          searchPlaceholder="Search"
-          labelField="label"
-          valueField="value"
-          placeholder="Task Request"
-          value={dropdown}
-          onChange={(request) => {
-            HandelRequest(request.value);
-          }}
-        />
-    <ScrollView>
-    <View style={styles.SaveContainer}>
-        <TouchableOpacity style={styles.Save} onPress={CloseTask}>
-          <Text>Save the tasks marked as "Done"</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.items}>{loading ? tasksList : <Spinner />}</View>
-    </ScrollView>
-    
+
+      <Dropdown
+        style={styles.dropdown}
+        data={requestType}
+        searchPlaceholder="Search"
+        labelField="label"
+        valueField="value"
+        placeholder="Task Request"
+        value={dropdown}
+        onChange={(request) => {
+          HandelRequest(request.value);
+        }}
+      />
+      <ScrollView>
+        <View style={styles.SaveContainer}>
+          <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+            <Text>Save the tasks marked as "Done"</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.items}>{loading ? tasksList : <Spinner />}</View>
+      </ScrollView>
+
     </ScrollView>
   );
 }
@@ -271,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-  
+
   },
   dropdown: {
     backgroundColor: "white",

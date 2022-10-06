@@ -17,19 +17,16 @@ export default function Registration({ navigation }) {
 
 
     const CheackFields = () => {
-      
-        if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 || last_name.length == 0 || !email.includes('@gmail.com') || phone.length < 3)
-        {
+        if (password.length < 9 || password !== re_Password || id.length !== 9 || first_name.length == 0 ||
+             last_name.length == 0 || !email.includes('@gmail.com') || phone.length < 3){
             Alert.alert("Data entry error")
             return false
         }
-   
         else {
-       
             return true
-        }
-    }
+        }}
 
+        
     const Spinner = () => (
         <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" />
