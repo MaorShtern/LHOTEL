@@ -1,10 +1,8 @@
 import { Animated,View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
 import React from "react";
-// import { BackgroundImage } from '@rneui/base';
 import { useState, useEffect, useContext } from "react";
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
-// import WorkerMenu from "./Workers/WorkerMenu";
 import { LinearGradient } from "expo-linear-gradient";
 import AppContext from '../AppContext';
 import { ActivityIndicator } from "react-native";
