@@ -1,11 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
-import Customer from "./Class/Customer";
 import { CreditCardInput } from "react-native-credit-card-input-view";
-import { useFocusEffect } from "@react-navigation/native";
 import AppContext from "../AppContext";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-
 
 
 export default function Credit({ route, navigation }) {
@@ -13,105 +9,99 @@ export default function Credit({ route, navigation }) {
 
   const myContext = useContext(AppContext);
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
+  const roomsReservation = myContext.roomsReservation
+  const totalSum = roomsReservation.totalSum;
+  const user = myContext.user
 
-  let { ReservationDetails } = route.params;
+  // console.log(user);
 
+  // let { ReservationDetails } = route.params;
   const [form, SetForm] = useState({});
 
+
   const onChange = (form) => {
+    roomsReservation.CardHolderName = form.values.name
+    roomsReservation.CreditCardNumber = form.values.number.replace(/ /g, "")
+    roomsReservation.CreditCardDate = form.values.expiry
+    roomsReservation.ThreeDigit = form.values.cvc
+
+    // // CardHolderName: form.values.name,
+    // // CreditCardNumber: form.values.number.replace(/ /g, ""),
+    // // CreditCardDate: form.values.expiry,
+    // // ThreeDigit: form.values.cvc,
+
     SetForm(form);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      SetForm({});
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     SetForm({});
 
-    }, [])
-  );
+  //   }, [])
+  // );
 
-  const SaveRoomReservation = async (value) => {
-    let { the_data, totalSum } = route.params;
-    var Hashes = require('jshashes')
+  const SaveRoomReservation = async () => {
+    // let totalSum = 
 
     try {
-      let reservation = value.fields;
-      let SHA1Card = new Hashes.SHA1().b64_hmac(reservation.CustomerID, reservation.CreditCardNumber)
-      reservation.CreditCardNumber = SHA1Card
+      let { the_data } = route.params;
+      var Hashes = require('jshashes')
+
+      // let reservation = value.fields;
+      let SHA1Card = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CreditCardNumber)
+      // roomsReservation.CreditCardNumber = SHA1Card
+      
       const requestOptions = {
         method: "POST",
-        body: JSON.stringify(reservation),
+        body: JSON.stringify({
+          CustomerID: user.CustomerID,
+          CardHolderName: roomsReservation.CardHolderName,
+          CreditCardDate: roomsReservation.CreditCardDate,
+          ThreeDigit: roomsReservation.ThreeDigit,
+          CreditCardNumber: SHA1Card,
+          EmployeeID: roomsReservation.EmployeeID,
+          CounterSingle: roomsReservation.CounterSingle,
+          CounterDouble: roomsReservation.CounterDouble,
+          CounterSuite: roomsReservation.CounterSuite,
+          EntryDate:roomsReservation.EntryDate,
+          ExitDate:roomsReservation.ExitDate ,
+          AmountOfPeople: roomsReservation.AmountOfPeople,
+          Breakfast: roomsReservation.Breakfast
+        }),
         headers: { "Content-Type": "application/json" },
       };
+      // console.log(requestOptions.body);
+ 
       let result = await fetch("http://proj13.ruppin-tech.co.il/SaveRoomReservation", requestOptions);
       let customerResult = await result.json();
       if (customerResult)
         navigation.navigate("ConfirmationPage", {
-          customer: value,
           the_data: the_data,
-          totalSum: totalSum
         });
 
     } catch (error) {
       alert(error);
     }
+
   };
 
 
   const ConfirmInformation = () => {
-    // console.log(form);
     if (!form.valid) {
       alert("Incorrect credit card details")
       return
     }
-    let reservation = createCustomerReservation();
-    // console.log(customer);
-    isEmploeeConncted
-      ? navigation.navigate("ShortCheckIn", {
-        currReservation: [reservation.fields],
-      })
-      : SaveRoomReservation(reservation);
-  };
-  //
-  const createCustomerReservation = () => {
-
-    let newReservation = {
-      className: Customer,
-      fields: {
-        CustomerID: ReservationDetails.CustomerID,
-        CustomerType: ReservationDetails.CustomerType,
-        FirstName: ReservationDetails.FirstName,
-        LastName: ReservationDetails.LastName,
-        Mail: ReservationDetails.Mail,
-        PhoneNumber: ReservationDetails.PhoneNumber,
-        EmployeeID: isEmploeeConncted ? ReservationDetails.EmployeeID : -1,
-        EntryDate: ReservationDetails.EntryDate,
-        ExitDate: ReservationDetails.ExitDate,
-        CounterSingle: ReservationDetails.CounterSingle,
-        CounterDouble: ReservationDetails.CounterDouble,
-        CounterSuite: ReservationDetails.CounterSuite,
-        AmountOfPeople: ReservationDetails.AmountOfPeople,
-        Breakfast: ReservationDetails.Breakfast,
-        NumberOfNights: ReservationDetails.NumberOfNights,
-        CardHolderName: form.values.name,
-        CreditCardNumber: form.values.number.replace(/ /g, ""),
-        CreditCardDate: form.values.expiry,
-        ThreeDigit: form.values.cvc,
-      },
-    };
-
-    return newReservation;
-
-
+    // let reservation = createCustomerReservation();
+    // // console.log(customer);
+    isEmploeeConncted ? navigation.navigate("ShortCheckIn")
+      : SaveRoomReservation();
   };
 
-
-
-  let { totalSum } = route.params;
 
   return (
     <View>
-      {isEmploeeConncted ? null : <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>}
 
+      <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
 
       <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
         <CreditCardInput
@@ -184,6 +174,7 @@ const styles = StyleSheet.create({
     paddingTop: 590,
     position: "absolute",
   },
+
   footerButtonOne: {
     backgroundColor: "#656255",
 

@@ -1,144 +1,96 @@
-import {
-  View,
-  Text,
-  Alert,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Switch,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Alert, Image, StyleSheet, ScrollView, Switch, TouchableOpacity, } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from "react-native-paper";
 import moment from "moment";
 import AppContext from "../../AppContext";
-import { useFocusEffect } from "@react-navigation/native";
 import { images } from "../../images";
 import { TextInput } from "react-native-paper";
 
 export default function Booking({ navigation }) {
 
   const myContext = useContext(AppContext);
-  // const [showDropDown, setShowDropDown] = useState(false);
-
+  const roomsReservation = myContext.roomsReservation
   const [flagEnrty, setFlagEntry] = useState(false);
   const [flagExit, setFlagExit] = useState(false);
-  const [entryDate, setEntryDate] = useState(moment().toDate());
-  const [exitDate, setExitDate] = useState(
-    moment(entryDate).add(1, "days").toDate()
-  );
-
-  const [isEntryModalOpened, SetIsEntryModalOpened] = useState(false);
-  const [isExitModalOpened, SetIsExitModalOpened] = useState(false);
   const [singleFlag, setSingle] = useState(false);
   const [doubleFlag, setDouble] = useState(false);
   const [suiteFlag, setSuite] = useState(false);
-  const [number_Of_Nights, setNumber_Of_Nights] = useState(0);
+  const [number_Of_Nights, setNumber_Of_Nights] = useState(false);
   const [breakfast, setBreakfast] = useState(false);
 
-  const [AmountOfPeople, setAmountOfPeople] = useState(0);
 
   const showDatePickerEntry = () => {
     setFlagEntry(true);
   };
   const hideDatePickerEntry = () => {
     setFlagEntry(false);
-    SetIsEntryModalOpened(true);
   };
   const showDatePickerExit = () => {
     setFlagExit(true);
   };
   const hideDatePickerExit = () => {
     setFlagExit(false);
-    SetIsExitModalOpened(true);
   };
   const handleConfirmEnteryDate = (date) => {
-    setEntryDate(date);
+    let entry = moment(date).format("YYYY-MM-DD");
+    roomsReservation.EntryDate = entry
     hideDatePickerEntry();
   };
 
   const handleConfirmExitDate = (date) => {
-    setExitDate(date);
+    let exit = moment(date).format("YYYY-MM-DD");
+    roomsReservation.ExitDate = exit
     hideDatePickerExit();
   };
 
-  const entry = moment(entryDate).format("DD/MM/YYYY");
-  const exit = moment(exitDate).format("DD/MM/YYYY");
-  // useEffect(() => {
 
-  //   const unsubscribe = navigation.addListener("focus", () => {
-  //     setSingle(false)
-  //     setDouble(false)
-  //     setSuite(false)
-  //     console.log();
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
+
+
+
   useEffect(() => {
+    let date = moment().format("DD/MM/YYYY")
 
     if (
-      moment(entryDate).isBefore(moment(), "day") ||
-      moment(exitDate).isSame(entryDate, "day") ||
-      moment(exitDate).isBefore(entryDate, "day")
+      moment(roomsReservation.EntryDate).isBefore(date) ||
+      moment(roomsReservation.EntryDate).isSame(date) ||
+      moment(roomsReservation.ExitDate).isSame(roomsReservation.EntryDate, "day") ||
+      moment(roomsReservation.ExitDate).isBefore(roomsReservation.EntryDate, "day")
     ) {
-      setNumber_Of_Nights(0);
+      setNumber_Of_Nights(false);
       return;
     }
-    if (!isEntryModalOpened && isExitModalOpened) {
-      setNumber_Of_Nights(moment(exitDate).diff(moment(entryDate), "days") + 1);
-
-      return;
-    }
-
-    setNumber_Of_Nights(moment(exitDate).diff(moment(entryDate), "days"));
+    // let number = moment(roomsReservation.EntryDate).diff( moment(roomsReservation.ExitDate), 'days') * -1  // =1
+    // console.log(number);
+    setNumber_Of_Nights(true)
   });
 
-  useFocusEffect(
-    React.useCallback(() => {
-      SetIsExitModalOpened(false);
-      SetIsEntryModalOpened(false);
-     
-    }, [])
-  );
-
-  const Delete = () => {
-    setNumber_Of_Nights(0);
-    setBreakfast(false);
-    setSingle(false);
-    setDouble(false);
-    setSuite(false);
-    setEntryDate(new Date());
-    setExitDate(new Date());
-  };
 
   const ChaeckRoomsMarks = () => {
     return singleFlag || doubleFlag || suiteFlag;
   };
 
   const ChaeckAll = () => {
-    if (number_Of_Nights === 0 || !(AmountOfPeople > 0 && AmountOfPeople <= 10)) {
+    if (number_Of_Nights !== true || !(roomsReservation.AmountOfPeople > 0
+      && roomsReservation.AmountOfPeople <= 10)) {
       Alert.alert("Some fields are not filled in Properly");
       return;
     }
+
+    let rooms_flags = {}
     if (ChaeckRoomsMarks()) {
-      let rooms_flags = {
+      rooms_flags = {
         "Single room": singleFlag,
         "Double room": doubleFlag,
         "Suite": suiteFlag,
-      };
+      }
+    }
 
-      // myContext.setRoomsFlags(rooms_flags);
-      navigation.navigate("SaveRoom", {
-        rooms_flags: rooms_flags,
-        number_Of_Nights: number_Of_Nights,
-        breakfast: breakfast,
-        entryDate: entryDate,
-        exitDate: exitDate,
-        amountOfPeople: AmountOfPeople,
-      });
-    } else Alert.alert("Some fields are not filled in Properly");
+    // console.log(rooms_flags);
+
+    navigation.navigate("SaveRoom", { rooms_flags: rooms_flags, });
   };
+
 
   return (
     <ScrollView>
@@ -146,7 +98,7 @@ export default function Booking({ navigation }) {
       <View style={styles.label}>
         <TouchableOpacity style={styles.input} onPress={showDatePickerEntry}>
           <View style={styles.ButtonContainer}>
-            <Text style={styles.text}>{"Entry date: " + entry}</Text>
+            <Text style={styles.text}>{"Entry date: " + moment(roomsReservation.EntryDate).format("DD-MM-YYYY")}</Text>
 
             <Image style={{ width: 50, height: 50 }} source={images.calendar} />
           </View>
@@ -160,7 +112,7 @@ export default function Booking({ navigation }) {
 
         <TouchableOpacity style={styles.input} onPress={showDatePickerExit}>
           <View style={styles.ButtonContainer}>
-            <Text style={styles.text}>{"Exit date: " + exit}</Text>
+            <Text style={styles.text}>{"Exit date: " +  moment(roomsReservation.ExitDate).format("DD-MM-YYYY")}</Text>
 
             <Image style={{ width: 50, height: 50 }} source={images.calendar} />
           </View>
@@ -173,15 +125,9 @@ export default function Booking({ navigation }) {
           onCancel={hideDatePickerExit}
         />
         <View>
-          {number_Of_Nights === 0 ? (
+          {!number_Of_Nights ? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>
-          ) : (
-            <View style={{ padding: 10 }}>
-              <Text style={{ fontSize: 18 }}>
-                Amount of nights : {number_Of_Nights}
-              </Text>
-            </View>
-          )}
+          ) : (null)}
         </View>
 
         <View>
@@ -222,38 +168,28 @@ export default function Booking({ navigation }) {
         </View>
 
         <TextInput
-          style={{
-            paddingHorizontal: 20,
-
-            marginVertical: 20,
-          }}
+          style={{ paddingHorizontal: 20, marginVertical: 20, }}
           label="Amount Of people"
           autoCapitalize="none"
           keyboardType="numeric"
-          onChangeText={(amount) => setAmountOfPeople(amount)}
+          onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}
         />
 
         <View style={styles.switchContainer}>
           <Switch
             onValueChange={() => {
-              setBreakfast(!breakfast);
-            }}
-            value={breakfast}
+              setBreakfast(!breakfast); roomsReservation.Breakfast = !breakfast
+            }} value={breakfast}
           />
           <Text>Include breakfast?</Text>
         </View>
-   
+
 
         <View style={{
-          flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
-          padding:10,
-          marginTop:20
+          padding: 10,
+          marginTop: 20
         }}>
-          <TouchableOpacity style={styles.button} onPress={Delete}>
-            <Text>DELETE</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.button2} onPress={ChaeckAll}>
             <Text>SUBMIT</Text>
           </TouchableOpacity>
@@ -295,20 +231,20 @@ const styles = StyleSheet.create({
 
   button:
   {
-      backgroundColor: '#C0C0C0',
-      paddingVertical: 15,
-      paddingHorizontal: 40,
-      borderRadius: 5,
+    backgroundColor: '#C0C0C0',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 5,
 
   },
   button2:
   {
-      backgroundColor: 'rgba(35,100,168, 0.4)',
-      paddingVertical: 15,
-      paddingHorizontal: 40,
-      borderRadius: 5,
-      
-      fontWeight:'500'
+    backgroundColor: 'rgba(35,100,168, 0.4)',
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+
+    fontWeight: '500'
   },
   RadioCheckbox: {
     borderColor: "black",

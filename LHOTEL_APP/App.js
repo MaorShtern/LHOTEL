@@ -3,13 +3,42 @@ import { LogBox } from 'react-native'
 import ignoreWarnings from 'ignore-warnings';
 import { useState} from "react";
 import AppContext from './AppContext';
+import moment from "moment";
 
 
 export default function App() {
 
   const isIos = Platform.OS === 'ios' 
   const [isUserExist, setIsUserExist] = useState(false);
-  const [roomsFlags, setRoomsFlags] = useState({});
+  const [roomsReservation, SetRoomsReservation]  = useState({
+    CustomerID: '',
+    CustomerType: 1,
+    FirstName: '',
+    LastName: '',
+    Mail: '',
+    PhoneNumber: '',
+    CardHolderName: '',
+    CreditCardNumber: '',
+    CreditCardDate: '',
+    ThreeDigit: '',
+    AmountOfPeople: 1,
+    EmployeeID: -1,
+    CounterSingle: 0,
+    CounterDouble: 0,
+    CounterSuite: 0,
+    ExitDate: moment(new Date()).add(1,"day").format("DD/MM/YYYY"),
+    EntryDate: moment(new Date()).format("DD/MM/YYYY"),
+    Breakfast:false,
+    NumberOfNights:0,
+    totalSum:0,
+    rooms:[]
+  }
+);
+  // const [roomsFlags, setRoomsFlags] = useState({
+  //     SingleRoom: singleFlag,
+  //     "DoubleRoom": doubleFlag,
+  //     "Suite": suiteFlag,
+  // });
   const [employee, setEmployee] = useState({});
   const [user, SetUser] = useState({})
 
@@ -19,6 +48,10 @@ export default function App() {
 
   const setUserDB = (obj) => {
     SetUser(obj)
+  }
+
+  const SetReservastionData = (obj)=>{
+    SetRoomsReservation(obj)
   }
   
 //   const setEmployeeId = (id) => {
@@ -35,11 +68,13 @@ export default function App() {
     user:user,
     isUserExist:isUserExist,
     isIos:isIos,
-    roomsFlags:roomsFlags,
+    // roomsFlags:roomsFlags,
+    roomsReservation:roomsReservation,
     setEmployeeDB,
     setUserDB,
     setIsUserExist,
-    setRoomsFlags
+    // setRoomsFlags,
+    SetReservastionData
   };
   
   ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]'])
@@ -49,7 +84,6 @@ export default function App() {
     'NativeBase: The contrast ratio of',
     "[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!",
   ])
-
 
 
 

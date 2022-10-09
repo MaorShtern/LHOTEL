@@ -1,16 +1,23 @@
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useContext } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
 import ReservationCard from './ReservationCard'
+import AppContext from '../../AppContext';
 
 export default function ConfirmationPage( { route, navigation }) {
 
     // { route, navigation }
 
-    let {customer ,totalSum, the_data } = route.params
-    const curr = customer.fields
+    let { the_data } = route.params
+    const myContext = useContext(AppContext);
+    const roomsReservation = myContext.roomsReservation
+    // console.log(roomsReservation);
+
+    // const myContext = useContext(AppContext);
+
+    // const curr = customer.fields
 // console.log(curr);
-console.log(curr);
+// console.log(curr);
     // const Delete = async () => {
     //     const requestOptions = {
     //         method: 'DELETE',
@@ -29,8 +36,9 @@ console.log(curr);
     // }
  
 
-    let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} count={room.count}
-        pricePerNight={room.pricePerNight} entryDate={curr.EntryDate} exitDate={curr.ExitDate} breakfast={room.B} />)
+    let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} 
+    count={room.count} pricePerNight={room.pricePerNight} entryDate={roomsReservation.EntryDate} 
+    exitDate={roomsReservation.ExitDate} breakfast={roomsReservation.Breakfast} />)
        
     return (
         <ScrollView>
@@ -41,11 +49,11 @@ console.log(curr);
             <View>
                 <View style={styles.OrderDetails}>
                     <Text style={styles.pay}>Payment details</Text>
-                    <Text style={styles.textStyle}>ID : {curr.CustomerID}</Text>
-                    <Text style={styles.textStyle}>total Price : {totalSum}$</Text>
-                    <Text style={styles.textStyle}>Amount Of People : {curr.AmountOfPeople}</Text>
-                    <Text style={styles.textStyle}>Number Of Nights : {curr.NumberOfNights}</Text>
-                    <Text style={styles.textStyle}>Cardholder's Name: {curr.CardHolderName}</Text>
+                    <Text style={styles.textStyle}>ID : {roomsReservation.CustomerID}</Text>
+                    <Text style={styles.textStyle}>total Price : {roomsReservation.totalSum}$</Text>
+                    <Text style={styles.textStyle}>Amount Of People : {roomsReservation.AmountOfPeople}</Text>
+                    {/* <Text style={styles.textStyle}>Number Of Nights : {customer.NumberOfNights}</Text> */}
+                    <Text style={styles.textStyle}>Cardholder's Name: {roomsReservation.CardHolderName}</Text>
                     <Text style={styles.textStyle}>Card Number: ****************</Text>
                     
                 </View>

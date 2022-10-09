@@ -136,10 +136,7 @@ export default function NewReservation({ navigation }) {
       }),
       headers: { "Content-Type": "application/json" },
     };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/GetDBCustomerById",
-      requestOptions
-    );
+    let result = await fetch("http://proj13.ruppin-tech.co.il/GetDBCustomerById",requestOptions);
     let user = await result.json();
     if (user !== null) {
       setCustomerID(IDCheck);
@@ -170,8 +167,6 @@ export default function NewReservation({ navigation }) {
       AmountOfPeople: AmountOfPeople,
       Breakfast : breakfast,
       NumberOfNights :number_Of_Nights
- 
-    
     };
   
     navigation.navigate("Credit", { ReservationDetails: newReservation });
@@ -182,10 +177,7 @@ export default function NewReservation({ navigation }) {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/GetAvailableRooms",
-      requestOptions
-    );
+    let result = await fetch("http://proj13.ruppin-tech.co.il/GetAvailableRooms",requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
       // console.log("rooms: " + JSON.stringify(rooms));
@@ -209,6 +201,7 @@ export default function NewReservation({ navigation }) {
         break;
     }
   };
+  
   const BilldData = (rooms) => {
     console.log(rooms);
     let temp = [];

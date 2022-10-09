@@ -5,44 +5,39 @@ import CardRoom from "./CardRoom";
 import moment from "moment";
 import AppContext from '../../AppContext';
 import Modal from "react-native-modal";
+
+
 export default function SaveRoom({ route, navigation }) {
+
+
   const myContext = useContext(AppContext);
-  let {
-    rooms_flags,
-    number_Of_Nights,
-    breakfast,
-    entryDate,
-    exitDate,
-    amountOfPeople,
-  } = route.params;
+  let { rooms_flags } = route.params;
   const user = myContext.user
-  // console.log("rooms_flags :" + rooms_flags);
-  // console.log("number_Of_Nights :" + number_Of_Nights);
-  // console.log("breakfast :" + breakfast);
-  // console.log("entryDate :" + entryDate);
-  // console.log("exitDate :" + exitDate);
-  const [totalSum, SetTotalSum] = useState(0)
-  const [single, SetSingle] = useState(0);
-  const [double, SetDouble] = useState(0);
-  const [suite, SetSuite] = useState(0);
+  const roomsReservation = myContext.roomsReservation
+  // console.log("rooms_flags :" + JSON.stringify(rooms_flags));
+
+  // const [totalSum, SetTotalSum] = useState(0)
+  // const [single, SetSingle] = useState(0);
+  // const [double, SetDouble] = useState(0);
+  // const [suite, SetSuite] = useState(0);
   const [loading, SetLoading] = useState(false);
   const [arrRoomsData, SetArrRoomsData] = useState([]);
-  // const [user, SetUser] = useState([]);
-  const [the_data, SetThe_data] = useState([]);
+  // const [user, SetUs er] = useState([]);
+  // const [the_data, SetThe_data] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
   const GoToLogin = () => {
     setModalVisible(!isModalVisible);
     navigation.navigate("Login")
   };
 
   useEffect(() => {
-
     const unsubscribe = navigation.addListener("focus", () => {
-
       SetLoading(false)
       FetchData()
       //  readData()
@@ -57,10 +52,7 @@ export default function SaveRoom({ route, navigation }) {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    let result = await fetch(
-      "http://proj13.ruppin-tech.co.il/GetAvailableRooms",
-      requestOptions
-    );
+    let result = await fetch("http://proj13.ruppin-tech.co.il/GetAvailableRooms", requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
       BilldData(rooms);
@@ -83,19 +75,17 @@ export default function SaveRoom({ route, navigation }) {
 
     //  console.log("temp: " + JSON.stringify(temp));
     let list = temp.filter(
-      (ele, ind) =>
-        ind ===
-        temp.findIndex(
-          (elem) => elem.type === ele.type && elem.type === ele.type
-        )
+      (ele, ind) => ind === temp.findIndex((elem) => elem.type === ele.type && elem.type === ele.type)
     );
 
     // console.log(flags);
     let array = [];
     // console.log("list" + JSON.stringify(list));
     for (const [key, value] of Object.entries(rooms_flags)) {
+      // console.log(key + " ---" + value);
       if (value) {
         let room = list.filter((per) => per.type === key);
+        // console.log(room);
         if (room[0] !== undefined) {
           room = room[0];
           array.push(room);
@@ -118,28 +108,31 @@ export default function SaveRoom({ route, navigation }) {
   //   }
   // };
 
-  const CreateReservation = () => {
-    let newReservation = {
-      CustomerID: user.CustomerID,
-      CustomerType: 1,
-      FirstName: user.FirstName,
-      LastName: user.LastName,
-      Mail: user.Mail,
-      Password: user.Password,
-      PhoneNumber: user.PhoneNumber,
-      EntryDate: moment(entryDate).format(" YYYY-MM-DD"),
-      ExitDate: moment(exitDate).format(" YYYY-MM-DD"),
-      CounterSingle: single,
-      CounterDouble: double,
-      CounterSuite: suite,
-      AmountOfPeople: amountOfPeople,
-      NumberOfNights: number_Of_Nights,
-      Breakfast: breakfast
-    };
-    // console.log(newReservation);
-    return newReservation
-  }
+  // const CreateReservation = () => {
+  //   let newReservation = {
+  //     CustomerID: user.CustomerID,
+  //     CustomerType: 1,
+  //     FirstName: user.FirstName,
+  //     LastName: user.LastName,
+  //     Mail: user.Mail,
+  //     Password: user.Password,
+  //     PhoneNumber: user.PhoneNumber,
+  //     EntryDate: moment(entryDate).format(" YYYY-MM-DD"),
+  //     ExitDate: moment(exitDate).format(" YYYY-MM-DD"),
+  //     CounterSingle: single,
+  //     CounterDouble: double,
+  //     CounterSuite: suite,
+  //     AmountOfPeople: amountOfPeople,
+  //     NumberOfNights: number_Of_Nights,
+  //     Breakfast: breakfast
+  //   };
+  //   // console.log(newReservation);
+  //   return newReservation
+  // }
   const GoToPayment = () => {
+
+    // console.log(roomsReservation);
+
 
     if (Object.keys(user).length === 0) {
       toggleModal()
@@ -147,9 +140,9 @@ export default function SaveRoom({ route, navigation }) {
     }
 
     let rooms_amounts = {
-      "Single room": single,
-      "Double room": double,
-      Suite: suite,
+      "Single room": roomsReservation.CounterSingle,
+      "Double room": roomsReservation.CounterDouble,
+      "Suite": roomsReservation.CounterSuite,
     };
 
 
@@ -179,30 +172,30 @@ export default function SaveRoom({ route, navigation }) {
 
       sum += tempToatal;
     }
-   
-
-    let reservation = CreateReservation()
-    console.log(reservation);
-    navigation.navigate("Credit", {
-      ReservationDetails: reservation, the_data: the_data, totalSum: sum
-    });
 
 
+    // console.log(the_data);
+    // console.log(roomsReservation);
+    roomsReservation.totalSum = sum
+    navigation.navigate("Credit", { the_data: the_data });
   };
+
+
 
   const SetCount = (number, roomType) => {
     switch (roomType) {
       case "Single room":
-        SetSingle(number);
+        roomsReservation.CounterSingle = number
         break;
       case "Double room":
-        SetDouble(number);
+        roomsReservation.CounterDouble = number
         break;
       case "Suite":
-        SetSuite(number);
+        roomsReservation.CounterSuite = number
         break;
     }
   };
+
 
   let roomsList = arrRoomsData.map((room, index) => (
     <CardRoom
@@ -215,10 +208,11 @@ export default function SaveRoom({ route, navigation }) {
     />
   ));
 
+
+
   return (
     <ScrollView>
       <Text style={styles.HeadLine}>Choose a room</Text>
-
 
       <Modal isVisible={isModalVisible}>
         <View style={{
@@ -235,7 +229,6 @@ export default function SaveRoom({ route, navigation }) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 50, }}>
             <Button title="go to login" onPress={GoToLogin} />
             <Button title="cancel" onPress={toggleModal} />
-
           </View>
 
         </View>
@@ -317,7 +310,7 @@ const styles = StyleSheet.create({
 //   const [double, SetDouble] = useState(0)
 //   const [suite, SetSuite] = useState(0)
 //   const [loading, SetLoading] = useState(false)
-//   const [arrRoomsData, SetArrRoomsData] = useState([])
+  // const [arrRoomsData, SetArrRoomsData] = useState([])
 
 //   useEffect(() => { FetchData() }, []);
 

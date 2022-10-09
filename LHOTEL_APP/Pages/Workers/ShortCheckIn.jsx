@@ -1,15 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
+import {StyleSheet,View,Image, TouchableOpacity,  FlatList,  Alert,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -19,14 +11,17 @@ import { Checkbox } from "react-native-paper";
 import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
 
+
+
 export default function ShortCheckIn({ route, navigation }) {
   // { route, navigation }
   const myContext = useContext(AppContext);
+  const roomsReservation = myContext.roomsReservation
 
-  let { currReservation } = route.params;
+  // let { currReservation } = route.params;
 
-  const curr = currReservation[0];
-  console.log(curr);
+  // const curr = currReservation[0];
+  // console.log(curr);
 
   const CalcCost = () => {
     let total = 0;

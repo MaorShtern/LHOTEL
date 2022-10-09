@@ -13,14 +13,9 @@ namespace DAL
         public string FirstName { set; get; }
         public string LastName { set; get; }
         public string Mail { set; get; }
-
-
         public string PhoneNumber { set; get; }
-
-
         public DateTime EntryDate { set; get; }
         public DateTime ExitDate { set; get; }
-
         public int AmountOfPeople { set; get; }
         public bool Breakfast { set; get; }
     }

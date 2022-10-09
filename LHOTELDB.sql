@@ -1761,12 +1761,12 @@ go
 
 
 --  פרוצדורה אשר מבצעת את שמירת החדרים ללקוח
-create proc SaveRoomReservation
+alter proc SaveRoomReservation
 @id int,
 @Card_Holder_Name  nvarchar(30),    -- יצירת פרמטרים הדרושים לביצוע הזמנה 
 @Credit_Card_Date nvarchar(5),
 @Three_Digit int,
-@Credit_Card_Number nvarchar(16),
+@Credit_Card_Number nvarchar(50),
 @Employee_ID int,
 @Counter_Single int,
 @Counter_Double int,
@@ -1833,10 +1833,12 @@ begin tran
 commit tran
 go
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
+--exec SaveRoomReservation 111111112,'Uvuvuvuv','02/28',569,'lIIhlH7q7geo1MEGrbuAUOZdKl8=',-1,1,1,1,'2022-10-18','2022 - 10 - 27',5,True
 --select * from [dbo].[Customers]
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
+
 
 --select * from [dbo].[Employees]
 --select * from [dbo].[Employees_Types]
@@ -1854,6 +1856,7 @@ go
     --"ExitDate": "2022-08-24",
     --"AmountOfPeople": 5 ,
     --"Breakfast":true
+
 
 
 	--exec GetReservedRoomsByCustomerId 666
@@ -1931,7 +1934,8 @@ begin tran
 commit tran
 go
 
--- exec CheckIn 666 , '2022-08-22'
+ --exec CheckIn 111111112 , '2022-10-18'
+ --exec CheckOut 111111112, '2022-10-27'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
 --select * from [dbo].[Customers_Rooms]
@@ -2079,7 +2083,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
--- exec CheckOut 666, '2022-08-24'
+ --exec CheckOut 111111112, '2022-10-27'
 
 
 
