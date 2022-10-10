@@ -26,14 +26,21 @@ export default function App() {
     CounterSingle: 0,
     CounterDouble: 0,
     CounterSuite: 0,
-    ExitDate: moment(new Date()).add(1,"day").format("DD/MM/YYYY"),
-    EntryDate: moment(new Date()).format("DD/MM/YYYY"),
+    EntryDate:moment().toDate(),
+   ExitDate: moment().add(1, "days").toDate(),
+    // ExitDate: moment(new Date()).add(1,"day").format("DD/MM/YYYY"),
+    // EntryDate: moment(new Date()).format("DD/MM/YYYY"),
     Breakfast:false,
     NumberOfNights:0,
     totalSum:0,
     rooms:[]
   }
 );
+
+
+
+
+
   // const [roomsFlags, setRoomsFlags] = useState({
   //     SingleRoom: singleFlag,
   //     "DoubleRoom": doubleFlag,

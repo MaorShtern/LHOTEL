@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, FlatList } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useContext} from "react";
 import { Divider } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import { Searchbar } from "react-native-paper";
-
+import AppContext from "../../AppContext";
 
 
 const numColumns = 2;
@@ -16,7 +16,8 @@ export default function CheckOut() {
   const [DBreservationItems, SetDBReservationItems] = useState([])
   const [reservationItems, setReservationItems] = useState([]);
   const [search, setSearch] = useState("");
-
+  const myContext = useContext(AppContext);
+  const roomsReservation = myContext.roomsReservation;
   useEffect(() => { FetchData() }, []);
 
 
@@ -39,6 +40,41 @@ export default function CheckOut() {
     }
     FetchData()
   }
+  const renderItem = ({ item }) => (
+    // console.log(item)
+    // <>
+    
+    // {
+    //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+    //   Room : {item.RoomNumber}
+    // </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+    //   Room : {roomNumber}
+    // </Text>)
+    // }
+        
+    //   </>
+    <>
+      <Divider
+        style={{
+          width: 2,
+          height: "70%",
+          marginRight: 10,
+          alignSelf: "center",
+        }}
+      />
+
+      <Text
+        style={{
+          fontSize: 17,
+          paddingHorizontal: 5,
+          marginRight: 10,
+          paddingBottom: 5,
+        }}
+      >
+        Room : {item}
+      </Text>
+    </>
+  );
 
   const BilldReservationItemsData = (data) => {
     // console.log(data);
@@ -65,24 +101,24 @@ export default function CheckOut() {
 
 
 
-  const RenderItem = ({ item}) => {
-  
+  // const RenderItem = ({ item}) => {
+  //   console.log(item)
 
-    return(
-      <>
+  //   return(
+  //     <>
     
-  {
-    item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-    Room : {item.RoomNumber}
-  </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-    Room : {roomNumber}
-  </Text>)
-  }
+  // {
+  //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+  //   Room : {item.RoomNumber}
+  // </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
+  //   Room : {roomNumber}
+  // </Text>)
+  // }
       
-    </>
-    )
+  //   </>
+  //   )
 
-  }
+  // }
    
  
 
@@ -147,8 +183,23 @@ export default function CheckOut() {
             alignItems: "center",
            paddingHorizontal: 10
           }}>
-            
-          <RenderItem item ={item}/>
+     {
+      item.RoomNumber.length === undefined? <Text style={{
+        fontSize: 17,
+        paddingHorizontal: 5,
+        marginRight: 10,
+        paddingBottom: 5,
+      }}> Room : {item.RoomNumber}</Text>:
+<FlatList
+                data={item.RoomNumber}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={3}
+              />
+         
+     }
+              
+          {/* <RenderItem item ={item}/> */}
      
           </View>
 
@@ -207,6 +258,7 @@ export default function CheckOut() {
           placeholder="Search"
           onChangeText={SerchReservation}
           value={search}
+          keyboardType="numeric"
         />
       </View>
 

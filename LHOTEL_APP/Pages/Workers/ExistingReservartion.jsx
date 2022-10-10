@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ImageBackground, View, StyleSheet, Image, Text, TouchableOpacity, FlatList, } from "react-native";
 import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
+import moment from "moment";
+
 // import { Ionicons } from "@expo/vector-icons";
 // import { CustomCard } from "./CustomCard";
-
+import { useFocusEffect } from '@react-navigation/native';
+import AppContext from "../../AppContext";
 
 
 export default function ExistingReservation({ route, navigation }) {
@@ -13,7 +16,36 @@ export default function ExistingReservation({ route, navigation }) {
   let { Id } = route.params
 
   const [id, setId] = useState(Id)
-
+  const myContext = useContext(AppContext);
+  const roomsReservation = myContext.roomsReservation
+  useFocusEffect(
+    React.useCallback(() => {
+      roomsReservation.CustomerID= '',
+      roomsReservation.CustomerType= 1,
+      roomsReservation.FirstName= '',
+      roomsReservation.LastName= '',
+      roomsReservation.Mail= '',
+      roomsReservation.PhoneNumber='',
+      roomsReservation.CardHolderName= '',
+      roomsReservation.CreditCardNumber= '',
+      roomsReservation.CreditCardDate= '',
+      roomsReservation.ThreeDigit= '',
+      roomsReservation.AmountOfPeople= 1,
+      roomsReservation.EmployeeID= -1,
+      roomsReservation.CounterSingle= 0,
+      roomsReservation.CounterDouble= 0,
+      roomsReservation.CounterSuite= 0,
+      roomsReservation.EntryDate=moment().toDate(),
+      roomsReservation. ExitDate= moment().add(1, "days").toDate(),
+    
+      roomsReservation.Breakfast=false,
+      roomsReservation.NumberOfNights=0,
+      roomsReservation.totalSum=0,
+      roomsReservation.rooms=[]
+ 
+  
+    }, [])
+  );
 
   const ReservationCheck = async () => {
 
@@ -27,11 +59,60 @@ export default function ExistingReservation({ route, navigation }) {
     let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
     let currReservation = await result.json();
     if (currReservation.length > 0) {
-      // console.log(currReservation);
-      navigation.navigate("ShortCheckIn", { currReservation: currReservation })
-      return
 
-    }
+
+
+      roomsReservation.AmountOfPeople = currReservation[0].AmountOfPeople 
+      roomsReservation.BillDate =  currReservation[0].BillDate
+      roomsReservation.BillNumber =  currReservation[0].BillNumber
+      roomsReservation.Breakfast=  currReservation[0].Breakfast
+      roomsReservation.CustomerID=  currReservation[0].CustomerID
+      roomsReservation.CustomerType=  currReservation[0].CustomerType
+      roomsReservation.EntryDate=  currReservation[0].EntryDate
+      roomsReservation.ExitDate=  currReservation[0].ExitDate
+      roomsReservation.FirstName=  currReservation[0].FirstName
+      roomsReservation.LastName=  currReservation[0].LastName
+      roomsReservation.Mail=  currReservation[0].Mail
+      roomsReservation.PhoneNumber=  currReservation[0].PhoneNumber
+     if(currReservation.length >1){
+       currReservation.map((room)=> roomsReservation.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
+     }
+     navigation.navigate("ShortCheckIn")
+    //  console.log(roomsReservation);
+     //  "BillDate": "2022-10-06T00:00:00",
+     //  "BillNumber": 35,
+     //  "Breakfast": false,
+     //  "CustomerID": 206055899,
+     //  "CustomerType": 1,
+     //  "EntryDate": "2022-10-06T00:00:00",
+     //  "ExitDate": "2022-10-07T00:00:00",
+     //  "FirstName": "Irit",
+     //  "LastName": "Taka",
+     //  "Mail": "Irit@gmail.com",
+     //  "PhoneNumber": "0549855689",
+     //  "PricePerNight": 500,
+     //  "RoomNumber": 25,
+     //  "RoomStatus": "Reserved",
+     // navigation.navigate("ShortCheckIn", { currReservation: currReservation })
+     // return
+     // navigation.navigate("ShortCheckIn")
+     // return
+   }
+
+
+
+
+
+
+
+
+
+      
+      // console.log(currReservation);
+    //   navigation.navigate("ShortCheckIn", { currReservation: currReservation })
+    //   return
+
+    // }
     else alert("No matching Reservation for the ID you entered")
 
   }

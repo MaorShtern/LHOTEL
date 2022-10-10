@@ -39,7 +39,7 @@ export default function ConfirmationPage( { route, navigation }) {
     let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} 
     count={room.count} pricePerNight={room.pricePerNight} entryDate={roomsReservation.EntryDate} 
     exitDate={roomsReservation.ExitDate} breakfast={roomsReservation.Breakfast} />)
-       
+       console.log(roomsReservation);
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
@@ -54,7 +54,7 @@ export default function ConfirmationPage( { route, navigation }) {
                     <Text style={styles.textStyle}>Amount Of People : {roomsReservation.AmountOfPeople}</Text>
                     {/* <Text style={styles.textStyle}>Number Of Nights : {customer.NumberOfNights}</Text> */}
                     <Text style={styles.textStyle}>Cardholder's Name: {roomsReservation.CardHolderName}</Text>
-                    <Text style={styles.textStyle}>Card Number: ****************</Text>
+                    <Text style={styles.textStyle}>Card Number: ************{roomsReservation.CreditCardNumber.slice(-4)}</Text>
                     
                 </View>
             </View>

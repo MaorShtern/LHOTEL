@@ -10,7 +10,7 @@ export default function Credit({ route, navigation }) {
   const myContext = useContext(AppContext);
   const isEmploeeConncted = JSON.stringify(myContext.employee) !== "{}";
   const roomsReservation = myContext.roomsReservation
-  const totalSum = roomsReservation.totalSum;
+  // const totalSum = roomsReservation.totalSum;
   const user = myContext.user
 
   // console.log(user);
@@ -20,10 +20,10 @@ export default function Credit({ route, navigation }) {
 
 
   const onChange = (form) => {
-    roomsReservation.CardHolderName = form.values.name
-    roomsReservation.CreditCardNumber = form.values.number.replace(/ /g, "")
-    roomsReservation.CreditCardDate = form.values.expiry
-    roomsReservation.ThreeDigit = form.values.cvc
+    // roomsReservation.CardHolderName = form.values.name
+    // roomsReservation.CreditCardNumber = form.values.number.replace(/ /g, "")
+    // roomsReservation.CreditCardDate = form.values.expiry
+    // roomsReservation.ThreeDigit = form.values.cvc
 
     // // CardHolderName: form.values.name,
     // // CreditCardNumber: form.values.number.replace(/ /g, ""),
@@ -41,16 +41,34 @@ export default function Credit({ route, navigation }) {
   // );
 
   const SaveRoomReservation = async () => {
+    // var Hashes = require('jshashes')
+    // let SHA1Card = new Hashes.SHA1().b64_hmac(user.CustomerID, roomsReservation.CreditCardNumber)
+    // roomsReservation.CreditCardNumber = SHA1Card
+    // console.log(JSON.stringify({
+    //   CustomerID: user.CustomerID,
+    //   CardHolderName: roomsReservation.CardHolderName,
+    //   CreditCardDate: roomsReservation.CreditCardDate,
+    //   ThreeDigit: roomsReservation.ThreeDigit,
+    //   CreditCardNumber: SHA1Card,
+    //   EmployeeID: roomsReservation.EmployeeID,
+    //   CounterSingle: roomsReservation.CounterSingle,
+    //   CounterDouble: roomsReservation.CounterDouble,
+    //   CounterSuite: roomsReservation.CounterSuite,
+    //   EntryDate:roomsReservation.EntryDate,
+    //   ExitDate:roomsReservation.ExitDate ,
+    //   AmountOfPeople: roomsReservation.AmountOfPeople,
+    //   Breakfast: roomsReservation.Breakfast
+    // }));
     // let totalSum = 
-
+// console.log(roomsReservation);
     try {
       let { the_data } = route.params;
       var Hashes = require('jshashes')
 
       // let reservation = value.fields;
-      let SHA1Card = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CreditCardNumber)
+      let SHA1Card = new Hashes.SHA1().b64_hmac(user.CustomerID, roomsReservation.CreditCardNumber)
       // roomsReservation.CreditCardNumber = SHA1Card
-      
+      roomsReservation.CustomerID = user.CustomerID
       const requestOptions = {
         method: "POST",
         body: JSON.stringify({
@@ -91,19 +109,28 @@ export default function Credit({ route, navigation }) {
       alert("Incorrect credit card details")
       return
     }
+roomsReservation.EmployeeID = isEmploeeConncted ? myContext.employee.EmployeeID : -1;
+ roomsReservation.CardHolderName = form.values.name;
+ roomsReservation.CreditCardNumber = form.values.number.replace(
+    / /g,
+    ""
+  );
+ roomsReservation.CreditCardDate = form.values.expiry;
+  roomsReservation.ThreeDigit = form.values.cvc;
+  // navigation.navigate("ShortCheckIn")
     // let reservation = createCustomerReservation();
     // // console.log(customer);
     isEmploeeConncted ? navigation.navigate("ShortCheckIn")
       : SaveRoomReservation();
   };
 
-
+// console.log(isEmploeeConncted);
   return (
     <View>
 
-      <Text style={styles.HeadLine}>Total to pay: {totalSum}$</Text>
+      <Text style={styles.HeadLine}>Total to pay: {roomsReservation.totalSum}$</Text>
 
-      <View style={isEmploeeConncted ? styles.empstyleCard : styles.styleCard}>
+      <View style={styles.styleCard}>
         <CreditCardInput
           requiresName={true}
           allowScroll={true}
@@ -116,7 +143,7 @@ export default function Credit({ route, navigation }) {
 
       </View>
 
-      <View style={isEmploeeConncted ? styles.empfooterStyle : styles.cusfooterStyle} >
+      <View style={styles.footerStyle} >
         <TouchableOpacity style={styles.footerButtonOne}>
           <Text style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}>
             DELETE
@@ -138,8 +165,8 @@ const styles = StyleSheet.create({
   HeadLine: {
     fontSize: 30,
     fontWeight: "bold",
-    paddingTop: 60,
-    paddingBottom: 40,
+    paddingTop: 20,
+    paddingBottom: 60,
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
@@ -155,23 +182,23 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   styleCard: {
-    paddingTop: 20,
+    paddingTop: 5,
 
   },
-  empstyleCard: {
-    paddingTop: 100
-  },
-  empfooterStyle: {
+ 
+  // empfooterStyle: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   paddingTop: 570,
+  //   position: "absolute",
+  //   alignItems:'center'
+  //   // paddingTop: 15,
+  // },
+ footerStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: 550,
-    position: "absolute",
-    // paddingTop: 15,
-  },
-  cusfooterStyle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 590,
+    paddingTop: 560,
+    alignItems:'center',
     position: "absolute",
   },
 

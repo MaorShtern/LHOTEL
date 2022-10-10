@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import {StyleSheet,View,Image, TouchableOpacity,  FlatList,  Alert,} from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -11,37 +18,49 @@ import { Checkbox } from "react-native-paper";
 import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
 
-
-
 export default function ShortCheckIn({ route, navigation }) {
   // { route, navigation }
   const myContext = useContext(AppContext);
-  const roomsReservation = myContext.roomsReservation
+  const roomsReservation = myContext.roomsReservation;
 
-  // let { currReservation } = route.params;
+  // let { roomsReservationReservation } = route.params;
 
   // const curr = currReservation[0];
   // console.log(curr);
 
   const CalcCost = () => {
-    let total = 0;
-    if (curr.BillNumber === undefined) {
-      let rooms_costs = [
-        { type: "Single", cost: 100, amount: curr.CounterSingle },
-        { type: "Double", cost: 300, amount: curr.CounterDouble },
-        { type: "Suite", cost: 500, amount: curr.CounterSuite },
-      ];
-      rooms_costs.map((room) => {
-        room.cost = room.cost * room.amount;
-      });
-      rooms_costs.forEach((element) => {
-        total += element.cost;
-      });
-    } else {
-      for (let i = 0; i < currReservation.length; i++) {
-        total += currReservation[i].PricePerNight;
-      }
-    }
+    let total = 0
+    // if (roomsReservation.BillNumber === undefined) {
+     
+    // }
+
+    roomsReservation.rooms.map((room) => {
+      total+= room.PricePerNight
+       
+        });
+
+        // useEffect(() => { GetCardsByRole(); 
+        // }, []);
+      
+console.log(roomsReservation.rooms);
+
+    // if (roomsReservation.BillNumber === undefined) {
+    //   let rooms_costs = [
+    //     { type: "Single", cost: 100, amount: roomsReservation.CounterSingle },
+    //     { type: "Double", cost: 300, amount: roomsReservation.CounterDouble },
+    //     { type: "Suite", cost: 500, amount: roomsReservation.CounterSuite },
+    //   ];
+    //   rooms_costs.map((room) => {
+    //     room.cost = room.cost * room.amount;
+    //   });
+    //   rooms_costs.forEach((element) => {
+    //     total += element.cost;
+    //   });
+    // } else {
+    //   for (let i = 0; i < currReservation.length; i++) {
+    //     total += currReservation[i].PricePerNight;
+    //   }
+    // }
 
     return total;
   };
@@ -75,30 +94,39 @@ export default function ShortCheckIn({ route, navigation }) {
         style={{
           marginHorizontal: 10,
           paddingTop: 10,
-          height: 200 + (Math.ceil(currReservation.length / 3) - 1) * 25,
-          
+          height: 200 + (Math.ceil(roomsReservation.rooms.length / 3) - 1) * 25,
         }}
       >
         <View style={styles.Details}>
           <Text style={{ fontSize: 16 }}>
             {moment(
-              curr.BillDate === undefined ? new Date() : new Date(curr.BillDate)
+              roomsReservation.BillDate === undefined
+                ? new Date()
+                : new Date(roomsReservation.BillDate)
             ).format("DD.MM.YYYY")}
           </Text>
           <Text style={{ fontSize: 16 }}>
-            {curr.BillNumber === undefined ? null : "No : " + curr.BillNumber}
+            {roomsReservation.BillNumber === undefined
+              ? null
+              : "No : " + roomsReservation.BillNumber}
           </Text>
         </View>
-        <View style={{ paddingTop: 10,alignSelf:'flex-end' }}>
+        <View style={{ paddingTop: 10, alignSelf: "flex-end" }}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>
             <Image style={styles.icon} source={images.calendar} />
             {" " +
-              moment(new Date(curr.EntryDate))
+              moment(new Date(roomsReservation.EntryDate))
                 .format("DD.MM.YYYY")
                 .split(".")[0] +
               " - " +
-              moment(new Date(curr.ExitDate)).format("DD.MM.YYYY")}{" "}
-            ({moment(curr.ExitDate).diff(moment(curr.EntryDate), "days")}{" "}
+              moment(new Date(roomsReservation.ExitDate)).format(
+                "DD.MM.YYYY"
+              )}{" "}
+            (
+            {moment(roomsReservation.ExitDate).diff(
+              moment(roomsReservation.EntryDate),
+              "days"
+            )}{" "}
             nights)
           </Text>
           <Text
@@ -107,10 +135,10 @@ export default function ShortCheckIn({ route, navigation }) {
               paddingHorizontal: 5,
               paddingTop: 10,
               fontSize: 17,
-              alignSelf:'flex-end'
+              alignSelf: "flex-end",
             }}
           >
-            {curr.AmountOfPeople} adults
+            {roomsReservation.AmountOfPeople} adults
           </Text>
         </View>
 
@@ -122,9 +150,9 @@ export default function ShortCheckIn({ route, navigation }) {
               marginRight: 5,
             }}
           >
-            {currReservation[0].RoomNumber === undefined ? null : (
+            {roomsReservation.rooms.length === 0 ? null : (
               <FlatList
-                data={currReservation}
+                data={roomsReservation.rooms}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={3}
@@ -137,48 +165,51 @@ export default function ShortCheckIn({ route, navigation }) {
   };
  // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
   const CheckIn_Without_Existing_User = async () => {
-    var Hashes = require('jshashes')
-        let SHA1Pass = new Hashes.SHA1().b64_hmac(curr.CustomerID, curr.CustomerID)
-        let SHA1Card = new Hashes.SHA1().b64_hmac(curr.CustomerID, curr.CreditCardNumber)
+    var Hashes = require("jshashes");
+    let SHA1Pass = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CustomerID);
+    let SHA1Card = new Hashes.SHA1().b64_hmac(
+      roomsReservation.CustomerID,
+      roomsReservation.CreditCardNumber
+    );
     try {
       let newCustomer = {
         // יצירת אובייקט מסוג לקוח
         className: Customer,
         fields: {
-          CustomerID: curr.CustomerID,
-          CustomerType: curr.CustomerType,
-          FirstName: curr.FirstName,
-          LastName: curr.LastName,
-          Mail: curr.Mail,
+          CustomerID: roomsReservation.CustomerID,
+          CustomerType: roomsReservation.CustomerType,
+          FirstName: roomsReservation.FirstName,
+          LastName: roomsReservation.LastName,
+          Mail: roomsReservation.Mail,
           Password: SHA1Pass,
-          PhoneNumber: curr.PhoneNumber,
-          CardHolderName: curr.CardHolderName,
-          CreditCardNumber: SHA1Card ,
-          CreditCardDate: curr.CreditCardDate,
-          ThreeDigit: curr.ThreeDigit,
-          EmployeeID: curr.EmployeeID,
-          AmountOfPeople: curr.AmountOfPeople,
-          Breakfast: curr.Breakfast,
-          CounterSingle: curr.CounterSingle,
-          CounterDouble: curr.CounterDouble,
-          CounterSuite: curr.CounterSuite,
-          ExitDate: curr.ExitDate,
-          EntryDate: curr.EntryDate
+          PhoneNumber: roomsReservation.PhoneNumber,
+          CardHolderName: roomsReservation.CardHolderName,
+          CreditCardNumber: SHA1Card,
+          CreditCardDate: roomsReservation.CreditCardDate,
+          ThreeDigit: roomsReservation.ThreeDigit,
+          EmployeeID: roomsReservation.EmployeeID,
+          AmountOfPeople: roomsReservation.AmountOfPeople,
+          Breakfast: roomsReservation.Breakfast,
+          CounterSingle: roomsReservation.CounterSingle,
+          CounterDouble: roomsReservation.CounterDouble,
+          CounterSuite: roomsReservation.CounterSuite,
+          ExitDate: roomsReservation.ExitDate,
+          EntryDate: roomsReservation.EntryDate,
         },
       };
-     
 
-    
-      let theCustomer = JSON.stringify(newCustomer.fields)
-     
+      let theCustomer = JSON.stringify(newCustomer.fields);
+
       const requestOptions = {
-        method: 'POST',
+        method: "POST",
         body: theCustomer,
-        headers: { 'Content-Type': 'application/json' }
-    };
-      
+        headers: { "Content-Type": "application/json" },
+      };
+
       let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User", requestOptions);
+        "http://proj13.ruppin-tech.co.il/CheckIn_Without_Existing_User",
+        requestOptions
+      );
       let reservationResult = await result.json();
       if (reservationResult) {
         console.log(reservationResult);
@@ -195,19 +226,19 @@ export default function ShortCheckIn({ route, navigation }) {
         // יצירת אובייקט מסוג לקוח
         className: Reservation,
         fields: {
-          CustomerID: curr.CustomerID,
-          Breakfast: curr.Breakfast,
-          CardHolderName: curr.CardHolderName,
-          CreditCardNumber: curr.CreditCardNumber,
-          CreditCardDate: curr.CreditCardDate,
-          ThreeDigit: curr.ThreeDigit,
-          AmountOfPeople: curr.AmountOfPeople,
-          EmployeeID: curr.EmployeeID,
-          CounterSingle: curr.CounterSingle,
-          CounterDouble: curr.CounterDouble,
-          CounterSuite: curr.CounterSuite,
-          ExitDate: curr.ExitDate,
-          EntryDate: curr.EntryDate,
+          CustomerID: roomsReservation.CustomerID,
+          Breakfast: roomsReservation.Breakfast,
+          CardHolderName: roomsReservation.CardHolderName,
+          CreditCardNumber: roomsReservation.CreditCardNumber,
+          CreditCardDate: roomsReservation.CreditCardDate,
+          ThreeDigit: roomsReservation.ThreeDigit,
+          AmountOfPeople: roomsReservation.AmountOfPeople,
+          EmployeeID: roomsReservation.EmployeeID,
+          CounterSingle: roomsReservation.CounterSingle,
+          CounterDouble: roomsReservation.CounterDouble,
+          CounterSuite: roomsReservation.CounterSuite,
+          ExitDate: roomsReservation.ExitDate,
+          EntryDate: roomsReservation.EntryDate,
         },
       };
 
@@ -235,14 +266,17 @@ export default function ShortCheckIn({ route, navigation }) {
       const requestOptions = {
         method: "PUT",
         body: JSON.stringify({
-          "id": curr.CustomerID,
-          "Entry_Date": curr.EntryDate,
+          id: roomsReservation.CustomerID,
+          Entry_Date: roomsReservation.EntryDate,
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch("http://proj13.ruppin-tech.co.il/CheckIn", requestOptions);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/CheckIn",
+        requestOptions
+      );
       let customerResult = await result.json();
-      if (customerResult !==null) {
+      if (customerResult !== null) {
         console.log(customerResult);
 
         alert("You have checked in successfully !");
@@ -252,9 +286,10 @@ export default function ShortCheckIn({ route, navigation }) {
       alert(error);
     }
   };
-console.log(myContext.isUserExist);
+  // console.log(roomsReservation.rooms);
+  // console.log(myContext.isUserExist);
   const CheckIn = () => {
-    if (curr.BillNumber !== undefined) CheckInWithExistingReservation();
+    if (roomsReservation.BillNumber !== undefined) CheckInWithExistingReservation();
     else if (myContext.isUserExist) CheckIn_With_Existing_User();
     else CheckIn_Without_Existing_User();
   };
@@ -298,7 +333,9 @@ console.log(myContext.isUserExist);
 
       <View style={{ flex: 1.5 }}>
         <View style={{ marginTop: 15, paddingHorizontal: 15 }}>
-          <Text style={{ fontSize: 20, paddingBottom: 20 ,alignSelf:'flex-end'}}>
+          <Text
+            style={{ fontSize: 20, paddingBottom: 20, alignSelf: "flex-end" }}
+          >
             Customer's details{" "}
           </Text>
 
@@ -312,7 +349,7 @@ console.log(myContext.isUserExist);
                   // alignSelf: "flex-end",
                 }}
               >
-                Type : {curr.CustomerType}
+                Type : {roomsReservation.CustomerType}
               </Text>
               <Text
                 style={{
@@ -322,23 +359,23 @@ console.log(myContext.isUserExist);
                   // alignSelf: "flex-end",
                 }}
               >
-                ID : {curr.CustomerID}
+                ID : {roomsReservation.CustomerID}
               </Text>
             </View>
             <View style={styles.Details}>
-              <Text style={{ fontSize: 18 }}>{curr.Mail}</Text>
+              <Text style={{ fontSize: 18 }}>{roomsReservation.Mail}</Text>
               <Text style={{ fontSize: 18 }}>
-                {curr.FirstName + " " + curr.LastName}
+                {roomsReservation.FirstName + " " + roomsReservation.LastName}
               </Text>
             </View>
             <View style={styles.Details}>
               {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421************</Text> */}
               {/* <Icon name="card" size={25} color="#a8a9ad" /> */}
             </View>
-            <Text style={{ padding: 10, fontSize: 18 ,alignSelf:'flex-end'}}>
+            <Text style={{ padding: 10, fontSize: 18, alignSelf: "flex-end" }}>
               {" "}
               <Icon name="call" size={20} color="#a8a9ad" />
-              {curr.PhoneNumber}
+              {roomsReservation.PhoneNumber}
             </Text>
           </View>
         </View>

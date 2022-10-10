@@ -1,6 +1,7 @@
 import { View, ScrollView, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 
+import moment from "moment";
 
 
 export default function ReservationCard(props) {
@@ -14,7 +15,7 @@ export default function ReservationCard(props) {
                
                 <View >
                     <Text  style={styles.textStyle}>ROOM TYPE : {roomType}</Text>
-                    <Text  style={styles.textStyle}> {entryDate}  - {exitDate}</Text>
+                    <Text  style={styles.textStyle}> {moment(entryDate).format("DD/MM/YYYY")} - {moment(exitDate).format("DD/MM/YYYY")}</Text>
                     <Text style={styles.textStyle} >Amount per room : {count}</Text>
                     <Text  style={styles.textStyle}>breakfast : {breakfast ? <Text>Yes</Text> : <Text>No</Text>}</Text>
                  

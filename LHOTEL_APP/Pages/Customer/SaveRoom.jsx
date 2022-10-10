@@ -5,7 +5,7 @@ import CardRoom from "./CardRoom";
 import moment from "moment";
 import AppContext from '../../AppContext';
 import Modal from "react-native-modal";
-
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function SaveRoom({ route, navigation }) {
 
@@ -35,15 +35,22 @@ export default function SaveRoom({ route, navigation }) {
     setModalVisible(!isModalVisible);
     navigation.navigate("Login")
   };
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+  useFocusEffect(
+    React.useCallback(() => {
       SetLoading(false)
       FetchData()
-      //  readData()
-    });
-    return unsubscribe;
-  }, [route.params]);
+     
+    }, [route.params])
+  );
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("focus", () => {
+  //     SetLoading(false)
+  //     FetchData()
+  //     //  readData()
+  //   });
+  //   return unsubscribe;
+  // }, [route.params]);
 
   const FetchData = async () => {
     // SetArrRoomsData([])

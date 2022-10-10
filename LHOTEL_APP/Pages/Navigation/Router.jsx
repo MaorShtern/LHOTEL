@@ -52,7 +52,12 @@ export default function Router() {
         <Stack.Screen name="ShortCheckIn" component={ShortCheckIn} options={{ headerShown: myContext.isIos }} />
         <Stack.Screen name="ExistingReservation" component={ExistingReservation} options={{ headerShown: myContext.isIos }} />
         <Stack.Screen name="AddEmployee" component={AddEmployee} options={{ headerShown: myContext.isIos }} />
-        <Stack.Screen name="Credit" component={Credit} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Credit" component={Credit} options={{ 
+          headerTitle: "",
+          headerTintColor: "white",
+          headerMode: 'none',
+          headerStyle: {
+            backgroundColor: "#000",}}} />
         <Stack.Screen name="Reports" component={Reports} options={{ headerShown: myContext.isIos }} />
 
       </Stack.Navigator>
