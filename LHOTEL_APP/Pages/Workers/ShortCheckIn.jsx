@@ -1,24 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
+import {StyleSheet,View, Image,  TouchableOpacity,  FlatList,  Alert,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Checkbox } from "react-native-paper";
-import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
 
-export default function ShortCheckIn({ route, navigation }) {
+
+
+export default function ShortCheckIn({ navigation }) {
   // { route, navigation }
   const myContext = useContext(AppContext);
   const roomsReservation = myContext.roomsReservation;
@@ -28,42 +21,45 @@ export default function ShortCheckIn({ route, navigation }) {
   // const curr = currReservation[0];
   // console.log(curr);
 
-  const CalcCost = () => {
-    let total = 0
-    // if (roomsReservation.BillNumber === undefined) {
+//   const CalcCost = () => {
+//     let total = 0
+//     // if (roomsReservation.BillNumber === undefined) {
      
-    // }
+//     // }
 
-    roomsReservation.rooms.map((room) => {
-      total+= room.PricePerNight
+//     roomsReservation.rooms.map((room) => {
+//       total+= room.PricePerNight
        
-        });
+//         });
 
-        // useEffect(() => { GetCardsByRole(); 
-        // }, []);
+//         // useEffect(() => { GetCardsByRole(); 
+//         // }, []);
       
-console.log(roomsReservation.rooms);
+// console.log(roomsReservation.rooms);
 
-    // if (roomsReservation.BillNumber === undefined) {
-    //   let rooms_costs = [
-    //     { type: "Single", cost: 100, amount: roomsReservation.CounterSingle },
-    //     { type: "Double", cost: 300, amount: roomsReservation.CounterDouble },
-    //     { type: "Suite", cost: 500, amount: roomsReservation.CounterSuite },
-    //   ];
-    //   rooms_costs.map((room) => {
-    //     room.cost = room.cost * room.amount;
-    //   });
-    //   rooms_costs.forEach((element) => {
-    //     total += element.cost;
-    //   });
-    // } else {
-    //   for (let i = 0; i < currReservation.length; i++) {
-    //     total += currReservation[i].PricePerNight;
-    //   }
-    // }
+//     // if (roomsReservation.BillNumber === undefined) {
+//     //   let rooms_costs = [
+//     //     { type: "Single", cost: 100, amount: roomsReservation.CounterSingle },
+//     //     { type: "Double", cost: 300, amount: roomsReservation.CounterDouble },
+//     //     { type: "Suite", cost: 500, amount: roomsReservation.CounterSuite },
+//     //   ];
+//     //   rooms_costs.map((room) => {
+//     //     room.cost = room.cost * room.amount;
+//     //   });
+//     //   rooms_costs.forEach((element) => {
+//     //     total += element.cost;
+//     //   });
+//     // } else {
+//     //   for (let i = 0; i < currReservation.length; i++) {
+//     //     total += currReservation[i].PricePerNight;
+//     //   }
+//     // }
 
-    return total;
-  };
+//     return total;
+//   };
+
+
+
   const ReservationCard = () => {
     const renderItem = ({ item }) => (
       <>
@@ -212,7 +208,7 @@ console.log(roomsReservation.rooms);
       );
       let reservationResult = await result.json();
       if (reservationResult) {
-        console.log(reservationResult);
+        // console.log(reservationResult);
         alert("You have checked in successfully !");
       }
       navigation.navigate("CheckIn");
@@ -317,11 +313,7 @@ const DeleteReservation = async () =>{
     const requestOptions = {
         method: 'DELETE',
         body: JSON.stringify({
-<<<<<<< Updated upstream
             id:roomsReservation.CustomerID
-=======
-            id:id
->>>>>>> Stashed changes
         }),
         headers: { 'Content-Type': 'application/json' }
     };
@@ -337,9 +329,6 @@ const DeleteReservation = async () =>{
 }
 
 }
-
-
-
 
 
   const CheckIn = () => {
