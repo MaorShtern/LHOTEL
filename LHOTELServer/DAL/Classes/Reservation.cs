@@ -9,7 +9,6 @@ namespace DAL
     public class Reservation
     {
         public int CustomerID { set; get; }
-
         public string FirstName { set; get; }
         public string LastName { set; get; }
         public string Mail { set; get; }
@@ -45,6 +44,15 @@ namespace DAL
         public int RoomNumber { set; get; }
         public int PricePerNight { set; get; }
         public string RoomStatus { set; get; }
+
+    }
+
+    public class RoomsHistory: ExistingReservation
+    {
+        public string RoomType { set; get; }
+        public int NumberOfNights { set; get; }
+        public string PaymentMethod { set; get; }
+        public DateTime PurchaseDate { set; get; }
 
     }
 }

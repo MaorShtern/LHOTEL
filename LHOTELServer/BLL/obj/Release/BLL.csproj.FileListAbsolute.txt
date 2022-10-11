@@ -54,3 +54,4 @@ C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\obj\
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\obj\Release\BLL.csproj.CopyComplete
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\obj\Release\BLL.dll
 C:\Users\iritt\OneDrive\שולחן העבודה\THE_LHOTEL\LHOTELServer\BLL\obj\Release\BLL.pdb
+C:\Users\maor1\OneDrive\שולחן העבודה\LHOTELClientside - NEW\LHOTELServer\BLL\obj\Release\BLL.csproj.CopyComplete

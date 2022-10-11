@@ -1640,12 +1640,11 @@ go
  --exec DeleteCustomerRoom 888,'2022-09-08'
 
 
-
-create proc FindCustomerRoomByID
+create proc FindCustomerReservations  
 @Customer_ID int
 as
 begin tran	
-	select [Room_Number] from [dbo].[Customers_Rooms]
+	select * from [dbo].[Customers_Rooms]
 	where [Customer_ID] = @Customer_ID 
 	if (@@error !=0)
 	begin
@@ -1656,7 +1655,8 @@ begin tran
 commit tran
 go
 --select * from [Customers_Rooms]
--- exec FindCustomerRoomByID 111111116
+-- exec FindCustomerReservations 666
+
 
 
 create proc AlterCustomerRoom
@@ -1761,7 +1761,7 @@ go
 
 
 --  פרוצדורה אשר מבצעת את שמירת החדרים ללקוח
-alter proc SaveRoomReservation
+create proc SaveRoomReservation
 @id int,
 @Card_Holder_Name  nvarchar(30),    -- יצירת פרמטרים הדרושים לביצוע הזמנה 
 @Credit_Card_Date nvarchar(5),
@@ -1856,10 +1856,33 @@ go
     --"ExitDate": "2022-08-24",
     --"AmountOfPeople": 5 ,
     --"Breakfast":true
+--exec GetReservedRoomsByCustomerId 666
 
 
+create proc DeleteReservation
+@id int
+as
+	begin tran	
 
-	--exec GetReservedRoomsByCustomerId 666
+	DELETE FROM [dbo].[Customers_Rooms] WHERE [Customer_ID] = @id 
+	UPDATE [dbo].[Bill] 
+	SET Bill_Status = 'Close'
+	where [Customer_ID] = @id
+
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go
+
+--exec DeleteReservation 666
+--select * from Bill
+--select * from [dbo].[Customers_Rooms] 
+
+
 
 create proc Room_Resit      
 @id int
@@ -1893,7 +1916,7 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 91598872
+--exec Room_Resit 206055899
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
@@ -2214,25 +2237,21 @@ go
  --exec AlterBill_Detail 1,2,10,'2021-12-12','13:00','Cash'
 
 
--- drop function GetAllCustomersHistory
---alter function GetAllCustomersHistory(@id int)
---RETURNS @temp TABLE (Bill_Number int, Customer_ID int, Bill_Date Date, Room_Number int,
---		Room_Type nvarchar(30), Price_Per_Night decimal(9,2),Amount_Of_People int, Breakfast bit,
---		Number_Of_Nights int, Payment_Method  nvarchar(20), Purchase_Date Date, Product_Code int )
---as
---begin
---	insert @temp select * from dbo.Purchases_Documentation where [Customer_ID] = @id
---	insert  @temp EXECUTE  Room_Resit @id	
---	RETURN
---end
+create proc GetAllCustomersHistory
+@id int
+as
+begin tran		
+	select * from dbo.Purchases_Documentation where [Customer_ID] = @id
+if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go 
 
-
---SELECT * FROM GetAllCustomersHistory (666) 
---select * from [dbo].[Bill]
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Bill_Details]
---select * from [dbo].[Purchases_Documentation]
---EXECUTE  Room_Resit 666
+--exec GetAllCustomersHistory 666 
 
 
 

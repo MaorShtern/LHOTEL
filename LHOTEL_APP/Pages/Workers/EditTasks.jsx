@@ -152,6 +152,9 @@ export default function EditTasks({ route, navigation }) {
     }
 
 
+   
+
+
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Tasks</Text>

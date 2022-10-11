@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, FlatList, Alert, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -17,6 +10,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Checkbox } from "react-native-paper";
 import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
+
+
 
 export default function ShortCheckIn({ route, navigation }) {
   // { route, navigation }
@@ -31,18 +26,18 @@ export default function ShortCheckIn({ route, navigation }) {
   const CalcCost = () => {
     let total = 0
     // if (roomsReservation.BillNumber === undefined) {
-     
+
     // }
 
     roomsReservation.rooms.map((room) => {
-      total+= room.PricePerNight
-       
-        });
+      total += room.PricePerNight
 
-        // useEffect(() => { GetCardsByRole(); 
-        // }, []);
-      
-console.log(roomsReservation.rooms);
+    });
+
+    // useEffect(() => { GetCardsByRole(); 
+    // }, []);
+
+    console.log(roomsReservation.rooms);
 
     // if (roomsReservation.BillNumber === undefined) {
     //   let rooms_costs = [
@@ -163,7 +158,7 @@ console.log(roomsReservation.rooms);
       </View>
     );
   };
- // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
+  // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
   const CheckIn_Without_Existing_User = async () => {
     var Hashes = require("jshashes");
     let SHA1Pass = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CustomerID);

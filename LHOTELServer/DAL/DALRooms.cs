@@ -42,24 +42,36 @@ namespace DAL
             }
         }
 
-        public static List<int> FindCustomerRoomByID(int id)
+        public static List<ExistingReservation> FindCustomerReservations(int id)
         {
             try
             {
-                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec FindCustomerRoomByID {id}");
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec FindCustomerReservations {id}");
                 if (reader == null && !reader.HasRows)
                 {
                     return null;
                 }
-                List<int> rooms = new List<int>();
+                List<ExistingReservation> rooms = new List<ExistingReservation>();
                 while (reader.Read())
                 {
-                    rooms.Add((int)reader["Room_Number"]);
+                    rooms.Add(new ExistingReservation()
+                    {
+                        RoomNumber = (int)reader["Room_Number"],
+                        BillNumber = (int)reader["Bill_Number"],
+                        CustomerID = (int)reader["Customer_ID"],
+                        BillDate= (DateTime)reader["Bill_Date"],
+                        EntryDate = (DateTime)reader["Entry_Date"],
+                        ExitDate = (DateTime)reader["Exit_Date"],
+                        AmountOfPeople = (int)reader["Amount_Of_People"],
+                        Breakfast = (bool)reader["Breakfast"],
+                        RoomStatus = (string)reader["Room_Status"],
+                    });
                 }
                 return rooms;
             }
-            catch (Exception)
+            catch (Exception e )
             {
+                Console.WriteLine(e.Message);
                 return null;
             }
             finally
@@ -183,6 +195,66 @@ namespace DAL
             {
                 Console.WriteLine(e.Message);
                 return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
+        public static bool DeleteReservation(int id)
+        {
+            try
+            {
+                string str = $@"exec DeleteReservation {id}";
+                str = str.Replace("\r\n", string.Empty);
+                int result = SQLConnection.ExeNonQuery(str);
+                return result > 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                SQLConnection.CloseDB();
+            }
+        }
+
+
+        public static List<RoomsHistory> GetAllCustomersHistory(int id)
+        {
+            try
+            {
+                SqlDataReader reader = SQLConnection.ExcNQReturnReder($@"exec GetAllCustomersHistory {id}");
+                if (reader == null && !reader.HasRows)
+                {
+                    return null;
+                }
+                List<RoomsHistory> rooms = new List<RoomsHistory>();
+                while (reader.Read())
+                {
+                    rooms.Add(new RoomsHistory()
+                    {
+                        RoomNumber = (int)reader["Room_Number"],
+                        BillNumber = (int)reader["Bill_Number"],
+                        CustomerID = (int)reader["Customer_ID"],
+                        BillDate = (DateTime)reader["Bill_Date"],
+                        AmountOfPeople = (int)reader["Amount_Of_People"],
+                        Breakfast = (bool)reader["Breakfast"],
+                        RoomType = (string)reader["Room_Type"],
+                        PricePerNight = (int)reader["Price_Per_Night"],
+                        NumberOfNights = (int)reader["Number_Of_Nights"],
+                        PaymentMethod = (string)reader["Payment_Method"],
+                        PurchaseDate = (DateTime)reader["Purchase_Date"],
+                    });
+                }
+                return rooms;
+            }
+            catch (Exception e )
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
             finally
             {

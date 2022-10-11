@@ -60,7 +60,7 @@ export default function Credit({ route, navigation }) {
     //   Breakfast: roomsReservation.Breakfast
     // }));
     // let totalSum = 
-// console.log(roomsReservation);
+    // console.log(roomsReservation);
     try {
       let { the_data } = route.params;
       var Hashes = require('jshashes')
@@ -81,15 +81,15 @@ export default function Credit({ route, navigation }) {
           CounterSingle: roomsReservation.CounterSingle,
           CounterDouble: roomsReservation.CounterDouble,
           CounterSuite: roomsReservation.CounterSuite,
-          EntryDate:roomsReservation.EntryDate,
-          ExitDate:roomsReservation.ExitDate ,
+          EntryDate: roomsReservation.EntryDate,
+          ExitDate: roomsReservation.ExitDate,
           AmountOfPeople: roomsReservation.AmountOfPeople,
           Breakfast: roomsReservation.Breakfast
         }),
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
- 
+
       let result = await fetch("http://proj13.ruppin-tech.co.il/SaveRoomReservation", requestOptions);
       let customerResult = await result.json();
       if (customerResult)
@@ -109,22 +109,18 @@ export default function Credit({ route, navigation }) {
       alert("Incorrect credit card details")
       return
     }
-roomsReservation.EmployeeID = isEmploeeConncted ? myContext.employee.EmployeeID : -1;
- roomsReservation.CardHolderName = form.values.name;
- roomsReservation.CreditCardNumber = form.values.number.replace(
-    / /g,
-    ""
-  );
- roomsReservation.CreditCardDate = form.values.expiry;
-  roomsReservation.ThreeDigit = form.values.cvc;
-  // navigation.navigate("ShortCheckIn")
+    roomsReservation.EmployeeID = isEmploeeConncted ? myContext.employee.EmployeeID : -1;
+    roomsReservation.CardHolderName = form.values.name;
+    roomsReservation.CreditCardNumber = form.values.number.replace(/ /g, "");
+    roomsReservation.CreditCardDate = form.values.expiry;
+    roomsReservation.ThreeDigit = form.values.cvc;
+    // navigation.navigate("ShortCheckIn")
     // let reservation = createCustomerReservation();
     // // console.log(customer);
-    isEmploeeConncted ? navigation.navigate("ShortCheckIn")
-      : SaveRoomReservation();
+    isEmploeeConncted ? navigation.navigate("ShortCheckIn") : SaveRoomReservation();
   };
 
-// console.log(isEmploeeConncted);
+  // console.log(isEmploeeConncted);
   return (
     <View>
 
@@ -185,7 +181,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
 
   },
- 
+
   // empfooterStyle: {
   //   flexDirection: "row",
   //   justifyContent: "space-between",
@@ -194,11 +190,11 @@ const styles = StyleSheet.create({
   //   alignItems:'center'
   //   // paddingTop: 15,
   // },
- footerStyle: {
+  footerStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 560,
-    alignItems:'center',
+    alignItems: 'center',
     position: "absolute",
   },
 

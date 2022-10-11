@@ -35,13 +35,13 @@ namespace LHOTELServer.Controllers
         }
 
         [System.Web.Http.HttpPut]
-        [System.Web.Http.Route("~/FindCustomerRoomByID")]
-        public IHttpActionResult FindCustomerRoomByID([FromBody] JObject data)
+        [System.Web.Http.Route("~/FindCustomerReservations")]
+        public IHttpActionResult FindCustomerReservations([FromBody] JObject data)
         {
             try
             {
                 int id = data["id"].ToObject<int>();
-                return Ok(BLLRooms.FindCustomerRoomByID(id));
+                return Ok(BLLRooms.FindCustomerReservations(id));
             }
             catch (Exception e)
             {
@@ -63,6 +63,24 @@ namespace LHOTELServer.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("~/DeleteReservation")]
+        public IHttpActionResult DeleteReservation([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLRooms.DeleteReservation(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("~/CheckIn_With_Existing_User")]
@@ -128,7 +146,21 @@ namespace LHOTELServer.Controllers
         }
 
 
+        [System.Web.Http.HttpPut]
+        [System.Web.Http.Route("~/GetAllCustomersHistory")]
 
+        public IHttpActionResult GetAllCustomersHistory([FromBody] JObject data)
+        {
+            try
+            {
+                int id = data["id"].ToObject<int>();
+                return Ok(BLLRooms.GetAllCustomersHistory(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
     }
 }
