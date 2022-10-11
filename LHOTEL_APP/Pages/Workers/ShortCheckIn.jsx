@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import { StyleSheet, View, Image, TouchableOpacity, FlatList, Alert, } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -10,8 +17,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Checkbox } from "react-native-paper";
 import CheckIn from "./CheckIn";
 import AppContext from "../../AppContext";
-
-
 
 export default function ShortCheckIn({ route, navigation }) {
   // { route, navigation }
@@ -26,18 +31,18 @@ export default function ShortCheckIn({ route, navigation }) {
   const CalcCost = () => {
     let total = 0
     // if (roomsReservation.BillNumber === undefined) {
-
+     
     // }
 
     roomsReservation.rooms.map((room) => {
-      total += room.PricePerNight
+      total+= room.PricePerNight
+       
+        });
 
-    });
-
-    // useEffect(() => { GetCardsByRole(); 
-    // }, []);
-
-    console.log(roomsReservation.rooms);
+        // useEffect(() => { GetCardsByRole(); 
+        // }, []);
+      
+console.log(roomsReservation.rooms);
 
     // if (roomsReservation.BillNumber === undefined) {
     //   let rooms_costs = [
@@ -158,7 +163,7 @@ export default function ShortCheckIn({ route, navigation }) {
       </View>
     );
   };
-  // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
+ // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
   const CheckIn_Without_Existing_User = async () => {
     var Hashes = require("jshashes");
     let SHA1Pass = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CustomerID);
@@ -283,6 +288,56 @@ export default function ShortCheckIn({ route, navigation }) {
   };
   // console.log(roomsReservation.rooms);
   // console.log(myContext.isUserExist);
+const DeleteReservationRequest = ()=>{
+  Alert.alert(  "Delete",
+  "The reservation will be permanently deleted",
+  [
+    {text: 'Ok', onPress: () =>{DeleteReservation()}},
+    {
+      text: "Cancel",
+      onPress: () => {},
+      style: "cancel",
+    },
+   
+    // {text: 'Ok', onPress: () => DeleteReservation()},
+    // {text: 'No', onPress: () => console.log('No button clicked'), style: 'cancel'},
+  ],
+  // {
+  //   cancelable: true,
+  //   onDismiss: () =>
+  //     Alert.alert(
+  //       "This alert was dismissed by tapping outside of the alert dialog."
+  //     ),
+  // }
+  );
+}
+const DeleteReservation = async () =>{
+
+  try {
+    const requestOptions = {
+        method: 'DELETE',
+        body: JSON.stringify({
+            id:roomsReservation.CustomerID
+        }),
+        headers: { 'Content-Type': 'application/json' }
+    };
+    // console.log(requestOptions.body);
+    let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteReservation', requestOptions);
+    if (result) {
+        alert("Task details successfully saved")
+        navigation.goBack()
+    }
+
+} catch (error) {
+    alert(error)
+}
+
+}
+
+
+
+
+
   const CheckIn = () => {
     if (roomsReservation.BillNumber !== undefined) CheckInWithExistingReservation();
     else if (myContext.isUserExist) CheckIn_With_Existing_User();
@@ -364,7 +419,7 @@ export default function ShortCheckIn({ route, navigation }) {
               </Text>
             </View>
             <View style={styles.Details}>
-              {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421************</Text> */}
+              {/* <Text style = {{paddingHorizontal:5,paddingVertical:5,fontSize:18 ,alignSelf:'flex-end'}}>5421******</Text> */}
               {/* <Icon name="card" size={25} color="#a8a9ad" /> */}
             </View>
             <Text style={{ padding: 10, fontSize: 18, alignSelf: "flex-end" }}>
@@ -378,27 +433,13 @@ export default function ShortCheckIn({ route, navigation }) {
 
       {/* Footer */}
       <View style={{ flex: 0.5, paddingHorizontal: 10 }}>
-        <LinearGradient
-          style={[{ height: 70, width: "100%", borderRadius: 15 }]}
-          colors={["#edf0fc", "#d6dfff"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
-          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-            <View
-              style={{
-                flex: 1,
-                marginHorizontal: 10,
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ fontSize: 30 }}>{CalcCost()}$</Text>
-            </View>
-
-            <TouchableOpacity
-              style={{ width: 130, height: "80%", marginHorizontal: 10 }}
+      
+          <View style={{ flex: 1, flexDirection: "row",    justifyContent: "space-between", }}>
+     
+          <TouchableOpacity
+              style={{ width: 130, height: "60%", marginHorizontal: 10 }}
               //   onPress={() => SaveReservationToDB()}
-              onPress={() => CheckIn()}
+             onPress={() => CheckIn()}
             >
               <LinearGradient
                 style={[
@@ -416,8 +457,41 @@ export default function ShortCheckIn({ route, navigation }) {
                 <Text style={{ color: "#fff" }}>CHECK IN NOW</Text>
               </LinearGradient>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={{ width: 190, height: "60%", marginHorizontal: 10 }}
+              onPress={() => DeleteReservationRequest()}
+            
+            >
+              <LinearGradient
+                style={[
+                  {
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 10,
+                  },
+                ]}
+                // colors={["#edf0fc", "#d6dfff"]}
+               colors={[ "#888","#CDCDCD"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+              >
+                <Text style={{ color: "#fff" }}>DELETE RESERVATION</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+         
+
+
+
+
+
+
+
+
+
           </View>
-        </LinearGradient>
+   
       </View>
     </View>
   );
