@@ -152,8 +152,6 @@ export default function EditTasks({ route, navigation }) {
     }
 
 
-   
-
 
     return (
         <ScrollView>

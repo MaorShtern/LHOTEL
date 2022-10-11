@@ -1779,13 +1779,14 @@ as
 begin tran	
     
 	exec UpdateCustomerCredit @id,@Card_Holder_Name,@Credit_Card_Date,@Three_Digit,@Credit_Card_Number  ---הפעלת פרוצדורה המעדכנת פרטי כ.אשראי ביטחון של לקוח על פי ת.ז
+
+
 	DECLARE @Bill_Date as date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open') --- מציאת תאריך החשבונית על פי ת.ז לקוח וסטוטס חשבונית פתוחה
 	DECLARE @date as date = GETDATE() --  השגת התאריך הנוכחי
 
-	if NOT EXISTS (select * from Bill where Customer_ID = @id and Bill_Status = 'Open')--- עדכון פרטים בחשבונית פתוחה במידה וקיימת אחרת יצירת חשבונית חדשה ללקוח
+
+	if (@Bill_Date is null)--- עדכון פרטים בחשבונית פתוחה במידה וקיימת אחרת יצירת חשבונית חדשה ללקוח
 		exec AddNewBill @Employee_ID, @id,@Credit_Card_Number ,@date,'Open'
-	else
-		exec AlterBill @id, @Bill_Date ,@Employee_ID, @Credit_Card_Number,'Open'
 
 
 	set @Bill_Date = (select Bill_Date from Bill where Customer_ID = @id and Bill_Status = 'Open')--- מציאת תאריך החשבונית על פי ת.ז לקוח וסטוטס חשבונית פתוחה
@@ -1833,11 +1834,13 @@ begin tran
 commit tran
 go
 --exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
---exec SaveRoomReservation 111111112,'Uvuvuvuv','02/28',569,'lIIhlH7q7geo1MEGrbuAUOZdKl8=',-1,1,1,1,'2022-10-18','2022 - 10 - 27',5,True
 --select * from [dbo].[Customers]
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
+--exec DeleteReservation 666
+
+
 
 
 --select * from [dbo].[Employees]
