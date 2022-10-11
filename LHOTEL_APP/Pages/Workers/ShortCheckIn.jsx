@@ -317,11 +317,9 @@ const DeleteReservation = async () =>{
     const requestOptions = {
         method: 'DELETE',
         body: JSON.stringify({
-<<<<<<< Updated upstream
+
             id:roomsReservation.CustomerID
-=======
-            id:id
->>>>>>> Stashed changes
+
         }),
         headers: { 'Content-Type': 'application/json' }
     };
