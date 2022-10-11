@@ -10,7 +10,8 @@ import Payment from "../Customer/Payment";
 import ConfirmationPage from "../Customer/ConfirmationPage";
 import Credit from "../Credit";
 import AppContext from "../../AppContext";
-// import RoomService from "../Customer/RoomService";
+import RoomService from "../Customer/RoomService";
+import Products from "../Customer/Products";
 // import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
 
@@ -19,8 +20,9 @@ const drawer = createDrawerNavigator();
 export default function Drawer() {
 
   const myContext = useContext(AppContext);
+ let  isUserConnected = JSON.stringify(myContext.user)  !== "{}"
 
-
+console.log(isUserConnected);
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -87,10 +89,10 @@ export default function Drawer() {
           }}
         />
 
-        {/* <drawer.Screen
+        <drawer.Screen
           name="Room Service"
           component={RoomService}
-          options={{
+          options={{ drawerItemStyle: isUserConnected ?  {}:  { display: "none" },
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {
@@ -98,7 +100,21 @@ export default function Drawer() {
             },
           }}
         />
-        <drawer.Screen
+        {/* isUserConnected */}
+         <drawer.Screen
+          name="Products"
+          component={Products}
+          options={{ drawerItemStyle: { display: "none" },
+            // drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+          }}
+        />
+        {/* <drawer.Screen
           name="Bill"
           component={Bill}
           options={{

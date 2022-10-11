@@ -32,7 +32,8 @@ export default function Home({ navigation }) {
       setPassword('')
       setId('')
       // console.log(myContext.employee);
-    
+      myContext.setUserDB({})
+      console.log(myContext.user);
     });
     return focus;
   }, [navigation]);
