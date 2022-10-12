@@ -1655,7 +1655,7 @@ begin tran
 commit tran
 go
 --select * from [Customers_Rooms]
--- exec FindCustomerReservations 666
+-- exec FindCustomerReservations 111111112
 
 
 
@@ -1834,14 +1834,17 @@ begin tran
 commit tran
 go
 
---exec SaveRoomReservation 666,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
+--exec SaveRoomReservation 111111112,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
 --select * from [dbo].[Customers]
 --select * from Bill
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
 --exec DeleteReservation 666
-
-
+--exec AddNewBill_Detail 111111112,21,'Coca cola',9,'Cash'
+--exec CheckIn 111111112, '2022-08-22'
+--exec CheckOut 111111112, '2022-08-24'
+--exec Room_Resit 111111112
+--exec GetAllCustomersHistory 111111112
 
 
 --select * from [dbo].[Employees]
@@ -1961,7 +1964,7 @@ begin tran
 commit tran
 go
 
- --exec CheckIn 111111112 , '2022-10-18'
+ --exec CheckIn 111111112 , '2022-08-22'
  --exec CheckOut 111111112, '2022-10-27'
     --"id": 666,
     --"Entry_Date": "2022-08-22"
@@ -2161,7 +2164,7 @@ create proc AddNewBill_Detail
 @Payment_Method nvarchar(20)
 as
 begin tran	
-		DECLARE @Purchase_Date as date =  GETDATE()
+	DECLARE @Purchase_Date as date =  GETDATE()
 
 	DECLARE @bill_number as int = (select Bill_Number from  [dbo].[Customers_Rooms] 
 	where [Customer_ID] = @id and Room_Number = @Room_Number)
@@ -2186,14 +2189,17 @@ begin tran
 commit tran
 go
 
---exec AddNewBill_Detail 315201913,21,'Coca cola',9,'Cash'
+--exec AddNewBill_Detail 111111112,21,'Coca cola',9,'Cash'
    --"CustomerID":315201913, 
    -- "RoomNumber":21,
    -- "ProductDec":"Coca cola",
    -- "Amount":9,
    -- "PaymentMethod":"Cash"
+  
 --select * from [dbo].[Bill_Details]
---exec Room_Resit 315201913
+--select * from [dbo].[Customers_Rooms]
+--exec CheckIn 666 , '2022-08-22'
+--exec Room_Resit 666
 
 
 
