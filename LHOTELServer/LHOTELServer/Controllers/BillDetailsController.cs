@@ -17,14 +17,14 @@ namespace LHOTELServer.Controllers
     public class BillDetailsController : ApiController
     {
 
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("~/GetRoomResit")]
-        public IHttpActionResult GetRoomResit([FromBody] JObject data)
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("~/RoomResit")]
+        public IHttpActionResult RoomResit([FromBody] JObject data)
         {
             try
             {
                 int id = data["id"].ToObject<int>();
-                return Ok(BLLBill_Details.GetRoomResit(id));
+                return Ok(BLLBill_Details.RoomResit(id));
             }
             catch (Exception e)
             {

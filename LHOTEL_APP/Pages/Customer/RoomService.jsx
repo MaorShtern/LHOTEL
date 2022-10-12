@@ -1,15 +1,15 @@
 import {View,Text,StyleSheet,TextInput,TouchableOpacity,Button,Image,} from "react-native";
-import React, { useState, useEffect } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useState, useEffect ,useContext} from "react";
+// import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import { images } from "../../images";
 import Products from "./Products";
-
-
-
+import { ScrollView } from 'react-native-virtualized-view';
+import { useFocusEffect } from "@react-navigation/native";
+import AppContext from "../../AppContext";
 const RequestType = [
   { label: "Room Cleaning", value: "Room Cleaning" },
   { label: "Room Service", value: "Room Service" },
@@ -18,19 +18,35 @@ const RequestType = [
   { label: "Product purchase", value: "Product purchase" },
 ];
 
-const Rooms = [
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
-  { label: "4", value: "4" },
-];
+
 
 export default function RoomService({ navigation }) {
   const [date, setDate] = useState(new Date());
-
+  const myContext = useContext(AppContext);
+  const bill = myContext.bill;
+  const user = myContext.user;
   // const [mydate, setDate] = useState(new Date());
   const [displaymode, setMode] = useState("date");
   const [isDisplayDate, setShow] = useState(false);
+
+  const Rooms = bill.rooms.map((room) =>  {return { label: JSON.stringify(room.RoomNumber), value: JSON.stringify(room.RoomNumber) }});
+
+
+console.log(Rooms)
+
+
+  // useFocusEffect(
+  //     React.useCallback(() => {
+  //       FetchCustomerReservationFromDB();
+  //     //   return () => {
+  //     //     alert("Screen was unfocused");
+  //     //     // Do something when the screen is unfocused
+  //     //     // Useful for cleanup functions
+  //     //   };
+  //     }, [])
+  //   );
+
+
   //     const changeSelectedDate = (event, selectedDate) => {
   //     const currentDate = selectedDate || date;
   //     setDate(currentDate);
@@ -57,9 +73,47 @@ export default function RoomService({ navigation }) {
 
 
 
-  useEffect(() => { SetRequest("") }, []);
+  useEffect(() => { SetRequest("")}, []);
 
-
+  // useEffect(() => {
+  //   FetchCustomerReservationFromDB();
+  // }, []);
+  // const FetchCustomerReservationFromDB = async () => {
+  //   if (user.CustomerID !== undefined) {
+  //     try {
+  //       const requestOptions = {
+  //         method: "POST",
+  //         body: JSON.stringify({
+  //           id: user.CustomerID,
+  //         }),
+  //         headers: { "Content-Type": "application/json" },
+  //       };
+  //       let result = await fetch(
+  //         "http://proj13.ruppin-tech.co.il/RoomResit",
+  //         requestOptions
+  //       );
+  //       let customerReservation = await result.json();
+  //       // console.log(JSON.stringify(user))
+  //       if (customerReservation !== null) {
+  //           bill.CustomerID = customerReservation[0].CustomerID
+  //           bill.BillNumber = customerReservation[0].BillNumber
+  //           bill.BillDate = customerReservation[0].BillDate
+  //           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
+  //           bill.Breakfast = customerReservation[0].Breakfast
+  //           bill.NumberOfNights = customerReservation[0].NumberOfNights
+  //           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
+        
+  //               customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
+             
+         
+  //         console.log(JSON.stringify(bill));
+  //       }
+  //     } catch (error) {
+  //       alert(error);
+  //     }
+  //   }
+  // };
+  console.log(JSON.stringify( bill));
 
   const hideDate = () => {
     setFlagDate(false);
@@ -122,7 +176,7 @@ export default function RoomService({ navigation }) {
             labelField="label"
             valueField="value"
             placeholder="Room Number"
-            value={dropdown}
+            value={room}
             onChange={(room) => {
               SetRoom(room.value);
             }}
@@ -148,11 +202,10 @@ export default function RoomService({ navigation }) {
                   style={styles.dropdown}
                   data={RequestType}
                   // search
-                  searchPlaceholder="Search"
                   labelField="label"
                   valueField="value"
                   placeholder="Request type"
-                  value={dropdown}
+                  value={request}
                   onChange={(request) => {
                     SetRequest(request.value);
                   }}
@@ -233,7 +286,7 @@ export default function RoomService({ navigation }) {
 
 
 
-    </ScrollView>
+      </ScrollView>
   );
 }
 
@@ -262,8 +315,9 @@ const styles = StyleSheet.create({
 
   dropdown: {
     backgroundColor: "white",
-    borderBottomColor: "gray",
-    borderBottomWidth: 0.5,
+    
+    // borderBottomColor: "gray",
+    // borderBottomWidth: 0.5,
     marginTop: 20,
   },
   alerts: {

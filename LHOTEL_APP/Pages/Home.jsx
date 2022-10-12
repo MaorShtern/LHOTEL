@@ -7,6 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import AppContext from '../AppContext';
 import { ActivityIndicator } from "react-native";
 
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
 
@@ -19,26 +20,39 @@ export default function Home({ navigation }) {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-
+  const user = myContext.user;
+  const bill = myContext.bill;
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
       <ActivityIndicator size="large" />
     </View>
   );
-
-  useEffect(() => {
-    const focus = navigation.addListener("focus", () => {
-      if(!info)  myContext.setEmployeeDB({})
+  useFocusEffect(
+    React.useCallback(() => {
       setPassword('')
       setId('')
+      if(!info)  myContext.setEmployeeDB({})
+      // myContext.SetBill({
+      //   CustomerID: '',
+      //   BillNumber: 0,
+      //   BillDate: '',
+      //   AmountOfPeople: 0,
+      //   Breakfast: false,
+      //   NumberOfNights: 0,
+      //   rooms: []})
       // console.log(myContext.employee);
-      myContext.setUserDB({})
-      console.log(myContext.user);
-    });
-    return focus;
-  }, [navigation]);
-
-
+      // myContext.setUserDB({})
+      // console.log(myContext.user);
+    //   return () => {
+    //     alert("Screen was unfocused");
+    //     // Do something when the screen is unfocused
+    //     // Useful for cleanup functions
+    //   };
+    }, [navigation])
+  );
+  // useEffect(() => {
+  //   FetchCustomerReservationFromDB()
+  // });
 
 
 
@@ -203,7 +217,8 @@ export default function Home({ navigation }) {
             <View style={styles.ButtonContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("Drawer"),
+               
+                 navigation.navigate("Drawer"),
                     doAnimation(closeState, 1, 500);
                 }}
                 style={{

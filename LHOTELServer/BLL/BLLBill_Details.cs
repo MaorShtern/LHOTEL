@@ -10,9 +10,9 @@ namespace BLL
 {
     public class BLLBill_Details
     {
-        public static List<RoomResit> GetRoomResit(int id)
+        public static List<RoomResit> RoomResit(int id)
         {
-            return DALBillDetails.GetRoomResit(id);
+            return DALBillDetails.RoomResit(id);
         }
         public static bool AddCharge(Charge charge)
         {

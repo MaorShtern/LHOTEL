@@ -1,16 +1,16 @@
 import Router from './Pages/Navigation/Router'
 import { LogBox } from 'react-native'
 import ignoreWarnings from 'ignore-warnings';
-import { useState} from "react";
+import { useState } from "react";
 import AppContext from './AppContext';
 import moment from "moment";
 
 
 export default function App() {
 
-  const isIos = Platform.OS === 'ios' 
+  const isIos = Platform.OS === 'ios'
   const [isUserExist, setIsUserExist] = useState(false);
-  const [roomsReservation, SetRoomsReservation]  = useState({
+  const [roomsReservation, SetRoomsReservation] = useState({
     CustomerID: '',
     CustomerType: 1,
     FirstName: '',
@@ -26,16 +26,28 @@ export default function App() {
     CounterSingle: 0,
     CounterDouble: 0,
     CounterSuite: 0,
-    EntryDate:moment().toDate(),
-   ExitDate: moment().add(1, "days").toDate(),
+    EntryDate: moment().toDate(),
+    ExitDate: moment().add(1, "days").toDate(),
     // ExitDate: moment(new Date()).add(1,"day").format("DD/MM/YYYY"),
     // EntryDate: moment(new Date()).format("DD/MM/YYYY"),
-    Breakfast:false,
-    NumberOfNights:0,
-    totalSum:0,
-    rooms:[]
+    Breakfast: false,
+    NumberOfNights: 0,
+    totalSum: 0,
+    rooms: []
   }
-);
+  );
+  const [bill, SetBill] = useState({
+
+    CustomerID: '',
+    BillNumber: 0,
+    BillDate: '',
+    AmountOfPeople: 0,
+    Breakfast: false,
+    NumberOfNights: 0,
+    rooms: []
+
+  }
+  );
 
 
 
@@ -57,33 +69,35 @@ export default function App() {
     SetUser(obj)
   }
 
-  const SetReservastionData = (obj)=>{
+  const SetReservastionData = (obj) => {
     SetRoomsReservation(obj)
   }
-  
-//   const setEmployeeId = (id) => {
-//     setEmployee((prev) => { return { ...prev, ...{id:id}}});
-// }
 
-//   const setEmployeePassword = (password) => {
-//     setEmployee((prev) => { return { ...prev, ...{password:password}}});
-//   };
+  //   const setEmployeeId = (id) => {
+  //     setEmployee((prev) => { return { ...prev, ...{id:id}}});
+  // }
+
+  //   const setEmployeePassword = (password) => {
+  //     setEmployee((prev) => { return { ...prev, ...{password:password}}});
+  //   };
 
 
   const userSettings = {
-    employee:employee,
-    user:user,
-    isUserExist:isUserExist,
-    isIos:isIos,
+    employee: employee,
+    user: user,
+    isUserExist: isUserExist,
+    isIos: isIos,
+    bill:bill,
     // roomsFlags:roomsFlags,
-    roomsReservation:roomsReservation,
+    roomsReservation: roomsReservation,
     setEmployeeDB,
     setUserDB,
     setIsUserExist,
+    SetBill,
     // setRoomsFlags,
     SetReservastionData
   };
-  
+
   ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]'])
 
   LogBox.ignoreLogs([
@@ -96,8 +110,8 @@ export default function App() {
 
   return (
     <AppContext.Provider value={userSettings}>
-       <Router />
-  </AppContext.Provider>
+      <Router />
+    </AppContext.Provider>
 
   );
 }

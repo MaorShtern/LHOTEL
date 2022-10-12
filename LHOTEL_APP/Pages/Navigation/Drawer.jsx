@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import CustomerHome from "../Customer/CustomerHome";
@@ -14,15 +14,20 @@ import RoomService from "../Customer/RoomService";
 import Products from "../Customer/Products";
 // import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
-
+// import { useFocusEffect } from "@react-navigation/native";
 const drawer = createDrawerNavigator();
 
 export default function Drawer() {
-
   const myContext = useContext(AppContext);
- let  isUserConnected = JSON.stringify(myContext.user)  !== "{}"
+  const user = myContext.user;
+  const bill = myContext.bill;
+  let isUserConnected = JSON.stringify(myContext.user) !== "{}";
+  let isAtHotel = myContext.bill.CustomerID !== "";
 
-console.log(isUserConnected);
+ 
+ 
+
+  console.log(isAtHotel);
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -76,23 +81,24 @@ console.log(isUserConnected);
           name="Booking"
           component={Booking}
         />) : null} */}
-       <drawer.Screen
+        <drawer.Screen
           name="Booking"
           component={Booking}
           options={{
             headerTitle: "",
             headerTintColor: "white",
-            headerMode: 'none',
+            headerMode: "none",
             headerStyle: {
               backgroundColor: "#000",
             },
           }}
         />
-
+        {/* drawerItemStyle: isUserConnected ?  {}:  { display: "none" }, */}
         <drawer.Screen
           name="Room Service"
           component={RoomService}
-          options={{ drawerItemStyle: isUserConnected ?  {}:  { display: "none" },
+          options={{
+            drawerItemStyle: isAtHotel ? {} : { display: "none" },
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {
@@ -101,14 +107,15 @@ console.log(isUserConnected);
           }}
         />
         {/* isUserConnected */}
-         <drawer.Screen
+        <drawer.Screen
           name="Products"
           component={Products}
-          options={{ drawerItemStyle: { display: "none" },
+          options={{
+            drawerItemStyle: { display: "none" },
             // drawerItemStyle: { display: "none" },
             headerTitle: "",
             headerTintColor: "white",
-            headerMode: 'none',
+            headerMode: "none",
             headerStyle: {
               backgroundColor: "#000",
             },
@@ -125,15 +132,17 @@ console.log(isUserConnected);
             },
           }}
         /> */}
-         <drawer.Screen
+        <drawer.Screen
           name="Credit"
           component={Credit}
-          options={{ drawerItemStyle: { display: "none" },
-          headerTitle: "",
-          headerTintColor: "white",
-          headerMode: 'none',
-          headerStyle: {
-            backgroundColor: "#000",}
+          options={{
+            drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: "none",
+            headerStyle: {
+              backgroundColor: "#000",
+            },
           }}
         />
         <drawer.Screen
@@ -143,7 +152,7 @@ console.log(isUserConnected);
             drawerItemStyle: { display: "none" },
             headerTitle: "",
             headerTintColor: "white",
-            headerMode: 'none',
+            headerMode: "none",
             headerStyle: {
               backgroundColor: "#000",
             },
@@ -156,7 +165,7 @@ console.log(isUserConnected);
             drawerItemStyle: { display: "none" },
             headerTitle: "",
             headerTintColor: "white",
-            headerMode: 'none',
+            headerMode: "none",
             headerStyle: {
               backgroundColor: "#000",
             },
@@ -169,7 +178,7 @@ console.log(isUserConnected);
             drawerItemStyle: { display: "none" },
             headerTitle: "",
             headerTintColor: "white",
-            headerMode: 'none',
+            headerMode: "none",
             headerStyle: {
               backgroundColor: "#000",
             },

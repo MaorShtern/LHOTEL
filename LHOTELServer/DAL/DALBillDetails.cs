@@ -12,7 +12,7 @@ namespace DAL
     {
 
 
-        public static List<RoomResit> GetRoomResit(int id)
+        public static List<RoomResit> RoomResit(int id)
         {
             try
             {
