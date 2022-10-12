@@ -66,67 +66,6 @@ export default function Booking({ navigation }) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const showDatePickerEntry = () => {
-  //   setFlagEntry(true);
-  // };
-  // const hideDatePickerEntry = () => {
-  //   setFlagEntry(false);
-  // };
-  // const showDatePickerExit = () => {
-  //   setFlagExit(true);
-  // };
-  // const hideDatePickerExit = () => {
-  //   setFlagExit(false);
-  // };
-  // const handleConfirmEnteryDate = (date) => {
-  //   let entry = moment(date).format("YYYY-MM-DD");
-  //   roomsReservation.EntryDate = entry;
-  //   hideDatePickerEntry();
-  // };
-
-  // const handleConfirmExitDate = (date) => {
-  //   let exit = moment(date).format("YYYY-MM-DD");
-  //   roomsReservation.ExitDate = exit;
-  //   hideDatePickerExit();
-  // };
-
-  // useEffect(() => {
-  //   let date = moment().format("DD/MM/YYYY");
-
-  //   if (
-  //     moment(roomsReservation.EntryDate).isBefore(date) ||
-  //     moment(roomsReservation.EntryDate).isSame(date) ||
-  //     moment(roomsReservation.ExitDate).isSame(
-  //       roomsReservation.EntryDate,
-  //       "day"
-  //     ) ||
-  //     moment(roomsReservation.ExitDate).isBefore(
-  //       roomsReservation.EntryDate,
-  //       "day"
-  //     )
-  //   ) {
-  //     setNumber_Of_Nights(false);
-  //     return;
-  //   }
-  //   // let number = moment(roomsReservation.EntryDate).diff( moment(roomsReservation.ExitDate), 'days') * -1  // =1
-  //   // console.log(number);
-  //   setNumber_Of_Nights(true);
-  // });
   useEffect(() => {
     if (
       moment(roomsReservation.EntryDate).isBefore(moment(), "day") ||
@@ -142,7 +81,7 @@ export default function Booking({ navigation }) {
       // roomsReservation.NumberOfNights = moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days") + 1;
       return;
     }
-  // roomsReservation.NumberOfNights =moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days");
+    // roomsReservation.NumberOfNights =moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days");
     setNumberOfNights(moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days"));
   });
 
@@ -150,7 +89,7 @@ export default function Booking({ navigation }) {
     React.useCallback(() => {
       SetIsExitModalOpened(false);
       SetIsEntryModalOpened(false);
-     
+
     }, [])
   );
 
@@ -170,43 +109,10 @@ export default function Booking({ navigation }) {
       };
       roomsReservation.NumberOfNights = numberOfNights
       roomsReservation.Breakfast = breakfast
-      // myContext.roomsReservation.EntryDate = entryDate
-      // myContext.roomsReservation.ExitDate = exitDate
-      // myContext.roomsReservation.AmountOfPeople = AmountOfPeople
-      // myContext.setRoomsFlags(rooms_flags);
-      navigation.navigate("SaveRoom", {
-        rooms_flags: rooms_flags
-       
-      });
+      navigation.navigate("SaveRoom", { rooms_flags: rooms_flags });
     } else Alert.alert("Some fields are not filled in Properly");
   };
 
-
-  // const ChaeckAll = () => {
-  //   if (
-  //     number_Of_Nights !== true ||
-  //     !(
-  //       roomsReservation.AmountOfPeople > 0 &&
-  //       roomsReservation.AmountOfPeople <= 10
-  //     )
-  //   ) {
-  //     Alert.alert("Some fields are not filled in Properly");
-  //     return;
-  //   }
-
-  //   let rooms_flags = {};
-  //   if (ChaeckRoomsMarks()) {
-  //     rooms_flags = {
-  //       "Single room": singleFlag,
-  //       "Double room": doubleFlag,
-  //       Suite: suiteFlag,
-  //     };
-  //   }
-
-  //   // console.log(rooms_flags);
-
-  //   navigation.navigate("SaveRoom", { rooms_flags: rooms_flags });
-  // };
 
   return (
     <ScrollView>
@@ -214,13 +120,8 @@ export default function Booking({ navigation }) {
       <View style={styles.label}>
         <TouchableOpacity style={styles.input} onPress={showDatePickerEntry}>
           <View style={styles.ButtonContainer}>
-            {/* <Text style={styles.text}>
-              {"Entry date: " +
-                moment(roomsReservation.EntryDate).format("DD-MM-YYYY")}
-            </Text> */}
-<Text style={styles.text}>
-              {"Entry date: " +
-               moment(roomsReservation.EntryDate).format("DD/MM/YYYY")}
+            <Text style={styles.text}>
+              {"Entry date: " + moment(roomsReservation.EntryDate).format("DD/MM/YYYY")}
             </Text>
             <Image style={{ width: 50, height: 50 }} source={images.calendar} />
           </View>
@@ -234,13 +135,8 @@ export default function Booking({ navigation }) {
 
         <TouchableOpacity style={styles.input} onPress={showDatePickerExit}>
           <View style={styles.ButtonContainer}>
-            {/* <Text style={styles.text}>
-              {"Exit date: " +
-                moment(roomsReservation.ExitDate).format("DD-MM-YYYY")}
-            </Text> */}
             <Text style={styles.text}>
-              {"Exit date: " +
-                moment(roomsReservation.ExitDate).format("DD/MM/YYYY")}
+              {"Exit date: " + moment(roomsReservation.ExitDate).format("DD/MM/YYYY")}
             </Text>
             <Image style={{ width: 50, height: 50 }} source={images.calendar} />
           </View>
@@ -252,12 +148,8 @@ export default function Booking({ navigation }) {
           onConfirm={handleConfirmExitDate}
           onCancel={hideDatePickerExit}
         />
-        {/* <View>
-          {!number_Of_Nights ? (
-            <Text style={styles.alerts}>*The dates are incorrect* </Text>
-          ) : null}
-        </View> */}
-  <View>
+
+        <View>
           {numberOfNights === 0 ? (
             <Text style={styles.alerts}>*The dates are incorrect* </Text>
           ) : (
@@ -309,44 +201,22 @@ export default function Booking({ navigation }) {
         <TextInput
           style={{
             paddingHorizontal: 20,
-
             marginVertical: 20,
           }}
           label="Amount Of people"
           autoCapitalize="none"
           keyboardType="numeric"
           onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}
-          />
+        />
 
-        {/* <TextInput
-          style={{ paddingHorizontal: 20, marginVertical: 20 }}
-          label="Amount Of people"
-          autoCapitalize="none"
-          keyboardType="numeric"
-          onChangeText={(amount) => (roomsReservation.AmountOfPeople = amount)}
-        /> */}
-
-        {/* <View style={styles.switchContainer}>
+        <View style={styles.switchContainer}>
           <Switch
-            onValueChange={() => {
-              setBreakfast(!breakfast);
-              roomsReservation.Breakfast = !breakfast;
-            }}
+            onValueChange={() => { setBreakfast(!breakfast); }}
             value={breakfast}
           />
           <Text>Include breakfast?</Text>
-        </View> */}
-  <View style={styles.switchContainer}>
-          <Switch
-             onValueChange={() => {
-              setBreakfast(!breakfast);
-            
-            }}
-           value={breakfast}
-          />
-          <Text>Include breakfast?</Text>
         </View>
-   
+
         <View
           style={{
             alignItems: "center",

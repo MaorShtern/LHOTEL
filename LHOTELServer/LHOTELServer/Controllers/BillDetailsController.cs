@@ -17,7 +17,7 @@ namespace LHOTELServer.Controllers
     public class BillDetailsController : ApiController
     {
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPut]
         [System.Web.Http.Route("~/GetRoomResit")]
         public IHttpActionResult GetRoomResit([FromBody] JObject data)
         {

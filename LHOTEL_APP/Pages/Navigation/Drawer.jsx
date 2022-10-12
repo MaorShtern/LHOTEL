@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import CustomerHome from "../Customer/CustomerHome";
@@ -12,7 +12,7 @@ import Credit from "../Credit";
 import AppContext from "../../AppContext";
 import RoomService from "../Customer/RoomService";
 import Products from "../Customer/Products";
-// import Bill from "../Customer/Bill";
+import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
 
 const drawer = createDrawerNavigator();
@@ -20,9 +20,10 @@ const drawer = createDrawerNavigator();
 export default function Drawer() {
 
   const myContext = useContext(AppContext);
- let  isUserConnected = JSON.stringify(myContext.user)  !== "{}"
+  let isUserConnected = JSON.stringify(myContext.user) !== "{}"
 
-console.log(isUserConnected);
+  // console.log(isUserConnected);
+
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -60,23 +61,7 @@ console.log(isUserConnected);
             },
           }}
         />
-        {/* <drawer.Screen
-          name="LogOut"
-          options={{
-            headerTitle: "",
-            headerTintColor: "white",
-            headerMode: 'none',
-            headerStyle: {
-              backgroundColor: "#000",
-            },
-          }}
-        /> */}
-        {/* {JSON.stringify(myContext.user) !== '{}'? 
-        (<drawer.Screen
-          name="Booking"
-          component={Booking}
-        />) : null} */}
-       <drawer.Screen
+        <drawer.Screen
           name="Booking"
           component={Booking}
           options={{
@@ -92,7 +77,8 @@ console.log(isUserConnected);
         <drawer.Screen
           name="Room Service"
           component={RoomService}
-          options={{ drawerItemStyle: isUserConnected ?  {}:  { display: "none" },
+          options={{
+            drawerItemStyle: isUserConnected ? {} : { display: "none" },
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {
@@ -101,10 +87,11 @@ console.log(isUserConnected);
           }}
         />
         {/* isUserConnected */}
-         <drawer.Screen
+        <drawer.Screen
           name="Products"
           component={Products}
-          options={{ drawerItemStyle: { display: "none" },
+          options={{
+            drawerItemStyle: { display: "none" },
             // drawerItemStyle: { display: "none" },
             headerTitle: "",
             headerTintColor: "white",
@@ -114,7 +101,7 @@ console.log(isUserConnected);
             },
           }}
         />
-        {/* <drawer.Screen
+        <drawer.Screen
           name="Bill"
           component={Bill}
           options={{
@@ -124,16 +111,18 @@ console.log(isUserConnected);
               backgroundColor: "#000",
             },
           }}
-        /> */}
-         <drawer.Screen
+        />
+        <drawer.Screen
           name="Credit"
           component={Credit}
-          options={{ drawerItemStyle: { display: "none" },
-          headerTitle: "",
-          headerTintColor: "white",
-          headerMode: 'none',
-          headerStyle: {
-            backgroundColor: "#000",}
+          options={{
+            drawerItemStyle: { display: "none" },
+            headerTitle: "",
+            headerTintColor: "white",
+            headerMode: 'none',
+            headerStyle: {
+              backgroundColor: "#000",
+            }
           }}
         />
         <drawer.Screen

@@ -12,7 +12,7 @@ import AppContext from "../../AppContext";
 
 
 export default function ShortCheckIn({ navigation }) {
-  // { route, navigation }
+
   const myContext = useContext(AppContext);
   const roomsReservation = myContext.roomsReservation;
 
@@ -313,13 +313,7 @@ const DeleteReservation = async () =>{
     const requestOptions = {
         method: 'DELETE',
         body: JSON.stringify({
-<<<<<<< HEAD
-
             id:roomsReservation.CustomerID
-
-=======
-            id:roomsReservation.CustomerID
->>>>>>> f13749bd7e52dd4e52b02576e7e452e69c62134d
         }),
         headers: { 'Content-Type': 'application/json' }
     };

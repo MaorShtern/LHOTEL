@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, FlatList } from "react-native";
-import React, { useState, useEffect ,useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Divider } from "react-native-paper";
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -43,7 +43,7 @@ export default function CheckOut() {
   const renderItem = ({ item }) => (
     // console.log(item)
     // <>
-    
+
     // {
     //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
     //   Room : {item.RoomNumber}
@@ -51,7 +51,7 @@ export default function CheckOut() {
     //   Room : {roomNumber}
     // </Text>)
     // }
-        
+
     //   </>
     <>
       <Divider
@@ -106,7 +106,7 @@ export default function CheckOut() {
 
   //   return(
   //     <>
-    
+
   // {
   //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
   //   Room : {item.RoomNumber}
@@ -114,13 +114,13 @@ export default function CheckOut() {
   //   Room : {roomNumber}
   // </Text>)
   // }
-      
+
   //   </>
   //   )
 
   // }
-   
- 
+
+
 
 
   const SerchReservation = (value) => {
@@ -153,20 +153,22 @@ export default function CheckOut() {
           <Text style={{ fontSize: 16 }}>No : {item.BillNumber}</Text>
         </View>
         <View style={styles.containerTaskDedtails}>
-          <View style={{flexDirection: "row",
-     alignItems: "center",
-  justifyContent: "space-between", }}>
-         <Icon name="person" size={18} style={{ padding: 4 }}>
-                {" "}
-                {item.AmountOfPeople}
-              </Icon>
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}>
+            <Icon name="person" size={18} style={{ padding: 4 }}>
+              {" "}
+              {item.AmountOfPeople}
+            </Icon>
             <Text
-              style={{ padding: 10,  fontSize: 18 }}
+              style={{ padding: 10, fontSize: 18 }}
             >
               ID : {item.CustomerID}
-             
+
             </Text>
-       
+
           </View>
 
           <Text style={{ padding: 10, alignSelf: 'flex-end', fontSize: 18 }}>
@@ -181,33 +183,33 @@ export default function CheckOut() {
           <View style={{
             flexDirection: "row",
             alignItems: "center",
-           paddingHorizontal: 10
+            paddingHorizontal: 10
           }}>
-     {
-      item.RoomNumber.length === undefined? <Text style={{
-        fontSize: 17,
-        paddingHorizontal: 5,
-        marginRight: 10,
-        paddingBottom: 5,
-      }}> Room : {item.RoomNumber}</Text>:
-<FlatList
-                data={item.RoomNumber}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={3}
-              />
-         
-     }
-              
-          {/* <RenderItem item ={item}/> */}
-     
+            {
+              item.RoomNumber.length === undefined ? <Text style={{
+                fontSize: 17,
+                paddingHorizontal: 5,
+                marginRight: 10,
+                paddingBottom: 5,
+              }}> Room : {item.RoomNumber}</Text> :
+                <FlatList
+                  data={item.RoomNumber}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  numColumns={3}
+                />
+
+            }
+
+            {/* <RenderItem item ={item}/> */}
+
           </View>
 
           <View style={styles.BTNContainer}>
             <TouchableOpacity style={styles.LogoutBtn} onPress={() => Checkout(item.CustomerID, item.ExitDate)} >
               <Text style={{ color: 'black' }}>Check out</Text>
             </TouchableOpacity>
-         
+
           </View>
         </View>
       </View>

@@ -24,8 +24,6 @@ export const images = {
   check:require("./assets/images/Check.png"),
   calendar:require("./assets/images/calendar.png"),
   clock:require("./assets/images/clock.png"),
-
-
   waterbottle:require("./assets/images/waterbottle.png"),
   whisky:require("./assets/images/whisky.png"),
   cocacola:require("./assets/images/cocacola.png"),

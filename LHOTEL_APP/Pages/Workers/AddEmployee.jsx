@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text,  Image,  StyleSheet,  ScrollView,  TextInput,  TouchableOpacity,  Alert,} from "react-native";
 import React, { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { images } from "../../images";
@@ -24,7 +15,7 @@ const Roles = [
 
 export default function AddEmployee({ navigation }) {
   const [flagDate, setFlagDate] = useState(false);
-  const [dropdown, setDropdown] = useState(null);
+  // const [dropdown, setDropdown] = useState(null);
   const [id, SetId] = useState("");
   const [name, SetName] = useState("");
   const [phoneNumber, SetPhoneNumber] = useState("");
