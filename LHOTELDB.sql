@@ -247,6 +247,7 @@ go
 
 
 
+--drop table Purchases_Documentation
 create table Purchases_Documentation
 (
 	Bill_Number int,
@@ -1931,7 +1932,7 @@ go
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
-
+--select * from [dbo].[Purchases_Documentation]
 
 
 create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
@@ -2448,34 +2449,9 @@ if (@@error !=0)
 commit tran
 go
 
-
-
-
-
---create proc ProductPurchaseByName
---@Description nvarchar(30)
---as
---begin tran		
---	SELECT dbo.Purchases_Documentation.Product_Code, 
---	dbo.Purchases_Documentation.Room_Type as Product_Name,
---	sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
---	dbo.Category.Description AS Category
---	FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
---	ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
---	ON dbo.Products.Category_Number = dbo.Category.Category_Number
---	WHERE  (dbo.Products.Description = @Description)
---	GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type, dbo.Purchases_Documentation.Number_Of_Nights, dbo.Products.Description, dbo.Category.Description
-
---if (@@error !=0)
---	begin
---		rollback tran
---		print 'error'
---		return
---	end
---commit tran
---go
---exec ProductPurchaseByName 'Vodka'
---select * from [dbo].[Purchases_Documentation]
+--exec ProductPurchaseByName 'Bamba'
+--exec ProductPurchaseByName 'Coca cola'
+--select * from dbo.Purchases_Documentation 
 
 
 
@@ -2485,8 +2461,8 @@ begin tran
 	
 	SELECT CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
 	,CAST( Sum([Sum_Total] * -1 ) as float) as [Expens + / Profit -]  
-	
 	from [dbo].[Purchase_Of_Goods]
+
 	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 	union all 
 	select  CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date

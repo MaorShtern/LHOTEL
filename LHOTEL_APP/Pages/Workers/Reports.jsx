@@ -72,10 +72,15 @@ export default function Reports() {
             };
             let result = await fetch('http://proj13.ruppin-tech.co.il/ProductPurchaseByName', requestOptions);
             let temp = await result.json();
+            console.log(temp);
             if (temp !== null) {
                 SetTableData([temp])
                 SetLoading(true)
                 return
+            }
+            else {
+                SetTableData([])
+                SetLoading(true)
             }
         } catch (error) {
             alert(error)
@@ -105,7 +110,7 @@ export default function Reports() {
         SetLoading(false)
         SetRequest(request.value)
         if (request !== undefined && request.value !== 'ProductPurchaseByName') {
-                GetTableFromDB(request.value)
+            GetTableFromDB(request.value)
         }
         SetLoading(true)
 
@@ -167,15 +172,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-   
+
     },
     tableContainer: {
         padding: 10
     },
     tableHeader: {
-       fontWeight:'bold',
-       fontSize:17,
-       marginTop:10,
+        fontWeight: 'bold',
+        fontSize: 17,
+        marginTop: 10,
         padding: 5,
     },
     container: {

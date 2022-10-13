@@ -50,6 +50,38 @@ export default function Bill() {
 
   const BilldHistoryData = () => {
     console.log(tableData);
+    // let tempData = []
+    // for (let index = 0; index < tableData.length; index++) {
+    //   let billNumber = tempData.filter((number) => number === tableData[index].BillNumber)[0]
+    //   if (billNumber === undefined) {
+    //     // let billDetailes = tableData.filter((number) => console.log(number.BillNumber))
+    //     // console.log(billDetailes);
+    //     tempData.push(tableData[index].BillNumber)
+    //   }
+    // }
+
+    // let data = []
+    // for (let i = 0; i < tempData.length; i++) {
+    //   let details = tableData.filter((number) => number.BillNumber === tempData[i])
+    //   let billObject = []
+    //   for (let j = 0; j < details.length; j++) {
+    //     billObject.push(
+    //       {
+    //         BillNumber: details[j].BillNumber,
+    //       }
+    //     )
+    //   }
+    //   // let billObject = {
+    //   //   BillNumber: details[index].BillNumber,
+    //   //   BillDetails:[
+    //   //     {
+    //   //       RoomNumber:details[index].RoomNumber,
+    //   //     }
+    //   //   ]
+    //   // }
+    //   console.log("billObject:   "+ JSON.stringify(billObject));
+    // }
+    // console.log(tempData);
   }
 
 
