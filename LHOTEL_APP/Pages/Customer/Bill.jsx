@@ -31,15 +31,8 @@ export default function Bill() {
       };
       let result = await fetch('http://proj13.ruppin-tech.co.il/' + request, requestOptions);
       let temp = await result.json();
-      if (temp !== null) {
-        // console.log(temp);
-        if (temp.length > 1)
-          SetTableData(temp);
-        else
-          SetTableData(null);
-        SetLoading(true)
-        return
-      }
+      SetTableData(temp);
+      SetLoading(true)
     } catch (error) {
       alert(error)
     }
@@ -55,17 +48,21 @@ export default function Bill() {
   );
 
 
+  const BilldHistoryData = () => {
+    console.log(tableData);
+  }
+
 
   // ---  יש לעבוד על אופן ההצגה של כול חשבונית עם המידע שלה הרלוונתי המפריד בין החשבוניות
   const HistoryCard = () => {
     let list = tableData.map((room) =>
       <View>
-        <Text style={{ paddingBottom: 10 }}>{room.BillNumber}Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
+        <Text style={styles.cardText}>{room.BillNumber}Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
       </View>
     )
     return (
-      <View style={{ backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1 }}>
-        <Text style={{ paddingBottom: 10 }}>BillNumber: {tableData[0].BillNumber}</Text>
+      <View style={styles.CardStyle}>
+        {/* <Text style={{ paddingBottom: 10 }}>BillNumber: {tableData[0].BillNumber}</Text> */}
         {list}
       </View>
     )
@@ -75,20 +72,15 @@ export default function Bill() {
   const ResitCard = () => {
     let list = tableData.map((room) =>
       <View>
-        <Text style={{ paddingBottom: 10 }}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
+        <Text style={styles.cardText}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
       </View>
     )
     return (
-      <View style={{ backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1 }}>
-        <Text style={{ paddingBottom: 10 }}>CustomerID: {tableData[0].CustomerID}</Text>
+      <View style={styles.CardStyle}>
+        <Text style={styles.cardText}>CustomerID: {tableData[0].CustomerID}</Text>
         {list}
-        {/* <View style={{ paddingBottom: 10 }}>
-          <Text>Reservation Date: {moment(tableData[0].PurchaseDate).format("DD-MM-YYYY")}</Text>
-        </View> */}
-        <Text>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
-        <Text>Number Of Nights: {tableData[0].NumberOfNights}</Text>
-        {/* <View style={{ alignItems: "center", paddingTop: 10 }}>
-        </View> */}
+        <Text style={styles.cardText}>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
+        <Text >Number Of Nights: {tableData[0].NumberOfNights}</Text>
       </View>
     )
   }
@@ -98,17 +90,17 @@ export default function Bill() {
   const ReservationCard = () => {
     let list = tableData.map((room) =>
       <View>
-        <Text style={{ paddingBottom: 10 }}>Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
+        <Text style={styles.cardText}>Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
       </View>
     )
     return (
-      <View style={{ backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1 }}>
-        <Text style={{ paddingBottom: 10 }}>CustomerID: {tableData[0].CustomerID}</Text>
+      <View style={styles.CardStyle}>
+        <Text style={styles.cardText}>CustomerID: {tableData[0].CustomerID}</Text>
         {list}
-        <Text>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
-        <Text>Name: {tableData[0].FirstName} {tableData[0].LastName}</Text>
-        <Text>AmountOfPeople: {tableData[0].AmountOfPeople}</Text>
-        <Text>Mail: {tableData[0].Mail}</Text>
+        <Text style={styles.cardText}>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
+        <Text style={styles.cardText}>Name: {tableData[0].FirstName} {tableData[0].LastName}</Text>
+        <Text style={styles.cardText}>AmountOfPeople: {tableData[0].AmountOfPeople}</Text>
+        <Text style={styles.cardText}>Mail: {tableData[0].Mail}</Text>
         <View style={{ alignItems: "center", paddingTop: 10 }}>
           <TouchableOpacity style={styles.deleteBTN}>
             <Image style={styles.save} source={images.trashCan} />
@@ -122,7 +114,7 @@ export default function Bill() {
   // console.log(tableData);
 
   const CreateCard = () => {
-    if (tableData !== null) {
+    if (tableData !== null && tableData.length > 1) {
       let temp = null
       switch (request) {
         case 'GetReservedRoomsByCustomerId':
@@ -132,6 +124,7 @@ export default function Bill() {
           temp = ResitCard()
           break;
         case 'GetAllCustomersHistory':
+          BilldHistoryData()
           temp = HistoryCard()
           break;
         default:
@@ -226,5 +219,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
 
+  },
+  CardStyle: {
+    backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1
+  },
+  cardText: {
+    paddingBottom: 10
   },
 })

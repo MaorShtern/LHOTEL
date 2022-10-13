@@ -241,12 +241,13 @@ namespace DAL
                         CustomerID = (int)reader["Customer_ID"],
                         BillDate = (DateTime)reader["Bill_Date"],
                         AmountOfPeople = (int)reader["Amount_Of_People"],
+                        EntryDate = (DateTime)reader["Entry_Date"],
+                        ExitDate = (DateTime)reader["Exit_Date"],
                         Breakfast = (bool)reader["Breakfast"],
                         RoomType = (string)reader["Room_Type"],
                         PricePerNight = (int)reader["Price_Per_Night"],
                         NumberOfNights = (int)reader["Number_Of_Nights"],
                         PaymentMethod = (string)reader["Payment_Method"],
-                        PurchaseDate = (DateTime)reader["Purchase_Date"],
                     });
                 }
                 return rooms;

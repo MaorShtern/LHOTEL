@@ -257,9 +257,10 @@ create table Purchases_Documentation
 	Price_Per_Night int,
 	Amount_Of_People int,
 	Breakfast BIT NOT NULL DEFAULT 0,
+	Entry_Date Date NOT NULL,
+	Exit_Date Date NOT NULL,
 	Number_Of_Nights int,
 	Payment_Method nvarchar(30),
-	Purchase_Date date,
 	Product_Code int
 )
 go
@@ -1933,7 +1934,7 @@ go
 
 
 
-alter trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
+create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
 on [Customers_Rooms] for update -- כאשר מופעלת פעולת עידכון על הטבלה "חדרי לקוחות" בצע
 as
 	if exists (select Room_Number from inserted where [Room_Status] = 'Occupied') --  אם קיים מספר חדר שהסטטוס שלו פנוי בצע
@@ -2078,16 +2079,14 @@ go
 
 
 --  פרוצדורה לשמירת הנתוני הרכישות
-create proc AddPurchases_Documentation
-@id int
+alter proc AddPurchases_Documentation
+create int
 as
 --print(@id)
 --exec Room_Resit 222
-	insert into [dbo].[Purchases_Documentation] exec Room_Resit 666
+	insert into [dbo].[Purchases_Documentation] exec Room_Resit @id
 go
 --exec AddPurchases_Documentation 222 
-
-
 --exec GetWorkersOnShift
 
 
@@ -2115,7 +2114,7 @@ go
 --exec GetAllBill_Details
 --exec GetCustomersRooms
 --select * from [dbo].[Purchases_Documentation]
- --exec CheckOut 111111112, '2022-10-27'
+ --exec CheckOut 111111112, '2022-08-24'
 
 
 
@@ -2254,6 +2253,7 @@ create proc GetAllCustomersHistory
 as
 begin tran		
 	select * from dbo.Purchases_Documentation where [Customer_ID] = @id
+	order by [Bill_Number] desc
 if (@@error !=0)
 	begin
 		rollback tran
@@ -2262,8 +2262,8 @@ if (@@error !=0)
 	end
 commit tran
 go 
-
---exec GetAllCustomersHistory 666 
+--select * from [dbo].[Bill]
+--exec GetAllCustomersHistory 111111112 
 
 
 
