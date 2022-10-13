@@ -16,9 +16,10 @@ namespace DAL.Classes
         public decimal PricePerNight { set; get; }
         public decimal Amount { set; get; }
         public bool Breakfest { set; get; }
+        public DateTime EntryDate { set; get; }
+        public DateTime ExitDate { set; get; }
         public int NumberOfNights { set; get; }
         public string PaymentMethod { set; get; }
-        public DateTime PurchaseDate { set; get; }
         public int ProductCode { set; get; }
 
     }

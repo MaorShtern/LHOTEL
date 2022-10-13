@@ -33,9 +33,10 @@ namespace DAL
                         PricePerNight = (decimal)reader["Price_Per_Night"],
                         Amount = (decimal)reader["Amount_Of_People"],
                         Breakfest = (bool)reader["Breakfast"],
+                        EntryDate = (DateTime)reader["Entry_Date"],
+                        ExitDate = (DateTime)reader["Exit_Date"],
                         NumberOfNights = (int)reader["Number_Of_Nights"],
                         PaymentMethod = (string)reader["Payment_Method"],
-                        PurchaseDate = (DateTime)reader["Purchase_Date"],
                         ProductCode = (int)reader["Product_Code"],
                     });
                 }

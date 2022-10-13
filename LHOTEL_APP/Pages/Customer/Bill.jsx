@@ -82,9 +82,13 @@ export default function Bill() {
       <View style={{ backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1 }}>
         <Text style={{ paddingBottom: 10 }}>CustomerID: {tableData[0].CustomerID}</Text>
         {list}
+        {/* <View style={{ paddingBottom: 10 }}>
+          <Text>Reservation Date: {moment(tableData[0].PurchaseDate).format("DD-MM-YYYY")}</Text>
+        </View> */}
         <Text>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
-        <View style={{ alignItems: "center", paddingTop: 10 }}>
-        </View>
+        <Text>Number Of Nights: {tableData[0].NumberOfNights}</Text>
+        {/* <View style={{ alignItems: "center", paddingTop: 10 }}>
+        </View> */}
       </View>
     )
   }

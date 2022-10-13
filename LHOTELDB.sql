@@ -1891,25 +1891,28 @@ go
 
 
 
-create proc Room_Resit      
+alter proc Room_Resit      
 @id int
 as
 begin tran		
 
-  declare @bill_number as int = (select [Bill_Number] from Bill 
+declare @bill_number as int = (select [Bill_Number] from Bill 
   where Customer_ID = @id and Bill_Status = 'Open')
 	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, 
 	dbo.Rooms.Room_Type, dbo.Rooms.Price_Per_Night,  
 	dbo.Customers_Rooms.Amount_Of_People,dbo.Customers_Rooms.Breakfast,
+	 dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date,
 	(SELECT DATEDIFF(day, dbo.Customers_Rooms.Entry_Date, dbo.Customers_Rooms.Exit_Date))AS Number_Of_Nights,
-	dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Purchase_Date,dbo.Bill_Details.Product_Code
+	dbo.Bill_Details.Payment_Method,dbo.Bill_Details.Product_Code
 	FROM     dbo.Customers_Rooms INNER JOIN
 			dbo.Bill_Details ON dbo.Customers_Rooms.Room_Number = dbo.Bill_Details.Room_Number INNER JOIN
 			dbo.Rooms ON dbo.Bill_Details.Room_Number = dbo.Rooms.Room_Number
 	WHERE  (dbo.Bill_Details.Product_Code = 8 and dbo.Bill_Details.Bill_Number = @bill_number)
 	union all
-	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date, dbo.Bill_Details.Room_Number, dbo.Products.Description, dbo.Products.Price_Per_Unit, dbo.Products.Discount_Percentage, dbo.Bill_Details.Breakfast, 
-           dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Purchase_Time, dbo.Bill_Details.Product_Code
+	SELECT dbo.Bill_Details.Bill_Number, dbo.Bill_Details.Customer_ID, dbo.Bill_Details.Bill_Date,
+	dbo.Bill_Details.Room_Number, dbo.Products.Description, dbo.Products.Price_Per_Unit, 
+	dbo.Products.Discount_Percentage, dbo.Bill_Details.Breakfast, dbo.Bill_Details.Purchase_Time,
+     dbo.Bill_Details.Purchase_Time,dbo.Bill_Details.Amount, dbo.Bill_Details.Payment_Method, dbo.Bill_Details.Product_Code
 			FROM  dbo.Bill_Details INNER JOIN
                   dbo.Products ON dbo.Bill_Details.Product_Code = dbo.Products.Product_Code INNER JOIN
                   dbo.Bill ON dbo.Bill_Details.Bill_Number = dbo.Bill.Bill_Number
@@ -1923,11 +1926,10 @@ begin tran
 commit tran
 go
 
---exec Room_Resit 206055899
+--exec Room_Resit 111111112
 --select * from Bill
 --exec GetCustomersRooms
 --select * from Bill_Details
-
 
 
 
