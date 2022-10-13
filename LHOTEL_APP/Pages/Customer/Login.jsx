@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity, } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { ActivityIndicator } from "react-native";
 import Modal from "react-native-modal";
@@ -21,6 +13,7 @@ export default function Login({ navigation }) {
 
   const user = myContext.user;
   const bill = myContext.bill;
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -36,9 +29,7 @@ export default function Login({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword",
-        requestOptions
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword", requestOptions
       );
       let user = await result.json();
       // console.log(JSON.stringify(user));
@@ -46,7 +37,7 @@ export default function Login({ navigation }) {
         // console.log(JSON.stringify(user));
         SetLoading(true);
         myContext.setUserDB(user);
-        // navigation.navigate('Home')
+        navigation.navigate('Home')
         return;
       } else {
         alert("There is no registered user in the system");
@@ -88,18 +79,18 @@ export default function Login({ navigation }) {
       Alert.alert("No such user exists in the system");
     }
   };
-const FetchCustomerReservationFromDB = async () => {
- if (user.CustomerID !== undefined) {
-  try {
- const requestOptions = {
- method: "POST",
-  body: JSON.stringify({
-   id: user.CustomerID
-  }),
-  headers: { "Content-Type": "application/json" },
- };
- let result = await fetch(
-  "http://proj13.ruppin-tech.co.il/RoomResit",requestOptions
+  const FetchCustomerReservationFromDB = async () => {
+    if (user.CustomerID !== undefined) {
+      try {
+        const requestOptions = {
+          method: "POST",
+          body: JSON.stringify({
+            id: user.CustomerID
+          }),
+          headers: { "Content-Type": "application/json" },
+        };
+        let result = await fetch(
+          "http://proj13.ruppin-tech.co.il/RoomResit", requestOptions
         );
         let customerReservation = await result.json();
 
@@ -155,7 +146,7 @@ const FetchCustomerReservationFromDB = async () => {
           style={styles.TextInput}
         ></TextInput>
       </View>
-      <Modal isVisible={isModalVisible}>
+      {/* <Modal isVisible={isModalVisible}>
         <View
           style={{
             flex: 1,
@@ -187,10 +178,9 @@ const FetchCustomerReservationFromDB = async () => {
             }}
           >
             <Button title="OK" onPress={FetchCustomerReservationFromDB} />
-            {/* <Button title="cancel" onPress={toggleModal} /> */}
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       <View style={styles.ButtonContainer}>
         <TouchableOpacity>
           <Text style={styles.button} onPress={Delete}>

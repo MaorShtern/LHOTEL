@@ -12,7 +12,7 @@ import Credit from "../Credit";
 import AppContext from "../../AppContext";
 import RoomService from "../Customer/RoomService";
 import Products from "../Customer/Products";
-// import Bill from "../Customer/Bill";
+import Bill from "../Customer/Bill";
 // import CheckIn from "../Customer/CheckIn";
 // import { useFocusEffect } from "@react-navigation/native";
 const drawer = createDrawerNavigator();
@@ -27,7 +27,7 @@ export default function Drawer() {
  
  
 
-  console.log(isAtHotel);
+  // console.log(isAtHotel);
   return (
     <NavigationContainer independent={true}>
       <drawer.Navigator initialRouteName="Home">
@@ -121,7 +121,7 @@ export default function Drawer() {
             },
           }}
         />
-        {/* <drawer.Screen
+        <drawer.Screen
           name="Bill"
           component={Bill}
           options={{
@@ -131,7 +131,7 @@ export default function Drawer() {
               backgroundColor: "#000",
             },
           }}
-        /> */}
+        />
         <drawer.Screen
           name="Credit"
           component={Credit}
