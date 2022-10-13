@@ -1,5 +1,13 @@
-import {View,Text,StyleSheet,TextInput,TouchableOpacity,Button,Image,} from "react-native";
-import React, { useState, useEffect ,useContext} from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  Image,
+} from "react-native";
+import React, { useState, useEffect, useContext } from "react";
 // import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -7,7 +15,7 @@ import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import { images } from "../../images";
 import Products from "./Products";
-import { ScrollView } from 'react-native-virtualized-view';
+import { ScrollView } from "react-native-virtualized-view";
 import { useFocusEffect } from "@react-navigation/native";
 import AppContext from "../../AppContext";
 const RequestType = [
@@ -18,39 +26,37 @@ const RequestType = [
   { label: "Product purchase", value: "Product purchase" },
 ];
 
-
-
 export default function RoomService({ navigation }) {
-  const [date, setDate] = useState(new Date());
   const myContext = useContext(AppContext);
+
+  const [date, setDate] = useState(new Date());
+  const [dropdown, setDropdown] = useState(null);
+  const [request, SetRequest] = useState("");
+  const [room, SetRoom] = useState("");
+  const [flagDate, setFlagDate] = useState(false);
+  const [flagTime, setFlagTime] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [time, setTime] = useState("");
+
   const bill = myContext.bill;
-  const user = myContext.user;
-  // const [mydate, setDate] = useState(new Date());
-  const [displaymode, setMode] = useState("date");
   const [isDisplayDate, setShow] = useState(false);
+  const [task, SetTask] = useState({
+    EmployeeID: null,
+    TaskName: "",
+    RoomNumber: 0,
+    StartTime: moment(new Date()).format("HH:MM"),
+    EndTime: null,
+    TaskStatus: "Open",
+    Description: "",
+  });
+  const Rooms = bill.rooms.map((room) => {
+    return {
+      label: JSON.stringify(room.RoomNumber),
+      value: JSON.stringify(room.RoomNumber),
+    };
+  });
 
-  const Rooms = bill.rooms.map((room) =>  {return { label: JSON.stringify(room.RoomNumber), value: JSON.stringify(room.RoomNumber) }});
-
-
-console.log(Rooms)
-
-
-  // useFocusEffect(
-  //     React.useCallback(() => {
-  //       FetchCustomerReservationFromDB();
-  //     //   return () => {
-  //     //     alert("Screen was unfocused");
-  //     //     // Do something when the screen is unfocused
-  //     //     // Useful for cleanup functions
-  //     //   };
-  //     }, [])
-  //   );
-
-
-  //     const changeSelectedDate = (event, selectedDate) => {
-  //     const currentDate = selectedDate || date;
-  //     setDate(currentDate);
-  //  };
   const showMode = (currentMode) => {
     setShow(!isDisplayDate);
     setMode(currentMode);
@@ -59,61 +65,23 @@ console.log(Rooms)
     showMode("calendar");
   };
 
-  const [dropdown, setDropdown] = useState(null);
-  const [request, SetRequest] = useState("");
-  const [room, SetRoom] = useState("");
-  const [flagDate, setFlagDate] = useState(false);
-  const [flagTime, setFlagTime] = useState(false);
+  useEffect(() => {
+    SetRequest("");
+  }, []);
 
-  const [minDate, setMinDate] = useState(new Date());
-  const [maxDate, setMaxDate] = useState(new Date());
-  // const [time, setTime] = useState(date.getHours() + ':' + date.getMinutes())
-  const [selectedDate, setSelectedDate] = useState("");
-  const [time, setTime] = useState("");
-
-
-
-  useEffect(() => { SetRequest("")}, []);
-
-  // useEffect(() => {
-  //   FetchCustomerReservationFromDB();
-  // }, []);
-  // const FetchCustomerReservationFromDB = async () => {
-  //   if (user.CustomerID !== undefined) {
-  //     try {
-  //       const requestOptions = {
-  //         method: "POST",
-  //         body: JSON.stringify({
-  //           id: user.CustomerID,
-  //         }),
-  //         headers: { "Content-Type": "application/json" },
-  //       };
-  //       let result = await fetch(
-  //         "http://proj13.ruppin-tech.co.il/RoomResit",
-  //         requestOptions
-  //       );
-  //       let customerReservation = await result.json();
-  //       // console.log(JSON.stringify(user))
-  //       if (customerReservation !== null) {
-  //           bill.CustomerID = customerReservation[0].CustomerID
-  //           bill.BillNumber = customerReservation[0].BillNumber
-  //           bill.BillDate = customerReservation[0].BillDate
-  //           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-  //           bill.Breakfast = customerReservation[0].Breakfast
-  //           bill.NumberOfNights = customerReservation[0].NumberOfNights
-  //           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-        
-  //               customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
-             
-         
-  //         console.log(JSON.stringify(bill));
-  //       }
-  //     } catch (error) {
-  //       alert(error);
-  //     }
-  //   }
-  // };
-  console.log(JSON.stringify( bill));
+  useFocusEffect(
+    React.useCallback(() => {
+      SetTask({
+        EmployeeID: null,
+        TaskName: "",
+        RoomNumber: 0,
+        StartTime: moment(new Date()).format("HH:mm"),
+        EndTime: null,
+        TaskStatus: "Open",
+        Description: "",
+      });
+    }, [])
+  );
 
   const hideDate = () => {
     setFlagDate(false);
@@ -137,30 +105,62 @@ console.log(Rooms)
   };
 
   const handleTime = (time) => {
-    let stringTime = "0";
-    if (time.getHours() <= 9) stringTime += time.getHours();
-    else stringTime = time.getHours();
+    // let t = moment(time)
+    // console.log(moment(time).format('HH:mm'));
+    task.StartTime = moment(time).format("HH:mm");
+    // let stringTime = "0";
+    // if (time.getHours() <= 9) stringTime += time.getHours();
+    // else stringTime = time.getHours();
 
-    stringTime += ":";
+    // stringTime += ":";
 
-    if (time.getMinutes() <= 9) stringTime += "0" + time.getMinutes();
-    else stringTime += time.getMinutes();
+    // if (time.getMinutes() <= 9) stringTime += "0" + time.getMinutes();
+    // else stringTime += time.getMinutes();
 
-    setTime(stringTime);
+    setTime(task.StartTime);
     hideTime();
   };
 
+  const CheckValues = () => {
+   
+    if (room !== "") return true;
+    else return false;
+  };
   const SaveOrder = async () => {
-    alert(
-      "date: " +
-      date.getFullYear() +
-      "-" +
-      (date.getMonth() + 1) +
-      "-" +
-      date.getDate()
-    );
-    alert("time: " + time);
-    navigation.navigate("Home");
+    try {
+      // if(!CheckValues())
+      // {
+      //     alert("The fields are not filled correctly")
+      //     return
+      // }
+      console.log(task);
+      const requestOptions = {
+        method: "POST",
+        body: JSON.stringify(task),
+        headers: { "Content-Type": "application/json" },
+      };
+      // console.log(requestOptions.body);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/AddNewTask",
+        requestOptions
+      );
+      if (result) {
+        alert("details successfully saved");
+        navigation.goBack();
+      }
+    } catch (error) {
+      alert(error);
+    }
+    // alert(
+    //   "date: " +
+    //   date.getFullYear() +
+    //   "-" +
+    //   (date.getMonth() + 1) +
+    //   "-" +
+    //   date.getDate()
+    // );
+    // alert("time: " + time);
+    // navigation.navigate("Home");
   };
 
   return (
@@ -176,14 +176,15 @@ console.log(Rooms)
             labelField="label"
             valueField="value"
             placeholder="Room Number"
-            value={room}
+            value={task.RoomNumber}
             onChange={(room) => {
-              SetRoom(room.value);
+              task.RoomNumber = room.value;
+              // SetRoom(room.value);
             }}
           />
         </View>
         <View>
-          {room === "" ? (
+          {task.RoomNumber === "" ? (
             <Text style={styles.alerts}>*Must select room* </Text>
           ) : null}
         </View>
@@ -194,8 +195,11 @@ console.log(Rooms)
           ) : null}
         </View> */}
         <View style={styles.ProdutsStyle}>
-          {request === "Product purchase" ? (<View><Products navigation={navigation} SetRequest={SetRequest} />
-</View>) : (
+          {request === "Product purchase" ? (
+            <View>
+              <Products navigation={navigation} SetRequest={SetRequest} />
+            </View>
+          ) : (
             <View>
               <View style={styles.container}>
                 <Dropdown
@@ -205,9 +209,9 @@ console.log(Rooms)
                   labelField="label"
                   valueField="value"
                   placeholder="Request type"
-                  value={request}
+                  value={task.TaskName}
                   onChange={(request) => {
-                    SetRequest(request.value);
+                    SetRequest(request.value), (task.TaskName = request.value);
                   }}
                 />
               </View>
@@ -216,7 +220,10 @@ console.log(Rooms)
                   <Text style={styles.alerts}>*Must select request type* </Text>
                 ) : null}
               </View>
-              <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+              <TouchableOpacity
+                style={styles.input}
+                onPress={displayDatepicker}
+              >
                 <View style={styles.ButtonContainer}>
                   <Text style={styles.text}>
                     {selectedDate === ""
@@ -224,7 +231,6 @@ console.log(Rooms)
                       : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
                   </Text>
                   <Image style={styles.icon} source={images.calendar} />
-
                 </View>
               </TouchableOpacity>
 
@@ -238,8 +244,14 @@ console.log(Rooms)
                   minuteInterval={30}
                   style={{ borderRadius: 10 }}
                   current={moment(date).format("YYYY-MM-DD").toString()}
-                  minimumDate={moment().weekday(-7).format("YYYY-MM-DD").toString()}
-                  maximumDate={moment().weekday(7).format("YYYY-MM-DD").toString()}
+                  minimumDate={moment()
+                    .weekday(-7)
+                    .format("YYYY-MM-DD")
+                    .toString()}
+                  maximumDate={moment()
+                    .weekday(7)
+                    .format("YYYY-MM-DD")
+                    .toString()}
                   onSelectedChange={(date) => {
                     setSelectedDate(date), setShow(!isDisplayDate);
                   }}
@@ -268,11 +280,12 @@ console.log(Rooms)
                   placeholderTextColor="grey"
                   numberOfLines={10}
                   multiline={true}
+                  onChangeText={(desc) => (task.Description = desc)}
                 />
               </View>
               <View style={styles.ButtonContainer}>
                 <TouchableOpacity>
-                  <Text style={styles.button} onPress={SaveOrder}>
+                  <Text style={styles.button} onPress={() => SaveOrder()}>
                     ORDER
                   </Text>
                 </TouchableOpacity>
@@ -280,13 +293,8 @@ console.log(Rooms)
             </View>
           )}
         </View>
-
-
       </View>
-
-
-
-      </ScrollView>
+    </ScrollView>
   );
 }
 
@@ -315,7 +323,7 @@ const styles = StyleSheet.create({
 
   dropdown: {
     backgroundColor: "white",
-    
+
     // borderBottomColor: "gray",
     // borderBottomWidth: 0.5,
     marginTop: 20,
@@ -348,10 +356,8 @@ const styles = StyleSheet.create({
     height: 30,
 
     padding: 20,
-
   },
   text: {
-
     height: 50,
 
     // margin: 3,
@@ -367,9 +373,10 @@ const styles = StyleSheet.create({
   },
   ProdutsStyle: {
     // paddingTop:17,
-  }
+  },
 });
-{/* <View>
+{
+  /* <View>
                 <TouchableOpacity style={styles.button} onPress={showDate} >
                     <Text>{"Date: " + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()}</Text>
                 </TouchableOpacity>
@@ -379,9 +386,11 @@ const styles = StyleSheet.create({
                     onConfirm={handleDate}
                     onCancel={hideDate} />
                 <View style={{ height: 20 }}></View>
-            </View> */}
+            </View> */
+}
 
-{/* <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
+{
+  /* <TouchableOpacity style={styles.input} onPress={displayDatepicker}>
             <Text style={styles.text}>
             {selectedDate===""? "select date":moment(new Date(selectedDate)).format("DD/MM/YYYY")}
             {"  "}
@@ -391,4 +400,5 @@ const styles = StyleSheet.create({
              
              
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity> */
+}

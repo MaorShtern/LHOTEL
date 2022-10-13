@@ -150,7 +150,7 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewTask {task.EmployeeID},{task.RoomNumber},'{task.TaskName}',
+                string str = $@"exec AddNewTask null,{task.RoomNumber},'{task.TaskName}',
 '{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
@@ -169,7 +169,28 @@ namespace DAL
             }
         }
 
-
+//        public static bool AddNewTask(Task task)
+//        {
+//            try
+//            {
+//                string str = $@"exec AddNewTask {task.EmployeeID},{task.RoomNumber},'{task.TaskName}',
+//'{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
+//                str = str.Replace("\r\n", string.Empty);
+//                int result = SQLConnection.ExeNonQuery(str);
+//                if (result == 1)
+//                    return true;
+//                return false;
+//            }
+//            catch (Exception e)
+//            {
+//                Console.WriteLine(e.Message);
+//                return false;
+//            }
+//            finally
+//            {
+//                SQLConnection.CloseDB();
+//            }
+//        }
         public static bool CloseTask(int code, string endTime)
         {
             try

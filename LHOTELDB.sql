@@ -1330,15 +1330,21 @@ commit tran
 go
 
 --exec AddNewTask 333,2,'Room Cleaning','13:00',null,'Close',''	
-
+--exec AddNewTask null,2,'Refill mini bar','19:00',null,'Open',''	
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
 --exec ClockIn 333,'11:00' 
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
-
-
+exec AddNewTask null,15,'Room Cleaning','21:28',null,'Open','yyyyy'	
+  "EmployeeID": -1,
+  "EndTime": null,
+  "RoomNumber": "7",
+  "StartTime": "21:28",
+  "TaskName": "Change of towels",
+  "TaskStatus": "Open",
+   "Description": "Gigujchchv"
 
 
 
@@ -1389,6 +1395,19 @@ go
 --exec AlterTask 5,111,'Room Cleaning',null,'2022-09-06','13:00','14:00','Close','chips and coke for room 30'
 --select * from [dbo].[Employees_Tasks]
 --exec AlterTask 13,222,'Room Cleaning',2,'13:00',NULL,'Open',null	
+
+
+
+--exec AlterTask 48,333,1,'Room Cleaning','22:00',NULL,'Open',''	
+exec GetAllTasks
+
+
+
+
+
+
+
+
 
 
 create proc DeleteTask
@@ -1584,8 +1603,20 @@ SELECT * FROM  ReservationsDetails() WHERE Customer_ID  = @Customer_ID and  [Roo
 commit tran
 go 
 
-
---exec GetReservedRoomsByCustomerId 666
+create proc GetOccupiedRoomsByCustomerId
+@Customer_ID int
+as
+begin tran	
+SELECT * FROM  ReservationsDetails() WHERE Customer_ID  = @Customer_ID and  [Room_Status] = 'Occupied' 
+	if (@@error !=0)
+	begin
+		rollback tran
+		print 'error'
+		return
+	end
+commit tran
+go 
+--exec GetOccupiedRoomsByCustomerId 206055899
 
 
 
@@ -2201,7 +2232,7 @@ go
 --select * from [dbo].[Bill_Details]
 --select * from [dbo].[Customers_Rooms]
 --exec CheckIn 666 , '2022-08-22'
---exec Room_Resit 666
+--exec Room_Resit 206055899
 
 
 
@@ -2309,7 +2340,28 @@ go
 --declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
 --exec AddRoomServiceRequest 111,'Product purchase',23,@date,@time,null,222,'Coca cola',2,'Cash'
 
+declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
+declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
+exec AddRoomServiceRequest 111,'Room Cleaning',5,@date,@time,null,222,'Coca cola',2,'Cash'
 
+
+
+
+
+
+--exec AddNewTask 333,2,'Room Cleaning','13:00',null,'Close',''	
+--exec AddRoomServiceRequest null,5,'Refill mini bar','16:00',null,'Open',''	
+--select * from [dbo].[Employees_Tasks]
+--select * from Shifts
+--exec ClockIn 333,'11:00' 
+--exec GetAllShifts
+--select * from Tasks_Types
+--exec GetAllTasks
+
+declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
+declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
+exec AddRoomServiceRequest null,'Change of towels','fyrtyrtyrty',18
+@employee_ID,@task_Name , @description,@room_Number
 
 
 -- ======================================================================

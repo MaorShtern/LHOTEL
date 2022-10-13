@@ -44,6 +44,13 @@ export default function App() {
     AmountOfPeople: 0,
     Breakfast: false,
     NumberOfNights: 0,
+    CustomerType: 1,
+    EntryDate: moment().toDate(),
+    ExitDate: moment().add(1, "days").toDate(),
+    FirstName: '',
+    LastName: '',
+    Mail: '',
+    PhoneNumber: '',
     rooms: []
 
   }

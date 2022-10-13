@@ -13,6 +13,15 @@ namespace BLL
         //{
         //    return DALCustomers.GetAllCustomers();
         //}
+
+        public static List<ExistingReservation> GetOccupiedRoomsByCustomerId(int id)
+        {
+            return DALCustomers.GetOccupiedRoomsByCustomerId(id);
+        }
+
+
+
+
         public static User GetDBCustomerById(int id)
         {
             return DALCustomers.GetDBCustomerById(id);

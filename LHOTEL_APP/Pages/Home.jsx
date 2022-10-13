@@ -1,24 +1,33 @@
-import { Animated,View, Image, StyleSheet, Text, TouchableOpacity, StatusBar, Alert, ImageBackground } from "react-native";
+import {
+  Animated,
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  StatusBar,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { images } from "../images";
 import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
-import AppContext from '../AppContext';
+import AppContext from "../AppContext";
 import { ActivityIndicator } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
-
-  const [loading, SetLoading] = useState(true)
+  const [loading, SetLoading] = useState(true);
   const myContext = useContext(AppContext);
 
   const [closeState, setCloseState] = useState(new Animated.Value(1));
   const [info, setInfo] = useState(false);
 
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
 
   const user = myContext.user;
   const bill = myContext.bill;
@@ -29,9 +38,9 @@ export default function Home({ navigation }) {
   );
   useFocusEffect(
     React.useCallback(() => {
-      setPassword('')
-      setId('')
-      if(!info)  myContext.setEmployeeDB({})
+      setPassword("");
+      setId("");
+      if (!info) myContext.setEmployeeDB({});
       // myContext.SetBill({
       //   CustomerID: '',
       //   BillNumber: 0,
@@ -43,20 +52,65 @@ export default function Home({ navigation }) {
       // console.log(myContext.employee);
       // myContext.setUserDB({})
       // console.log(myContext.user);
-    //   return () => {
-    //     alert("Screen was unfocused");
-    //     // Do something when the screen is unfocused
-    //     // Useful for cleanup functions
-    //   };
+      //   return () => {
+      //     alert("Screen was unfocused");
+      //     // Do something when the screen is unfocused
+      //     // Useful for cleanup functions
+      //   };
     }, [navigation])
   );
   // useEffect(() => {
   //   FetchCustomerReservationFromDB()
   // });
 
+  const FetchCustomerReservationFromDB = async () => {
+    if (user.CustomerID !== undefined) {
+      try {
+        const requestOptions = {
+          method: "PUT",
+          body: JSON.stringify({
+            id: user.CustomerID,
+          }),
+          headers: { "Content-Type": "application/json" },
+        };
+        let result = await fetch(
+          "http://proj13.ruppin-tech.co.il/GetOccupiedRoomsByCustomerId",
+          requestOptions
+        );
+        let customerReservation = await result.json();
+        // console.log(JSON.stringify(user))
+        if (customerReservation !== null) {
+          bill.CustomerType = customerReservation[0].CustomerType;
+          bill.EntryDate = customerReservation[0].EntryDate;
+          bill.ExitDate = customerReservation[0].ExitDate;
+          bill.FirstName = customerReservation[0].FirstName;
+          bill.LastName = customerReservation[0].LastName;
+          bill.Mail = customerReservation[0].Mail;
+          bill.PhoneNumber = customerReservation[0].PhoneNumber;
+          bill.CustomerID = customerReservation[0].CustomerID;
+          bill.BillNumber = customerReservation[0].BillNumber;
+          bill.BillDate = customerReservation[0].BillDate;
+          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
+          bill.Breakfast = customerReservation[0].Breakfast;
+          bill.NumberOfNights = customerReservation[0].NumberOfNights;
+          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
+          if (bill.rooms.length === 0)
+            customerReservation.map((room) =>
+              bill.rooms.push({
+                RoomNumber: room.RoomNumber,
+                PricePerNight: room.PricePerNight,
+              })
+            );
 
-
-
+          // console.log(JSON.stringify(customerReservation));
+        }
+        // else FetchCustomerReservationFromDB()
+      } catch (error) {
+        alert(error);
+      }
+    }
+    navigation.navigate("Drawer");
+  };
 
   // useEffect(() => {
   //   const focus = navigation.addListener("focus", () => {
@@ -64,21 +118,19 @@ export default function Home({ navigation }) {
   //     // setWorkerCode(1)
   //     setPassword('')
   //     setId('')
-      
-    
+
   //   });
   //   return focus;
   // }, [navigation]);
 
-
-  const LogIn = async () => { /// פונקציה אסינכרונית אשר מביאה לנו את פרטי העובד על פי ת.ז וסיסמה
+  const LogIn = async () => {
+    /// פונקציה אסינכרונית אשר מביאה לנו את פרטי העובד על פי ת.ז וסיסמה
     try {
-      if(id === '' || password === '')
-      {
-        alert('It is mandatory to fill in an ID card and employee code')
-        return
+      if (id === "" || password === "") {
+        alert("It is mandatory to fill in an ID card and employee code");
+        return;
       }
-      SetLoading(false)
+      SetLoading(false);
       const requestOptions = {
         method: "POST",
         body: JSON.stringify({
@@ -88,82 +140,83 @@ export default function Home({ navigation }) {
         headers: { "Content-Type": "application/json" }, // יצירת הבקשה בעזרת הפרמטרים שהמשתמש הזין למערכת
       };
       // console.log(requestOptions.body);
-      let result = await fetch("http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword", requestOptions);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetEmployeeByIdAndPassword",
+        requestOptions
+      );
       let employee = await result.json();
-      if (employee === null) { // אם לא מוחזר משתמש מהמסד הנתונים הצג הודעת שגיאה
-        SetLoading(true)
+      if (employee === null) {
+        // אם לא מוחזר משתמש מהמסד הנתונים הצג הודעת שגיאה
+        SetLoading(true);
         Alert.alert("No such user exists in the system");
-        return
+        return;
       }
-      myContext.setEmployeeDB(employee) // שמור את פרטי המשתמש במשתנה גלובלי במערכת
+      myContext.setEmployeeDB(employee); // שמור את פרטי המשתמש במשתנה גלובלי במערכת
       // navigation.navigate("Credit");
-      navigation.navigate("WorkerMenu")
-    }
-    catch (error) {
+      navigation.navigate("WorkerMenu");
+    } catch (error) {
       alert(error);
     }
-    SetLoading(true)
+    SetLoading(true);
   };
- 
 
   const renderCurrentSelection = () => {
-   
-        return (
-          <View style={styles.loginContainer}>
-            <View style={styles.items}>
-              {loading ? null : <Spinner />}
-            </View>
-            <TextInput
-              label="Employee ID"
-              left={<TextInput.Icon name="account" />}
-              keyboardType="numeric"
-              mode="outlined"
-              style={{ margin: 10, paddingLeft: 3 }}
-              onChangeText={(id) => setId(id)}
-              value={id}
-            // onChangeText={myContext.setEmployeeId}
-            />
+    return (
+      <View style={styles.loginContainer}>
+        <View style={styles.items}>{loading ? null : <Spinner />}</View>
+        <TextInput
+          label="Employee ID"
+          left={<TextInput.Icon name="account" />}
+          keyboardType="numeric"
+          mode="outlined"
+          style={{ margin: 10, paddingLeft: 3 }}
+          onChangeText={(id) => setId(id)}
+          value={id}
+          // onChangeText={myContext.setEmployeeId}
+        />
 
-            <TextInput
-              label="Employee Code"
-              left={<TextInput.Icon name="lock" />}
-              keyboardType="numeric"
-              mode="outlined"
-              style={{ margin: 10, paddingLeft: 3 }}
-              value={password}
-            
-              secureTextEntry={true}
-              onChangeText={(code) => setPassword(code)}
-            />
+        <TextInput
+          label="Employee Code"
+          left={<TextInput.Icon name="lock" />}
+          keyboardType="numeric"
+          mode="outlined"
+          style={{ margin: 10, paddingLeft: 3 }}
+          value={password}
+          secureTextEntry={true}
+          onChangeText={(code) => setPassword(code)}
+        />
 
-            <TouchableOpacity style={styles.btn} onPress={() => {
-              LogIn()
-              // console.log(JSON.stringify(myContext.employee))
-            }}>
-              <Text style={{ fontSize: 20, color: "white", fontWeight: "800" }}>
-                LOGIN
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text
-                style={styles.underLineText}
-                onPress={() => {
-                  doAnimation(closeState, 1, 250), setInfo(false);
-                }}
-              >
-                I'm not a worker
-              </Text>
-            </TouchableOpacity>
-          </View>
-        );
-      // case 2:
-      //   return (
-      //     <WorkerMenu
-      //       currentUserArr={currentUserArr}
-        
-      //       HandelNavigation={HandelNavigation}
-      //     />
-      //   );
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
+            LogIn();
+            // console.log(JSON.stringify(myContext.employee))
+          }}
+        >
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "800" }}>
+            LOGIN
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text
+            style={styles.underLineText}
+            onPress={() => {
+              doAnimation(closeState, 1, 250), setInfo(false);
+            }}
+          >
+            I'm not a worker
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+    // case 2:
+    //   return (
+    //     <WorkerMenu
+    //       currentUserArr={currentUserArr}
+
+    //       HandelNavigation={HandelNavigation}
+    //     />
+    //   );
     // }
   };
 
@@ -217,8 +270,8 @@ export default function Home({ navigation }) {
             <View style={styles.ButtonContainer}>
               <TouchableOpacity
                 onPress={() => {
-               
-                 navigation.navigate("Drawer"),
+                  FetchCustomerReservationFromDB(),
+                    //  navigation.navigate("Drawer"),
                     doAnimation(closeState, 1, 500);
                 }}
                 style={{
@@ -318,7 +371,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 55,
-    position: 'absolute',
+    position: "absolute",
     // justifyContent: 'center',
     zIndex: 1,
     fontWeight: "bold",
@@ -335,8 +388,7 @@ const styles = StyleSheet.create({
   horizontal: {
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: 10
-
+    padding: 10,
   },
   scrollContainer: {
     height: 300,
@@ -434,7 +486,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 5,
     justifyContent: "center",
-    alignSelf:'center',
+    alignSelf: "center",
     marginTop: 20,
   },
 });

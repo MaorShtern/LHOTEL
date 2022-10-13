@@ -37,6 +37,7 @@ export default function Login({ navigation }) {
         // console.log(JSON.stringify(user));
         SetLoading(true);
         myContext.setUserDB(user);
+       
         navigation.navigate('Home')
         return;
       } else {
@@ -48,6 +49,7 @@ export default function Login({ navigation }) {
     // setModalVisible(!isModalVisible)
     SetLoading(true);
   };
+  
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
@@ -66,61 +68,58 @@ export default function Login({ navigation }) {
   //     Alert.alert(error)
   //   }
   // }
+  
 
   const LogIn = () => {
     if (id.length != 0 && password.length != 0) {
       var Hashes = require("jshashes");
       let hashPassword = new Hashes.SHA1().b64_hmac(id, password); // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה
       FetchUserFromDB(hashPassword);
-      setModalVisible(!isModalVisible);
+      // setModalVisible(!isModalVisible);
       // toggleModal()
-      //  FetchCustomerReservationFromDB(id)
+    
     } else {
       Alert.alert("No such user exists in the system");
     }
   };
-  const FetchCustomerReservationFromDB = async () => {
-    if (user.CustomerID !== undefined) {
-      try {
-        const requestOptions = {
-          method: "POST",
-          body: JSON.stringify({
-            id: user.CustomerID
-          }),
-          headers: { "Content-Type": "application/json" },
-        };
-        let result = await fetch(
-          "http://proj13.ruppin-tech.co.il/RoomResit", requestOptions
-        );
-        let customerReservation = await result.json();
-
-        if (customerReservation !== null) {
-          bill.CustomerID = customerReservation[0].CustomerID;
-          bill.BillNumber = customerReservation[0].BillNumber;
-          bill.BillDate = customerReservation[0].BillDate;
-          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
-          bill.Breakfast = customerReservation[0].Breakfast;
-          bill.NumberOfNights = customerReservation[0].NumberOfNights;
-          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
-
-          customerReservation.map((room) =>
-            bill.rooms.push({
-              RoomNumber: room.RoomNumber,
-              PricePerNight: room.PricePerNight,
-            })
-          );
-
-          //   console.log(JSON.stringify(bill));
-        } else {
-          FetchCustomerReservationFromDB();
-        }
-      } catch (error) {
-        alert(error);
-      }
-      setModalVisible(!isModalVisible)
-      navigation.navigate("Home");
-    }
-  };
+//   const FetchCustomerReservationFromDB = async () => {
+    
+   
+//      try {
+//        const requestOptions = {
+//          method: "PUT",
+//          body: JSON.stringify({
+//            id: id,
+//          }),
+//          headers: { "Content-Type": "application/json" },
+//        };
+//        let result = await fetch(
+//          "http://proj13.ruppin-tech.co.il/GetRoomResit",
+//          requestOptions
+//        );
+//        let customerReservation = await result.json();
+//        // console.log(JSON.stringify(user))
+//        if (customerReservation !== null) {
+//            bill.CustomerID = customerReservation[0].CustomerID
+//            bill.BillNumber = customerReservation[0].BillNumber
+//            bill.BillDate = customerReservation[0].BillDate
+//            bill.AmountOfPeople = customerReservation[0].AmountOfPeople
+//            bill.Breakfast = customerReservation[0].Breakfast
+//            bill.NumberOfNights = customerReservation[0].NumberOfNights
+//            bill.AmountOfPeople = customerReservation[0].AmountOfPeople
+//        if(bill.rooms.length ===0)
+//                customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
+            
+        
+//         //  console.log(JSON.stringify(bill));
+//        }
+    
+//      } catch (error) {
+//        alert(error);
+     
+//  }
+ 
+//  };
   const Delete = () => {
     setID("");
     setPassword("");

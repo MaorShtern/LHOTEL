@@ -80,6 +80,42 @@ export default function Products({ SetRequest,navigation }) {
 
     
   // };
+  const AddChargeToDB = async () => {
+    try {
+      let counter = 0;
+      for (let index = 0; index < productsToAdd.length; index++) {
+        if (productsToAdd[index].Amount > 0) {
+          const requestOptions = {
+            method: "POST",
+            body: JSON.stringify({
+              CustomerID: Number(id),
+              RoomNumber: room_Number,
+              ProductDec: productsToAdd[index].ProductDec,
+              Amount: productsToAdd[index].Amount,
+              PaymentMethod: payment,
+            }),
+            headers: { "Content-Type": "application/json" },
+          };
+          // console.log(requestOptions.body);
+          let result = await fetch ("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
+          let temp = await result.json();
+          if (temp) {
+            counter++;
+            // GetAllTasksFromDB()
+          }
+        }
+      }
+      if (counter > 0) {
+        alert("The purchase was successfully registered");
+        navigation.goBack();
+      } else {
+        alert("The purchase has not been made");
+      }
+    } catch (error) {
+      alert(error);
+      SetLoading(true);
+    }
+  };
 
   const RestCount = () => {
     for (let i = 0; i < ProductsArr.length; i++) {

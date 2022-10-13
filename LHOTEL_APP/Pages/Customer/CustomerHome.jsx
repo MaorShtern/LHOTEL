@@ -37,8 +37,17 @@ export default function CustomerHome({ route, navigation }) {
         rooms: []});
   };
 //   console.log(bill);
-
-//   useEffect(() => {
+// useFocusEffect(
+//   React.useCallback(() => {
+//     FetchCustomerReservationFromDB();
+//     // return () => {
+//     //   alert('Screen was unfocused');
+//     //   // Do something when the screen is unfocused
+//     //   // Useful for cleanup functions
+//     // };
+//   })
+// );
+// useFocusEffect(() => {
 //       FetchCustomerReservationFromDB();
 //     //   return () => {
 //     //     // alert("Screen was unfocused");
@@ -52,14 +61,14 @@ export default function CustomerHome({ route, navigation }) {
   
 //     try {
 //       const requestOptions = {
-//         method: "POST",
+//         method: "PUT",
 //         body: JSON.stringify({
 //           id: user.CustomerID,
 //         }),
 //         headers: { "Content-Type": "application/json" },
 //       };
 //       let result = await fetch(
-//         "http://proj13.ruppin-tech.co.il/RoomResit",
+//         "http://proj13.ruppin-tech.co.il/GetRoomResit",
 //         requestOptions
 //       );
 //       let customerReservation = await result.json();
@@ -72,15 +81,13 @@ export default function CustomerHome({ route, navigation }) {
 //           bill.Breakfast = customerReservation[0].Breakfast
 //           bill.NumberOfNights = customerReservation[0].NumberOfNights
 //           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-      
+//       if(bill.rooms.length ===0)
 //               customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
            
        
 //       //   console.log(JSON.stringify(bill));
 //       }
-//       else {
-//         FetchCustomerReservationFromDB()
-//       }
+   
 //     } catch (error) {
 //       alert(error);
 //     }
