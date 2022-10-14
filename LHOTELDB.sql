@@ -2514,14 +2514,14 @@ begin tran
 	SELECT CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
 	,CAST( Sum([Sum_Total] * -1 ) as float) as [Expens + / Profit -]  
 	from [dbo].[Purchase_Of_Goods]
+	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 
-	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 	union all 
-	select  CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
+
+	select  CAST(YEAR([Entry_Date]) AS VARCHAR(4)) + '-' + CAST(MONTH([Entry_Date]) AS VARCHAR(2)) as Date
 	,CAST(Sum([Price_Per_Night])as float) as [Expens/Profit] 
-	
 	from dbo.Purchases_Documentation
-	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
+	GROUP BY CAST(YEAR([Entry_Date]) AS VARCHAR(4)) + '-' + CAST(MONTH([Entry_Date]) AS VARCHAR(2))
 	if (@@error !=0)
 	begin
 		rollback tran
