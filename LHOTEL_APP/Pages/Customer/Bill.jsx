@@ -49,7 +49,7 @@ export default function Bill() {
 
 
   const BilldHistoryData = () => {
-    console.log(tableData);
+    // console.log(tableData);
     // let tempData = []
     // for (let index = 0; index < tableData.length; index++) {
     //   let billNumber = tempData.filter((number) => number === tableData[index].BillNumber)[0]
@@ -146,6 +146,7 @@ export default function Bill() {
   // console.log(tableData);
 
   const CreateCard = () => {
+    console.log(tableData);
     if (tableData !== null && tableData.length > 1) {
       let temp = null
       switch (request) {
@@ -155,13 +156,14 @@ export default function Bill() {
         case 'GetRoomResit':
           temp = ResitCard()
           break;
-        case 'GetAllCustomersHistory':
-          BilldHistoryData()
-          temp = HistoryCard()
-          break;
+        // case 'GetAllCustomersHistory':
+        //   BilldHistoryData()
+        //   temp = HistoryCard()
+        //   break;
         default:
           break;
       }
+
       return temp
     }
     else
@@ -189,7 +191,7 @@ export default function Bill() {
               data={[
                 { label: "Reservation", value: "GetReservedRoomsByCustomerId" },
                 { label: "Room Resit", value: "GetRoomResit" },
-                { label: "Previous Reservationes", value: "GetAllCustomersHistory" },
+                // { label: "Previous Reservationes", value: "GetAllCustomersHistory" },
               ]}
               labelField="label"
               valueField="value"

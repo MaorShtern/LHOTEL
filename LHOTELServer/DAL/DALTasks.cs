@@ -32,6 +32,7 @@ namespace DAL
                         EndTime = (reader["End_Time"] != DBNull.Value)
                         ? (string)reader["End_Time"] : null,
                         TaskStatus = (string)reader["Task_Status"],
+
                         Description = (reader["Description"] != DBNull.Value)
                         ? (string)reader["Description"] : null
                     });
@@ -150,7 +151,7 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewTask null,{task.RoomNumber},'{task.TaskName}',
+                string str = $@"exec AddNewTask {task.EmployeeID},{task.RoomNumber},'{task.TaskName}',
 '{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);

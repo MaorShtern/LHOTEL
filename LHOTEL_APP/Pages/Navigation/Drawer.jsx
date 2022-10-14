@@ -22,7 +22,7 @@ export default function Drawer() {
   const user = myContext.user;
   const bill = myContext.bill;
   let isUserConnected = JSON.stringify(myContext.user) !== "{}";
-  let isAtHotel = myContext.bill.CustomerID !== "";
+  // let isAtHotel = myContext.bill.CustomerID !== "";
 
  
  
@@ -94,18 +94,18 @@ export default function Drawer() {
           }}
         />
         {/* drawerItemStyle: isUserConnected ?  {}:  { display: "none" }, */}
-        <drawer.Screen
+        {/* <drawer.Screen
           name="Room Service"
           component={RoomService}
           options={{
-            drawerItemStyle: isAtHotel ? {} : { display: "none" },
+            drawerItemStyle: isUserConnected ? {} : { display: "none" },
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {
               backgroundColor: "#000",
             },
           }}
-        />
+        /> */}
         {/* isUserConnected */}
         <drawer.Screen
           name="Products"
@@ -121,7 +121,7 @@ export default function Drawer() {
             },
           }}
         />
-        <drawer.Screen
+        {/* <drawer.Screen
           name="Bill"
           component={Bill}
           options={{
@@ -131,7 +131,7 @@ export default function Drawer() {
               backgroundColor: "#000",
             },
           }}
-        />
+        /> */}
         <drawer.Screen
           name="Credit"
           component={Credit}

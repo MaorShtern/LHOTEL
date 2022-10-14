@@ -57,8 +57,8 @@ export default function AddCharge({ navigation }) {
     let temp = []
     for (let index = 0; index < rooms.length; index++) {
       temp.push({
-        label: JSON.stringify(rooms[index]),
-        value: JSON.stringify(rooms[index])
+        label: JSON.stringify(rooms[index].RoomNumber),
+        value: JSON.stringify(rooms[index].RoomNumber)
       })
 
     }
@@ -73,11 +73,20 @@ export default function AddCharge({ navigation }) {
         body: JSON.stringify({ id: id }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch("http://proj13.ruppin-tech.co.il/FindCustomerRoomByID", requestOptions);
+      let result = await fetch("http://proj13.ruppin-tech.co.il/FindCustomerReservations", requestOptions);
       let temp = await result.json();
-      if (temp !== null) {
-        BilldDropdownData(temp);
+      if (temp !== null && temp.length > 0) {
+        // console.log(temp[0]);
+        if(temp[0].RoomStatus === 'Reserved')
+        {
+          alert("There is no customer in the hotel with this ID number")
+          return
+        }
+        else
+          BilldDropdownData(temp);
       }
+      else
+        alert("There is no customer in the hotel with this ID number")
     } catch (error) {
       alert(error)
     }
@@ -102,7 +111,7 @@ export default function AddCharge({ navigation }) {
             headers: { "Content-Type": "application/json" },
           };
           // console.log(requestOptions.body);
-          let result = await fetch ("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
+          let result = await fetch("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
           let temp = await result.json();
           if (temp) {
             counter++;

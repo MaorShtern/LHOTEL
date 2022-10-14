@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  Image,
-} from "react-native";
+import {  View,  Text,  StyleSheet,  TextInput,  TouchableOpacity,  Button,  Image,} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 // import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";

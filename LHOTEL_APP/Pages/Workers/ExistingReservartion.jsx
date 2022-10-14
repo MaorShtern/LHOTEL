@@ -50,7 +50,7 @@ export default function ExistingReservation({ route, navigation }) {
   const ReservationCheck = async () => {
 
     const requestOptions = {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({
         "id": id,
       }),
@@ -58,10 +58,9 @@ export default function ExistingReservation({ route, navigation }) {
     };
     let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
     let currReservation = await result.json();
+    // console.log(currReservation);
     if (currReservation !== null) {
-      
-
-
+    
       roomsReservation.AmountOfPeople = currReservation[0].AmountOfPeople 
       roomsReservation.BillDate =  currReservation[0].BillDate
       roomsReservation.BillNumber =  currReservation[0].BillNumber

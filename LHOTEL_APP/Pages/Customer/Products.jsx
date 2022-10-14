@@ -102,8 +102,6 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   const ChargeToDB = async () => {
  try {
     
-     
-      
           const requestOptions = {
             method: "POST",
             body: JSON.stringify({
@@ -141,10 +139,9 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
 
   }
   const AddChargeToDB = () => {
- 
     // try {
       let selectedItems = [];
-    ProductsArr.map((selectedItem) => {if (selectedItem.Amount !== 0)
+      ProductsArr.map((selectedItem) => {if (selectedItem.Amount !== 0)
       selectedItems.push(selectedItem)
       }
 
