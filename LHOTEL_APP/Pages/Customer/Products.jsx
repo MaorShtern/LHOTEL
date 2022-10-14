@@ -1,21 +1,41 @@
-import {Text, View, FlatList, Image, TouchableOpacity,StyleSheet, Button, Alert } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+  Alert,
+} from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Counter from "react-native-counters";
+import AppContext from "../../AppContext";
+
+// const ProductsArr = [
+//   {id: 1,image: images.waterbottle,name: "Water bottle", price: 10,amountTaken: 0},
+//   {id: 2, image: images.whisky,name: "Whiskey",price: 5,amountTaken: 0},
+//   {id: 3,image: images.choclatebar, name: "Chocolate bar",price: 16,amountTaken: 0 },
+//   {id: 4,image: images.alcoholWine, name: "White wine",price: 3, amountTaken: 0 },
+//   { id: 5,image: images.cocacola,name: "Coca Cola bottle", price: 20, amountTaken: 0},
+// ];
 
 const ProductsArr = [
-  {id: 1,image: images.waterbottle,name: "Water bottle", price: 10,amountTaken: 0},
-  {id: 2, image: images.whisky,name: "Whiskey",price: 5,amountTaken: 0},
-  {id: 3,image: images.choclatebar, name: "Chocolate bar",price: 16,amountTaken: 0 },
-  {id: 4,image: images.alcoholWine, name: "White wine",price: 3, amountTaken: 0 },
-  { id: 5,image: images.cocacola,name: "Coca Cola bottle", price: 20, amountTaken: 0},
+  { ProductCode: 1, ProductDec: "Coca cola", Price: 15, Amount: 0 },
+  { ProductCode: 2, ProductDec: "Vodka", Price: 35, Amount: 0 },
+  { ProductCode: 3, ProductDec: "Bamba", Price: 20, Amount: 0 },
+  { ProductCode: 4, ProductDec: "Doritos", Price: 20, Amount: 0 },
+  { ProductCode: 5, ProductDec: "Sprite", Price: 15, Amount: 0 },
+  { ProductCode: 6, ProductDec: "Whiskey", Price: 45, Amount: 0 },
+  { ProductCode: 7, ProductDec: "Chips", Price: 20, Amount: 0 },
 ];
 
-export default function Products({ SetRequest,navigation }) {
+export default function Products({ RoomNumber, SetRequest, navigation }) {
   // useEffect(() => { SetCount(0) }, []);
-
+  const myContext = useContext(AppContext);
   const [totalSum, SetTotalSum] = useState(0);
   const [start, SetStart] = useState(0);
   const [showBox, setShowBox] = useState(true);
@@ -43,25 +63,25 @@ export default function Products({ SetRequest,navigation }) {
           text: "Yes",
           onPress: () => {
             setShowBox(false);
-         
-            let temp = []
-            ProductsArr.map((item) =>
-              temp.push(
-                {
-                  id: item.id,
-                  image: item.image,
-                  name: item.name, 
-                  price: item.price,
-                  amountTaken:  item.amountTaken
-                  
-                }))
-        
-                let selectedItems = ProductsArr.filter((selectedItem) =>
-            selectedItem.amountTaken !== 0 )
-         
-               
+            AddChargeToDB();
+
+            // let temp = []
+            // ProductsArr.map((item) =>
+            //   temp.push(
+            //     {
+            //       ProductCode: item.ProductCode,
+            //       image: item.image,
+            //       ProductDec: item.ProductDec,
+            //       Price: item.Price,
+            //       Amount:  item.Amount
+
+            //     }))
+
+            //     let selectedItems = ProductsArr.filter((selectedItem) =>
+            // selectedItem.Amount !== 0 )
+
             // navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
-            cancel()
+            cancel();
             // getSelectedProducts()
           },
         },
@@ -78,33 +98,32 @@ export default function Products({ SetRequest,navigation }) {
   //     data[i].amountTaken = 0;
   //   }
 
-    
   // };
-  const AddChargeToDB = async () => {
-    try {
-      let counter = 0;
-      for (let index = 0; index < productsToAdd.length; index++) {
-        if (productsToAdd[index].Amount > 0) {
+  const ChargeToDB = async () => {
+ try {
+    
+     
+      
           const requestOptions = {
             method: "POST",
             body: JSON.stringify({
-              CustomerID: Number(id),
-              RoomNumber: room_Number,
-              ProductDec: productsToAdd[index].ProductDec,
-              Amount: productsToAdd[index].Amount,
-              PaymentMethod: payment,
+              CustomerID: myContext.bill.CustomerID,
+              RoomNumber: RoomNumber,
+              ProductDec: ProductsArr[index].ProductDec,
+              Amount: ProductsArr[index].Amount,
+              PaymentMethod: "Credit",
             }),
             headers: { "Content-Type": "application/json" },
           };
           // console.log(requestOptions.body);
           let result = await fetch ("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
           let temp = await result.json();
-          if (temp) {
-            counter++;
-            // GetAllTasksFromDB()
-          }
-        }
-      }
+          // if (temp) {
+          //   // counter++;
+          //   // GetAllTasksFromDB()
+          // }
+        
+    
       if (counter > 0) {
         alert("The purchase was successfully registered");
         navigation.goBack();
@@ -115,11 +134,69 @@ export default function Products({ SetRequest,navigation }) {
       alert(error);
       SetLoading(true);
     }
+
+
+
+
+
+  }
+  const AddChargeToDB = () => {
+ 
+    // try {
+      let selectedItems = [];
+    ProductsArr.map((selectedItem) => {if (selectedItem.Amount !== 0)
+      selectedItems.push(selectedItem)
+      }
+
+  );
+  // console.log(selectedItems);
+  selectedItems.map((selectedItem) =>ChargeToDB(selectedItem)) 
+ 
+  
+  
+    //   let counter = 0;
+    //   for (let index = 0; index < ProductsArr.length; index++) {
+    //     if (ProductsArr[index].Amount > 0) {
+    //       const requestOptions = {
+    //         method: "POST",
+            // body: JSON.stringify({
+            //   CustomerID: myContext.bill.CustomerID,
+            //   RoomNumber: RoomNumber,
+            //   ProductDec: ProductsArr[index].ProductDec,
+            //   Amount: ProductsArr[index].Amount,
+            //   PaymentMethod: "Credit",
+            // }),
+    //         headers: { "Content-Type": "application/json" },
+    //       };
+    //       // console.log(requestOptions.body);
+    //       let result = await fetch(
+    //         "http://proj13.ruppin-tech.co.il/AddCharge",
+    //         requestOptions
+    //       );
+    //       let temp = await result.json();
+    //       if (temp) {
+    //         counter++;
+    //         // GetAllTasksFromDB()
+       
+    //       }
+    //     }
+    //   }
+    //   console.log("counter" +  counter);
+    //   if (counter > 0) {
+    //     alert("The purchase was successfully registered");
+    //     navigation.goBack();
+    //   } else {
+    //     alert("The purchase has not been made");
+    //   }
+    // } catch (error) {
+    //   alert(error);
+    //   SetLoading(true);
+    // }
   };
 
   const RestCount = () => {
     for (let i = 0; i < ProductsArr.length; i++) {
-      ProductsArr[i].amountTaken = 0;
+      ProductsArr[i].Amount = 0;
     }
 
     // SetTotalSum(0);
@@ -133,10 +210,10 @@ export default function Products({ SetRequest,navigation }) {
     let sum = 0;
     let goodsCounter = 0;
     for (let i = 0; i < ProductsArr.length; i++) {
-      let price = ProductsArr[i].price;
-      let amountTaken = ProductsArr[i].amountTaken;
-      let tempToatal = amountTaken * price;
-      goodsCounter += amountTaken;
+      let Price = ProductsArr[i].Price;
+      let Amount = ProductsArr[i].Amount;
+      let tempToatal = Amount * Price;
+      goodsCounter += Amount;
       sum += tempToatal;
     }
 
@@ -164,11 +241,11 @@ export default function Products({ SetRequest,navigation }) {
               paddingTop: 35,
             }}
           >
-            {item.name}
+            {item.ProductDec}
           </Text>
           <View style={styles.priceStyle}>
             <Text style={{ color: "#2e2f30", fontSize: 15 }}>
-              ${item.price}
+              ${item.Price}
             </Text>
           </View>
         </View>
@@ -181,7 +258,7 @@ export default function Products({ SetRequest,navigation }) {
             style={styles.counterStyle}
             // onChange={(count) => {SetCount.bind(this)}}
             onChange={(count) => {
-              (item.amountTaken = count),
+              (item.Amount = count),
                 // console.log(count),
                 Calculate_Final_Amount();
             }}
@@ -216,7 +293,7 @@ export default function Products({ SetRequest,navigation }) {
             style={styles.checkoutButtonStyle}
             onPress={() => showConfirmDialog()}
           >
-            <Text style={{ color: "#fff",textAlign:'center' }}>ORDER</Text>
+            <Text style={{ color: "#fff", textAlign: "center" }}>ORDER</Text>
           </TouchableOpacity>
         </View>
       </View>

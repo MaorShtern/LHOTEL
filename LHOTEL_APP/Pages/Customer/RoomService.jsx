@@ -184,7 +184,7 @@ export default function RoomService({ navigation }) {
           />
         </View>
         <View>
-          {task.RoomNumber === "" ? (
+          {task.RoomNumber === 0 ? (
             <Text style={styles.alerts}>*Must select room* </Text>
           ) : null}
         </View>
@@ -197,7 +197,7 @@ export default function RoomService({ navigation }) {
         <View style={styles.ProdutsStyle}>
           {request === "Product purchase" ? (
             <View>
-              <Products navigation={navigation} SetRequest={SetRequest} />
+              <Products navigation={navigation} RoomNumber={task.RoomNumber} SetRequest={SetRequest} />
             </View>
           ) : (
             <View>
