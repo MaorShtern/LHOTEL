@@ -151,8 +151,9 @@ namespace DAL
         {
             try
             {
-                string str = $@"exec AddNewTask {task.EmployeeID},{task.RoomNumber},'{task.TaskName}',
+                string str = $@"exec AddNewTask null,{task.RoomNumber},'{task.TaskName}','{task.StartDate:yyyy-MM-dd}',
 '{task.StartTime}','{task.EndTime}','{task.TaskStatus}','{task.Description}'";
+                if(task.EmployeeID != -1 ) str = str.Replace("null",$"{task.EmployeeID}");
                 str = str.Replace("\r\n", string.Empty);
                 int result = SQLConnection.ExeNonQuery(str);
                 if (result == 1)

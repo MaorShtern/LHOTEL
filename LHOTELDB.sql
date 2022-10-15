@@ -1329,7 +1329,7 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 222,2,'Room Cleaning','13:00',null,'Close',''	
+--exec AddNewTask 333,2,'Room Cleaning','13:00',null,'Close',''	
 --exec AddNewTask null,2,'Refill mini bar','19:00',null,'Open',''	
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
@@ -1337,13 +1337,14 @@ go
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
-  --"EmployeeID": -1,
-  --"EndTime": null,
-  --"RoomNumber": "7",
-  --"StartTime": "21:28",
-  --"TaskName": "Change of towels",
-  --"TaskStatus": "Open",
-  -- "Description": "Gigujchchv"
+exec AddNewTask null,15,'Room Cleaning','21:28',null,'Open','yyyyy'	
+  "EmployeeID": -1,
+  "EndTime": null,
+  "RoomNumber": "7",
+  "StartTime": "21:28",
+  "TaskName": "Change of towels",
+  "TaskStatus": "Open",
+   "Description": "Gigujchchv"
 
 
 
@@ -1869,16 +1870,15 @@ go
 --exec SaveRoomReservation 111111112,'mmm','12/29',912,'4580111133335555',111,1,1,1,'2022-08-22','2022-08-24',5,1
 --select * from [dbo].[Customers]
 --select * from Bill
---select * from Employees
 --select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Bill_Details]
---exec DeleteReservation 111111112
+--exec DeleteReservation 666
 --exec AddNewBill_Detail 111111112,21,'Coca cola',9,'Cash'
 --exec CheckIn 111111112, '2022-08-22'
---exec CheckOut 111111112, '2022-10-20'
+--exec CheckOut 111111112, '2022-08-24'
 --exec Room_Resit 111111112
 --exec GetAllCustomersHistory 111111112
---exec GetAllTasks
+
 
 --select * from [dbo].[Employees]
 --select * from [dbo].[Employees_Types]
@@ -1918,7 +1918,7 @@ as
 commit tran
 go
 
---exec DeleteReservation 111111112
+--exec DeleteReservation 666
 --select * from Bill
 --select * from [dbo].[Customers_Rooms] 
 
@@ -2111,7 +2111,8 @@ go
 
 
 --  פרוצדורה לשמירת הנתוני הרכישות
-create proc AddPurchases_Documentation
+alter proc AddPurchases_Documentation
+create int
 as
 --print(@id)
 --exec Room_Resit 222
@@ -2185,7 +2186,7 @@ begin tran
 commit tran
 go
 -- exec GetBill_DetailsByNumber 1
---EXEC GetAllTasks
+
 
 
 create proc AddNewBill_Detail
@@ -2513,14 +2514,14 @@ begin tran
 	SELECT CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
 	,CAST( Sum([Sum_Total] * -1 ) as float) as [Expens + / Profit -]  
 	from [dbo].[Purchase_Of_Goods]
+
 	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
-
 	union all 
-
-	select  CAST(YEAR([Entry_Date]) AS VARCHAR(4)) + '-' + CAST(MONTH([Entry_Date]) AS VARCHAR(2)) as Date
+	select  CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2)) as Date
 	,CAST(Sum([Price_Per_Night])as float) as [Expens/Profit] 
+	
 	from dbo.Purchases_Documentation
-	GROUP BY CAST(YEAR([Entry_Date]) AS VARCHAR(4)) + '-' + CAST(MONTH([Entry_Date]) AS VARCHAR(2))
+	GROUP BY CAST(YEAR(Purchase_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Purchase_Date) AS VARCHAR(2))
 	if (@@error !=0)
 	begin
 		rollback tran

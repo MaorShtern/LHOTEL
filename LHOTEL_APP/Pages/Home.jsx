@@ -41,27 +41,10 @@ export default function Home({ navigation }) {
       setPassword("");
       setId("");
       if (!info) myContext.setEmployeeDB({});
-      // myContext.SetBill({
-      //   CustomerID: '',
-      //   BillNumber: 0,
-      //   BillDate: '',
-      //   AmountOfPeople: 0,
-      //   Breakfast: false,
-      //   NumberOfNights: 0,
-      //   rooms: []})
-      // console.log(myContext.employee);
-      // myContext.setUserDB({})
-      // console.log(myContext.user);
-      //   return () => {
-      //     alert("Screen was unfocused");
-      //     // Do something when the screen is unfocused
-      //     // Useful for cleanup functions
-      //   };
+      
     }, [navigation])
   );
-  // useEffect(() => {
-  //   FetchCustomerReservationFromDB()
-  // });
+ 
 
   const FetchCustomerReservationFromDB = async () => {
     if (user.CustomerID !== undefined) {
@@ -270,8 +253,8 @@ export default function Home({ navigation }) {
             <View style={styles.ButtonContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  FetchCustomerReservationFromDB(),
-                    //  navigation.navigate("Drawer"),
+          
+                   navigation.navigate("Drawer"),
                     doAnimation(closeState, 1, 500);
                 }}
                 style={{
