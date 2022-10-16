@@ -49,51 +49,73 @@ export default function Bill() {
 
 
   const BilldHistoryData = () => {
-    // console.log(tableData);
-    // let tempData = []
-    // for (let index = 0; index < tableData.length; index++) {
-    //   let billNumber = tempData.filter((number) => number === tableData[index].BillNumber)[0]
-    //   if (billNumber === undefined) {
-    //     // let billDetailes = tableData.filter((number) => console.log(number.BillNumber))
-    //     // console.log(billDetailes);
-    //     tempData.push(tableData[index].BillNumber)
-    //   }
-    // }
+    let billNumbers = []
+    tableData.map(function (per) {
+      if (billNumbers.indexOf(per.BillNumber) < 0) { billNumbers.push(per.BillNumber) }
+    })
 
-    // let data = []
-    // for (let i = 0; i < tempData.length; i++) {
-    //   let details = tableData.filter((number) => number.BillNumber === tempData[i])
-    //   let billObject = []
-    //   for (let j = 0; j < details.length; j++) {
-    //     billObject.push(
-    //       {
-    //         BillNumber: details[j].BillNumber,
-    //       }
-    //     )
-    //   }
-    //   // let billObject = {
-    //   //   BillNumber: details[index].BillNumber,
-    //   //   BillDetails:[
-    //   //     {
-    //   //       RoomNumber:details[index].RoomNumber,
-    //   //     }
-    //   //   ]
-    //   // }
-    //   console.log("billObject:   "+ JSON.stringify(billObject));
-    // }
-    // console.log(tempData);
+    let tempData = []
+    for (let index = 0; index < billNumbers.length; index++) {
+      let temp = tableData.filter((per) => per.BillNumber === billNumbers[index]).map(
+        ({
+          RoomNumber, RoomType, PricePerNight, AmountOfPeople, Breakfast, EntryDate, ExitDate, NumberOfNights, PaymentMethod,
+        }) => ({
+          RoomNumber, RoomType, PricePerNight, AmountOfPeople, Breakfast, EntryDate, ExitDate, NumberOfNights, PaymentMethod,
+        })
+      )
+      // console.log(temp);
+      tempData.push({
+        BillNumber: billNumbers[index],
+        BillDetailes: temp
+      })
+    }
+    return tempData
   }
 
 
   // ---  יש לעבוד על אופן ההצגה של כול חשבונית עם המידע שלה הרלוונתי המפריד בין החשבוניות
-  const HistoryCard = () => {
-    let list = tableData.map((room) =>
-      <View>
-        <Text style={styles.cardText}>{room.BillNumber}Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
+  const HistoryCard = (data) => {
+    // console.log(data[0].BillDetailes[0].RoomType);
+    // console.log(data)
+    // let list = data.map((bill) =>
+    //   <View style={styles.CardStyle}>
+    //     <Text style={styles.cardText}>BillNumber: {bill.BillNumber}</Text>
+    //     {billDetails}
+    //   </View>
+    // )
+
+    let billDetails = []
+    for (let i = 0; i < data.length; index++) {
+      // const element =  array[index];
+      let detailsIndex = data[i].BillDetailes
+      // console.log("index --- > " + index + " ---- >");
+      // console.log(detailsIndex);
+
+      for (let j = 0; j < detailsIndex.length; index++) {
+        console.log("index --- > " + j + " ---- >");
+        console.log(detailsIndex[j]);
+      }
+
+      // details Index.map((per) => console.log(per))
+      // let render = detailsIndex.map((per) => 
+      // <View>
+      //   <Text>RoomType: {per.RoomType}</Text>
+      // </View>)
+
+      // billDetails.push(render)
+    }
+
+    let list = data.map((bill) =>
+      <View style={styles.CardStyle}>
+        <Text style={styles.cardText}>BillNumber: {bill.BillNumber}</Text>
+        {billDetails}
       </View>
     )
+
+    // data.map((bill) => console.log(bill[0].BillDetailes))
+
     return (
-      <View style={styles.CardStyle}>
+      <View >
         {/* <Text style={{ paddingBottom: 10 }}>BillNumber: {tableData[0].BillNumber}</Text> */}
         {list}
       </View>
@@ -118,36 +140,44 @@ export default function Bill() {
   }
 
 
+  const DeleteReservationFromDB = async () => {
+    try {
+      SetLoading(false)
+      const requestOptions = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          id: user.CustomerID
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      };
+      let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteReservation', requestOptions);
+      let temp = await result.json();
+      if (temp) {
+        alert("order has been canceled")
+        SetTableData(null)
+        SetLoading(true)
+      }
+    } catch (error) {
+      alert(error)
+    }
+    SetLoading(true)
+  }
+
 
   const DeleteReservation = () => {
     return Alert.alert(
       "order",
-      "Are you sure you want to  add the selected products to your account?",
+      "Are you sure you want to cancel your order?",
       [
         {
           text: "Yes",
           onPress: () => {
-            setShowBox(false);
-            AddChargeToDB();
-            cancel();
+            DeleteReservationFromDB()
           },
         },
         { text: "No", },
       ]
     );
-    // console.log(user.CustomerID);
-    // try {
-    //   SetLoading(true)
-    //   // console.log(user.CustomerID);
-    //   // SetLoading(true)
-
-    // } catch (error) {
-    //   alert(error)
-    //   SetLoading(true)
-
-    // }
-    // SetLoading(true)
-
   }
 
 
@@ -188,10 +218,10 @@ export default function Bill() {
         case 'GetRoomResit':
           temp = ResitCard()
           break;
-        // case 'GetAllCustomersHistory':
-        //   BilldHistoryData()
-        //   temp = HistoryCard()
-        //   break;
+        case 'GetAllCustomersHistory':
+          let data = BilldHistoryData()
+          temp = HistoryCard(data)
+          break;
         default:
           break;
       }
@@ -223,7 +253,7 @@ export default function Bill() {
               data={[
                 { label: "Reservation", value: "GetReservedRoomsByCustomerId" },
                 { label: "Room Resit", value: "GetRoomResit" },
-                // { label: "Previous Reservationes", value: "GetAllCustomersHistory" },
+                { label: "Previous Reservationes", value: "GetAllCustomersHistory" },
               ]}
               labelField="label"
               valueField="value"
@@ -287,7 +317,12 @@ const styles = StyleSheet.create({
 
   },
   CardStyle: {
-    backgroundColor: "gray", padding: 10, borderColor: "black", borderRadius: 5, borderWidth: 1
+    backgroundColor: "gray",
+    padding: 10,
+    borderColor: "black",
+    borderRadius: 5,
+    borderWidth: 1,
+    marginBottom: 5
   },
   cardText: {
     paddingBottom: 10
