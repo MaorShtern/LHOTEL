@@ -22,9 +22,15 @@ import AddEmployee from '../Workers/AddEmployee';
 import Credit from '../Credit';
 import AppContext from '../../AppContext';
 import Reports from '../Workers/Reports';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+
+
+
+
 const Stack = createNativeStackNavigator();
 // options={{ headerShown: false }}
-
+const MaterialTopTabs = createMaterialTopTabNavigator();
 
 
 export default function Router() {
@@ -59,9 +65,27 @@ export default function Router() {
           headerStyle: {
             backgroundColor: "#000",}}} />
         <Stack.Screen name="Reports" component={Reports} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Top"children={createTopTabs}  options={{ 
+          headerTitle: "",
+          headerTintColor: "white",
+          headerMode: 'none',
+          headerStyle: {
+            backgroundColor: "#000",}}}/>
 
       </Stack.Navigator>
     </NavigationContainer>
 
   )
+}
+
+const createTopTabs = (props) => {
+  return <MaterialTopTabs.Navigator>
+    <MaterialTopTabs.Screen
+      name="All Tasks"
+      component={Tasks}
+      options={{ header: null }}
+    />
+    <MaterialTopTabs.Screen name="Today's tasks" component={Tasks}   />
+    <MaterialTopTabs.Screen name="Open Tasks" component={Tasks}  />
+  </MaterialTopTabs.Navigator>
 }

@@ -52,9 +52,9 @@ export default function TasksCard(props) {
                 </View>
 
                 <View style={styles.Details}>
-                    {/* <Text>Start Date: {StartDate}</Text> */}
-                    <Text>Employee ID: {EmployeeID}</Text>
-                    <Text>Status: {TaskStatus}</Text>
+                <Text>Status: {TaskStatus}</Text>
+                    <Text style={{fontWeight: EmployeeID === -1 ? 'bold':'400'}}>Employee ID: {EmployeeID}</Text>
+                   
                
                     
                 </View>
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
         padding: 5
     },
     BTNImages: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
     },
     BTNContainer: {
         flex: 1,

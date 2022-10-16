@@ -1,13 +1,23 @@
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import React, {useState, useContext } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { ActivityIndicator } from "react-native";
 import TasksCard from "./TasksCard";
 import moment from "moment";
 import AppContext from "../../AppContext";
+import { useFocusEffect } from "@react-navigation/native";
+import { images } from '../../images';
+import Registration from "../Customer/Registration";
+import Login from "../Customer/Login";
 
-
-export default function Tasks({ navigation }) {
+export default function Tasks(props, { navigation }) {
   const myContext = useContext(AppContext);
   const myEmployee = myContext.employee;
   const [dropdown, setDropdown] = useState(null);
@@ -15,6 +25,7 @@ export default function Tasks({ navigation }) {
   const [tasksDisplay, SetTasksDisplay] = useState([]);
   const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([]);
   const [loading, SetLoading] = useState(false);
+
   const [requestType, SetRequestType] = useState([
     { label: "All Task", value: "All Task" },
     { label: "Today's tasks", value: "Today's tasks" },
@@ -22,14 +33,20 @@ export default function Tasks({ navigation }) {
     { label: "Add New Task", value: "Add New Task" },
   ]);
 
-  useEffect(() => {
-    if (myEmployee.Description === "Manager")
-      GetAllTasksFromDB();
-    else
-      GetTasksByID();
-  }, []);
+  // useEffect(() => {
+  //   if (myEmployee.Description === "Manager")
+  //     GetAllTasksFromDB();
+  //   else
+  //     GetTasksByID();
+  // }, []);
 
-
+  useFocusEffect(
+    React.useCallback(() => {
+      if (myEmployee.Description === "Manager") GetAllTasksFromDB();
+      else GetTasksByID();
+    }, [props])
+  );
+  // console.log(tasks);
 
   const GetTasksByID = async () => {
     try {
@@ -40,12 +57,19 @@ export default function Tasks({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch("http://proj13.ruppin-tech.co.il/GetTaskById", requestOptions);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetTaskById",
+        requestOptions
+      );
       let temp = await result.json();
       // console.log(temp);
       if (temp !== null) {
         SetTasks(temp);
-        SetTasksDisplay(temp);
+      
+        HandelRequest(temp);
+
+     
+      
         // console.log(requestType);
         let newRequest = requestType.filter(
           (request) => request.label !== "Add New Task"
@@ -59,19 +83,24 @@ export default function Tasks({ navigation }) {
     }
   };
 
-
   const GetAllTasksFromDB = async () => {
+ 
     try {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch("http://proj13.ruppin-tech.co.il/GetAllTasks",requestOptions);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetAllTasks",
+        requestOptions
+      );
       let temp = await result.json();
       // console.log(temp);
       if (temp !== null) {
         SetTasks(temp);
-        SetTasksDisplay(temp);
+       HandelRequest(temp);
+       
+        // SetTasksDisplay(temp);
         SetLoading(true);
       }
     } catch (error) {
@@ -85,20 +114,23 @@ export default function Tasks({ navigation }) {
     navigation.navigate("EditTasks", { taskDetails: taskDetails });
   };
 
-  const HandelRequest = (request) => {
-    // console.log(request);
+  const HandelRequest = (allTasks) => {
+    // console.log(tasks);
     let listTemp = null;
-    switch (request) {
-      case "All Task":
-        listTemp = tasks;
+    switch (props.route.name) {
+      case "All Tasks":
+        listTemp = allTasks;
         break;
       case "Today's tasks":
-        listTemp = tasks.filter(
-          (task) => task.StartDate === moment(new Date()).format("YYYY-MM-DD")
+
+        listTemp = allTasks.filter(
+          (task) =>
+            moment(task.StartDate).format("YYYY-MM-DD") ===
+            moment().format("YYYY-MM-DD")
         );
         break;
       case "Open Tasks":
-        listTemp = tasks.filter((task) => task.TaskStatus === "Open");
+        listTemp = allTasks.filter((task) => task.TaskStatus === "Open");
         break;
       case "Add New Task":
         navigation.navigate("EditTasks");
@@ -111,17 +143,19 @@ export default function Tasks({ navigation }) {
   };
 
   const MarkTaskAsDone = (taskCode) => {
-    let newArrayTasks = tasksDisplay.filter((task) => task.TaskCode === taskCode)[0];
+    let newArrayTasks = tasksDisplay.filter(
+      (task) => task.TaskCode === taskCode
+    )[0];
     let temp = [...taskToMarkAsDone, newArrayTasks];
     SetTaskToMarkAsDone(temp);
   };
 
-
   const RemoveFromCheck = (taskCode) => {
-    let newArrayTasks = taskToMarkAsDone.filter((task) => task.TaskCode !== taskCode);
+    let newArrayTasks = taskToMarkAsDone.filter(
+      (task) => task.TaskCode !== taskCode
+    );
     SetTaskToMarkAsDone(newArrayTasks);
   };
-
 
   const DeleteTask = async (taskCode) => {
     try {
@@ -134,7 +168,10 @@ export default function Tasks({ navigation }) {
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
-      let result = await fetch("http://proj13.ruppin-tech.co.il/DeleteTask", requestOptions);
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/DeleteTask",
+        requestOptions
+      );
       let temp = await result.json();
       // console.log(temp);
       if (temp) {
@@ -161,12 +198,15 @@ export default function Tasks({ navigation }) {
           method: "PUT",
           body: JSON.stringify({
             task_code: taskToMarkAsDone[index].TaskCode,
-            end_time: moment(new Date()).format('HH:MM')
+            end_time: moment(new Date()).format("HH:MM"),
           }),
           headers: { "Content-Type": "application/json" },
         };
         // console.log(requestOptions.body);
-        let result = await fetch("http://proj13.ruppin-tech.co.il/CloseTask", requestOptions);
+        let result = await fetch(
+          "http://proj13.ruppin-tech.co.il/CloseTask",
+          requestOptions
+        );
         let temp = await result.json();
         if (temp) {
           counter++;
@@ -211,40 +251,38 @@ export default function Tasks({ navigation }) {
       DeleteTask={DeleteTask}
     />
   ));
-
-  // console.log(JSON.stringify(tasks));
-
-  // let role = 'Manager'
-
+  // style={styles.SaveContainer}
   return (
-    <ScrollView>
-      <Text style={styles.HeadLine}>All Tasks</Text>
+    <View >
+      
+      <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+        {/* <Text>Save the tasks marked as "Done"</Text> */}
+        <Image style={styles.save} source={images.save} />
+      </TouchableOpacity>
 
-      <Dropdown
-        style={styles.dropdown}
-        data={requestType}
-        searchPlaceholder="Search"
-        labelField="label"
-        valueField="value"
-        placeholder="Task Request"
-        value={dropdown}
-        onChange={(request) => {
-          HandelRequest(request.value);
-        }}
-      />
       <ScrollView>
-        <View style={styles.SaveContainer}>
-          <TouchableOpacity style={styles.Save} onPress={CloseTask}>
-            <Text>Save the tasks marked as "Done"</Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.items}>{loading ? tasksList : <Spinner />}</View>
       </ScrollView>
-
-    </ScrollView>
+    </View>
   );
 }
-
+const TopTabs = {
+  path: "top_tabs",
+  screens: {
+    Tab1: {
+      path: "tTab1",
+      exact: true,
+    },
+    Tab2: {
+      path: "tTab2",
+      exact: true,
+    },
+    Tab3: {
+      path: "tTab3",
+      exact: true,
+    },
+  },
+};
 const styles = StyleSheet.create({
   HeadLine: {
     fontSize: 40,
@@ -253,7 +291,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-
   },
   dropdown: {
     backgroundColor: "white",
@@ -271,14 +308,24 @@ const styles = StyleSheet.create({
   SaveContainer: {
     alignItems: "center",
     padding: 10,
+    position: "absolute",
+    zIndex: 2,
   },
   Save: {
-    backgroundColor: "#D9E7E2",
+    backgroundColor: "#D9E7E0",
     padding: 15,
-    borderRadius: 15,
-    alignItems: "center",
+    borderRadius: 50,
+    // marginTop:350,
+    position: 'absolute',
+    bottom:30,
+    left:20,
     borderWidth: 2,
+    zIndex: 2,
   },
+  save: {
+    width: 30,
+    height: 30
+},
   container: {
     flex: 1,
     justifyContent: "center",
@@ -289,3 +336,19 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+{
+  /* <Text style={styles.HeadLine}>All Tasks</Text>
+
+      <Dropdown
+        style={styles.dropdown}
+        data={requestType}
+        searchPlaceholder="Search"
+        labelField="label"
+        valueField="value"
+        placeholder="Task Request"
+        value={dropdown}
+        onChange={(request) => {
+          HandelRequest(request.value);
+        }}
+      /> */
+}

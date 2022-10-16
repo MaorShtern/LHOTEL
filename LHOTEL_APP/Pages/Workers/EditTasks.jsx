@@ -155,7 +155,7 @@ export default function EditTasks({ route, navigation }) {
 
     return (
         <ScrollView>
-            <Text style={styles.HeadLine}>Tasks</Text>
+            <Text style={styles.HeadLine}>Edit Task</Text>
             {task.TaskCode !== null ?
                 <View>
                     <Text style={styles.SumHeadLine}>Task number: {task.TaskCode}</Text>
@@ -164,9 +164,9 @@ export default function EditTasks({ route, navigation }) {
             <View style={styles.DetailsContainer}>
                 <Text style={{ paddingLeft: 15 }}>Employee ID:</Text>
                 <TextInput
-                    label={JSON.stringify(task.EmployeeID)}
+                    // label={JSON.stringify(task.EmployeeID)}
                     placeholder={JSON.stringify(task.EmployeeID)}
-                    left={<TextInput.Icon name="account" />}
+                    // right={<TextInput.Icon name="account" />}
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
@@ -175,9 +175,9 @@ export default function EditTasks({ route, navigation }) {
 
                 <Text style={{ paddingLeft: 15 }}>Room Number:</Text>
                 <TextInput
-                    label={JSON.stringify(task.RoomNumber)}
+                    // label={JSON.stringify(task.RoomNumber)}
                     placeholder={JSON.stringify(task.RoomNumber)}
-                    left={<TextInput.Icon name="" />}
+                    // left={<TextInput.Icon name="" />}
                     mode="outlined"
                     keyboardType='numeric'
                     style={{ margin: 10, paddingLeft: 3 }}
@@ -196,10 +196,14 @@ export default function EditTasks({ route, navigation }) {
                         onChange={taskName => { HandelRequest(taskName.value) }} />
                 </View>
 
-                <View >
-                    <TouchableOpacity style={styles.button} onPress={showStartTime}>
-                        <Text>{"Start at: " + task.StartTime}</Text>
+                <View  style={styles.timeStyle}>
+                
+                    <TouchableOpacity onPress={showStartTime}>
+                    
+                        <Text style={{fontSize:18}}>{task.StartTime}</Text>
                     </TouchableOpacity>
+                    <TextInput.Icon name="clock" size ={25}/>
+                    </View>
                     <DateTimePickerModal
                         isVisible={flagStartTime}
                         mode="time"
@@ -216,7 +220,7 @@ export default function EditTasks({ route, navigation }) {
                         onCancel={hideEndTime}
                     />
                     {/* <View style={{ height: 20 }}></View> */}
-                </View>
+              
 
 
                 <View style={styles.CheckboxContainer}>
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         textAlign: "center",
         justifyContent: "center",
-        textDecorationLine: 'underline',
+     
 
     },
     SumHeadLine: {
@@ -306,5 +310,12 @@ const styles = StyleSheet.create({
     save: {
         width: 30,
         height: 30
+    },
+    timeStyle:{
+        flexDirection: "row-reverse",
+        alignItems: "center",
+        alignSelf:'flex-end',
+        justifyContent: "space-between",
+        paddingHorizontal: 30,
     },
 })

@@ -14,6 +14,7 @@ import AppContext from "../../AppContext";
 import RoomService from "../Customer/RoomService";
 import Products from "../Customer/Products";
 import Bill from "../Customer/Bill";
+import CustomDrawer from "./CustomDrawer";
 // import CheckIn from "../Customer/CheckIn";
 // import { useFocusEffect } from "@react-navigation/native";
 const drawer = createDrawerNavigator();
@@ -85,7 +86,9 @@ export default function Drawer() {
 
   return (
     <NavigationContainer independent={true}>
-      <drawer.Navigator initialRouteName="Home">
+      <drawer.Navigator initialRouteName="Home"
+      drawerContent={props => <CustomDrawer {...props} isUserConnected={isUserConnected} />}
+      >
         <drawer.Screen
           name="Home"
           component={CustomerHome}
@@ -102,6 +105,7 @@ export default function Drawer() {
           name="Login"
           component={Login}
           options={{
+            drawerItemStyle: isUserConnected ? { display: "none" }:{} ,
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {
@@ -113,6 +117,7 @@ export default function Drawer() {
           name="Registration"
           component={Registration}
           options={{
+            drawerItemStyle: isUserConnected ? { display: "none" }: {}  ,
             headerTitle: " ",
             headerTintColor: "white",
             headerStyle: {

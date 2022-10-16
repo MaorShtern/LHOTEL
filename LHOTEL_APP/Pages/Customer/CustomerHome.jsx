@@ -29,109 +29,11 @@ export default function CustomerHome({ route, navigation }) {
         NumberOfNights: 0,
         rooms: []});
   };
-//   console.log(bill);
-// useFocusEffect(
-//   React.useCallback(() => {
-//     FetchCustomerReservationFromDB();
-//     // return () => {
-//     //   alert('Screen was unfocused');
-//     //   // Do something when the screen is unfocused
-//     //   // Useful for cleanup functions
-//     // };
-//   })
-// );
-// useFocusEffect(() => {
-//       FetchCustomerReservationFromDB();
-//     //   return () => {
-//     //     // alert("Screen was unfocused");
-//     //     FetchCustomerReservationFromDB();
-//     //   };
-//     })
- 
-//   const FetchCustomerReservationFromDB = async () => {
-//    if(user.CustomerID !== undefined){
 
-  
-//     try {
-//       const requestOptions = {
-//         method: "PUT",
-//         body: JSON.stringify({
-//           id: user.CustomerID,
-//         }),
-//         headers: { "Content-Type": "application/json" },
-//       };
-//       let result = await fetch(
-//         "http://proj13.ruppin-tech.co.il/GetRoomResit",
-//         requestOptions
-//       );
-//       let customerReservation = await result.json();
-//       // console.log(JSON.stringify(user))
-//       if (customerReservation !== null) {
-//           bill.CustomerID = customerReservation[0].CustomerID
-//           bill.BillNumber = customerReservation[0].BillNumber
-//           bill.BillDate = customerReservation[0].BillDate
-//           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-//           bill.Breakfast = customerReservation[0].Breakfast
-//           bill.NumberOfNights = customerReservation[0].NumberOfNights
-//           bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-//       if(bill.rooms.length ===0)
-//               customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
-           
-       
-//       //   console.log(JSON.stringify(bill));
-//       }
-   
-//     } catch (error) {
-//       alert(error);
-//     }
-// }
-
-// };
-//   useEffect(() => {
-//     FetchCustomerReservationFromDB();
-//   }, []);
-//   const FetchCustomerReservationFromDB = async () => {
-//     if (user.CustomerID !== undefined) {
-//       try {
-//         const requestOptions = {
-//           method: "POST",
-//           body: JSON.stringify({
-//             id: user.CustomerID,
-//           }),
-//           headers: { "Content-Type": "application/json" },
-//         };
-//         let result = await fetch(
-//           "http://proj13.ruppin-tech.co.il/RoomResit",
-//           requestOptions
-//         );
-//         let customerReservation = await result.json();
-//         // console.log(JSON.stringify(user))
-//         if (customerReservation !== null) {
-//             bill.CustomerID = customerReservation[0].CustomerID
-//             bill.BillNumber = customerReservation[0].BillNumber
-//             bill.BillDate = customerReservation[0].BillDate
-//             bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-//             bill.Breakfast = customerReservation[0].Breakfast
-//             bill.NumberOfNights = customerReservation[0].NumberOfNights
-//             bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-        
-//                 customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
-             
-         
-//         //   console.log(JSON.stringify(bill));
-//         }
-//       } catch (error) {
-//         alert(error);
-//       }
-//     }
-//   };
-//   console.log(JSON.stringify( bill));
-
-// console.log(user.CustomerID);
   return (
     <ScrollView>
       <StatusBar translucent={true} backgroundColor={"transparent"} />
-      {user.FirstName !== undefined ? (
+      {/* {user.FirstName !== undefined ? (
         <View style={styles.userContainer}>
           <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
             <Text style={{ color: "white" }}>Log out</Text>
@@ -139,9 +41,8 @@ export default function CustomerHome({ route, navigation }) {
           <Text style={{ color: "white" }}>
             Hello , {user.FirstName} {user.LastName}
           </Text>
-          {/* <Text style={styles.Text}>Username: {user.firstName} {user.lastName}</Text> */}
         </View>
-      ) : null}
+      ) : null} */}
 
       {/* <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text> */}
       <View style={styles.ButtonContainer}>
