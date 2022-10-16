@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Dropdown } from "react-native-element-dropdown";
 import { ActivityIndicator } from "react-native";
@@ -120,42 +120,19 @@ export default function Bill() {
 
 
   const DeleteReservation = () => {
-    return alert(
+    return Alert.alert(
       "order",
       "Are you sure you want to  add the selected products to your account?",
       [
-        // The "Yes" button
         {
           text: "Yes",
           onPress: () => {
             setShowBox(false);
             AddChargeToDB();
-
-            // let temp = []
-            // ProductsArr.map((item) =>
-            //   temp.push(
-            //     {
-            //       ProductCode: item.ProductCode,
-            //       image: item.image,
-            //       ProductDec: item.ProductDec,
-            //       Price: item.Price,
-            //       Amount:  item.Amount
-
-            //     }))
-
-            //     let selectedItems = ProductsArr.filter((selectedItem) =>
-            // selectedItem.Amount !== 0 )
-
-            // navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
             cancel();
-            // getSelectedProducts()
           },
         },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
-        {
-          text: "No",
-        },
+        { text: "No", },
       ]
     );
     // console.log(user.CustomerID);

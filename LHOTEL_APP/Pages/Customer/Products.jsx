@@ -1,13 +1,4 @@
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  Alert,
-} from "react-native";
+import { Text, View, FlatList, Image, TouchableOpacity, StyleSheet, Button, Alert, } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { images } from "../../images";
