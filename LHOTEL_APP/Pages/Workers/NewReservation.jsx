@@ -32,6 +32,8 @@ export default function NewReservation({ navigation }) {
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [flagEnrty, setFlagEntry] = useState(false);
   const [flagExit, setFlagExit] = useState(false);
+
+
   // const [entryDate, setEntryDate] = useState(moment().toDate());
   // const [exitDate, setExitDate] = useState(
   //   moment(entryDate).add(1, "days").toDate()
@@ -41,7 +43,7 @@ export default function NewReservation({ navigation }) {
   const [isExitModalOpened, SetIsExitModalOpened] = useState(false);
   const [numberOfNights, setNumberOfNights] = useState(0);
   // const [AmountOfPeople, setAmountOfPeople] = useState(0);
-  const [breakfast, setreakfast] = useState(false);
+  const [breakfast, setBreakfast] = useState(false);
 
   const showDatePickerEntry = () => {
     setFlagEntry(true);
@@ -172,7 +174,7 @@ export default function NewReservation({ navigation }) {
 
   const ConfirmInformation = () => {
    roomsReservation.NumberOfNights = numberOfNights
- 
+   roomsReservation.Breakfast = breakfast
  
   let rooms_amounts = {
     "Single room": roomsReservation.CounterSingle,
@@ -195,6 +197,7 @@ export default function NewReservation({ navigation }) {
     let tempToatal = pricePerNight * count
 
     sum += tempToatal;
+    if(roomsReservation.Breakfast)sum +=70*count
       }
     }
   }
@@ -410,11 +413,14 @@ export default function NewReservation({ navigation }) {
 
             <View style={styles.switchContainer}>
               <Switch
-                onValueChange={() => {
-                  roomsReservation.Breakfast = !roomsReservation.Breakfast
+                    onValueChange={() => { setBreakfast(!breakfast); }}
+            
+                // onValueChange={() => {
+                //   roomsReservation.Breakfast = !roomsReservation.Breakfast
                   // setreakfast(!breakfast);
-                }}
-                value={roomsReservation.Breakfast}
+                // }}
+                value={breakfast}
+                // value={roomsReservation.Breakfast}
               />
               <Text style={{ fontSize: 18 }}>Include breakfast?</Text>
             </View>

@@ -178,11 +178,13 @@ export default function SaveRoom({ route, navigation }) {
       let tempToatal = pricePerNight * count
 
       sum += tempToatal;
+      if(roomsReservation.Breakfast)sum +=70*count
     }
 
-
+// console.log(the_data);
     // console.log(the_data);
     // console.log(roomsReservation);
+    // if(roomsReservation.Breakfast) 
     roomsReservation.totalSum = sum
     navigation.navigate("Credit", { the_data: the_data });
   };
