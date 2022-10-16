@@ -40,10 +40,12 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   const [start, SetStart] = useState(0);
   const [showBox, setShowBox] = useState(true);
   const [goodsCount, SetGoodsCount] = useState(0);
-
+  const [counter, SetCounter] = useState(0);
+  counter
   useEffect(() => {
     SetTotalSum(0);
     SetGoodsCount(0);
+    SetCounter(0);
   }, []);
 
   const cancel = () => {
@@ -99,7 +101,7 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   //   }
 
   // };
-  const ChargeToDB = async () => {
+  const ChargeToDB = async (selectedItem) => {
  try {
     
           const requestOptions = {
@@ -107,8 +109,8 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
             body: JSON.stringify({
               CustomerID: myContext.bill.CustomerID,
               RoomNumber: RoomNumber,
-              ProductDec: ProductsArr[index].ProductDec,
-              Amount: ProductsArr[index].Amount,
+              ProductDec: selectedItem.ProductDec,
+              Amount: selectedItem.Amount,
               PaymentMethod: "Credit",
             }),
             headers: { "Content-Type": "application/json" },
@@ -116,18 +118,19 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
           // console.log(requestOptions.body);
           let result = await fetch ("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
           let temp = await result.json();
-          // if (temp) {
-          //   // counter++;
-          //   // GetAllTasksFromDB()
-          // }
+          if (temp) {
+            SetCounter(counter+1)
+            // counter++;
+            // GetAllTasksFromDB()
+          }
         
     
-      if (counter > 0) {
-        alert("The purchase was successfully registered");
-        navigation.goBack();
-      } else {
-        alert("The purchase has not been made");
-      }
+      // if (counter > 0) {
+      //   alert("The purchase was successfully registered");
+      //   navigation.goBack();
+      // } else {
+      //   alert("The purchase has not been made");
+      // }
     } catch (error) {
       alert(error);
       SetLoading(true);
@@ -148,7 +151,12 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   );
   // console.log(selectedItems);
   selectedItems.map((selectedItem) =>ChargeToDB(selectedItem)) 
- 
+     if (counter > 0) {
+        alert("The purchase was successfully registered");
+        navigation.goBack();
+      } else {
+        alert("The purchase has not been made");
+      }
   
   
     //   let counter = 0;

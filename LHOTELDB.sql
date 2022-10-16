@@ -1292,11 +1292,11 @@ go
 
 
 
-
 alter proc AddNewTask
 @Employee_ID int, 
 @Room_Number int,
 @Task_Name nvarchar(30),
+@Date  date,
 @start_Time nvarchar(5),
 @end_Time nvarchar(5),
 @status nvarchar(10),
@@ -1304,8 +1304,8 @@ alter proc AddNewTask
 as
 begin tran
 
-	declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
-
+	--declare @Date as date = (SELECT FORMAT (getdate(), 'yyyy-MM-dd'))
+	
 	if(@end_Time = '')
 	begin
 		Set @end_Time = null
@@ -1316,9 +1316,9 @@ begin tran
 	end 
 
 	declare @number int = (select [Task_Number] from [dbo].[Tasks_Types]where [Task_Name] = @Task_Name)
-
-		insert [dbo].[Employees_Tasks]
-		values (@Employee_ID,@number,@Room_Number ,@Date,
+	--if EXISTS (SELECT Room_Number FROM Customers_Rooms WHERE Customers_Rooms.Room_Number = @Room_Number)
+	--set @Employee_ID = null
+		insert [dbo].[Employees_Tasks] values (@Employee_ID,@number,@Room_Number ,@Date,
 		@start_Time,@end_Time,@status, @Description)
 	if (@@error !=0)
 	begin
@@ -1329,7 +1329,27 @@ begin tran
 commit tran
 go
 
---exec AddNewTask 333,2,'Room Cleaning','13:00',null,'Close',''	
+exec AddNewTask null,78,'Room Cleaning','2022 - 10 - 15',
+'20:10','','Open','Dhdhdhd'
+
+-select * from [dbo].[Customers_Rooms]
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+--exec AddNewTask -1,5,'Room Cleaning','2022-12-12','13:00',null,'Open',''	
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+============================================זה עובד ===========================================================
+
+
+
+
+
+
 --exec AddNewTask null,2,'Refill mini bar','19:00',null,'Open',''	
 --select * from [dbo].[Employees_Tasks]
 --select * from Shifts
@@ -1730,7 +1750,7 @@ go
 --exec AlterCustomerRoom 24,57,15584444,'2022-09-15','2022-09-20','2022-09-30',4,1,Reserved
 --exec AlterCustomerRoom 1,4,666,'2022-09-11','2022-08-22','2022-08-24',5,1,'Occupied'
 
---select * from Bill_Details where  Customer_ID = 666
+--select * from Bill_Details where  Customer_ID = 111111117
 
 
 --  מביא את החדרים שתאריך היציאה שלהם גדול מהתאריך של היום
