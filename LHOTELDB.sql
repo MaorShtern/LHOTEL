@@ -1898,7 +1898,8 @@ go
 --exec CheckOut 111111112, '2022-08-24'
 --exec Room_Resit 111111112
 --exec GetAllCustomersHistory 111111112
-
+--select * from Bill_Details
+--where Customer_ID = 111111112
 
 --select * from [dbo].[Employees]
 --select * from [dbo].[Employees_Types]
@@ -2132,7 +2133,6 @@ go
 
 --  פרוצדורה לשמירת הנתוני הרכישות
 alter proc AddPurchases_Documentation
-create int
 as
 --print(@id)
 --exec Room_Resit 222
@@ -2251,8 +2251,10 @@ go
   
 --select * from [dbo].[Bill_Details]
 --select * from [dbo].[Customers_Rooms]
---exec CheckIn 666 , '2022-08-22'
+--exec CheckOut 666 , '2022-08-24'
 --exec Room_Resit 206055899
+--select * from [dbo].[Bill_Details]
+--where [Customer_ID] = 111111112
 
 
 

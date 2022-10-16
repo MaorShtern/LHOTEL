@@ -119,6 +119,61 @@ export default function Bill() {
 
 
 
+  const DeleteReservation = () => {
+    return alert(
+      "order",
+      "Are you sure you want to  add the selected products to your account?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            setShowBox(false);
+            AddChargeToDB();
+
+            // let temp = []
+            // ProductsArr.map((item) =>
+            //   temp.push(
+            //     {
+            //       ProductCode: item.ProductCode,
+            //       image: item.image,
+            //       ProductDec: item.ProductDec,
+            //       Price: item.Price,
+            //       Amount:  item.Amount
+
+            //     }))
+
+            //     let selectedItems = ProductsArr.filter((selectedItem) =>
+            // selectedItem.Amount !== 0 )
+
+            // navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
+            cancel();
+            // getSelectedProducts()
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+    // console.log(user.CustomerID);
+    // try {
+    //   SetLoading(true)
+    //   // console.log(user.CustomerID);
+    //   // SetLoading(true)
+
+    // } catch (error) {
+    //   alert(error)
+    //   SetLoading(true)
+
+    // }
+    // SetLoading(true)
+
+  }
+
+
   const ReservationCard = () => {
     let list = tableData.map((room) =>
       <View>
@@ -134,7 +189,7 @@ export default function Bill() {
         <Text style={styles.cardText}>AmountOfPeople: {tableData[0].AmountOfPeople}</Text>
         <Text style={styles.cardText}>Mail: {tableData[0].Mail}</Text>
         <View style={{ alignItems: "center", paddingTop: 10 }}>
-          <TouchableOpacity style={styles.deleteBTN}>
+          <TouchableOpacity style={styles.deleteBTN} onPress={() => DeleteReservation()}>
             <Image style={styles.save} source={images.trashCan} />
             <Text>Delete Reservation</Text>
           </TouchableOpacity>
@@ -146,7 +201,7 @@ export default function Bill() {
   // console.log(tableData);
 
   const CreateCard = () => {
-    console.log(tableData);
+    // console.log(tableData);
     if (tableData !== null && tableData.length > 1) {
       let temp = null
       switch (request) {

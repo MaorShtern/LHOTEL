@@ -1,14 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Linking,
-  TouchableOpacity,
-  StatusBar,
-} from "react-native";
+import {  View,  Text,  StyleSheet,  Image,  ScrollView,  Linking,  TouchableOpacity,  StatusBar,} from "react-native";
 import CarouselImages from "./CarouselImages";
 import { images } from "../../images";
 import { useContext ,useEffect} from "react";
@@ -20,7 +11,9 @@ const url = Platform.select({
   ios: `maps:0,0?q=${fullAddress}`,
   android: `geo:0,0?q=${fullAddress}`,
 });
-console.log();
+// console.log();
+
+
 export default function CustomerHome({ route, navigation }) {
   const myContext = useContext(AppContext);
   const user = myContext.user;

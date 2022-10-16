@@ -119,6 +119,9 @@ export default function RoomService({ navigation }) {
     setTime(task.StartTime);
     hideTime();
   };
+
+
+
   const FetchCustomerReservationFromDB = async () => {
     if (user.CustomerID !== undefined) {
       try {
@@ -188,7 +191,7 @@ export default function RoomService({ navigation }) {
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
       };
-      // console.log(requestOptions.body);
+      console.log(requestOptions.body);
       let result = await fetch(
         "http://proj13.ruppin-tech.co.il/AddNewTask",
         requestOptions

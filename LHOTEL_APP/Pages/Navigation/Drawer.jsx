@@ -176,7 +176,7 @@ export default function Drawer() {
             },
           }}
         />
-        {/* <drawer.Screen
+        <drawer.Screen
           name="Bill"
           component={Bill}
           options={{
@@ -186,7 +186,7 @@ export default function Drawer() {
               backgroundColor: "#000",
             },
           }}
-        /> */}
+        />
         <drawer.Screen
           name="Credit"
           component={Credit}

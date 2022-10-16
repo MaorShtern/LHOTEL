@@ -40,12 +40,12 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   const [start, SetStart] = useState(0);
   const [showBox, setShowBox] = useState(true);
   const [goodsCount, SetGoodsCount] = useState(0);
-  const [counter, SetCounter] = useState(0);
-  counter
+  // const [counter, SetCounter] = useState(0);
+
   useEffect(() => {
     SetTotalSum(0);
     SetGoodsCount(0);
-    SetCounter(0);
+    // SetCounter(0);
   }, []);
 
   const cancel = () => {
@@ -102,35 +102,31 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
 
   // };
   const ChargeToDB = async (selectedItem) => {
- try {
-    
-          const requestOptions = {
-            method: "POST",
-            body: JSON.stringify({
-              CustomerID: myContext.bill.CustomerID,
-              RoomNumber: RoomNumber,
-              ProductDec: selectedItem.ProductDec,
-              Amount: selectedItem.Amount,
-              PaymentMethod: "Credit",
-            }),
-            headers: { "Content-Type": "application/json" },
-          };
-          // console.log(requestOptions.body);
-          let result = await fetch ("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
-          let temp = await result.json();
-          if (temp) {
-            SetCounter(counter+1)
-            // counter++;
-            // GetAllTasksFromDB()
-          }
-        
-    
-      // if (counter > 0) {
-      //   alert("The purchase was successfully registered");
-      //   navigation.goBack();
-      // } else {
-      //   alert("The purchase has not been made");
-      // }
+    try {
+      let counter = 0
+      for (let index = 0; index < selectedItem.length; index++) {
+        const requestOptions = {
+          method: "POST",
+          body: JSON.stringify({
+            CustomerID: myContext.bill.CustomerID,
+            RoomNumber: RoomNumber,
+            ProductDec: selectedItem[index].ProductDec,
+            Amount: selectedItem[index].Amount,
+            PaymentMethod: "Credit",
+          }),
+          headers: { "Content-Type": "application/json" },
+        };
+        let result = await fetch("http://proj13.ruppin-tech.co.il/AddCharge", requestOptions);
+        let temp = await result.json();
+        if (temp)
+          counter++
+      }
+      if (counter > 0) {
+        alert("The purchase was successfully registered");
+        navigation.goBack();
+      } else {
+        alert("The purchase has not been made");
+      }
     } catch (error) {
       alert(error);
       SetLoading(true);
@@ -143,34 +139,51 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   }
   const AddChargeToDB = () => {
     // try {
-      let selectedItems = [];
-      ProductsArr.map((selectedItem) => {if (selectedItem.Amount !== 0)
-      selectedItems.push(selectedItem)
-      }
+    let selectedItems = [];
+    ProductsArr.map((selectedItem) => {
+      if (selectedItem.Amount !== 0)
+        selectedItems.push(selectedItem)
+    });
 
-  );
-  // console.log(selectedItems);
-  selectedItems.map((selectedItem) =>ChargeToDB(selectedItem)) 
-     if (counter > 0) {
-        alert("The purchase was successfully registered");
-        navigation.goBack();
-      } else {
-        alert("The purchase has not been made");
-      }
-  
-  
+    ChargeToDB(selectedItems)
+    // console.log(selectedItems);
+    // selectedItems.map((selectedItem) => ChargeToDB(selectedItem))
+    // if (counter > 0) {
+    //   alert("The purchase was successfully registered");
+    //   navigation.goBack();
+    // } else {
+    //   alert("The purchase has not been made");
+    // }
+    // selectedItems.map((selectedItem) => console.log(selectedItem))
+    // let counter = 0
+    // for (let index = 0; index < selectedItems.length; index++) {
+    //   // const element = array[index];
+    //   // console.log(selectedItems[index]);
+    //   let flag = ChargeToDB(selectedItems[index])
+    //   console.log(flag);
+    //   // if (ChargeToDB(selectedItems[index]) === true)
+    //   //   counter++
+    // }
+    // if (counter > 0) {
+    //   alert("The purchase was successfully registered");
+    //   navigation.goBack();
+    // } else {
+    //   alert("The purchase has not been made");
+    // }
+
+
     //   let counter = 0;
     //   for (let index = 0; index < ProductsArr.length; index++) {
     //     if (ProductsArr[index].Amount > 0) {
     //       const requestOptions = {
     //         method: "POST",
-            // body: JSON.stringify({
-            //   CustomerID: myContext.bill.CustomerID,
-            //   RoomNumber: RoomNumber,
-            //   ProductDec: ProductsArr[index].ProductDec,
-            //   Amount: ProductsArr[index].Amount,
-            //   PaymentMethod: "Credit",
-            // }),
+    // body: JSON.stringify({
+    //   CustomerID: myContext.bill.CustomerID,
+    //   RoomNumber: RoomNumber,
+    //   ProductDec: ProductsArr[index].ProductDec,
+    //   Amount: ProductsArr[index].Amount,
+    //   PaymentMethod: "Credit",
+    // }),
     //         headers: { "Content-Type": "application/json" },
     //       };
     //       // console.log(requestOptions.body);
@@ -182,7 +195,7 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
     //       if (temp) {
     //         counter++;
     //         // GetAllTasksFromDB()
-       
+
     //       }
     //     }
     //   }
