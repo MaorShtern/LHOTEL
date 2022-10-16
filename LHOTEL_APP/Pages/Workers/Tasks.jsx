@@ -254,11 +254,13 @@ export default function Tasks(props, { navigation }) {
   // style={styles.SaveContainer}
   return (
     <View >
-      
-      <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+      {
+        loading ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
         {/* <Text>Save the tasks marked as "Done"</Text> */}
         <Image style={styles.save} source={images.save} />
-      </TouchableOpacity>
+      </TouchableOpacity>:null
+      }
+     
 
       <ScrollView>
         <View style={styles.items}>{loading ? tasksList : <Spinner />}</View>
@@ -266,23 +268,7 @@ export default function Tasks(props, { navigation }) {
     </View>
   );
 }
-const TopTabs = {
-  path: "top_tabs",
-  screens: {
-    Tab1: {
-      path: "tTab1",
-      exact: true,
-    },
-    Tab2: {
-      path: "tTab2",
-      exact: true,
-    },
-    Tab3: {
-      path: "tTab3",
-      exact: true,
-    },
-  },
-};
+
 const styles = StyleSheet.create({
   HeadLine: {
     fontSize: 40,
@@ -315,7 +301,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#D9E7E0",
     padding: 15,
     borderRadius: 50,
-    // marginTop:350,
+   
     position: 'absolute',
     bottom:30,
     left:20,

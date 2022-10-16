@@ -83,7 +83,7 @@ const createTopTabs = (props) => {
     <MaterialTopTabs.Screen
       name="All Tasks"
       component={Tasks}
-      options={{ header: null }}
+      
     />
     <MaterialTopTabs.Screen name="Today's tasks" component={Tasks}   />
     <MaterialTopTabs.Screen name="Open Tasks" component={Tasks}  />
