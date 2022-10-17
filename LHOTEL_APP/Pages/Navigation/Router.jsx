@@ -20,6 +20,7 @@ import ShortCheckIn from '../Workers/ShortCheckIn';
 import NewReservation from '../Workers/NewReservation';
 import AddEmployee from '../Workers/AddEmployee';
 import Credit from '../Credit';
+import Products from "../Customer/Products";
 import AppContext from '../../AppContext';
 import Reports from '../Workers/Reports';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -65,6 +66,8 @@ export default function Router() {
           headerStyle: {
             backgroundColor: "#000",}}} />
         <Stack.Screen name="Reports" component={Reports} options={{ headerShown: myContext.isIos }} />
+        <Stack.Screen name="Products" component={Products} options={{ headerShown: myContext.isIos }} />
+
         <Stack.Screen name="Top"children={createTopTabs}  options={{ 
           headerTitle: "",
           headerTintColor: "white",
@@ -85,7 +88,8 @@ const createTopTabs = (props) => {
       component={Tasks}
       
     />
-    <MaterialTopTabs.Screen name="Today's tasks" component={Tasks}   />
+    <MaterialTopTabs.Screen name="Today's Tasks" component={Tasks}   />
     <MaterialTopTabs.Screen name="Open Tasks" component={Tasks}  />
+    <MaterialTopTabs.Screen name="Task Form" component={EditTasks}  />
   </MaterialTopTabs.Navigator>
 }

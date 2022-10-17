@@ -105,8 +105,8 @@ export default function UpdateDetails({ route, navigation }) {
                 <View>
                     <Text > Full Name :</Text>
                     <TextInput
-                        label={JSON.stringify(employee.EmployeeName)}
-                        placeholder={JSON.stringify(employee.EmployeeName)}
+                        // label={employee.EmployeeName}
+                        placeholder={employee.EmployeeName}
                    
                         mode="outlined"
                      
@@ -116,8 +116,8 @@ export default function UpdateDetails({ route, navigation }) {
                 <View style ={{paddingTop:10}}>
                     <Text >Phone Number :</Text>
                     <TextInput
-                        label={JSON.stringify(employee.PhoneNumber)}
-                        placeholder={JSON.stringify(employee.PhoneNumber)}
+                        // label={JSON.stringify(employee.PhoneNumber)}
+                        placeholder={employee.PhoneNumber}
        
                         keyboardType='numeric'
                         mode="outlined"
@@ -128,8 +128,8 @@ export default function UpdateDetails({ route, navigation }) {
                 <View style ={{paddingTop:10}}>
                     <Text style={{ paddingLeft: 5 }}>Address :</Text>
                     <TextInput
-                        label={JSON.stringify(employee.Address)}
-                        placeholder={JSON.stringify(employee.Address)}
+                        // label={JSON.stringify(employee.Address)}
+                        placeholder={employee.Address}
                       
                         mode="outlined"
                         

@@ -21,20 +21,21 @@ export default function EMCard(props) {
 
     return (
         <View style={styles.card}>
-            <Text >Employee Code: {EmployeeCode}</Text>
+            
+            <Text style={styles.textStyle} >Employee Code: {EmployeeCode}</Text>
             <View style={styles.details}>
-                <Text >Name: {EmployeeName}</Text>
-                <Text >ID: {EmployeeID}</Text>
+                <Text style={styles.textStyle} >Name : {EmployeeName}</Text>
+                <Text style={styles.textStyle} >ID : {EmployeeID}</Text>
             </View>
             <View style={styles.details}>
           
-                <Text >Phone: {PhoneNumber}</Text>
-                <Text>Role: {Description}</Text>
+                <Text style={styles.textStyle}  >Phone : {PhoneNumber}</Text>
+                <Text style={styles.textStyle} >Role : {Description}</Text>
             </View>
 
             <View style={styles.details}>
-            <Text style={{paddingLeft:5}}>Hourly Wage: {HourlyWage}</Text>
-                <Text >Birth Date: {moment(BirthDate).format('DD/MM/YYYY')}</Text>
+            <Text style={{paddingLeft:5,fontSize:16}}>Hourly : {HourlyWage}$</Text>
+                <Text style={styles.textStyle}  >Birth Date : {moment(BirthDate).format('DD/MM/YYYY')}</Text>
                 {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
                
             </View>
@@ -42,7 +43,7 @@ export default function EMCard(props) {
 
            
 
-                <Text style ={{padding:5}}>Address: {Address}</Text>
+                <Text style ={{padding:5,fontSize:16}}>Address: {Address}</Text>
     
 
             <View style={styles.BTNContainer}>
@@ -52,7 +53,9 @@ export default function EMCard(props) {
                 <TouchableOpacity onPress={DeleteEmployee}>
                     <Image style={styles.BTNImages} source={images.trashCan} />
                 </TouchableOpacity>
+                
             </View>
+          
 
         </View>
     )
@@ -62,9 +65,14 @@ const styles = StyleSheet.create({
 
     card: {
         backgroundColor: '#FFF',
-        padding: 25,
+        padding: 15,
         borderRadius: 10,
-        marginBottom: 20,
+        marginBottom: 10,
+        borderBottomWidth:1
+       
+    },
+    textStyle:{
+        fontSize:16,
     },
     itemLeft: {
         flex: 1,
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     BTNImages: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
     },
 })

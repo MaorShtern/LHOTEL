@@ -14,10 +14,9 @@ import moment from "moment";
 import AppContext from "../../AppContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { images } from '../../images';
-import Registration from "../Customer/Registration";
-import Login from "../Customer/Login";
+import { Dimensions } from 'react-native';
 
-export default function Tasks(props, { navigation }) {
+export default function Tasks(props) {
   const myContext = useContext(AppContext);
   const myEmployee = myContext.employee;
   const [dropdown, setDropdown] = useState(null);
@@ -25,14 +24,14 @@ export default function Tasks(props, { navigation }) {
   const [tasksDisplay, SetTasksDisplay] = useState([]);
   const [taskToMarkAsDone, SetTaskToMarkAsDone] = useState([]);
   const [loading, SetLoading] = useState(false);
-
-  const [requestType, SetRequestType] = useState([
-    { label: "All Task", value: "All Task" },
-    { label: "Today's tasks", value: "Today's tasks" },
-    { label: "Open Tasks", value: "Open Tasks" },
-    { label: "Add New Task", value: "Add New Task" },
-  ]);
-
+  const windowHeight = Dimensions.get('window').height;
+  // const [requestType, SetRequestType] = useState([
+  //   { label: "All Task", value: "All Task" },
+  //   { label: "Today's tasks", value: "Today's tasks" },
+  //   { label: "Open Tasks", value: "Open Tasks" },
+  //   { label: "Add New Task", value: "Add New Task" },
+  // ]);
+// console.log(props.navigation);
   // useEffect(() => {
   //   if (myEmployee.Description === "Manager")
   //     GetAllTasksFromDB();
@@ -65,16 +64,15 @@ export default function Tasks(props, { navigation }) {
       // console.log(temp);
       if (temp !== null) {
         SetTasks(temp);
-      
         HandelRequest(temp);
 
      
       
         // console.log(requestType);
-        let newRequest = requestType.filter(
-          (request) => request.label !== "Add New Task"
-        );
-        SetRequestType(newRequest);
+        // let newRequest = requestType.filter(
+        //   (request) => request.label !== "Add New Task"
+        // );
+        // SetRequestType(newRequest);
         SetLoading(true);
       }
     } catch (error) {
@@ -111,7 +109,7 @@ export default function Tasks(props, { navigation }) {
 
   const EditTaskDetails = (taskcode) => {
     let taskDetails = tasks.filter((task) => task.TaskCode === taskcode)[0];
-    navigation.navigate("EditTasks", { taskDetails: taskDetails });
+    props.navigation.navigate("EditTasks", { taskDetails: taskDetails });
   };
 
   const HandelRequest = (allTasks) => {
@@ -121,7 +119,7 @@ export default function Tasks(props, { navigation }) {
       case "All Tasks":
         listTemp = allTasks;
         break;
-      case "Today's tasks":
+      case "Today's Tasks":
 
         listTemp = allTasks.filter(
           (task) =>
@@ -132,9 +130,10 @@ export default function Tasks(props, { navigation }) {
       case "Open Tasks":
         listTemp = allTasks.filter((task) => task.TaskStatus === "Open");
         break;
-      case "Add New Task":
-        navigation.navigate("EditTasks");
-        return;
+      // case "Task Form":
+      //   // EditTaskDetails
+      //   // navigation.navigate("EditTasks");
+      //   return
       default:
         return;
     }
@@ -251,11 +250,12 @@ export default function Tasks(props, { navigation }) {
       DeleteTask={DeleteTask}
     />
   ));
+  
   // style={styles.SaveContainer}
   return (
-    <View >
+    <View  style ={{height:windowHeight}}>
       {
-        loading ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+        tasksDisplay.length!==0 ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
         {/* <Text>Save the tasks marked as "Done"</Text> */}
         <Image style={styles.save} source={images.save} />
       </TouchableOpacity>:null
@@ -303,8 +303,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
    
     position: 'absolute',
-    bottom:30,
-    left:20,
+    bottom:170,
+    left:30,
     borderWidth: 2,
     zIndex: 2,
   },

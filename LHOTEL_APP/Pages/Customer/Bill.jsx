@@ -106,7 +106,7 @@ export default function Bill() {
     }
 
     let list = data.map((bill) =>
-      <View style={styles.CardStyle}>
+      <View  style={styles.CardStyle}>
         <Text style={styles.cardText}>BillNumber: {bill.BillNumber}</Text>
         {billDetails}
       </View>
@@ -124,8 +124,8 @@ export default function Bill() {
 
 
   const ResitCard = () => {
-    let list = tableData.map((room) =>
-      <View>
+    let list = tableData.map((room,index) =>
+      <View key ={index}>
         <Text style={styles.cardText}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
       </View>
     )

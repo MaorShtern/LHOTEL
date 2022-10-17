@@ -1900,7 +1900,7 @@ go
 --exec GetAllCustomersHistory 111111112
 --select * from Bill_Details
 --where Customer_ID = 111111112
-
+select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Employees]
 --select * from [dbo].[Employees_Types]
 --select * from [dbo].[Employees_Tasks]
