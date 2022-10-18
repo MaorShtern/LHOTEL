@@ -5,6 +5,7 @@ import { ActivityIndicator } from "react-native";
 import AppContext from "../../AppContext";
 import moment from 'moment/moment';
 import { images } from "../../images";
+import BillHistoryCard from './BillHistoryCard';
 
 
 export default function Bill() {
@@ -48,92 +49,61 @@ export default function Bill() {
   );
 
 
+
   const BilldHistoryData = () => {
     let billNumbers = []
     tableData.map(function (per) {
-      if (billNumbers.indexOf(per.BillNumber) < 0) { billNumbers.push(per.BillNumber) }
+      if (billNumbers.find((number) => number.BillNumber === per.BillNumber) === undefined) {
+        let bill = {
+          BillNumber: per.BillNumber,
+          BillDate: moment(per.BillDate).format("DD-MM-YYYY"),
+          EntryDate: moment(per.EntryDate).format("DD-MM-YYYY"),
+          ExitDate: moment(per.ExitDate).format("DD-MM-YYYY")
+        }
+        billNumbers.push(bill)
+      }
     })
 
     let tempData = []
     for (let index = 0; index < billNumbers.length; index++) {
-      let temp = tableData.filter((per) => per.BillNumber === billNumbers[index]).map(
+      let temp = tableData.filter((per) => per.BillNumber === billNumbers[index].BillNumber).map(
         ({
           RoomNumber, RoomType, PricePerNight, AmountOfPeople, Breakfast, EntryDate, ExitDate, NumberOfNights, PaymentMethod,
         }) => ({
           RoomNumber, RoomType, PricePerNight, AmountOfPeople, Breakfast, EntryDate, ExitDate, NumberOfNights, PaymentMethod,
         })
       )
-      // console.log(temp);
+
       tempData.push({
-        BillNumber: billNumbers[index],
+        BillNumber: billNumbers[index].BillNumber,
+        BillDate: billNumbers[index].BillDate,
+        EntryDate: billNumbers[index].EntryDate,
+        ExitDate: billNumbers[index].ExitDate,
+        SumTotal: temp.reduce(function (prev, current) {
+          return current.PricePerNight * current.NumberOfNights + prev
+        }, 0),
         BillDetailes: temp
       })
     }
+
+
     return tempData
   }
 
 
-  // ---  יש לעבוד על אופן ההצגה של כול חשבונית עם המידע שלה הרלוונתי המפריד בין החשבוניות
-  const HistoryCard = (data) => {
-    // console.log(data[0].BillDetailes[0].RoomType);
-    // console.log(data)
-    // let list = data.map((bill) =>
-    //   <View style={styles.CardStyle}>
-    //     <Text style={styles.cardText}>BillNumber: {bill.BillNumber}</Text>
-    //     {billDetails}
-    //   </View>
-    // )
-
-    let billDetails = []
-    for (let i = 0; i < data.length; index++) {
-      // const element =  array[index];
-      let detailsIndex = data[i].BillDetailes
-      // console.log("index --- > " + index + " ---- >");
-      // console.log(detailsIndex);
-
-      for (let j = 0; j < detailsIndex.length; index++) {
-        console.log("index --- > " + j + " ---- >");
-        console.log(detailsIndex[j]);
-      }
-
-      // details Index.map((per) => console.log(per))
-      // let render = detailsIndex.map((per) => 
-      // <View>
-      //   <Text>RoomType: {per.RoomType}</Text>
-      // </View>)
-
-      // billDetails.push(render)
-    }
-
-    let list = data.map((bill) =>
-      <View  style={styles.CardStyle}>
-        <Text style={styles.cardText}>BillNumber: {bill.BillNumber}</Text>
-        {billDetails}
-      </View>
-    )
-
-    // data.map((bill) => console.log(bill[0].BillDetailes))
-
-    return (
-      <View >
-        {/* <Text style={{ paddingBottom: 10 }}>BillNumber: {tableData[0].BillNumber}</Text> */}
-        {list}
-      </View>
-    )
-  }
-
-
   const ResitCard = () => {
-    let list = tableData.map((room,index) =>
-      <View key ={index}>
+    let list = tableData.map((room, index) =>
+      <View key={index}>
         <Text style={styles.cardText}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
       </View>
     )
     return (
       <View style={styles.CardStyle}>
-        <Text style={styles.cardText}>CustomerID: {tableData[0].CustomerID}</Text>
+        <View>
+          <Text style={styles.cardText}>CustomerID: {tableData[0].CustomerID}</Text>
+          <Text style={styles.cardText}>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
+        </View>
         {list}
-        <Text style={styles.cardText}>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
         <Text >Number Of Nights: {tableData[0].NumberOfNights}</Text>
       </View>
     )
@@ -182,6 +152,7 @@ export default function Bill() {
 
 
   const ReservationCard = () => {
+    console.log(tableData);
     let list = tableData.map((room) =>
       <View>
         <Text style={styles.cardText}>Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
@@ -205,10 +176,8 @@ export default function Bill() {
     )
   }
 
-  // console.log(tableData);
 
   const CreateCard = () => {
-    // console.log(tableData);
     if (tableData !== null && tableData.length > 1) {
       let temp = null
       switch (request) {
@@ -220,7 +189,9 @@ export default function Bill() {
           break;
         case 'GetAllCustomersHistory':
           let data = BilldHistoryData()
-          temp = HistoryCard(data)
+          temp = data.map((per) => <BillHistoryCard key={per.BillNumber} BillNumber={per.BillNumber}
+            BillDate={per.BillDate} EntryDate={per.EntryDate} ExitDate={per.ExitDate} SumTotal={per.SumTotal}
+            BillDetailes={per.BillDetailes} />)
           break;
         default:
           break;
@@ -231,11 +202,6 @@ export default function Bill() {
     else
       return null
   }
-
-
-
-
-
 
 
   return (
@@ -326,5 +292,11 @@ const styles = StyleSheet.create({
   },
   cardText: {
     paddingBottom: 10
+  },
+  detailsBill: {
+    flexDirection: "row-reverse",
+    alignItems: 'center',
+    justifyContent: "space-between",
+    paddingBottom: 5,
   },
 })

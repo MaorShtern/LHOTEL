@@ -1,23 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import {View,  Text,  StyleSheet,  Image,  Alert,  TouchableOpacity,} from "react-native";
 import React from "react";
 import Counter from "react-native-counters";
 import { images } from "../../images";
-import {
-  Card,
-  CardTitle,
-  CardContent,
-  CardAction,
-  CardButton,
-  CardImage,
-} from "react-native-cards";
-
+import {  Card,  CardTitle,  CardContent,  CardAction,  CardButton,  CardImage,} from "react-native-cards";
 import { useState, useEffect } from "react";
 
 export default function CardRoom(props) {

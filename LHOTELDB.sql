@@ -1900,7 +1900,7 @@ go
 --exec GetAllCustomersHistory 111111112
 --select * from Bill_Details
 --where Customer_ID = 111111112
-select * from [dbo].[Customers_Rooms]
+--select * from [dbo].[Customers_Rooms]
 --select * from [dbo].[Employees]
 --select * from [dbo].[Employees_Types]
 --select * from [dbo].[Employees_Tasks]
@@ -1985,6 +1985,7 @@ go
 --exec GetCustomersRooms
 --select * from Bill_Details
 --select * from [dbo].[Purchases_Documentation]
+
 
 
 create trigger AddRoomToDetails  ---- (טריגר להכנסת רשומה חיוב על חדר חדשה לטבלת פרטי חשבונית של לקוח , מופעל כאשר ססטוס חדר בטבלת ההזמנות משתנה למאוכלס (לקוח ביצע צ'ק אין  
@@ -2140,6 +2141,9 @@ as
 go
 --exec AddPurchases_Documentation 222 
 --exec GetWorkersOnShift
+--select * from [dbo].[Customers_Rooms]
+--exec Room_Resit 111111117
+
 
 
 create proc CheckOut      
@@ -2318,7 +2322,7 @@ commit tran
 go 
 --select * from [dbo].[Bill]
 --exec GetAllCustomersHistory 111111112 
-
+--select * from dbo.Purchases_Documentation
 
 
 
