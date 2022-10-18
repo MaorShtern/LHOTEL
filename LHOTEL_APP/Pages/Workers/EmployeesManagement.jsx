@@ -17,6 +17,8 @@ import { ActivityIndicator } from "react-native";
 import { images } from "../../images";
 import AppContext from "../../AppContext";
 
+
+
 export default function EmployeesManagement({ navigation }) {
   const [DBemployees, SetDBEmployees] = useState([]);
   const [employees, SetEmployees] = useState([]);
@@ -24,7 +26,6 @@ export default function EmployeesManagement({ navigation }) {
   const [loading, SetLoading] = useState(false);
   const myContext = useContext(AppContext);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
   useEffect(() => {
     
     GetDBEmployees();
@@ -209,7 +210,7 @@ export default function EmployeesManagement({ navigation }) {
 
           <View style={styles.Empcontainer}>
             
-            <ScrollView style={{ paddingHorizontal:  5 }} >
+            <ScrollView style={{ paddingHorizontal:  5 ,marginBottom:100}} >
               {loading ? listEmployees : <Spinner />}
             </ScrollView>
           </View>
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // padding: 10,
+
   },
   topview: {
     // marginTop:60,
