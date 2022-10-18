@@ -30,4 +30,5 @@ export const images = {
   choclatebar:require("./assets/images/choclatebar.png"),
   alcoholWine:require("./assets/images/alcoholWine.png"),
   hotelloby:require("./assets/images/hotellobby.png"),
+  back:require("./assets/images/back.png"),
 }

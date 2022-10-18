@@ -1,5 +1,15 @@
-import {  ImageBackground,View,  Text,  StyleSheet,  TextInput,  TouchableOpacity,  Button,  Image,} from "react-native";
-import React, { useState, useEffect, useContext,useReducer  } from "react";
+import {
+  ImageBackground,
+  View,
+  Text,
+  StyleSheet,
+
+  TouchableOpacity,
+  Button,
+  Image,
+} from "react-native";
+import { TextInput } from "react-native-paper";
+import React, { useState, useEffect, useContext, useReducer } from "react";
 // import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dropdown } from "react-native-element-dropdown";
@@ -22,10 +32,10 @@ const RequestType = [
 export default function RoomService({ navigation }) {
   const myContext = useContext(AppContext);
   // const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(moment());
   const [dropdown, setDropdown] = useState(null);
   const [request, SetRequest] = useState("");
-  const [room, SetRoom] = useState("");
+  const [room, SetRoom] = useState(0);
   const [flagDate, setFlagDate] = useState(false);
   const [flagTime, setFlagTime] = useState(false);
   const [mode, setMode] = useState("");
@@ -35,17 +45,17 @@ export default function RoomService({ navigation }) {
   const bill = myContext.bill;
   const user = myContext.user;
   const [isDisplayDate, setShow] = useState(false);
- 
+
   const [task, SetTask] = useState({
     TaskCode: null,
     EmployeeID: -1,
-    TaskName: '',
+    TaskName: "",
     RoomNumber: 0,
-    StartDate: moment(new Date()).format('YYYY-MM-DD'),
-    StartTime: moment(new Date()).format("HH:MM"),
+    StartDate: moment().format("YYYY-MM-DD"),
+    StartTime: moment().format("HH:MM"),
     EndTime: null,
     TaskStatus: "Open",
-    Description: '',
+    Description: "",
   });
   const Rooms = bill.rooms.map((room) => {
     return {
@@ -56,28 +66,30 @@ export default function RoomService({ navigation }) {
 
   const showMode = (currentMode) => {
     setShow(!isDisplayDate);
-  //  setMode(currentMode);
+    //  setMode(currentMode);
   };
   const displayDatepicker = () => {
     showMode("calendar");
   };
 
-  useEffect(() => {
-    SetRequest("");
-  }, []);
-  
+  // useEffect(() => {
+  //   SetRequest("");
+  // }, []);
+
   useFocusEffect(
     React.useCallback(() => {
+      SetRequest("");
+      SetRoom(0);
       SetTask({
         TaskCode: null,
         EmployeeID: -1,
-        TaskName: '',
+        TaskName: "",
         RoomNumber: 0,
-        StartDate: moment(new Date()).format('YYYY-MM-DD'),
-        StartTime: moment(new Date()).format("HH:MM"),
+        StartDate: moment().format("YYYY-MM-DD"),
+        StartTime: moment().format("HH:MM"),
         EndTime: null,
         TaskStatus: "Open",
-        Description: '',
+        Description: "",
       });
     }, [])
   );
@@ -120,8 +132,6 @@ export default function RoomService({ navigation }) {
     hideTime();
   };
 
-
-
   const FetchCustomerReservationFromDB = async () => {
     if (user.CustomerID !== undefined) {
       try {
@@ -160,7 +170,7 @@ export default function RoomService({ navigation }) {
                 PricePerNight: room.PricePerNight,
               })
             );
-            forceUpdate();
+          forceUpdate();
           // console.log(JSON.stringify(customerReservation));
         }
         // else FetchCustomerReservationFromDB()
@@ -168,11 +178,9 @@ export default function RoomService({ navigation }) {
         alert(error);
       }
     }
-   
   };
 
   const CheckValues = () => {
-   
     if (room !== "") return true;
     else return false;
   };
@@ -217,128 +225,150 @@ export default function RoomService({ navigation }) {
 
   return (
     <ScrollView>
-    <Text style={styles.HeadLine}>LHotel Room Service</Text>
-    <View style={styles.label}>
-    <View style={styles.container}>
-      <Dropdown
-        style={styles.dropdown}
-        data={Rooms}
-        // search
-        searchPlaceholder="Search"
-        labelField="label"
-        valueField="value"
-        placeholder="Room Number"
-        value={task.RoomNumber}
-        onChange={(room) => {
-          task.RoomNumber = room.value;
-          // SetRoom(room.value);
-        }}
-      />
-    </View>
-    <View>
-      {task.RoomNumber === 0 ? (
-        <Text style={styles.alerts}>*Must select room* </Text>
-      ) : null}
-    </View>
-    
-    {/* <View>
+      <Text style={styles.HeadLine}>LHotel Room Service</Text>
+      <View style={styles.label}>
+        <View style={styles.container}>
+          <Dropdown
+            style={styles.dropdown}
+            data={Rooms}
+            // search
+            searchPlaceholder="Search"
+            labelField="label"
+            valueField="value"
+            placeholder="Room Number"
+            value={task.RoomNumber}
+            onChange={(room) => {
+              task.RoomNumber = room.value;
+              SetRoom(room.value);
+            }}
+          />
+        </View>
+        <View>
+          {room === 0 ? (
+            <Text style={styles.alerts}>*Must select room* </Text>
+          ) : null}
+        </View>
+
+        {/* <View>
       {request === "" ? (
         <Text style={styles.alerts}>*Must select request type* </Text>
       ) : null}
     </View> */}
-    <View style={styles.ProdutsStyle}>
-      {request === "Product purchase" ? (
-        <View>
-          <Products navigation={navigation} RoomNumber={task.RoomNumber} SetRequest={SetRequest} />
-        </View>
-      ) : (
-        <View>
-          <View style={styles.container}>
-            <Dropdown
-              style={styles.dropdown}
-              data={RequestType}
-              // search
-              labelField="label"
-              valueField="value"
-              placeholder="Request type"
-              value={task.TaskName}
-              onChange={(request) => {
-                SetRequest(request.value), (task.TaskName = request.value);
-              }}
-            />
-          </View>
-          <View>
-            {request === "" ? (
-              <Text style={styles.alerts}>*Must select request type* </Text>
-            ) : null}
-          </View>
-          <TouchableOpacity
-            style={styles.input}
-            onPress={displayDatepicker}
-          >
-            <View style={styles.ButtonContainer}>
-              <Text style={styles.text}>
-                {selectedDate === ""
-                  ? "select date"
-                  : moment(new Date(selectedDate)).format("DD/MM/YYYY")}
-              </Text>
-              <Image style={styles.icon} source={images.calendar} />
+        <View style={styles.ProdutsStyle}>
+          {request === "Product purchase" ? (
+            <View>
+              <Products
+                navigation={navigation}
+                RoomNumber={task.RoomNumber}
+                SetRequest={SetRequest}
+              />
             </View>
-          </TouchableOpacity>
-    
-          {isDisplayDate && (
-            <DatePicker
-              options={{
-                backgroundColor: "rgb(202, 232, 228)",
-                mainColor: "#000",
-              }}
-              mode="calendar"
-              minuteInterval={30}
-              style={{ borderRadius: 10 }}
-              current={moment(date).format("YYYY-MM-DD").toString()}
-              minimumDate={moment(bill.EntryDate).format("YYYY-MM-DD").toString()}
-              maximumDate={moment(bill.ExitDate).format("YYYY-MM-DD").toString()}
-              onSelectedChange={(date) => {task.StartDate = moment(date).format('YYYY-MM-DD'),setSelectedDate(date),setShow(!isDisplayDate);
-              }}
+          ) : (
+            <View>
+              <View style={styles.container}>
+                <Dropdown
+                  style={styles.dropdown}
+                  data={RequestType}
+                  // search
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Request type"
+                  value={task.TaskName}
+                  onChange={(request) => {
+                    SetRequest(request.value), (task.TaskName = request.value);
+                  }}
+                />
+              </View>
+              <View>
+                {request === "" ? (
+                  <Text style={styles.alerts}>*Must select request type* </Text>
+                ) : null}
+              </View>
+              <TouchableOpacity
+                style={styles.input}
+                onPress={displayDatepicker}
+              >
+                <View style={styles.ButtonContainer}>
+                  <Text style={styles.text}>
+                    {selectedDate === ""
+                      ? "select date"
+                      : moment(selectedDate).format("DD/MM/YYYY")}
+                  </Text>
+                  <Image style={styles.icon} source={images.calendar} />
+                </View>
+              </TouchableOpacity>
+
+              {isDisplayDate && (
+                <DatePicker
+                  options={{
+                    backgroundColor: "rgb(202, 232, 228)",
+                    mainColor: "#000",
+                  }}
+                  mode="calendar"
+                  minuteInterval={30}
+                  style={{ borderRadius: 10 }}
+                  current={moment(date).format("YYYY-MM-DD").toString()}
+                  minimumDate={moment(bill.EntryDate)
+                    .format("YYYY-MM-DD")
+                    .toString()}
+                  maximumDate={moment(bill.ExitDate)
+                    .format("YYYY-MM-DD")
+                    .toString()}
+                  onSelectedChange={(date) => {
+                    (task.StartDate = moment(date).format("YYYY-MM-DD")),
+                      setSelectedDate(date),
+                      setShow(!isDisplayDate);
+                  }}
+                />
+              )}
+              {/* setSelectedDate(date) */}
+              <View style ={styles.timeStyle}>
+              <TouchableOpacity onPress={showTime} style={styles.Btn}>
+              <TextInput.Icon
+              name="clock"
+              size={25}
+              style={{ paddingRight: 5 }}
             />
+              <Text style={{ fontSize: 18 }}>{"Time  " + time}</Text>
+             
+              {/* <Text>{"To Do By: " + task.EndTime}</Text> */}
+            </TouchableOpacity>
+            
+                {/* <TouchableOpacity style={styles.button} onPress={showTime}>
+                  <Text>{"Time: " + time}</Text>
+                </TouchableOpacity> */}
+                <DateTimePickerModal
+                  isVisible={flagTime}
+                  mode="time"
+                  onConfirm={handleTime}
+                  onCancel={hideTime}
+                />
+              
+              </View>
+
+              <Text style={styles.Text}>Description </Text>
+              <View style={styles.textAreaContainer}>
+                <TextInput
+                  style={styles.textArea}
+                  underlineColorAndroid="transparent"
+                  placeholder="Type something"
+                  placeholderTextColor="grey"
+                  numberOfLines={10}
+                  multiline={true}
+                  onChangeText={(desc) => (task.Description = desc)}
+                />
+              </View>
+              <View style={styles.ButtonContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.button} onPress={() => SaveOrder()}>
+                    ORDER
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           )}
-     {/* setSelectedDate(date) */}
-          <View>
-            <TouchableOpacity style={styles.button} onPress={showTime}>
-              <Text>{"Time: " + time}</Text>
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={flagTime}
-              mode="time"
-              onConfirm={handleTime}
-              onCancel={hideTime}
-            />
-            <View style={{ height: 20 }}></View>
-          </View>
-    
-          <Text style={styles.Text}>Description </Text>
-          <View style={styles.textAreaContainer}>
-            <TextInput
-              style={styles.textArea}
-              underlineColorAndroid="transparent"
-              placeholder="Type something"
-              placeholderTextColor="grey"
-              numberOfLines={10}
-              multiline={true}
-              onChangeText={(desc) => (task.Description = desc)}
-            />
-          </View>
-          <View style={styles.ButtonContainer}>
-            <TouchableOpacity>
-              <Text style={styles.button} onPress={() => SaveOrder()}>
-                ORDER
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      )}
-    </View>
-    </View>
+      </View>
     </ScrollView>
   );
 }
@@ -361,13 +391,26 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: "flex-start",
   },
+  Btn:{
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    // // alignSelf:'flex-end',
+    justifyContent: "space-evenly",
+    // paddingLeft: 28,
+    borderColor: "white",
+    borderWidth: 1,
+    // borderRadius: 10,
+    paddingVertical: 10,
+    paddingRight: 10,
+    paddingLeft: 40,
+  },
   label: {
     flex: 2,
     padding: 20,
   },
 
   dropdown: {
-    backgroundColor: "white",
+    // backgroundColor: "white",
 
     // borderBottomColor: "gray",
     // borderBottomWidth: 0.5,
@@ -383,9 +426,11 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: "gray",
-    // padding: 10,
-    // borderRadius: 10,
-
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+   
     padding: 10,
     paddingRight: 60,
     paddingLeft: 60,
@@ -393,8 +438,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    margin: 12,
-    borderWidth: 1,
+    marginTop:15,
+    margin: 5,
+    borderWidth: 0.2,
   },
   icon: {
     width: 30,
@@ -419,10 +465,24 @@ const styles = StyleSheet.create({
   ProdutsStyle: {
     // paddingTop:17,
   },
- 
+  timeStyle: {
+    // flexDirection: "row-reverse",
+    
+    // justifyContent: "space-between",
+    // paddingTop: 560,
+    alignSelf: 'flex-end',
+    padding:10,
+    // position: "absolute",
+    // flexDirection: "row",
+    // alignItems: "center",
+    // // alignSelf:'flex-end',
+    // justifyContent: "space-between",
+    // // paddingHorizontal: 10,
+  },
 });
 
-{/* <View>
+{
+  /* <View>
 
 { bill.CustomerID === "" ?
   <View style={styles.container}>
@@ -485,7 +545,8 @@ const styles = StyleSheet.create({
 
       </View>
     </View>
-  </View>: */}
+  </View>: */
+}
 //   <ScrollView>
 // <Text style={styles.HeadLine}>LHotel Room Service</Text>
 // <View style={styles.label}>
@@ -620,10 +681,4 @@ const styles = StyleSheet.create({
 
 // }
 
-
-
-
-
-
-
-  // </View>
+// </View>

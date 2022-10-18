@@ -149,6 +149,7 @@ export default function Home({ navigation }) {
         <View style={styles.items}>{loading ? null : <Spinner />}</View>
         <TextInput
           label="Employee ID"
+          activeOutlineColor="#000"
           left={<TextInput.Icon name="account" />}
           keyboardType="numeric"
           mode="outlined"
@@ -160,6 +161,7 @@ export default function Home({ navigation }) {
 
         <TextInput
           label="Employee Code"
+          activeOutlineColor="#000"
           left={<TextInput.Icon name="lock" />}
           keyboardType="numeric"
           mode="outlined"
