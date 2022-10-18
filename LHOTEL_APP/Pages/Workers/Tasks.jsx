@@ -253,7 +253,7 @@ export default function Tasks(props) {
   
   // style={styles.SaveContainer}
   return (
-    <View  style ={{height:windowHeight}}>
+    <View  style ={{height:windowHeight-120}}>
       {
         tasksDisplay.length!==0 ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
         {/* <Text>Save the tasks marked as "Done"</Text> */}
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
    
     position: 'absolute',
-    bottom:170,
+    bottom:75,
     left:30,
     borderWidth: 2,
     zIndex: 2,

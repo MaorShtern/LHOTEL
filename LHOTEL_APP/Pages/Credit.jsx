@@ -192,9 +192,10 @@ const styles = StyleSheet.create({
   // },
   footerStyle: {
     flexDirection: "row",
+    
     justifyContent: "space-between",
     paddingTop: 560,
-    alignItems: 'center',
+    alignSelf: 'center',
     position: "absolute",
   },
 
