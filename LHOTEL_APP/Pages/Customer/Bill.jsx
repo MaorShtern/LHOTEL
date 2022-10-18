@@ -196,7 +196,6 @@ export default function Bill() {
         default:
           break;
       }
-
       return temp
     }
     else
