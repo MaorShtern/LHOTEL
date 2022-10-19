@@ -1892,7 +1892,7 @@ go
     --"ExitDate": "2022-08-24",
     --"AmountOfPeople": 5 ,
     --"Breakfast":true
---exec GetReservedRoomsByCustomerId 666
+--exec GetReservedRoomsByCustomerId 111111112
 
 
 create proc DeleteReservation
@@ -1922,7 +1922,7 @@ go
 
 
 
-alter proc Room_Resit      
+create proc Room_Resit      
 @id int
 as
 begin tran		

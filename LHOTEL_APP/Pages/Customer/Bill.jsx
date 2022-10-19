@@ -152,7 +152,6 @@ export default function Bill() {
 
 
   const ReservationCard = () => {
-    console.log(tableData);
     let list = tableData.map((room) =>
       <View>
         <Text style={styles.cardText}>Room: {room.RoomNumber}  Price Per Night: {room.PricePerNight} {room.RoomType}</Text>
@@ -178,7 +177,7 @@ export default function Bill() {
 
 
   const CreateCard = () => {
-    if (tableData !== null && tableData.length > 1) {
+    if (tableData !== null && tableData.length > 0) {
       let temp = null
       switch (request) {
         case 'GetReservedRoomsByCustomerId':
