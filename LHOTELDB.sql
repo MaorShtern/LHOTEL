@@ -1924,11 +1924,13 @@ create proc DeleteReservation
 @id int
 as
 	begin tran	
+	declare  @bill_Number as int = (SELECT MAX([Bill_Number]) as max_items
+	FROM Bill where [Customer_ID] = @id)
 
 	DELETE FROM [dbo].[Customers_Rooms] WHERE [Customer_ID] = @id 
 	UPDATE [dbo].[Bill] 
 	SET Bill_Status = 'Close'
-	where [Customer_ID] = @id
+	where [Customer_ID] = @id and [Bill_Number] = @bill_Number
 
 	if (@@error !=0)
 	begin
@@ -2563,12 +2565,16 @@ go
 
 
 
---select * from [dbo].[Bill]
---select * from [dbo].[Customers_Rooms]
---select * from [dbo].[Bill_Details]
---select * from [dbo].[Employees]
---select * from [dbo].[Shifts]
---select * from [dbo].[Employees_Tasks]
+select * from [dbo].[Bill]
+where [Customer_ID]= 111111112
+select * from [dbo].[Customers_Rooms]
+where [Customer_ID]= 111111112
+select * from [dbo].[Bill_Details]
+where [Customer_ID]= 111111112
+
+select * from [dbo].[Employees]
+select * from [dbo].[Shifts]
+select * from [dbo].[Employees_Tasks]
 --select * from [dbo].[Customers]
 --select * from [dbo].[Purchases_Documentation]
 

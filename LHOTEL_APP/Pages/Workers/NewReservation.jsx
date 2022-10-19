@@ -6,9 +6,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import {ImageBackground,View,StyleSheet,Image,Text,TouchableOpacity,ScrollView,StatusBar,Switch,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
-
-// import { Dropdown } from "react-native-element-dropdown";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Dialog from "react-native-dialog";
 import { TextInput } from "react-native-paper";
