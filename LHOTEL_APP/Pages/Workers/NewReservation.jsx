@@ -141,19 +141,7 @@ export default function NewReservation({ navigation }) {
     let result = await fetch("http://proj13.ruppin-tech.co.il/GetDBCustomerById",requestOptions);
     let user = await result.json();
     if (user !== null) {
-      // CustomerID: user.CustomerID,
-      // CardHolderName: roomsReservation.CardHolderName,
-      // CreditCardDate: roomsReservation.CreditCardDate,
-      // ThreeDigit: roomsReservation.ThreeDigit,
-      // CreditCardNumber: SHA1Card,
-      // EmployeeID: roomsReservation.EmployeeID,
-      // CounterSingle: roomsReservation.CounterSingle,
-      // CounterDouble: roomsReservation.CounterDouble,
-      // CounterSuite: roomsReservation.CounterSuite,
-      // EntryDate:roomsReservation.EntryDate,
-      // ExitDate:roomsReservation.ExitDate ,
-      // AmountOfPeople: roomsReservation.AmountOfPeople,
-      // Breakfast: roomsReservation.Breakfast
+
       roomsReservation.CustomerID = IDCheck ;
       roomsReservation.Mail = user.Mail;
       roomsReservation.FirstName = user.FirstName ;
