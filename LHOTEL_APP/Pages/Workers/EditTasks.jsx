@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, } from "react-native";
 import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { Dropdown } from "react-native-element-dropdown";
@@ -14,6 +7,7 @@ import { Checkbox } from "react-native-paper";
 import moment from "moment";
 import { useEffect } from "react";
 import { images } from "../../images";
+
 
 const RequestType = [
   { label: "Room Cleaning", value: "Room Cleaning" },
@@ -29,7 +23,6 @@ export default function EditTasks({ route, navigation }) {
   const [dropdown, setDropdown] = useState(null);
   const [flagStartTime, setFlagStartTime] = useState(false);
   const [flagEndTime, setFlagEndTime] = useState(false);
-
   const [taskStatus, SetTaskStatus] = useState(false);
   const [task, SetTask] = useState({
     TaskCode: null,
@@ -109,7 +102,6 @@ export default function EditTasks({ route, navigation }) {
 
   const CheckValues = () => {
     return (
-      task.EmployeeID !== null &&
       /^-?\d+$/.test(task.RoomNumber) &&
       task.RoomNumber > 0 &&
       task.TaskName !== ""
@@ -118,16 +110,17 @@ export default function EditTasks({ route, navigation }) {
 
   const AlterTask = async () => {
     try {
+      if (!CheckValues()) {
+        alert("The fields are not filled correctly");
+        return;
+      }
       const requestOptions = {
         method: "PUT",
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
       };
-      console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/AlterTask",
-        requestOptions
-      );
+      // console.log(requestOptions.body);
+      let result = await fetch("http://proj13.ruppin-tech.co.il/AlterTask", requestOptions);
       if (result) {
         alert("Task details successfully saved");
         navigation.goBack();
@@ -149,10 +142,7 @@ export default function EditTasks({ route, navigation }) {
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/AddNewTask",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/AddNewTask", requestOptions);
       if (result) {
         alert("Task details successfully saved");
         navigation.goBack();
@@ -162,7 +152,7 @@ export default function EditTasks({ route, navigation }) {
     }
   };
 
-  console.log(task);
+  // console.log(task);
 
   return (
     <ScrollView>
@@ -179,7 +169,7 @@ export default function EditTasks({ route, navigation }) {
         <Text style={{ paddingLeft: 15, fontSize: 18 }}>Employee ID:</Text>
         <TextInput
           // label={JSON.stringify(task.EmployeeID)}
-          placeholder={task.EmployeeID !== null ?JSON.stringify(task.EmployeeID):""}
+          placeholder={task.EmployeeID !== null ? JSON.stringify(task.EmployeeID) : ""}
           // right={<TextInput.Icon name="account" />}
           mode="outlined"
           keyboardType="numeric"
@@ -190,7 +180,7 @@ export default function EditTasks({ route, navigation }) {
         <Text style={{ paddingLeft: 15, fontSize: 18 }}>Room Number:</Text>
         <TextInput
           // label={JSON.stringify(task.RoomNumber)}
-          placeholder={task.RoomNumber !== 0 ? JSON.stringify(task.RoomNumber): ""}
+          placeholder={task.RoomNumber !== 0 ? JSON.stringify(task.RoomNumber) : ""}
           // left={<TextInput.Icon name="" />}
           mode="outlined"
           keyboardType="numeric"
@@ -259,7 +249,7 @@ export default function EditTasks({ route, navigation }) {
               status={taskStatus ? "checked" : "unchecked"}
               onPress={HandelTaskStatus}
             />
-            <Text  style={{ fontSize: 18 }}>Should the task be performed?</Text>
+            <Text style={{ fontSize: 18 }}>Should the task be performed?</Text>
           </View>
         </View>
         <View>
@@ -282,7 +272,7 @@ export default function EditTasks({ route, navigation }) {
         <View
           style={{
             alignSelf: "center",
-           
+
           }}
         >
           <TouchableOpacity
@@ -334,21 +324,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   container: {
-    paddingBottom:10,
+    paddingBottom: 10,
   },
   button: {
     backgroundColor: "#D9E7E0",
     padding: 10,
     borderRadius: 10,
-  
-    borderBottomWidth:0.2,
+
+    borderBottomWidth: 0.2,
     margin: 5,
     // flex: 1,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
     width: 120,
-   marginBottom:80
+    marginBottom: 80
   },
   Checkbox: {
     flexDirection: "row",
@@ -356,8 +346,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   CheckboxContainer: {
-   
-    marginVertical:15
+
+    marginVertical: 15
   },
   save: {
     width: 30,

@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, {useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { ActivityIndicator } from "react-native";
 import TasksCard from "./TasksCard";
@@ -31,7 +31,7 @@ export default function Tasks(props) {
   //   { label: "Open Tasks", value: "Open Tasks" },
   //   { label: "Add New Task", value: "Add New Task" },
   // ]);
-// console.log(props.navigation);
+  // console.log(props.navigation);
   // useEffect(() => {
   //   if (myEmployee.Description === "Manager")
   //     GetAllTasksFromDB();
@@ -66,8 +66,8 @@ export default function Tasks(props) {
         SetTasks(temp);
         HandelRequest(temp);
 
-     
-      
+
+
         // console.log(requestType);
         // let newRequest = requestType.filter(
         //   (request) => request.label !== "Add New Task"
@@ -82,23 +82,19 @@ export default function Tasks(props) {
   };
 
   const GetAllTasksFromDB = async () => {
- 
+
     try {
       const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
       let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetAllTasks",
-        requestOptions
-      );
+        "http://proj13.ruppin-tech.co.il/GetAllTasks", requestOptions);
       let temp = await result.json();
       // console.log(temp);
       if (temp !== null) {
         SetTasks(temp);
-       HandelRequest(temp);
-       
-        // SetTasksDisplay(temp);
+        HandelRequest(temp);
         SetLoading(true);
       }
     } catch (error) {
@@ -167,10 +163,7 @@ export default function Tasks(props) {
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/DeleteTask",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/DeleteTask", requestOptions);
       let temp = await result.json();
       // console.log(temp);
       if (temp) {
@@ -191,21 +184,19 @@ export default function Tasks(props) {
       }
       SetLoading(false);
       let counter = 0;
+      let endTime =  moment(new Date()).format("HH:MM")
       for (let index = 0; index < taskToMarkAsDone.length; index++) {
         // console.log(taskToMarkAsDone[index]);
         const requestOptions = {
           method: "PUT",
           body: JSON.stringify({
             task_code: taskToMarkAsDone[index].TaskCode,
-            end_time: moment(new Date()).format("HH:MM"),
+            end_time: endTime,
           }),
           headers: { "Content-Type": "application/json" },
         };
         // console.log(requestOptions.body);
-        let result = await fetch(
-          "http://proj13.ruppin-tech.co.il/CloseTask",
-          requestOptions
-        );
+        let result = await fetch("http://proj13.ruppin-tech.co.il/CloseTask", requestOptions);
         let temp = await result.json();
         if (temp) {
           counter++;
@@ -250,17 +241,17 @@ export default function Tasks(props) {
       DeleteTask={DeleteTask}
     />
   ));
-  
+
   // style={styles.SaveContainer}
   return (
-    <View  style ={{height:windowHeight-120}}>
+    <View style={{ height: windowHeight - 120 }}>
       {
-        tasksDisplay.length!==0 ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
-        {/* <Text>Save the tasks marked as "Done"</Text> */}
-        <Image style={styles.save} source={images.save} />
-      </TouchableOpacity>:null
+        tasksDisplay.length !== 0 ? <TouchableOpacity style={styles.Save} onPress={CloseTask}>
+          {/* <Text>Save the tasks marked as "Done"</Text> */}
+          <Image style={styles.save} source={images.save} />
+        </TouchableOpacity> : null
       }
-     
+
 
       <ScrollView>
         <View style={styles.items}>{loading ? tasksList : <Spinner />}</View>
@@ -301,17 +292,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#D9E7E0",
     padding: 15,
     borderRadius: 50,
-   
+
     position: 'absolute',
-    bottom:75,
-    left:30,
+    bottom: 75,
+    left: 30,
     borderWidth: 2,
     zIndex: 2,
   },
   save: {
     width: 30,
     height: 30
-},
+  },
   container: {
     flex: 1,
     justifyContent: "center",

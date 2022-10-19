@@ -1,4 +1,4 @@
-import { View, Text,  Image,  StyleSheet,  ScrollView,  TextInput,  TouchableOpacity,  Alert,} from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, } from "react-native";
 import React, { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { images } from "../../images";
@@ -19,7 +19,7 @@ export default function AddEmployee({ navigation }) {
   const [id, SetId] = useState("");
   const [name, SetName] = useState("");
   const [phoneNumber, SetPhoneNumber] = useState("");
-  const [date, SetDate] = useState("");
+  const [date, SetDate] = useState(new Date());
   const [description, SetDescription] = useState("General");
   const [hourlyWage, SetHourlyWage] = useState(30);
   const [address, SetAddress] = useState("");
@@ -33,8 +33,8 @@ export default function AddEmployee({ navigation }) {
   };
 
   const HandelDate = (date) => {
-    let dateStr = moment(date).format("DD/MM/YYYY");
-    SetDate(dateStr);
+    // let dateStr = moment(date).format("DD/MM/YYYY");
+    SetDate(date);
     HideDate();
   };
 
@@ -58,10 +58,7 @@ export default function AddEmployee({ navigation }) {
         headers: { "Content-Type": "application/json" },
       };
       // console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/AddNewEmployee",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/AddNewEmployee", requestOptions);
       if (result) {
         alert("The employee was saved successfully");
         navigation.goBack();
@@ -94,7 +91,7 @@ export default function AddEmployee({ navigation }) {
         <Text>Employee ID</Text>
         <TextInput
           keyboardType="numeric"
-       
+
           style={styles.TextInput}
           onChangeText={(id) => SetId(id)}
         ></TextInput>
@@ -104,21 +101,13 @@ export default function AddEmployee({ navigation }) {
           </View>
         ) : null}
 
-        <Text style={{ paddingTop: 10 }}>Full Name</Text>
-        <TextInput
-       
-          style={styles.TextInput}
-          onChangeText={(name) => SetName(name)}
-        ></TextInput>
-        {/* {name === "" ?
-                    (<View><Text style={{color:"red"}}>* Required field</Text></View>)
-                    : null
-                } */}
+        <Text style={{ paddingTop: 10 }}>Full Name  (Only English letters)</Text>
+        <TextInput style={styles.TextInput} onChangeText={(name) => SetName(name)}></TextInput>
 
         <Text style={{ paddingTop: 10 }}>Phone Number</Text>
         <TextInput
           keyboardType="numeric"
-   
+
           style={styles.TextInput}
           onChangeText={(phone) => SetPhoneNumber(phone)}
         ></TextInput>
@@ -126,8 +115,7 @@ export default function AddEmployee({ navigation }) {
         <View style={{ paddingTop: 10 }}>
           <TouchableOpacity style={styles.input} onPress={ShowDate}>
             <View style={styles.ButtonContainer}>
-              <Text>{" Birth date : " + date}</Text>
-
+              <Text>{" Birth date : " + moment(date).format("DD/MM/YYYY")}</Text>
               <Image
                 style={{ width: 30, height: 30 }}
                 source={images.calendar}
@@ -142,7 +130,7 @@ export default function AddEmployee({ navigation }) {
             onCancel={HideDate}
           />
         </View>
-        <Text style={{ paddingTop :10 }}>Address</Text>
+        <Text style={{ paddingTop: 10 }}>Address  (Only English letters)</Text>
         <TextInput
           placeholder="City, street , house number ..."
           style={styles.TextInput}
@@ -155,7 +143,7 @@ export default function AddEmployee({ navigation }) {
             data={Roles}
             labelField="label"
             valueField="value"
-            placeholder={"Role"} 
+            placeholder={"Role"}
             onChange={(role) => {
               SetDescription(role.value);
             }}
@@ -172,14 +160,14 @@ export default function AddEmployee({ navigation }) {
           />
           <Text>Hourly Wage </Text>
         </View>
-  
 
-        
+
+
         <View
           style={{
             flex: 1,
             alignItems: "center",
-            paddingTop:20,
+            paddingTop: 20,
             justifyContent: "space-between",
           }}
         >
@@ -212,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderWidth: 0.6,
     height: 50,
-    marginTop:2,
+    marginTop: 2,
     padding: 10,
   },
   input: {

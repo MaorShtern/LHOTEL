@@ -21,6 +21,8 @@ import Products from "./Products";
 import { ScrollView } from "react-native-virtualized-view";
 import { useFocusEffect } from "@react-navigation/native";
 import AppContext from "../../AppContext";
+
+
 const RequestType = [
   { label: "Room Cleaning", value: "Room Cleaning" },
   { label: "Room Service", value: "Room Service" },
@@ -132,78 +134,76 @@ export default function RoomService({ navigation }) {
     hideTime();
   };
 
-  const FetchCustomerReservationFromDB = async () => {
-    if (user.CustomerID !== undefined) {
-      try {
-        const requestOptions = {
-          method: "PUT",
-          body: JSON.stringify({
-            id: user.CustomerID,
-          }),
-          headers: { "Content-Type": "application/json" },
-        };
-        let result = await fetch(
-          "http://proj13.ruppin-tech.co.il/GetOccupiedRoomsByCustomerId",
-          requestOptions
-        );
-        let customerReservation = await result.json();
-        // console.log(JSON.stringify(user))
-        if (customerReservation !== null) {
-          bill.CustomerType = customerReservation[0].CustomerType;
-          bill.EntryDate = customerReservation[0].EntryDate;
-          bill.ExitDate = customerReservation[0].ExitDate;
-          bill.FirstName = customerReservation[0].FirstName;
-          bill.LastName = customerReservation[0].LastName;
-          bill.Mail = customerReservation[0].Mail;
-          bill.PhoneNumber = customerReservation[0].PhoneNumber;
-          bill.CustomerID = customerReservation[0].CustomerID;
-          bill.BillNumber = customerReservation[0].BillNumber;
-          bill.BillDate = customerReservation[0].BillDate;
-          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
-          bill.Breakfast = customerReservation[0].Breakfast;
-          bill.NumberOfNights = customerReservation[0].NumberOfNights;
-          bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
-          if (bill.rooms.length === 0)
-            customerReservation.map((room) =>
-              bill.rooms.push({
-                RoomNumber: room.RoomNumber,
-                PricePerNight: room.PricePerNight,
-              })
-            );
-          forceUpdate();
-          // console.log(JSON.stringify(customerReservation));
-        }
-        // else FetchCustomerReservationFromDB()
-      } catch (error) {
-        alert(error);
-      }
-    }
-  };
+  // const FetchCustomerReservationFromDB = async () => {
+  //   if (user.CustomerID !== undefined) {
+  //     try {
+  //       const requestOptions = {
+  //         method: "PUT",
+  //         body: JSON.stringify({
+  //           id: user.CustomerID,
+  //         }),
+  //         headers: { "Content-Type": "application/json" },
+  //       };
+  //       let result = await fetch(
+  //         "http://proj13.ruppin-tech.co.il/GetOccupiedRoomsByCustomerId",
+  //         requestOptions
+  //       );
+  //       let customerReservation = await result.json();
+  //       // console.log(JSON.stringify(user))
+  //       if (customerReservation !== null) {
+  //         bill.CustomerType = customerReservation[0].CustomerType;
+  //         bill.EntryDate = customerReservation[0].EntryDate;
+  //         bill.ExitDate = customerReservation[0].ExitDate;
+  //         bill.FirstName = customerReservation[0].FirstName;
+  //         bill.LastName = customerReservation[0].LastName;
+  //         bill.Mail = customerReservation[0].Mail;
+  //         bill.PhoneNumber = customerReservation[0].PhoneNumber;
+  //         bill.CustomerID = customerReservation[0].CustomerID;
+  //         bill.BillNumber = customerReservation[0].BillNumber;
+  //         bill.BillDate = customerReservation[0].BillDate;
+  //         bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
+  //         bill.Breakfast = customerReservation[0].Breakfast;
+  //         bill.NumberOfNights = customerReservation[0].NumberOfNights;
+  //         bill.AmountOfPeople = customerReservation[0].AmountOfPeople;
+  //         if (bill.rooms.length === 0)
+  //           customerReservation.map((room) =>
+  //             bill.rooms.push({
+  //               RoomNumber: room.RoomNumber,
+  //               PricePerNight: room.PricePerNight,
+  //             })
+  //           );
+  //         forceUpdate();
+  //         // console.log(JSON.stringify(customerReservation));
+  //       }
+  //       // else FetchCustomerReservationFromDB()
+  //     } catch (error) {
+  //       alert(error);
+  //     }
+  //   }
+  // };
 
   const CheckValues = () => {
-    if (room !== "") return true;
-    else return false;
+    if (room !== 0 && request !== "")
+      return true;
+    else
+      return false;
   };
+
 
   const SaveOrder = async () => {
     try {
-      console.log(JSON.stringify(task));
-      // if(!CheckValues())
-      // {
-      //     alert("The fields are not filled correctly")
-      //     return
-      // }
-      // console.log(task);
+      if (!CheckValues()) {
+        alert("The fields are not filled correctly")
+        return
+      }
       const requestOptions = {
         method: "POST",
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
       };
-      console.log(requestOptions.body);
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/AddNewTask",
-        requestOptions
-      );
+      // console.log(requestOptions.body);
+      let result = await fetch("http://proj13.ruppin-tech.co.il/AddNewTask", requestOptions);
+      // console.log(result);
       if (result) {
         alert("details successfully saved");
         navigation.goBack();
@@ -231,7 +231,6 @@ export default function RoomService({ navigation }) {
           <Dropdown
             style={styles.dropdown}
             data={Rooms}
-            // search
             searchPlaceholder="Search"
             labelField="label"
             valueField="value"
@@ -274,9 +273,7 @@ export default function RoomService({ navigation }) {
                   valueField="value"
                   placeholder="Request type"
                   value={task.TaskName}
-                  onChange={(request) => {
-                    SetRequest(request.value), (task.TaskName = request.value);
-                  }}
+                  onChange={(request) => { SetRequest(request.value), (task.TaskName = request.value); }}
                 />
               </View>
               <View>
@@ -322,18 +319,18 @@ export default function RoomService({ navigation }) {
                 />
               )}
               {/* setSelectedDate(date) */}
-              <View style ={styles.timeStyle}>
-              <TouchableOpacity onPress={showTime} style={styles.Btn}>
-              <TextInput.Icon
-              name="clock"
-              size={25}
-              style={{ paddingRight: 5 }}
-            />
-              <Text style={{ fontSize: 18 }}>{"Time  " + time}</Text>
-             
-              {/* <Text>{"To Do By: " + task.EndTime}</Text> */}
-            </TouchableOpacity>
-            
+              <View style={styles.timeStyle}>
+                <TouchableOpacity onPress={showTime} style={styles.Btn}>
+                  <TextInput.Icon
+                    name="clock"
+                    size={25}
+                    style={{ paddingRight: 5 }}
+                  />
+                  <Text style={{ fontSize: 18 }}>{"Time  " + time}</Text>
+
+                  {/* <Text>{"To Do By: " + task.EndTime}</Text> */}
+                </TouchableOpacity>
+
                 {/* <TouchableOpacity style={styles.button} onPress={showTime}>
                   <Text>{"Time: " + time}</Text>
                 </TouchableOpacity> */}
@@ -343,21 +340,17 @@ export default function RoomService({ navigation }) {
                   onConfirm={handleTime}
                   onCancel={hideTime}
                 />
-              
-              </View>
 
+              </View>
               <Text style={styles.Text}>Description </Text>
               <View style={styles.textAreaContainer}>
                 <TextInput
-                  style={styles.textArea}
-                  underlineColorAndroid="transparent"
-                  placeholder="Type something"
-                  placeholderTextColor="grey"
-                  numberOfLines={10}
                   multiline={true}
+                  numberOfLines={4}
                   onChangeText={(desc) => (task.Description = desc)}
                 />
               </View>
+
               <View style={styles.ButtonContainer}>
                 <TouchableOpacity>
                   <Text style={styles.button} onPress={() => SaveOrder()}>
@@ -391,15 +384,12 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: "flex-start",
   },
-  Btn:{
+  Btn: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    // // alignSelf:'flex-end',
     justifyContent: "space-evenly",
-    // paddingLeft: 28,
     borderColor: "white",
     borderWidth: 1,
-    // borderRadius: 10,
     paddingVertical: 10,
     paddingRight: 10,
     paddingLeft: 40,
@@ -410,35 +400,25 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    // backgroundColor: "white",
-
-    // borderBottomColor: "gray",
-    // borderBottomWidth: 0.5,
     marginTop: 20,
   },
   alerts: {
     color: "red",
   },
-  ButtonContainer: {
-    alignItems: "center",
-    paddingTop: 10,
-  },
 
   button: {
     backgroundColor: "gray",
-    padding: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderRadius: 10,
-   
     padding: 10,
     paddingRight: 60,
     paddingLeft: 60,
-    borderRadius: 3,
+    marginRight: 60
+
   },
   input: {
     height: 50,
-    marginTop:15,
+    marginTop: 15,
     margin: 5,
     borderWidth: 0.2,
   },
@@ -450,8 +430,6 @@ const styles = StyleSheet.create({
   },
   text: {
     height: 50,
-
-    // margin: 3,
     paddingTop: 17,
     paddingLeft: 10,
   },
@@ -462,24 +440,26 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     padding: 10,
   },
-  ProdutsStyle: {
-    // paddingTop:17,
-  },
+
   timeStyle: {
-    // flexDirection: "row-reverse",
-    
-    // justifyContent: "space-between",
-    // paddingTop: 560,
     alignSelf: 'flex-end',
-    padding:10,
-    // position: "absolute",
-    // flexDirection: "row",
-    // alignItems: "center",
-    // // alignSelf:'flex-end',
-    // justifyContent: "space-between",
-    // // paddingHorizontal: 10,
+    padding: 10,
+
   },
 });
+
+
+{/* <TextInput
+style={styles.textArea}
+underlineColorAndroid="transparent"
+placeholder="Type something"
+placeholderTextColor="grey"
+
+// numberOfLines={10}
+multiline={true}
+onChangeText={(desc) => (task.Description = desc)}
+/> */}
+
 
 {
   /* <View>

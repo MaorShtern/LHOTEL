@@ -1,45 +1,20 @@
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect,useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Icon from 'react-native-vector-icons/Octicons';
 import ReservationCard from './ReservationCard'
 import AppContext from '../../AppContext';
 
-export default function ConfirmationPage( { route, navigation }) {
-
-    // { route, navigation }
+export default function ConfirmationPage({ route, navigation }) {
 
     let { the_data } = route.params
     const myContext = useContext(AppContext);
     const roomsReservation = myContext.roomsReservation
-    // console.log(roomsReservation);
 
-    // const myContext = useContext(AppContext);
 
-    // const curr = customer.fields
-// console.log(curr);
-// console.log(curr);
-    // const Delete = async () => {
-    //     const requestOptions = {
-    //         method: 'DELETE',
-    //         headers: { 'Content-Type': 'application/json' }
-    //     };
-    //     let result = await fetch('http://proj13.ruppin-tech.co.il/api/Customers/' + id, requestOptions);
-    //     let deleteResult = await result.json();
-    //     if (deleteResult) {
-    //         alert("The order has been removed")
-    //         navigation.navigate('Homepage')
-    //     }
-    //     else {
-    //         alert("ERROR")
-    //     }
+    let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type}
+        count={room.count} pricePerNight={room.pricePerNight} entryDate={roomsReservation.EntryDate}
+        exitDate={roomsReservation.ExitDate} breakfast={roomsReservation.Breakfast} />)
 
-    // }
- 
-
-    let listCards = the_data.map((room) => <ReservationCard key={room.type} roomType={room.type} 
-    count={room.count} pricePerNight={room.pricePerNight} entryDate={roomsReservation.EntryDate} 
-    exitDate={roomsReservation.ExitDate} breakfast={roomsReservation.Breakfast} />)
-       console.log(roomsReservation);
     return (
         <ScrollView>
             <Text style={styles.HeadLine}>Order Confirmation <Icon name='check' size={40} color='green' /></Text>
@@ -55,7 +30,7 @@ export default function ConfirmationPage( { route, navigation }) {
                     {/* <Text style={styles.textStyle}>Number Of Nights : {customer.NumberOfNights}</Text> */}
                     <Text style={styles.textStyle}>Cardholder's Name: {roomsReservation.CardHolderName}</Text>
                     <Text style={styles.textStyle}>Card Number: ************{roomsReservation.CreditCardNumber.slice(-4)}</Text>
-                    
+
                 </View>
             </View>
             {/* curr.CreditCardNumber.slice(-4) */}
@@ -95,14 +70,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     ButtonContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 30,
-        justifyContent: 'space-between',
-        paddingTop: 5
+        alignItems:"center",
+        paddingTop: 10
     },
- 
+
     pay: {
         textDecorationLine: 'underline',
         alignSelf: 'center',
@@ -116,18 +87,16 @@ const styles = StyleSheet.create({
         padding: 20,
         margin: 5
     },
-    textStyle:{
+    textStyle: {
         fontSize: 16,
-        paddingVertical:2,
-      
-       },
+        paddingVertical: 2,
+
+    },
     button:
     {
         backgroundColor: 'gray',
-        paddingHorizontal:20,
-        paddingVertical:10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         borderRadius: 10,
-   
-
     },
 })

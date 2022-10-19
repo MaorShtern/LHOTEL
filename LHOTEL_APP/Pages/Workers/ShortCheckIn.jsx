@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Customer from "../Class/Customer";
 import Reservation from "../Class/Reservation";
-import {StyleSheet,View, Image,  TouchableOpacity,  FlatList,  Alert,} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, FlatList, Alert, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import { Divider, Text } from "react-native-paper";
@@ -21,42 +21,42 @@ export default function ShortCheckIn({ navigation }) {
   // const curr = currReservation[0];
   // console.log(curr);
 
-//   const CalcCost = () => {
-//     let total = 0
-//     // if (roomsReservation.BillNumber === undefined) {
-     
-//     // }
+  //   const CalcCost = () => {
+  //     let total = 0
+  //     // if (roomsReservation.BillNumber === undefined) {
 
-//     roomsReservation.rooms.map((room) => {
-//       total+= room.PricePerNight
-       
-//         });
+  //     // }
 
-//         // useEffect(() => { GetCardsByRole(); 
-//         // }, []);
-      
-// console.log(roomsReservation.rooms);
+  //     roomsReservation.rooms.map((room) => {
+  //       total+= room.PricePerNight
 
-//     // if (roomsReservation.BillNumber === undefined) {
-//     //   let rooms_costs = [
-//     //     { type: "Single", cost: 100, amount: roomsReservation.CounterSingle },
-//     //     { type: "Double", cost: 300, amount: roomsReservation.CounterDouble },
-//     //     { type: "Suite", cost: 500, amount: roomsReservation.CounterSuite },
-//     //   ];
-//     //   rooms_costs.map((room) => {
-//     //     room.cost = room.cost * room.amount;
-//     //   });
-//     //   rooms_costs.forEach((element) => {
-//     //     total += element.cost;
-//     //   });
-//     // } else {
-//     //   for (let i = 0; i < currReservation.length; i++) {
-//     //     total += currReservation[i].PricePerNight;
-//     //   }
-//     // }
+  //         });
 
-//     return total;
-//   };
+  //         // useEffect(() => { GetCardsByRole(); 
+  //         // }, []);
+
+  // console.log(roomsReservation.rooms);
+
+  //     // if (roomsReservation.BillNumber === undefined) {
+  //     //   let rooms_costs = [
+  //     //     { type: "Single", cost: 100, amount: roomsReservation.CounterSingle },
+  //     //     { type: "Double", cost: 300, amount: roomsReservation.CounterDouble },
+  //     //     { type: "Suite", cost: 500, amount: roomsReservation.CounterSuite },
+  //     //   ];
+  //     //   rooms_costs.map((room) => {
+  //     //     room.cost = room.cost * room.amount;
+  //     //   });
+  //     //   rooms_costs.forEach((element) => {
+  //     //     total += element.cost;
+  //     //   });
+  //     // } else {
+  //     //   for (let i = 0; i < currReservation.length; i++) {
+  //     //     total += currReservation[i].PricePerNight;
+  //     //   }
+  //     // }
+
+  //     return total;
+  //   };
 
 
 
@@ -159,7 +159,7 @@ export default function ShortCheckIn({ navigation }) {
       </View>
     );
   };
- // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
+  // פונצקיה לביצוע צ'ק אין ללקוח שלא קיים לו משתמש במערכת
   const CheckIn_Without_Existing_User = async () => {
     var Hashes = require("jshashes");
     let SHA1Pass = new Hashes.SHA1().b64_hmac(roomsReservation.CustomerID, roomsReservation.CustomerID);
@@ -249,7 +249,7 @@ export default function ShortCheckIn({ navigation }) {
       );
       let customerResult = await result.json();
       if (customerResult) {
-        console.log(customerResult);
+        // console.log(customerResult);
         alert("You have checked in successfully !");
       }
       navigation.navigate("CheckIn");
@@ -267,14 +267,12 @@ export default function ShortCheckIn({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/CheckIn",
-        requestOptions
-      );
+      // console.log( roomsReservation.EntryDate);
+      // console.log(requestOptions.body);
+      let result = await fetch("http://proj13.ruppin-tech.co.il/CheckIn", requestOptions);
       let customerResult = await result.json();
       if (customerResult !== null) {
-        console.log(customerResult);
-
+        // console.log(customerResult);
         alert("You have checked in successfully !");
       }
       navigation.navigate("CheckIn");
@@ -284,59 +282,54 @@ export default function ShortCheckIn({ navigation }) {
   };
   // console.log(roomsReservation.rooms);
   // console.log(myContext.isUserExist);
-const DeleteReservationRequest = ()=>{
-  Alert.alert(  "Delete",
-  "The reservation will be permanently deleted",
-  [
-    {text: 'Ok', onPress: () =>{DeleteReservation()}},
-    {
-      text: "Cancel",
-      onPress: () => {},
-      style: "cancel",
-    },
-   
-    // {text: 'Ok', onPress: () => DeleteReservation()},
-    // {text: 'No', onPress: () => console.log('No button clicked'), style: 'cancel'},
-  ],
-  // {
-  //   cancelable: true,
-  //   onDismiss: () =>
-  //     Alert.alert(
-  //       "This alert was dismissed by tapping outside of the alert dialog."
-  //     ),
-  // }
-  );
-}
-const DeleteReservation = async () =>{
+  const DeleteReservationRequest = () => {
+    Alert.alert("Delete",
+      "The reservation will be permanently deleted",
+      [
+        { text: 'Ok', onPress: () => { DeleteReservation() } },
+        {
+          text: "Cancel",
+          onPress: () => { },
+          style: "cancel",
+        },
 
-  try {
-    const requestOptions = {
+        // {text: 'Ok', onPress: () => DeleteReservation()},
+        // {text: 'No', onPress: () => console.log('No button clicked'), style: 'cancel'},
+      ],
+      // {
+      //   cancelable: true,
+      //   onDismiss: () =>
+      //     Alert.alert(
+      //       "This alert was dismissed by tapping outside of the alert dialog."
+      //     ),
+      // }
+    );
+  }
+  const DeleteReservation = async () => {
+
+    try {
+      const requestOptions = {
         method: 'DELETE',
         body: JSON.stringify({
-
-
-            id:roomsReservation.CustomerID
-
-
-
+          id: roomsReservation.CustomerID
         }),
         headers: { 'Content-Type': 'application/json' }
-    };
-    // console.log(requestOptions.body);
-    let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteReservation', requestOptions);
-    if (result) {
+      };
+      // console.log(requestOptions.body);
+      let result = await fetch('http://proj13.ruppin-tech.co.il/DeleteReservation', requestOptions);
+      if (result) {
         alert("Task details successfully saved")
         navigation.goBack()
+      }
+    } catch (error) {
+      alert(error)
     }
 
-} catch (error) {
-    alert(error)
-}
-
-}
+  }
 
 
   const CheckIn = () => {
+    console.log(roomsReservation.BillNumber);
     if (roomsReservation.BillNumber !== undefined) CheckInWithExistingReservation();
     else if (myContext.isUserExist) CheckIn_With_Existing_User();
     else CheckIn_Without_Existing_User();
@@ -431,65 +424,53 @@ const DeleteReservation = async () =>{
 
       {/* Footer */}
       <View style={{ flex: 0.5, paddingHorizontal: 10 }}>
-      
-          <View style={{ flex: 1, flexDirection: "row",    justifyContent: "space-between", }}>
-     
+
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", }}>
+
           <TouchableOpacity
-              style={{ width: 130, height: "60%", marginHorizontal: 10 }}
-              //   onPress={() => SaveReservationToDB()}
-             onPress={() => CheckIn()}
+            style={{ width: 130, height: "60%", marginHorizontal: 10 }}
+            //   onPress={() => SaveReservationToDB()}
+            onPress={() => CheckIn()}
+          >
+            <LinearGradient
+              style={[
+                {
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                },
+              ]}
+              colors={["#46aeff", "#5884ff"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
             >
-              <LinearGradient
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                  },
-                ]}
-                colors={["#46aeff", "#5884ff"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-              >
-                <Text style={{ color: "#fff" }}>CHECK IN NOW</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ width: 190, height: "60%", marginHorizontal: 10 }}
-              onPress={() => DeleteReservationRequest()}
-            
+              <Text style={{ color: "#fff" }}>CHECK IN NOW</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ width: 190, height: "60%", marginHorizontal: 10 }}
+            onPress={() => DeleteReservationRequest()}
+
+          >
+            <LinearGradient
+              style={[
+                {
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                },
+              ]}
+              // colors={["#edf0fc", "#d6dfff"]}
+              colors={["#888", "#CDCDCD"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
             >
-              <LinearGradient
-                style={[
-                  {
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 10,
-                  },
-                ]}
-                // colors={["#edf0fc", "#d6dfff"]}
-               colors={[ "#888","#CDCDCD"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-              >
-                <Text style={{ color: "#fff" }}>DELETE RESERVATION</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-         
-
-
-
-
-
-
-
-
-
-          </View>
-   
+              <Text style={{ color: "#fff" }}>DELETE RESERVATION</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

@@ -54,9 +54,6 @@ export default function TasksCard(props) {
                 <View style={styles.Details}>
                 <Text>Status: {TaskStatus}</Text>
                     <Text style={{fontWeight: EmployeeID === -1 ? 'bold':'400'}}>Employee ID: {EmployeeID}</Text>
-                   
-               
-                    
                 </View>
 
                 <View style={styles.Details}>

@@ -29,6 +29,7 @@ export default function Reports() {
     const [request, SetRequest] = useState(false)
 
 
+
     const Spinner = () => (
 
         <View style={[styles.container, styles.horizontal]}>
@@ -72,7 +73,7 @@ export default function Reports() {
             };
             let result = await fetch('http://proj13.ruppin-tech.co.il/ProductPurchaseByName', requestOptions);
             let temp = await result.json();
-            console.log(temp);
+            // console.log(temp);
             if (temp !== null) {
                 SetTableData([temp])
                 SetLoading(true)

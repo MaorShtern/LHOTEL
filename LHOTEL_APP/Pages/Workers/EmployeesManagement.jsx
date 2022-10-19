@@ -1,22 +1,10 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Keyboard,
-  Image,
-  ImageBackground,
-  StatusBar,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Keyboard, Image, ImageBackground, StatusBar, Alert, TouchableOpacity, } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { Searchbar } from "react-native-paper";
 import EMCard from "./EMCard";
 import { ActivityIndicator } from "react-native";
 import { images } from "../../images";
 import AppContext from "../../AppContext";
-
 
 
 export default function EmployeesManagement({ navigation }) {
@@ -26,32 +14,30 @@ export default function EmployeesManagement({ navigation }) {
   const [loading, SetLoading] = useState(false);
   const myContext = useContext(AppContext);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+
   useEffect(() => {
-    
     GetDBEmployees();
     const keyboardDidShowListener = Keyboard.addListener(
-        "keyboardDidShow",
-        () => {
-          setKeyboardVisible(true); // or some other action
-        }
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-        "keyboardDidHide",
-        () => {
-          setKeyboardVisible(false); // or some other action
-        }
-      );
-  
-      return () => {
-        keyboardDidHideListener.remove();
-        keyboardDidShowListener.remove();
-      };
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
 
-
-
-
-
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, []);
+
+
 
   const GetDBEmployees = async () => {
     try {
@@ -59,10 +45,7 @@ export default function EmployeesManagement({ navigation }) {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetAllEmployees",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetAllEmployees", requestOptions);
       let temp = await result.json();
       if (temp !== null) {
         SetDBEmployees(temp.filter((employee) => employee.EmployeeID !== -1));
@@ -177,16 +160,16 @@ export default function EmployeesManagement({ navigation }) {
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor={"transparent"} />
       <Searchbar
-            style={styles.searchbar}
-            placeholder="search by name ..."
-            onChangeText={SerchEmployee}
-            value={search}
-          />
-           {/* <Image style={styles.circle} source={images.plus} /> */}
-       
-         <TouchableOpacity style={styles.circle}  onPress={() => navigation.navigate("AddEmployee")}>
-         <Image  style={styles.circleImg} source={images.plus} />
-       </TouchableOpacity>
+        style={styles.searchbar}
+        placeholder="search by name ..."
+        onChangeText={SerchEmployee}
+        value={search}
+      />
+      {/* <Image style={styles.circle} source={images.plus} /> */}
+
+      <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("AddEmployee")}>
+        <Image style={styles.circleImg} source={images.plus} />
+      </TouchableOpacity>
       <ImageBackground
         source={images.hotelback}
         resizeMode="cover"
@@ -195,12 +178,12 @@ export default function EmployeesManagement({ navigation }) {
           justifyContent: "flex-end",
         }}
       >
-        
+
         <View style={styles.topview}>
           <Text style={styles.HeadLine}>Employees Management</Text>
-        
+
         </View>
-{/* 
+        {/* 
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate("AddEmployee")}
@@ -208,13 +191,13 @@ export default function EmployeesManagement({ navigation }) {
             <Text>Add New Employee</Text>
           </TouchableOpacity> */}
 
-          <View style={styles.Empcontainer}>
-            
-            <ScrollView style={{ paddingHorizontal:  5 ,marginBottom:100}} >
-              {loading ? listEmployees : <Spinner />}
-            </ScrollView>
-          </View>
-    
+        <View style={styles.Empcontainer}>
+
+          <ScrollView style={{ paddingHorizontal: 5, marginBottom: 100 }} >
+            {loading ? listEmployees : <Spinner />}
+          </ScrollView>
+        </View>
+
       </ImageBackground>
     </View>
   );
@@ -248,7 +231,7 @@ const styles = StyleSheet.create({
 
     // justifyContent:"space-between"
   },
-  Empcontainer:{
+  Empcontainer: {
     flex: 3.5,
     backgroundColor: "#fff",
     borderTopLeftRadius: 50,
@@ -259,40 +242,40 @@ const styles = StyleSheet.create({
   searchbar: {
 
     position: 'absolute',
-    bottom:30,
-    left:20,
+    bottom: 30,
+    left: 20,
     width: "70%",
-    
+
 
 
 
     // flexDirection:"row",
     backgroundColor: "#CDCDCD",
-    
+
     // alignSelf: "center",
     // width: "95%",
     // height:40,
     borderRadius: 50,
     zIndex: 2,
-    
+
     // paddingBottom:20,
- 
+
   },
   circle: {
     backgroundColor: "#CDCDCD",
-     padding:15,
+    padding: 15,
     borderRadius: 50,
-  
+
     position: 'absolute',
-    bottom:25,
-    right:20,
+    bottom: 25,
+    right: 20,
     // borderWidth: 2,
     zIndex: 8,
   },
   circleImg: {
     width: 25,
     height: 25
-},
+  },
   dropdown: {
     backgroundColor: "white",
     borderBottomColor: "gray",

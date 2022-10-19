@@ -140,11 +140,11 @@ export default function Credit({ route, navigation }) {
       </View>
 
       <View style={styles.footerStyle} >
-        <TouchableOpacity style={styles.footerButtonOne}>
+        {/* <TouchableOpacity style={styles.footerButtonOne}>
           <Text style={{ fontSize: 16, color: "#fff", fontWeight: "bold" }}>
             DELETE
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.footerButtonTwo}
           onPress={() => ConfirmInformation()}
@@ -212,9 +212,6 @@ const styles = StyleSheet.create({
 
   footerButtonTwo: {
     backgroundColor: "#556B2F",
-
-    // marginLeft:10,
-    // padding: 15,
     marginHorizontal: 50,
     paddingHorizontal: 40,
     paddingVertical: 10,

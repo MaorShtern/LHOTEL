@@ -1329,23 +1329,6 @@ begin tran
 commit tran
 go
 
-exec AddNewTask null,78,'Room Cleaning','2022 - 10 - 15',
-'20:10','','Open','Dhdhdhd'
-
--select * from [dbo].[Customers_Rooms]
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
---exec AddNewTask -1,5,'Room Cleaning','2022-12-12','13:00',null,'Open',''	
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-============================================זה עובד ===========================================================
-
-
 
 
 
@@ -1357,14 +1340,14 @@ exec AddNewTask null,78,'Room Cleaning','2022 - 10 - 15',
 --exec GetAllShifts
 --select * from Tasks_Types
 --exec GetAllTasks
-exec AddNewTask null,15,'Room Cleaning','21:28',null,'Open','yyyyy'	
-  "EmployeeID": -1,
-  "EndTime": null,
-  "RoomNumber": "7",
-  "StartTime": "21:28",
-  "TaskName": "Change of towels",
-  "TaskStatus": "Open",
-   "Description": "Gigujchchv"
+--exec AddNewTask null,15,'Room Cleaning','21:28',null,'Open','yyyyy'	
+--  "EmployeeID": -1,
+--  "EndTime": null,
+--  "RoomNumber": "7",
+--  "StartTime": "21:28",
+--  "TaskName": "Change of towels",
+--  "TaskStatus": "Open",
+--   "Description": "Gigujchchv"
 
 
 
@@ -1391,6 +1374,11 @@ begin tran
 		Set @Description = null
 	end 
 
+	if(@Employee_ID = -1)
+	begin
+		set @Employee_ID = null
+	end
+
 	UPDATE [dbo].[Employees_Tasks]
 	SET 
 	[Employee_ID] = @Employee_ID ,
@@ -1412,23 +1400,10 @@ commit tran
 go
 --exec GetAllTasks
 --exec GetAllShifts
---exec AlterTask 5,111,'Room Cleaning',null,'2022-09-06','13:00','14:00','Close','chips and coke for room 30'
+--select * from Shifts
+--exec AlterTask 92,-1,13,'Room Service','12:10','12:10','Open',''
 --select * from [dbo].[Employees_Tasks]
---exec AlterTask 13,222,'Room Cleaning',2,'13:00',NULL,'Open',null	
-
-
-
---exec AlterTask 48,333,1,'Room Cleaning','22:00',NULL,'Open',''	
-exec GetAllTasks
-
-
-
-
-
-
-
-
-
+	
 
 create proc DeleteTask
 @Tasks_Code int
@@ -2368,9 +2343,9 @@ go
 --declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
 --exec AddRoomServiceRequest 111,'Product purchase',23,@date,@time,null,222,'Coca cola',2,'Cash'
 
-declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
-declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
-exec AddRoomServiceRequest 111,'Room Cleaning',5,@date,@time,null,222,'Coca cola',2,'Cash'
+--declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
+--declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
+--exec AddRoomServiceRequest 111,'Room Cleaning',5,@date,@time,null,222,'Coca cola',2,'Cash'
 
 
 
@@ -2386,10 +2361,10 @@ exec AddRoomServiceRequest 111,'Room Cleaning',5,@date,@time,null,222,'Coca cola
 --select * from Tasks_Types
 --exec GetAllTasks
 
-declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
-declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
-exec AddRoomServiceRequest null,'Change of towels','fyrtyrtyrty',18
-@employee_ID,@task_Name , @description,@room_Number
+--declare @date as date = (select FORMAT(getdate(), 'yyyy-MM-dd'))
+--declare @time as VARCHAR(5) = (SELECT CONVERT(VARCHAR(5), GETDATE(), 108))
+--exec AddRoomServiceRequest null,'Change of towels','fyrtyrtyrty',18
+--@employee_ID,@task_Name , @description,@room_Number
 
 
 -- ======================================================================
@@ -2420,19 +2395,19 @@ go
 --select * from Bill_Details  where Customer_ID =666
 
 
-create proc Amount_Of_Products_Purchased_In_The_Store
+alter proc Amount_Of_Products_Purchased_In_The_Store
 as
 	begin tran		
-		SELECT dbo.Purchases_Documentation.Product_Code,
-		dbo.Purchases_Documentation.Room_Type as Product_Name, 
-		sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount, 
+		SELECT dbo.Purchases_Documentation.Product_Code as Code,
+		dbo.Purchases_Documentation.Room_Type  as Product, 
+		sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
 		dbo.Category.Description as Category
-		FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
-		ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
-		ON dbo.Products.Category_Number = dbo.Category.Category_Number
-		WHERE  (dbo.Purchases_Documentation.Product_Code != 8)
+		FROM dbo.Purchases_Documentation INNER JOIN
+		dbo.Products ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN
+		dbo.Category ON dbo.Products.Category_Number = dbo.Category.Category_Number
+		WHERE  (dbo.Purchases_Documentation.Product_Code <> 8)
 		GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type,
-		dbo.Purchases_Documentation.Number_Of_Nights, dbo.Category.Description
+		dbo.Category.Description
 		ORDER BY Amount DESC
 	if (@@error !=0)
 	begin
@@ -2486,40 +2461,25 @@ begin tran
 	end
 commit tran
 go
-
-
---create proc Number_of_tasks_per_month
---as
---begin tran		
---	SELECT CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)) as Date
---	,DATENAME(MONTH,Start_Date) as Month_Name, count(MONTH(Start_Date)) as Amount FROM Employees_Tasks 
---	GROUP by CAST(YEAR(Start_Date) AS VARCHAR(4)) + '-' + CAST(MONTH(Start_Date) AS VARCHAR(2)),
---	DATENAME(MONTH,Start_Date)
---	if (@@error !=0)
---	begin
---		rollback tran
---		print 'error'
---		return
---	end
---commit tran
---go
 --exec Number_of_tasks_per_month
---select * from Employees_Tasks
+
+
 
 alter proc ProductPurchaseByName
 @Description nvarchar(30)
 as
 begin tran		
-	SELECT dbo.Purchases_Documentation.Product_Code as Code, 
-	dbo.Purchases_Documentation.Room_Type as Product,
-	sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
-	dbo.Category.Description AS Category
-	FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
-	ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
-	ON dbo.Products.Category_Number = dbo.Category.Category_Number
-	WHERE  (dbo.Products.Description = @Description)
-	GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type, dbo.Purchases_Documentation.Number_Of_Nights, dbo.Products.Description, dbo.Category.Description
-
+	SELECT dbo.Purchases_Documentation.Product_Code as Code,
+		dbo.Purchases_Documentation.Room_Type  as Product, 
+		sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount,
+		dbo.Category.Description as Category
+		FROM dbo.Purchases_Documentation INNER JOIN
+		dbo.Products ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN
+		dbo.Category ON dbo.Products.Category_Number = dbo.Category.Category_Number
+		WHERE  (dbo.Purchases_Documentation.Product_Code <> 8 
+		and dbo.Purchases_Documentation.Room_Type = @Description)
+		GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type,
+		dbo.Category.Description
 if (@@error !=0)
 	begin
 		rollback tran
@@ -2565,45 +2525,17 @@ go
 
 
 
-select * from [dbo].[Bill]
-where [Customer_ID]= 111111112
-select * from [dbo].[Customers_Rooms]
-where [Customer_ID]= 111111112
-select * from [dbo].[Bill_Details]
-where [Customer_ID]= 111111112
+--select * from [dbo].[Bill]
+--where [Customer_ID]= 111111112
+--select * from [dbo].[Customers_Rooms]
+--where [Customer_ID]= 111111112
+--select * from [dbo].[Bill_Details]
+--where [Customer_ID]= 111111112
 
-select * from [dbo].[Employees]
-select * from [dbo].[Shifts]
-select * from [dbo].[Employees_Tasks]
+--select * from [dbo].[Employees]
+--select * from [dbo].[Shifts]
+--select * from [dbo].[Employees_Tasks]
 --select * from [dbo].[Customers]
 --select * from [dbo].[Purchases_Documentation]
 
 
-
-
-
---drop proc Regulation_Quantity_Of_Products_Purchased
---alter proc Regulation_Quantity_Of_Products_Purchased
---as
---	begin tran		
---		SELECT dbo.Purchases_Documentation.Product_Code,
---		dbo.Purchases_Documentation.Room_Type as Product_Name, 
---		sum (dbo.Purchases_Documentation.Number_Of_Nights) as Amount, 
---		dbo.Category.Description as Category
---		FROM dbo.Purchases_Documentation INNER JOIN dbo.Products 
---		ON dbo.Purchases_Documentation.Product_Code = dbo.Products.Product_Code INNER JOIN dbo.Category 
---		ON dbo.Products.Category_Number = dbo.Category.Category_Number
---		WHERE  (dbo.Purchases_Documentation.Product_Code != 8)
---		GROUP BY dbo.Purchases_Documentation.Product_Code, dbo.Purchases_Documentation.Room_Type,
---		dbo.Purchases_Documentation.Number_Of_Nights, dbo.Category.Description
---		--ORDER BY Amount DESC
---	if (@@error !=0)
---	begin
---		rollback tran
---		print 'error'
---		return
---	end
---commit tran
---go
---exec Regulation_Quantity_Of_Products_Purchased
---select * from [dbo].[Purchases_Documentation]
