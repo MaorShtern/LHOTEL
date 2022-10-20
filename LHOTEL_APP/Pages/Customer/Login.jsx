@@ -1,14 +1,7 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState} from "react";
+import {  View,  Text,  StyleSheet,  TextInput,  Button,  Alert,  TouchableOpacity,} from "react-native";
+import React, { useState ,useContext } from "react";
 import { ActivityIndicator } from "react-native";
+import AppContext from "../../AppContext";
 
 
 export default function Login({ navigation }) {
@@ -16,6 +9,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [loading, SetLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
+  const myContext = useContext(AppContext);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -32,16 +26,12 @@ export default function Login({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch(
-        "http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword",
-        requestOptions
-      );
+      let result = await fetch("http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword", requestOptions);
       let user = await result.json();
 
       if (user !== null) {
         SetLoading(true);
         myContext.setUserDB(user);
-
         navigation.navigate("Home");
         return;
       } else {
@@ -65,7 +55,7 @@ export default function Login({ navigation }) {
       var Hashes = require("jshashes");
       let hashPassword = new Hashes.SHA1().b64_hmac(id, password); // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה
       FetchUserFromDB(hashPassword);
-     
+
     } else {
       Alert.alert("No such user exists in the system");
     }

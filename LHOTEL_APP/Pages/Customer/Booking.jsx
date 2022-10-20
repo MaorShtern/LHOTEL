@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  Alert,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Switch,
-  TouchableOpacity,
-} from "react-native";
+import {  View,  Text,  Alert,  Image, StyleSheet,  ScrollView,  Switch,  TouchableOpacity,} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Checkbox } from "react-native-paper";
@@ -199,7 +190,7 @@ export default function Booking({ navigation }) {
             paddingHorizontal: 20,
             marginVertical: 20,
           }}
-          label="Amount Of people"
+          label={"Amount Of people: " + roomsReservation.AmountOfPeople }
           autoCapitalize="none"
           keyboardType="numeric"
           onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}

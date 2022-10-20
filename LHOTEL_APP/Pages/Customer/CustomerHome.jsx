@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  ImageBackground,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Linking,
-  TouchableOpacity,
-  StatusBar,
-} from "react-native";
+import {  View,  ImageBackground,  Text,  StyleSheet, Image,  ScrollView,  Linking,  TouchableOpacity,  StatusBar,} from "react-native";
 import CarouselImages from "./CarouselImages";
 import { images } from "../../images";
 import { Icon } from "react-native-elements";

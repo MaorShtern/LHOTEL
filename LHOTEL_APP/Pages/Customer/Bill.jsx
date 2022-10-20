@@ -15,7 +15,7 @@ export default function Bill() {
   const [request, SetRequest] = useState('')
   const myContext = useContext(AppContext);
   const user = myContext.user
- 
+
 
 
   const FetchTableFromDB = async (request) => {
@@ -91,19 +91,44 @@ export default function Bill() {
 
 
   const ResitCard = () => {
-    let list = tableData.map((room, index) =>
-      <View key={index}>
-        <Text style={styles.cardText}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
-      </View>
-    )
+    // console.log(tableData);
+    let listRooms = tableData.map((room, index) =>
+      room.ProductCode === 8 ?
+        (<View key={index}>
+          <Text style={styles.cardText}>Room: {room.RoomNumber}  Price: {room.PricePerNight}  {room.RoomType}</Text>
+        </View>) : null)
+
+    let listProducts = tableData.map((room, index) =>
+      room.ProductCode !== 8 ?
+        (<View key={index}>
+          <Text style={styles.cardText}>{room.RoomType}    Amount: {room.NumberOfNights}  Price: {room.PricePerNight}</Text>
+        </View>) : null)
+
+    let sumTotal = tableData.reduce(function (prev, current) {
+      return current.PricePerNight * current.NumberOfNights + prev
+    }, 0)
+
+
     return (
       <View style={styles.CardStyle}>
         <View>
           <Text style={styles.cardText}>CustomerID: {tableData[0].CustomerID}</Text>
           <Text style={styles.cardText}>Date: {moment(tableData[0].EntryDate).format("DD-MM-YYYY")}  --  {moment(tableData[0].ExitDate).format("DD-MM-YYYY")}</Text>
+          <Text style={styles.cardText}>Number Of Nights: {tableData[0].NumberOfNights}</Text>
         </View>
-        {list}
-        <Text >Number Of Nights: {tableData[0].NumberOfNights}</Text>
+        <View>
+          <Text>Rooms</Text>
+          {listRooms}
+        </View>
+        <View>
+          <Text>Products</Text>
+          {listProducts}
+        </View>
+        <View>
+          <Text>
+            Sum Total: {sumTotal}
+          </Text>
+        </View>
       </View>
     )
   }

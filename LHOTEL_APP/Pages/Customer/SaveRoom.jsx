@@ -2,7 +2,6 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Alert, Button } f
 import React, { useEffect, useState, useContext } from "react";
 import { ActivityIndicator } from "react-native";
 import CardRoom from "./CardRoom";
-import moment from "moment";
 import AppContext from '../../AppContext';
 import Modal from "react-native-modal";
 import { useFocusEffect } from "@react-navigation/native";
@@ -17,7 +16,7 @@ export default function SaveRoom({ route, navigation }) {
 
   const [loading, SetLoading] = useState(false);
   const [arrRoomsData, SetArrRoomsData] = useState([]);
-  
+
   const [isModalVisible, setModalVisible] = useState(false);
 
 
@@ -33,7 +32,7 @@ export default function SaveRoom({ route, navigation }) {
     React.useCallback(() => {
       SetLoading(false)
       FetchData()
-     
+
     }, [route.params])
   );
 
@@ -66,31 +65,44 @@ export default function SaveRoom({ route, navigation }) {
       })
     );
 
-  
+
     let list = temp.filter(
       (ele, ind) => ind === temp.findIndex((elem) => elem.type === ele.type && elem.type === ele.type)
     );
 
-    
+
     let array = [];
-   
     for (const [key, value] of Object.entries(rooms_flags)) {
-     
       if (value) {
         let room = list.filter((per) => per.type === key);
-       
         if (room[0] !== undefined) {
           room = room[0];
           array.push(room);
         }
       }
     }
-
     SetArrRoomsData(array);
   };
-  
+
+
+  // console.log(rooms_flags)
+
+  const CheckParams = () => {
+    let temp = Object.values(rooms_flags)
+    if ((temp[0] && roomsReservation.CounterSingle === 0) ||
+      (temp[1] && roomsReservation.CounterDouble === 0) ||
+      (temp[2] && roomsReservation.CounterSuite === 0)) {
+      return true
+    }
+    return false
+  }
+
   const GoToPayment = () => {
 
+    if (CheckParams()) {
+      alert("Not all the rooms you requested are marked with the desired quantity")
+      return
+    }
 
 
     if (Object.keys(user).length === 0) {
@@ -130,7 +142,7 @@ export default function SaveRoom({ route, navigation }) {
       let tempToatal = pricePerNight * count
 
       sum += tempToatal;
-      if(roomsReservation.Breakfast)sum +=70*count
+      if (roomsReservation.Breakfast) sum += 70 * count
     }
 
     roomsReservation.totalSum = sum
@@ -197,8 +209,6 @@ export default function SaveRoom({ route, navigation }) {
             <Text>Save</Text>
           </TouchableOpacity>
         ) : null}
-
-
       </View>
     </ScrollView>
   );

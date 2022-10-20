@@ -107,10 +107,11 @@ export default function AddEmployee({ navigation }) {
         <Text style={{ paddingTop: 10 }}>Phone Number</Text>
         <TextInput
           keyboardType="numeric"
-
           style={styles.TextInput}
           onChangeText={(phone) => SetPhoneNumber(phone)}
-        ></TextInput>
+        >
+          
+        </TextInput>
 
         <View style={{ paddingTop: 10 }}>
           <TouchableOpacity style={styles.input} onPress={ShowDate}>

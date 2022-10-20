@@ -3,43 +3,29 @@ import Room from "../Class/Room";
 import AppContext from "../../AppContext";
 import CardRoom from "../Customer/CardRoom";
 import { useFocusEffect } from "@react-navigation/native";
-import {ImageBackground,View,StyleSheet,Image,Text,TouchableOpacity,ScrollView,StatusBar,Switch,} from "react-native";
+import { ImageBackground, View, StyleSheet, Image, Text, TouchableOpacity, ScrollView, StatusBar, Switch, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Dialog from "react-native-dialog";
 import { TextInput } from "react-native-paper";
 import moment from "moment";
-import { loadAsync } from "expo-font";
+// import { loadAsync } from "expo-font";
 
 export default function NewReservation({ navigation }) {
   const [visible, setVisible] = useState(false);
 
   const myContext = useContext(AppContext);
   const roomsReservation = myContext.roomsReservation;
-  const [single, SetSingle] = useState(0);
-  const [double, SetDouble] = useState(0);
-  const [suite, SetSuite] = useState(0);
   const [arrRoomsData, SetArrRoomsData] = useState([]);
   const [IDCheck, setIDCheck] = useState("");
-  const [CustomerID, setCustomerID] = useState("");
-  const [Mail, setMail] = useState("");
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [PhoneNumber, setPhoneNumber] = useState("");
   const [flagEnrty, setFlagEntry] = useState(false);
   const [flagExit, setFlagExit] = useState(false);
 
 
-  // const [entryDate, setEntryDate] = useState(moment().toDate());
-  // const [exitDate, setExitDate] = useState(
-  //   moment(entryDate).add(1, "days").toDate()
-  // );
-
   const [isEntryModalOpened, SetIsEntryModalOpened] = useState(false);
   const [isExitModalOpened, SetIsExitModalOpened] = useState(false);
   const [numberOfNights, setNumberOfNights] = useState(0);
-  // const [AmountOfPeople, setAmountOfPeople] = useState(0);
   const [breakfast, setBreakfast] = useState(false);
 
   const showDatePickerEntry = () => {
@@ -81,9 +67,7 @@ export default function NewReservation({ navigation }) {
     setVisible(false);
     GetDBCustomerById();
   };
-  // const entry = moment(entryDate).format("DD/MM/YYYY");
-  // const exit = moment(exitDate).format("DD/MM/YYYY");
-// console.log(roomsReservation.NumberOfNights);
+
   useEffect(() => {
     if (
       moment(roomsReservation.EntryDate).isBefore(moment(), "day") ||
@@ -99,7 +83,7 @@ export default function NewReservation({ navigation }) {
       // roomsReservation.NumberOfNights = moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days") + 1;
       return;
     }
-  // roomsReservation.NumberOfNights =moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days");
+    // roomsReservation.NumberOfNights =moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days");
     setNumberOfNights(moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days"));
   });
   useFocusEffect(
@@ -110,22 +94,6 @@ export default function NewReservation({ navigation }) {
     }, [])
   );
 
-  const CheackDates = (date) => {
-    // return new Date(date.toDateString()) < new Date(new Date().toDateString());
-  };
-
-  const Delete = () => {
-    SetIsExitModalOpened(false);
-    SetIsEntryModalOpened(false);
-    // setNumber_Of_Nights(0);
-    // setEntryDate(moment().toDate());
-    // setExitDate(moment(entryDate).add(1, "days").toDate());
-  };
-
-  // const CheckCardDate = () => {
-  //   const CardDateRegex = /^(0[1-9]|1[0-2])\/([2][2-9])$/;
-  //   return CardDateRegex.test(CreditCardDate);
-  // };
 
   const GetDBCustomerById = async () => {
     // פונקציה אסינכרונית לטובת קבלת נתוני משתמש לפי ת.ז המתקבל במידה וקיים
@@ -138,79 +106,85 @@ export default function NewReservation({ navigation }) {
       }),
       headers: { "Content-Type": "application/json" },
     };
-    let result = await fetch("http://proj13.ruppin-tech.co.il/GetDBCustomerById",requestOptions);
+    let result = await fetch("http://proj13.ruppin-tech.co.il/GetDBCustomerById", requestOptions);
     let user = await result.json();
     if (user !== null) {
-
-      roomsReservation.CustomerID = IDCheck ;
+      roomsReservation.CustomerID = IDCheck;
       roomsReservation.Mail = user.Mail;
-      roomsReservation.FirstName = user.FirstName ;
+      roomsReservation.FirstName = user.FirstName;
       roomsReservation.LastName = user.LastName;
       roomsReservation.PhoneNumber = user.PhoneNumber;
-      // setCustomerID(IDCheck);
-      // setMail(user.Mail);
-      // setFirstName(user.FirstName);
-      // setLastName(user.LastName);
-      // setPhoneNumber(user.PhoneNumber);
       myContext.setIsUserExist(true); //עדכון סטטוס משתמש אם קיים בסטייט הגלובאלי
     }
   };
 
 
+  const CheckRooms = () => {
+    if (roomsReservation.CounterSingle === 0 && roomsReservation.CounterDouble === 0 &&
+      roomsReservation.CounterSuite === 0) {
+      return true
+    }
+    return false
+  }
+
+
+  const CheckParams = () => {
+    if ((roomsReservation.CustomerID === "" && roomsReservation.CustomerID.length) &&
+      roomsReservation.FirstName === "" &&
+      roomsReservation.LastName === "" &&
+      (roomsReservation.Mail === "" && roomsReservation.Mail.includes("@gmail.com")) &&
+      (roomsReservation.PhoneNumber === "" && roomsReservation.PhoneNumber.length === 10)) {
+      return true;
+    }
+    return false
+
+  }
+
+  // console.log(roomsReservation);
+
   const ConfirmInformation = () => {
-   roomsReservation.NumberOfNights = numberOfNights
-   roomsReservation.Breakfast = breakfast
- 
-  let rooms_amounts = {
-    "Single room": roomsReservation.CounterSingle,
-    "Double room": roomsReservation.CounterDouble,
-    "Suite": roomsReservation.CounterSuite,
-  };
 
 
-  let sum = 0
-  for (const [key, value] of Object.entries(rooms_amounts)) {
-    for (let i = 0; i < arrRoomsData.length; i++) {
-      if (arrRoomsData[i].RoomType === key) {
-        if (arrRoomsData[i].count < value) {
-          Alert.alert("Some fields are not filled in Properly");
-          return;
+    if (CheckRooms()) {
+      alert("You must choose at least one room")
+      return
+    }
+
+    if (CheckParams()) {
+      alert("Not all customer details are filled in properly")
+      return
+    }
+
+    // console.log(roomsReservation);
+
+    roomsReservation.NumberOfNights = numberOfNights
+    roomsReservation.Breakfast = breakfast
+    let rooms_amounts = {
+      "Single room": roomsReservation.CounterSingle,
+      "Double room": roomsReservation.CounterDouble,
+      "Suite": roomsReservation.CounterSuite,
+    };
+
+
+    let sum = 0
+    for (const [key, value] of Object.entries(rooms_amounts)) {
+      for (let i = 0; i < arrRoomsData.length; i++) {
+        if (arrRoomsData[i].RoomType === key) {
+          if (arrRoomsData[i].count < value) {
+            Alert.alert("Some fields are not filled in Properly");
+            return;
+          }
+          let pricePerNight = arrRoomsData[i].PricePerNight;
+          let count = value;
+          let tempToatal = pricePerNight * count
+          sum += tempToatal;
+          if (roomsReservation.Breakfast) sum += 70 * count
         }
-      
-        let pricePerNight = arrRoomsData[i].PricePerNight;
-    let count = value;
-    let tempToatal = pricePerNight * count
-
-    sum += tempToatal;
-    if(roomsReservation.Breakfast)sum +=70*count
       }
     }
-  }
-  
-  roomsReservation.totalSum = sum
-  navigation.navigate("Credit");
-// console.log(sum);
 
-
-    // let newReservation = {
-    //   CustomerID: CustomerID,
-    //   EmployeeID: myContext.employee.EmployeeID,
-    //   CustomerType: 1,
-    //   FirstName: FirstName,
-    //   LastName: LastName,
-    //   Mail: Mail,
-    //   PhoneNumber: PhoneNumber,
-    //   EntryDate: entryDate,
-    //   ExitDate: exitDate,
-    //   CounterSingle: single,
-    //   CounterDouble: double,
-    //   CounterSuite: suite,
-    //   AmountOfPeople: AmountOfPeople,
-    //   Breakfast : breakfast,
-    //   NumberOfNights :number_Of_Nights
-    // };
-  
-    // navigation.navigate("Credit", { ReservationDetails: newReservation });
+    roomsReservation.totalSum = sum
+    navigation.navigate("Credit");
   };
 
   const FetchData = async () => {
@@ -218,7 +192,7 @@ export default function NewReservation({ navigation }) {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    let result = await fetch("http://proj13.ruppin-tech.co.il/GetAvailableRooms",requestOptions);
+    let result = await fetch("http://proj13.ruppin-tech.co.il/GetAvailableRooms", requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
       // console.log("rooms: " + JSON.stringify(rooms));
@@ -242,7 +216,7 @@ export default function NewReservation({ navigation }) {
         break;
     }
   };
-  
+
   const BilldData = (rooms) => {
     // console.log(rooms);
     let temp = [];
@@ -286,6 +260,8 @@ export default function NewReservation({ navigation }) {
     );
   });
 
+
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000" />
@@ -312,7 +288,7 @@ export default function NewReservation({ navigation }) {
         <TouchableOpacity onPress={() => showDialog()}>
           <Text style={styles.underLineText}>User exists ?</Text>
         </TouchableOpacity>
-      
+
         <Dialog.Container visible={visible}>
           <Dialog.Description>Enter customer's ID</Dialog.Description>
           <Dialog.Input
@@ -387,7 +363,7 @@ export default function NewReservation({ navigation }) {
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-              label="Amount Of people"
+              label={"Amount Of people: " + roomsReservation.AmountOfPeople}
               autoCapitalize="none"
               keyboardType="numeric"
               onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}
@@ -398,14 +374,8 @@ export default function NewReservation({ navigation }) {
 
             <View style={styles.switchContainer}>
               <Switch
-                    onValueChange={() => { setBreakfast(!breakfast); }}
-            
-                // onValueChange={() => {
-                //   roomsReservation.Breakfast = !roomsReservation.Breakfast
-                  // setreakfast(!breakfast);
-                // }}
+                onValueChange={() => { setBreakfast(!breakfast); }}
                 value={breakfast}
-                // value={roomsReservation.Breakfast}
               />
               <Text style={{ fontSize: 18 }}>Include breakfast?</Text>
             </View>
@@ -413,37 +383,47 @@ export default function NewReservation({ navigation }) {
               <Text style={styles.sectionTitle}>Customer Details</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Customer ID "
+                placeholder={roomsReservation.CustomerID === undefined?
+                "Customer ID: " : "Customer ID: " + roomsReservation.CustomerID}
+                // placeholder={"Customer ID: " + roomsReservation.CustomerID}
                 keyboardType="numeric"
-                value={roomsReservation.CustomerID}
                 onChangeText={(text) => roomsReservation.CustomerID = text}
-              />
-               
-              <TextInput
-                style={styles.input}
-                placeholder="First Name "
-                value={roomsReservation.FirstName}
-                onChangeText={(text) =>  roomsReservation.FirstName = text}
               />
 
               <TextInput
                 style={styles.input}
-                placeholder="Last Name "
-                value={roomsReservation.LastName}
+                placeholder={roomsReservation.FirstName === undefined?
+                  "First Name " : "First Name " + roomsReservation.FirstName}
+                // placeholder={"First Name " + roomsReservation.FirstName}
+                // value={roomsReservation.FirstName}
+                onChangeText={(text) => roomsReservation.FirstName = text}
+              />
+
+              <TextInput
+                style={styles.input}
+                placeholder={roomsReservation.LastName === undefined?
+                  "Last Name: " : "Last Name: " + roomsReservation.LastName}
+                // placeholder={"Last Name: " + roomsReservation.LastName}
+                // value={roomsReservation.LastName}
                 onChangeText={(text) => roomsReservation.LastName = text}
               />
 
               <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder={roomsReservation.Mail === undefined?
+                  "Email: " : "Email: " + roomsReservation.Mail}
+
+                // placeholder={"Email: " + roomsReservation.Mail}
                 autoCapitalize="none"
-                value={roomsReservation.Mail}
+                // value={roomsReservation.Mail}
                 onChangeText={(text) => roomsReservation.Mail = text}
               />
               <TextInput
                 style={styles.input}
-                placeholder="Phone Number"
-                value={roomsReservation.PhoneNumber}
+                placeholder={roomsReservation.PhoneNumber === undefined?
+                  "Phone Number: " : "Phone Number: " + roomsReservation.PhoneNumber}
+                // placeholder={"Phone Number: " + roomsReservation.PhoneNumber}
+                // value={roomsReservation.PhoneNumber}
                 keyboardType="numeric"
                 onChangeText={(text) => roomsReservation.PhoneNumber = text}
               />
@@ -470,14 +450,12 @@ export default function NewReservation({ navigation }) {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
-                  <Text
-                    style={{ color: "#000", fontSize: 25, fontWeight: "bold" }}
-                  >
+                  <Text style={{ color: "#000", fontSize: 25, fontWeight: "bold" }}>
                     CONTINUE
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
-           
+
             </View>
           </ScrollView>
         </View>
