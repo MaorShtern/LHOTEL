@@ -1,5 +1,16 @@
 import * as React from "react";
-import {  View,  ImageBackground,  Text,  StyleSheet, Image,  ScrollView,  Linking,  TouchableOpacity,  StatusBar,} from "react-native";
+import {
+  View,
+  ImageBackground,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Linking,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import { Divider} from "react-native-paper";
 import CarouselImages from "./CarouselImages";
 import { images } from "../../images";
 import { Icon } from "react-native-elements";
@@ -9,10 +20,10 @@ const url = Platform.select({
   ios: `maps:0,0?q=${fullAddress}`,
   android: `geo:0,0?q=${fullAddress}`,
 });
-
+// style ={{backgroundColor:'#000'}}
 export default function CustomerHome({ navigation }) {
   return (
-    <View>
+    <View  style ={{backgroundColor:'#000'}}> 
       <TouchableOpacity style={styles.icon}>
         <Icon
           name="west"
@@ -57,12 +68,23 @@ export default function CustomerHome({ navigation }) {
               <Text style={styles.buttonText}>ADDRESS</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.Text}>POPULERS ROOMS</Text>
+          
         </ImageBackground>
+        <View style ={{width:'80%',alignSelf:'center'}}>
+                <Text style={{color:'#fff',textAlign:'center'}}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blandrum! Provident similique accusantium nemo autem. Veritatis
 
+                </Text>
+            </View>
+            <Divider
+ style={{height:0.2,width:'50%',alignSelf:'center', backgroundColor:'white',marginTop:25,marginBottom:5}}
+
+        />
+        <Text style={styles.Text}>POPULERS ROOMS</Text>
         <CarouselImages />
-
-        <View style={{ height: 10 }}></View>
+       
 
         <Text style={styles.Text}>ACTIVITES</Text>
 
@@ -138,6 +160,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     padding: 20,
+    paddingHorizontal:50
   },
   ButtonContainer: {
     flexDirection: "row",
