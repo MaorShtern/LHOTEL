@@ -31,4 +31,5 @@ export const images = {
   alcoholWine:require("./assets/images/alcoholWine.png"),
   hotelloby:require("./assets/images/hotellobby.png"),
   back:require("./assets/images/back.png"),
+  fadeloby:require("./assets/images/fadeloby.png"),
 }

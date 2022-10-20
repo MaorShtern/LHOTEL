@@ -93,11 +93,12 @@ export default function Drawer() {
           name="Home"
           component={CustomerHome}
           options={{
-            headerTitle: " ",
-            headerTintColor: "white",
-            headerStyle: {
-              backgroundColor: "#000",
-            },
+            headerShown: false
+            // headerTitle: " ",
+            // headerTintColor: "white",
+            // headerStyle: {
+            //   backgroundColor: "#000",
+            // },
           }}
         />
 

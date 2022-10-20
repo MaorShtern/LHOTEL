@@ -1,10 +1,12 @@
 import * as React from "react";
-import {  View,  Text,  StyleSheet,  Image,  ScrollView,  Linking,  TouchableOpacity,  StatusBar,} from "react-native";
+import {  View,ImageBackground,  Text,  StyleSheet,  Image,  ScrollView,  Linking,  TouchableOpacity,  StatusBar,} from "react-native";
 import CarouselImages from "./CarouselImages";
 import { images } from "../../images";
 import { useContext ,useEffect} from "react";
 import AppContext from "../../AppContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { Icon } from 'react-native-elements'
+import zIndex from "@mui/material/styles/zIndex";
 
 const fullAddress = "חדרה";
 const url = Platform.select({
@@ -31,20 +33,31 @@ export default function CustomerHome({ route, navigation }) {
   };
 
   return (
-    <ScrollView>
-      <StatusBar translucent={true} backgroundColor={"transparent"} />
-      {/* {user.FirstName !== undefined ? (
-        <View style={styles.userContainer}>
-          <TouchableOpacity style={styles.LogoutBtn} onPress={LogOutUser}>
-            <Text style={{ color: "white" }}>Log out</Text>
-          </TouchableOpacity>
-          <Text style={{ color: "white" }}>
-            Hello , {user.FirstName} {user.LastName}
-          </Text>
-        </View>
-      ) : null} */}
-
-      {/* <Text style={styles.Text}>DETAILS ABOUT THE HOTEL</Text> */}
+    <View>
+       <TouchableOpacity style={styles.icon}>
+       <Icon name="west"
+          
+          size={40}
+  type='material'
+  color='#fff'
+  onPress={() => navigation.toggleDrawer()}  />
+       </TouchableOpacity>
+  
+    <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      {/* <StatusBar animated={true} backgroundColor="#fff"  barStyle="dark-content" /> */}
+   <ImageBackground
+          source={images.fadeloby}
+          resizeMode="stretch"
+          style={{
+      height:650,
+      // width:450,
+            justifyContent: "flex-end",
+          }}
+        >
+      
+        
+       <Text style={styles.header}>LHOTEL</Text>
+     
       <View style={styles.ButtonContainer}>
         <TouchableOpacity
           style={styles.button}
@@ -69,6 +82,18 @@ export default function CustomerHome({ route, navigation }) {
         </TouchableOpacity>
       </View>
       <Text style={styles.Text}>POPULERS ROOMS</Text>
+        </ImageBackground>
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+    
       <CarouselImages />
 
       <View style={{ height: 10 }}></View>
@@ -77,7 +102,7 @@ export default function CustomerHome({ route, navigation }) {
 
       <View
         style={{
-          flex: 2,
+          // flex: 2,
           flexDirection: "row",
           justifyContent: "space-between",
           paddingTop: 10,
@@ -88,7 +113,7 @@ export default function CustomerHome({ route, navigation }) {
       </View>
       <View
         style={{
-          flex: 2,
+          // flex: 2,
           flexDirection: "row",
           justifyContent: "space-between",
         }}
@@ -118,6 +143,7 @@ export default function CustomerHome({ route, navigation }) {
         <Text style={{ paddingLeft: 75 }}>LOBI</Text>
       </View>
     </ScrollView>
+    </View>
   );
 }
 
@@ -129,6 +155,22 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     padding: 5,
   },
+  header:{
+  paddingBottom:10,
+  fontSize: 40,
+  textAlign: "center",
+  textShadowColor: "#B59410",
+
+  textShadowOffset: { width: -1, height: 1 },
+  color:'#fff',
+  textShadowRadius: 10,
+
+    // color: "white",
+    // fontWeight: "bold",
+    // alignItems: "center",
+    // textAlign: "center",
+    // padding: 20,
+  },
   Text: {
     backgroundColor: "black",
     color: "white",
@@ -138,9 +180,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   ButtonContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor:'rgba(0,0,0,0.2)',
     padding: 30,
     justifyContent: "space-between",
   },
@@ -151,7 +194,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textShadowColor: "rgba(0, 0, 0, 0.4)",
     textShadowOffset: { width: -1, height: 1 },
+    color:'#fff',
     textShadowRadius: 10,
+  },
+  icon:{
+    
+    position: 'absolute',
+    top: 50,
+    left: 30,
+   
+    zIndex: 2,
+// flex:1,
+// top:50,
+// paddingRight:300,
+// zIndex:2
   },
   buttonRooms: {
     flex: 1,
