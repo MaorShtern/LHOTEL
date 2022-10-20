@@ -14,9 +14,9 @@ export default function ReservationCard(props) {
             <View style={styles.OrderDetails}>
                
                 <View >
-                    <Text  style={styles.textStyle}>ROOM TYPE : {roomType}</Text>
+                    <Text  style={styles.textStyle}>ROOM TYPE : {roomType}  X {count}</Text>
                     <Text  style={styles.textStyle}> {moment(entryDate).format("DD/MM/YYYY")} - {moment(exitDate).format("DD/MM/YYYY")}</Text>
-                    <Text style={styles.textStyle} >Amount per room : {count}</Text>
+                
                     <Text  style={styles.textStyle}>breakfast : {breakfast ? <Text>Yes</Text> : <Text>No</Text>}</Text>
                  
                     <Text  style={styles.textStyle}>Price Per Night : {pricePerNight}$</Text>

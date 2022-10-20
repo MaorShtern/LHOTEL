@@ -190,7 +190,9 @@ export default function Booking({ navigation }) {
             paddingHorizontal: 20,
             marginVertical: 20,
           }}
-          label={"Amount Of people: " + roomsReservation.AmountOfPeople }
+         
+         
+          label= "Number Of people "
           autoCapitalize="none"
           keyboardType="numeric"
           onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}

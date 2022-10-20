@@ -10,7 +10,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Dialog from "react-native-dialog";
 import { TextInput } from "react-native-paper";
 import moment from "moment";
-// import { loadAsync } from "expo-font";
+
 
 export default function NewReservation({ navigation }) {
   const [visible, setVisible] = useState(false);
@@ -25,7 +25,7 @@ export default function NewReservation({ navigation }) {
 
   const [isEntryModalOpened, SetIsEntryModalOpened] = useState(false);
   const [isExitModalOpened, SetIsExitModalOpened] = useState(false);
-  const [numberOfNights, setNumberOfNights] = useState(0);
+  const [numberOfNights, setNumberOfNights] = useState(1);
   const [breakfast, setBreakfast] = useState(false);
 
   const showDatePickerEntry = () => {
@@ -44,13 +44,13 @@ export default function NewReservation({ navigation }) {
   };
   const handleConfirmEnteryDate = (date) => {
     roomsReservation.EntryDate = date
-    // setEntryDate(date);
+  
     hideDatePickerEntry();
   };
 
   const handleConfirmExitDate = (date) => {
     roomsReservation.ExitDate = date
-    // setExitDate(date);
+  
     hideDatePickerExit();
   };
 
@@ -89,9 +89,35 @@ export default function NewReservation({ navigation }) {
   useFocusEffect(
     React.useCallback(() => {
       FetchData();
-      SetIsExitModalOpened(false);
-      SetIsEntryModalOpened(false);
-    }, [])
+      setIDCheck("");
+      myContext.SetReservastionData(
+        {
+          CustomerID: '',
+          CustomerType: 1,
+          FirstName: '',
+          LastName: '',
+          Mail: '',
+          PhoneNumber: '',
+          CardHolderName: '',
+          CreditCardNumber: '',
+          CreditCardDate: '',
+          ThreeDigit: '',
+          AmountOfPeople: 1,
+          EmployeeID: -1,
+          CounterSingle: 0,
+          CounterDouble: 0,
+          CounterSuite: 0,
+          EntryDate: moment().toDate(),
+          ExitDate: moment().add(1, "days").toDate(),
+      
+          Breakfast: false,
+          NumberOfNights: 0,
+          totalSum: 0,
+          rooms: []
+        }
+      )
+      
+    }, [navigation])
   );
 
 
@@ -109,6 +135,7 @@ export default function NewReservation({ navigation }) {
     let result = await fetch("http://proj13.ruppin-tech.co.il/GetDBCustomerById", requestOptions);
     let user = await result.json();
     if (user !== null) {
+     
       roomsReservation.CustomerID = IDCheck;
       roomsReservation.Mail = user.Mail;
       roomsReservation.FirstName = user.FirstName;
@@ -127,21 +154,20 @@ export default function NewReservation({ navigation }) {
     return false
   }
 
+  // const CheckParams = () => {
+  //   console.log(roomsReservation);
 
-  const CheckParams = () => {
-    if ((roomsReservation.CustomerID === "" && roomsReservation.CustomerID.length) &&
-      roomsReservation.FirstName === "" &&
-      roomsReservation.LastName === "" &&
-      (roomsReservation.Mail === "" && roomsReservation.Mail.includes("@gmail.com")) &&
-      (roomsReservation.PhoneNumber === "" && roomsReservation.PhoneNumber.length === 10)) {
-      return true;
-    }
-    return false
+  //   // return (
+  //   //   roomsReservation.FirstName === "" ||  roomsReservation.LastName === "" ||
+  //   //   roomsReservation.Mail === "" || !roomsReservation.Mail.includes("@gmail.com") ||
+  //   //   roomsReservation.PhoneNumber === "" || roomsReservation.PhoneNumber.length !==10 )
+   
+ 
+    
 
-  }
+  // }
 
-  // console.log(roomsReservation);
-
+ 
   const ConfirmInformation = () => {
 
 
@@ -150,10 +176,10 @@ export default function NewReservation({ navigation }) {
       return
     }
 
-    if (CheckParams()) {
-      alert("Not all customer details are filled in properly")
-      return
-    }
+    // if (CheckParams()) {
+    //   alert("Not all customer details are filled in properly")
+    //   return
+    // }
 
     // console.log(roomsReservation);
 
@@ -184,9 +210,14 @@ export default function NewReservation({ navigation }) {
     }
 
     roomsReservation.totalSum = sum
+
+
+   
+
+    
     navigation.navigate("Credit");
   };
-
+  
   const FetchData = async () => {
     const requestOptions = {
       method: "GET",
@@ -195,7 +226,7 @@ export default function NewReservation({ navigation }) {
     let result = await fetch("http://proj13.ruppin-tech.co.il/GetAvailableRooms", requestOptions);
     let rooms = await result.json();
     if (rooms !== null) {
-      // console.log("rooms: " + JSON.stringify(rooms));
+     
       BilldData(rooms);
 
       return;
@@ -218,7 +249,7 @@ export default function NewReservation({ navigation }) {
   };
 
   const BilldData = (rooms) => {
-    // console.log(rooms);
+  
     let temp = [];
     rooms.map((room) => {
       let tempRoom = {
@@ -299,7 +330,7 @@ export default function NewReservation({ navigation }) {
             <Dialog.Button
               style={{ paddingHorizontal: 20 }}
               label="Ok"
-              onPress={handleOk}
+              onPress={()=>handleOk()}
             />
             <Dialog.Button label="Cancel" onPress={handleCancel} />
           </View>
@@ -319,7 +350,7 @@ export default function NewReservation({ navigation }) {
               onPress={showDatePickerEntry}
             >
               <View style={styles.ButtonContainer}>
-                <Text style={styles.text}>{"Entry date: " + moment(roomsReservation.EntryDate).format("DD/MM/YYYY")}</Text>
+                <Text style={styles.text}>{"Entry date  " + moment(roomsReservation.EntryDate).format("DD/MM/YYYY")}</Text>
 
                 <Image style={styles.icon} source={images.calendar} />
               </View>
@@ -363,7 +394,10 @@ export default function NewReservation({ navigation }) {
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-              label={"Amount Of people: " + roomsReservation.AmountOfPeople}
+              mode="outlined"
+              activeOutlineColor="#000"
+            
+              label="Amount Of people"
               autoCapitalize="none"
               keyboardType="numeric"
               onChangeText={(amount) => roomsReservation.AmountOfPeople = amount}
@@ -382,48 +416,64 @@ export default function NewReservation({ navigation }) {
             <View style={{ paddingVertical: 10 }}>
               <Text style={styles.sectionTitle}>Customer Details</Text>
               <TextInput
-                style={styles.input}
+            
+           
+                style={styles.textInput}
+                label="Customer ID"
+                mode="outlined"
+                activeOutlineColor="#000"
                 placeholder={roomsReservation.CustomerID === undefined?
-                "Customer ID: " : "Customer ID: " + roomsReservation.CustomerID}
-                // placeholder={"Customer ID: " + roomsReservation.CustomerID}
+                " " : roomsReservation.CustomerID}
                 keyboardType="numeric"
                 onChangeText={(text) => roomsReservation.CustomerID = text}
               />
 
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
+               
+                label="First Name"
+                mode="outlined"
+                activeOutlineColor="#000"
                 placeholder={roomsReservation.FirstName === undefined?
-                  "First Name " : "First Name " + roomsReservation.FirstName}
-                // placeholder={"First Name " + roomsReservation.FirstName}
-                // value={roomsReservation.FirstName}
+                  " " : roomsReservation.FirstName}
+               
                 onChangeText={(text) => roomsReservation.FirstName = text}
               />
 
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
+                label="Last Name"
+                mode="outlined"
+                activeOutlineColor="#000"
+             
                 placeholder={roomsReservation.LastName === undefined?
-                  "Last Name: " : "Last Name: " + roomsReservation.LastName}
-                // placeholder={"Last Name: " + roomsReservation.LastName}
-                // value={roomsReservation.LastName}
+                  " " : roomsReservation.LastName}
+              
                 onChangeText={(text) => roomsReservation.LastName = text}
               />
 
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
+                label="Email"
+                mode="outlined"
+                activeOutlineColor="#000"
+        
                 placeholder={roomsReservation.Mail === undefined?
-                  "Email: " : "Email: " + roomsReservation.Mail}
+                  " " :roomsReservation.Mail}
 
-                // placeholder={"Email: " + roomsReservation.Mail}
                 autoCapitalize="none"
-                // value={roomsReservation.Mail}
+             
                 onChangeText={(text) => roomsReservation.Mail = text}
               />
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
+                label="Phone Number"
+
+                mode="outlined"
+                activeOutlineColor="#000"
                 placeholder={roomsReservation.PhoneNumber === undefined?
-                  "Phone Number: " : "Phone Number: " + roomsReservation.PhoneNumber}
-                // placeholder={"Phone Number: " + roomsReservation.PhoneNumber}
-                // value={roomsReservation.PhoneNumber}
+                  " " : roomsReservation.PhoneNumber}
+        
                 keyboardType="numeric"
                 onChangeText={(text) => roomsReservation.PhoneNumber = text}
               />
@@ -506,27 +556,16 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // backgroundColor: "#000",
   },
-  input: {
-    marginHorizontal: 30,
-    marginVertical: 50,
-    borderWidth: 1,
-    borderColor: "#000",
-    fontSize: 18,
-    fontWeight: "500",
+
+  textInput:{
+    height: 50,
+    margin: 12,
   },
-  //   container: {
-  //     flex: 1,
-  //     marginHorizontal: 20,
-  //     marginVertical: 20,
-  //     paddingTop: 60,
-  //   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     paddingBottom: 35,
-    // alignSelf: "flex-end",
   },
   sectionTitleV1: {
     paddingTop: 30,
@@ -545,7 +584,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     justifyContent: "center",
-    // textDecorationLine: "underline",
   },
 
   SubHeadLine: {
@@ -566,7 +604,7 @@ const styles = StyleSheet.create({
   TextInput: {
     borderColor: "black",
     borderRadius: 15,
-    borderWidth: 2,
+    // borderWidth: 2,
   },
 
   Sum: {
@@ -650,7 +688,7 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     margin: 12,
-    borderWidth: 1,
+    borderWidth:1,
   },
   icon: {
     width: 30,
@@ -661,7 +699,6 @@ const styles = StyleSheet.create({
   text: {
     height: 50,
 
-    // margin: 3,
     paddingTop: 17,
     paddingLeft: 10,
   },
@@ -709,220 +746,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-// import * as React from "react";
-// import {
-//   ImageBackground,
-//   View,
-//   StyleSheet,
-//   Image,
-//   Text,
-//   TouchableOpacity,
-//   TextInput,
-//   FlatList,
-
-// } from "react-native";
-// import { LinearGradient } from "expo-linear-gradient";
-// import { useNavigation } from "@react-navigation/native";
-// import { images } from "../../images";
-// import { Ionicons } from "@expo/vector-icons";
-// import { CustomCard } from "./CustomCard";
-
-// export default function Temp({ route, navigation }) {
-//   const nav = useNavigation();
-//   const DATA = [
-//     {
-//       id: 1,
-//       name: "Save",
-//       backgroundColor: "#6BC5E8",
-//       imagesrc: images.save,
-//       onPressHandler: () => {
-//         nav.navigate("schedule", {
-//           title: "Save",
-//           imagesrc: images.save,
-//           backgroundColor: "#6BC5E8",
-//         });
-//       },
-//     },
-//     {
-//       id: 2,
-//       name: "trashCan",
-//       backgroundColor: "#3A9EC2",
-//       imagesrc: images.trashCan,
-//       onPressHandler: () => {
-//         nav.navigate("schedule", {
-//           title: "trashCan",
-//           imagesrc: images.trashCan,
-//           backgroundColor: "#3A9EC2",
-//         });
-//       },
-//     },
-//   ];
-//   const transportItem = ({ item }) => {
-//     return (
-//       <CustomCard>
-//         <View
-//           style={{
-//             flexDirection: "row",
-//             overflow: "hidden",
-//             justifyContent: "space-between",
-//             padding: 15,
-//             backgroundColor: item.backgroundColor,
-//             marginHorizontal: 26,
-//             marginBottom: 10,
-//             borderRadius: 10,
-//           }}
-//         >
-//           <View style={{ justifyContent: "space-between" }}>
-//             <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>
-//               {item.name}
-//             </Text>
-//             <TouchableOpacity
-//               style={{
-//                 backgroundColor: "#fff",
-//                 width: 70,
-//                 padding: 5,
-//                 borderRadius: 6,
-//                 marginTop: 50,
-//               }}
-//               onPress={item.onPressHandler}
-//             >
-//               <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-//                 Select
-//               </Text>
-//             </TouchableOpacity>
-//           </View>
-//           <View>
-//             <Image
-//               style={{ position: "absolute", right: -15, bottom: 2 }}
-//               source={item.imagesrc}
-//             ></Image>
-//           </View>
-//         </View>
-//       </CustomCard>
-//     );
-//   };
-//   return (
-//     <View style={styles.container}>
-//       <ImageBackground
-//         source={images.hotelloby}
-//         resizeMode="cover"
-//         style={{
-
-//           flex: 2,
-//           justifyContent: "center",
-//         }}
-//       />
-
-//       <View style={styles.bottomview}>
-
-//         <View style ={{paddingTop:80}}>
-//         <TouchableOpacity
-
-//             style={{
-//               width: "80%",
-//               height: 60,
-//               marginHorizontal: 10,
-//               marginVertical: 20,
-//               alignSelf: "center",
-//             }}
-//           >
-//             <LinearGradient
-//               style={[
-//                 {
-//                   flex: 1,
-//                   alignItems: "center",
-//                   justifyContent: "center",
-//                   borderRadius: 10,
-//                 },
-//               ]}
-//               colors={["#5884ff", "#d3dfff"]}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
-//               <Text style={{ color: "#000", fontSize: 20, fontWeight: "bold" }}>
-//                 New reservation
-//               </Text>
-//             </LinearGradient>
-//           </TouchableOpacity>
-//           <TouchableOpacity
-
-//             style={{
-//               width: "80%",
-//               height: 60,
-//               marginHorizontal: 10,
-//               marginVertical: 20,
-//               alignSelf: "center",
-//             }}
-//           >
-//             <LinearGradient
-//               style={[
-//                 {
-//                   flex: 1,
-//                   alignItems: "center",
-//                   justifyContent: "center",
-//                   borderRadius: 10,
-//                 },
-//               ]}
-//               colors={["#5884ff", "#d3dfff"]}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
-//               <Text style={{ color: "#000", fontSize: 20, fontWeight: "bold" }}>
-//                 Existing reservation
-//               </Text>
-//             </LinearGradient>
-//           </TouchableOpacity>
-//         </View>
-
-//       </View>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   topview: {
-//     marginTop: 60,
-//     marginHorizontal: 24,
-//     backgroundColor: "gray",
-//     flex: 1,
-//     justifyContent: "space-between",
-//   },
-//   welcomemessage: {
-//     color: "#fff",
-//     fontSize: 35,
-//     fontWeight: "bold",
-//   },
-//   searchbar: {
-//     flexDirection: "row",
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     width: "100%",
-//     height: 40,
-//     borderRadius: 10,
-//     marginBottom: 65,
-//   },
-//   circle: {
-//     borderRadius: 25,
-//     height: 50,
-//     width: 50,
-//     backgroundColor: "#fff",
-//   },
-//   welcomecontainer: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//   },
-//   bottomview: {
-//     flex: 4,
-//     backgroundColor: "#fff",
-//     borderTopLeftRadius: 50,
-//     borderTopRightRadius: 50,
-//   marginTop: -40,
-
-//   },
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#000",
-//   },
-// });

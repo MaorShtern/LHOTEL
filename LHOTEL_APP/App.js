@@ -28,8 +28,7 @@ export default function App() {
     CounterSuite: 0,
     EntryDate: moment().toDate(),
     ExitDate: moment().add(1, "days").toDate(),
-    // ExitDate: moment(new Date()).add(1,"day").format("DD/MM/YYYY"),
-    // EntryDate: moment(new Date()).format("DD/MM/YYYY"),
+
     Breakfast: false,
     NumberOfNights: 0,
     totalSum: 0,
@@ -56,15 +55,6 @@ export default function App() {
   }
   );
 
-
-
-
-
-  // const [roomsFlags, setRoomsFlags] = useState({
-  //     SingleRoom: singleFlag,
-  //     "DoubleRoom": doubleFlag,
-  //     "Suite": suiteFlag,
-  // });
   const [employee, setEmployee] = useState({});
   const [user, SetUser] = useState({})
 
@@ -80,28 +70,19 @@ export default function App() {
     SetRoomsReservation(obj)
   }
 
-  //   const setEmployeeId = (id) => {
-  //     setEmployee((prev) => { return { ...prev, ...{id:id}}});
-  // }
-
-  //   const setEmployeePassword = (password) => {
-  //     setEmployee((prev) => { return { ...prev, ...{password:password}}});
-  //   };
-
 
   const userSettings = {
     employee: employee,
     user: user,
     isUserExist: isUserExist,
     isIos: isIos,
-    bill:bill,
-    // roomsFlags:roomsFlags,
+    bill: bill,
+
     roomsReservation: roomsReservation,
     setEmployeeDB,
     setUserDB,
     setIsUserExist,
-    SetBill,
-    // setRoomsFlags,
+    
     SetReservastionData
   };
 

@@ -15,6 +15,8 @@ import { TextInput } from "react-native-paper";
 import { Dropdown } from "react-native-element-dropdown";
 import ProductsCards from "./ProductsCards";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { images } from "../../images";
 import Icon from "react-native-vector-icons/Ionicons";
 const Products = [
@@ -50,11 +52,20 @@ export default function AddCharge({ navigation }) {
     } else {
       product = productsToAdd.filter((prod) => prod.ProductCode === id)[0];
       product.Amount = amount;
-      // console.log(product);
     }
     Cal_Sum();
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      SetRoom_Number(-1);
+      SetId(-1);
+      SetPayment("");
 
+      SetSumTotal(0);
+      SetProductsToAdd([]);
+      SetGoodsCount(0);
+    }, [flag])
+  );
   const Cal_Sum = () => {
     let sum = 0;
     let goodsCounter = 0;
@@ -127,7 +138,6 @@ export default function AddCharge({ navigation }) {
             }),
             headers: { "Content-Type": "application/json" },
           };
-          // console.log(requestOptions.body);
           let result = await fetch(
             "http://proj13.ruppin-tech.co.il/AddCharge",
             requestOptions
@@ -135,7 +145,6 @@ export default function AddCharge({ navigation }) {
           let temp = await result.json();
           if (temp) {
             counter++;
-            // GetAllTasksFromDB()
           }
         }
       }
@@ -196,12 +205,9 @@ export default function AddCharge({ navigation }) {
     />
   ));
 
-  // console.log(JSON.stringify(dropdownData));
-  // console.log(room_Number);
-
   return (
     <View style={styles.container}>
-            <StatusBar translucent={true} backgroundColor={"transparent"} />
+      <StatusBar translucent={true} backgroundColor={"transparent"} />
 
       <ImageBackground
         source={images.hotelback}
@@ -224,20 +230,9 @@ export default function AddCharge({ navigation }) {
             borderTopRightRadius: 50,
             marginTop: -40,
           }}
-          // style={styles.bottomview}
         >
           <View style={{ paddingTop: 40 }}>
             <Text style={styles.HeadLine}>Add Charge</Text>
-            {/* <Text
-              style={{
-                paddingHorizontal: 35,
-                paddingTop: 30,
-                fontWeight: "bold",
-                fontSize: 17,
-              }}
-            >
-              Customer ID
-            </Text> */}
 
             <TextInput
               style={styles.input}
@@ -247,14 +242,12 @@ export default function AddCharge({ navigation }) {
               autoCapitalize="none"
               keyboardType="numeric"
               onChangeText={(id) => SetId(id)}
-              // value={id}
             />
 
             <TouchableOpacity
               onPress={() => {
                 FindCustomerRoomByID();
               }}
-              // onPress={FindCustomerRoomByID}
               style={{
                 width: "70%",
                 height: 60,
@@ -293,20 +286,21 @@ export default function AddCharge({ navigation }) {
         <Animated.View
           style={{
             flex: closeState,
-            //  , flex: 4,
+
             backgroundColor: "#fff",
-            //  borderTopLeftRadius: 50,
-            //  borderTopRightRadius: 50,
+
             marginTop: -40,
           }}
-          // style={styles.bottomview}
         >
-            <TouchableOpacity  onPress={()=> {SetFlag(!flag),doAnimation(closeState, 3, 500)}} style={styles.save} >
-            <Image style={styles.Save} source={images.back} /> 
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              SetFlag(!flag), doAnimation(closeState, 3, 500);
+            }}
+            style={styles.save}
+          >
+            <Image style={styles.Save} source={images.back} />
+          </TouchableOpacity>
           <View style={{ marginHorizontal: 10 }}>
-          
-          
             <View
               style={{
                 flexDirection: "row-reverse",
@@ -325,8 +319,8 @@ export default function AddCharge({ navigation }) {
               <Dropdown
                 style={styles.dropdown2}
                 data={[
-                  { label: "Charge on the room", value: "Credit" },
-                  { label: "Immediate Cash Payment", value: "Cash" },
+                  { label: "Charge the room", value: "Credit" },
+                  { label: "Immediate Cash Pay", value: "Cash" },
                 ]}
                 // search
                 searchPlaceholder="Search"
@@ -342,13 +336,6 @@ export default function AddCharge({ navigation }) {
 
             {dropdownData !== null ? (
               <View>
-                {/* <Text>Room Number:</Text>
-            <TextInput
-              keyboardType="numeric"
-              style={styles.TextInput}
-              onChangeText={(room) => SetRoom_Number(room)}
-            ></TextInput> */}
-
                 <View>
                   <View
                     style={{
@@ -371,160 +358,23 @@ export default function AddCharge({ navigation }) {
                       />
                       <Text style={{ fontSize: 16 }}>{goodsCount} goods</Text>
                     </View>
-                    {/* {goodsCount} */}
                     <View style={styles.totalContainerStyle}>
                       <Text style={{ fontSize: 16 }}>Total - {sumTotal} $</Text>
                     </View>
                   </View>
                 </View>
-                {/* <View style={styles.goodsStyle}>
-                <Text style={{ fontSize: 18 }}> Total : {sumTotal} $</Text>
-                <Icon name="ios-cart" size={25} />
-              </View>
-            </View> */}
 
-                <TouchableOpacity style={styles.button} onPress={SavePurchase}> 
-                  <Text style={{ fontSize: 20 ,textAlign:'center'}}>SAVE</Text>
-                  {/* <Image style={styles.save} source={images.save} /> */}
+                <TouchableOpacity style={styles.button} onPress={SavePurchase}>
+                  <Text style={{ fontSize: 20, textAlign: "center" }}>
+                    SAVE
+                  </Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.button} onPress={SavePurchase}>
-                <Image style={styles.save} source={images.save} />
-              </TouchableOpacity> */}
               </View>
             ) : null}
-
-            {/* <Text style={styles.HeadLine}>Add Charge</Text> */}
-            {/* <Text  style={{ paddingHorizontal:35, paddingTop:45, fontWeight: "bold", fontSize: 17 }}>Customer ID</Text> */}
-            {/*       
-      <TextInput
-        style={styles.input}
-
-        autoCapitalize="none"
-        keyboardType="numeric"
-        onChangeText={(id) => SetId(id)}
-        value={id}
-      /> */}
-
-            {/* <TouchableOpacity
-         onPress= {()=> {doAnimation(closeState,9, 500),SetFlag(!flag)}}
-        // onPress={FindCustomerRoomByID}
-        style={{
-          width: "70%",
-          height: 60,
-          marginHorizontal: 10,
-          marginVertical: 20,
-          alignSelf: "center",
-          borderRadius: 25,
-          shadowOpacity: 0.3,
-          shadowRadius: 25,
-          elevation: 5,
-        }}
-      >
-        <LinearGradient
-          style={[
-            {
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 10,
-            },
-          ]}
-          colors={["#926F34", "#DFBD69"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
-          <Text style={{ color: "#000", fontSize: 25, fontWeight: "bold" }}>
-          Search 
-          </Text>
-        </LinearGradient>
-      </TouchableOpacity> */}
           </View>
         </Animated.View>
       )}
     </View>
-    // <ScrollView>
-    //   <Text style={styles.HeadLine}>Add Charge</Text>
-
-    //   <View style={styles.label}>
-    //     <Text>Customer ID:</Text>
-    //     <TextInput
-    //       keyboardType="numeric"
-    //       style={styles.TextInput}
-    //       onChangeText={(id) => SetId(id)}
-    //     ></TextInput>
-    //     <View style={{ height: 10 }}></View>
-    //     <View>
-    //       <TouchableOpacity style={styles.SearchID} onPress={FindCustomerRoomByID}>
-    //         <Text>Search rooms by ID</Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //     {dropdownData !== null ?
-    //       (<View>
-    //         <Dropdown
-    //           style={styles.dropdown}
-    //           data={dropdownData}
-    //           labelField="label"
-    //           valueField="value"
-    //           placeholder="Room"
-    //           onChange={(room) => SetRoom_Number(room.value)}
-    //         />
-
-    //         {/* <Text>Room Number:</Text>
-    //         <TextInput
-    //           keyboardType="numeric"
-    //           style={styles.TextInput}
-    //           onChangeText={(room) => SetRoom_Number(room)}
-    //         ></TextInput> */}
-    //         <View style={{ height: 10 }}></View>
-
-    //         <View>
-    //           <View style={{ borderRadius: 5, borderWidth: 0.4 }}>
-
-    //             {listOfProducts}
-    //           </View>
-
-    //           <View style={styles.goodsStyle}>
-    //             <Text style={{ fontSize: 18 }}> Total : {sumTotal} $</Text>
-    //             <Icon name="ios-cart" size={25} />
-    //           </View>
-    //         </View>
-
-    //         <View style={{ height: 10 }}></View>
-
-    //         <View>
-    //           <Dropdown
-    //             style={styles.dropdown}
-    //             data={[
-    //               { label: "Charge on the room", value: "Credit" },
-    //               { label: "Immediate Cash Payment", value: "Cash" },
-    //             ]}
-    //             // search
-    //             searchPlaceholder="Search"
-    //             labelField="label"
-    //             valueField="value"
-    //             placeholder="Payment Method"
-    //             value={payment}
-    //             onChange={(method) => {
-    //               SetPayment(method.value);
-    //             }}
-    //           />
-    //         </View>
-    //         <View style={{ height: 10 }}></View>
-
-    //         <View
-    //           style={{
-    //             flex: 1,
-    //             alignItems: "center",
-    //             justifyContent: "space-between",
-    //           }}>
-    //           <TouchableOpacity style={styles.button} onPress={SavePurchase}>
-    //             <Image style={styles.save} source={images.save} />
-    //           </TouchableOpacity>
-    //         </View>
-    //       </View>)
-    //       : null}
-    //   </View>
-    // </ScrollView>
   );
 }
 
@@ -549,15 +399,13 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   dropdown1: {
-    // backgroundColor: "white",
-    // borderBottomColor: "gray",
-    // borderBottomWidth: 0.5,
     marginRight: 22,
-    width: "25%",
+    width: "22%",
   },
   dropdown2: {
     marginVertical: 20,
-    width: "60%",
+    paddingLeft: 70,
+    width: "66%",
   },
   amount: {
     flex: 1,
@@ -566,7 +414,6 @@ const styles = StyleSheet.create({
   totalContainerStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // paddingTop: 15,
   },
   goodsStyle: {
     flexDirection: "row",
@@ -575,36 +422,31 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "rgba(35,100,168, 0.4)",
     padding: 10,
-     marginTop:20,
+    marginTop: 20,
     borderRadius: 10,
-width:'98%',
+    width: "98%",
     borderBottomWidth: 0.2,
     margin: 5,
     alignSelf: "center",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
-    
+
     marginBottom: 80,
-    // backgroundColor: "rgba(35,100,168, 0.4)",
-    // padding: 15,
-    // borderRadius: 10,
-    // margin: 5,
   },
   save: {
     backgroundColor: "#CDCDCD",
     padding: 15,
     borderRadius: 50,
- 
-    position: 'absolute',
-    top:15,
-    left:20,
-    // borderWidth: 0.2,
+
+    position: "absolute",
+    top: 15,
+    left: 20,
     zIndex: 2,
   },
   Save: {
-    width:20,
-    height:20,
+    width: 15,
+    height: 15,
   },
   SearchID: {
     backgroundColor: "gray",
@@ -617,10 +459,8 @@ width:'98%',
 
   bottomview: {
     flex: 4,
-    // backgroundColor: "#fff",
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    // marginTop: -40,
   },
   container: {
     flex: 1,
@@ -637,25 +477,11 @@ width:'98%',
   input: {
     marginHorizontal: 30,
     marginVertical: 30,
-    // borderWidth: 1,
-    // borderColor: "#000",
+
     fontSize: 18,
     fontWeight: "500",
   },
-  // button: {
-  //   shadowColor: "grey",
 
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 5,
-  //   elevation: 5,
-  //   backgroundColor: "orange",
-  //   alignSelf: "center",
-  //   width: 210,
-  //   paddingHorizontal: 50,
-  //   paddingVertical: 20,
-
-  //   borderRadius: 10,
-  // },
   textButton: {
     color: "#fff",
     alignSelf: "center",

@@ -13,7 +13,7 @@ import {
 import AppContext from "../../AppContext";
 
 export default function CustomDrawer(props) {
-    // console.log(props.isUserConnected);
+   
     const myContext = useContext(AppContext);
     const LogOutUser =  () => {
         myContext.setUserDB({});
@@ -25,7 +25,7 @@ export default function CustomDrawer(props) {
             Breakfast: false,
             NumberOfNights: 0,
             rooms: []});
-        //    props.navigation.closeDrawer()
+        
            props.navigation.navigate("Home")
       };
   return (
@@ -39,9 +39,8 @@ export default function CustomDrawer(props) {
              <Text
                style={{
                  color: "#fff",
-                 fontSize: 18,
-                 //   fontFamily: 'Roboto-Medium',
-                 marginBottom: 5,
+                 fontSize: 22,
+                
                }}
              >
              {myContext.user.FirstName} {myContext.user.LastName}
@@ -51,7 +50,7 @@ export default function CustomDrawer(props) {
         }
        
 
-        <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10 }}>
+        <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10}}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
@@ -60,11 +59,11 @@ props.isUserConnected ?
 <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}>
         <TouchableOpacity onPress={() => LogOutUser()} style={{ paddingVertical: 15 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Ionicons name="exit-outline" size={22} /> */}
+        
             <Text
               style={{
                 fontSize: 15,
-                // fontFamily: 'Roboto-Medium',
+              
                 marginLeft: 5,
               }}
             >

@@ -36,7 +36,7 @@ export default function EMCard(props) {
             <View style={styles.details}>
             <Text style={{paddingLeft:5,fontSize:16}}>Hourly : {HourlyWage}$</Text>
                 <Text style={styles.textStyle}  >Birth Date : {moment(BirthDate).format('DD/MM/YYYY')}</Text>
-                {/* <Text >Hourly Wage: {Hourly_Wage}</Text> */}
+            
                
             </View>
          
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     details: {
         flexDirection: "row",
-        // alignItems: 'center',
+    
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 5

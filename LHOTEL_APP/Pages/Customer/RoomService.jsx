@@ -254,13 +254,13 @@ export default function RoomService({ navigation }) {
                 />
               </View>
 
-              <View style={styles.ButtonContainer}>
+             
                 <TouchableOpacity>
                   <Text style={styles.button} onPress={() => SaveOrder()}>
                     ORDER
                   </Text>
                 </TouchableOpacity>
-              </View>
+            
             </View>
           )}
         </View>
@@ -310,13 +310,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "gray",
-    borderRadius: 10,
-    borderWidth: 1,
-    padding: 10,
-    paddingRight: 60,
-    paddingLeft: 60,
-    marginRight: 60,
+    backgroundColor: "rgba(35,100,168, 0.4)",
+    paddingVertical: 15,
+    padding: 40,
+    borderRadius: 5,
+marginVertical:40,
+alignSelf:'center',
+    fontWeight: "500",
   },
   input: {
     height: 50,

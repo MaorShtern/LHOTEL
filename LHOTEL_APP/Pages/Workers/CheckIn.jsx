@@ -65,7 +65,7 @@ export default function CheckIn({ route, navigation }) {
             </LinearGradient>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("ExistingReservation",{Id:''})}
+            onPress={() => navigation.navigate("ExistingReservation")}
             style={{
               width: "80%",
               height: 60,

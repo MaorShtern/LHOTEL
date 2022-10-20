@@ -49,44 +49,6 @@ namespace LHOTELServer.Controllers
             }
         }
 
-        //[System.Web.Http.HttpPost]
-        //public IHttpActionResult Post([FromBody] Products product)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLProducts.AddNewProduct(product));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
-
-        //[System.Web.Http.HttpPut]
-        //public IHttpActionResult Put([FromBody] Products product)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLProducts.AlterProductById(product));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[System.Web.Http.HttpDelete]
-        //public IHttpActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLProducts.DeleteProductById(id));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
     }
 }

@@ -94,10 +94,7 @@ export default function EditTasks({ route, navigation }) {
     SetTaskStatus(!taskStatus);
     task.TaskStatus = !taskStatus ? "Open" : "Close";
 
-    // if (taskStatus !== true)
-    //     task.TaskStatus = 'Open'
-    // else
-    //     task.TaskStatus = 'Close'
+    
   };
 
   const CheckValues = () => {
@@ -119,7 +116,6 @@ export default function EditTasks({ route, navigation }) {
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
       };
-      // console.log(requestOptions.body);
       let result = await fetch("http://proj13.ruppin-tech.co.il/AlterTask", requestOptions);
       if (result) {
         alert("Task details successfully saved");
@@ -141,7 +137,6 @@ export default function EditTasks({ route, navigation }) {
         body: JSON.stringify(task),
         headers: { "Content-Type": "application/json" },
       };
-      // console.log(requestOptions.body);
       let result = await fetch("http://proj13.ruppin-tech.co.il/AddNewTask", requestOptions);
       if (result) {
         alert("Task details successfully saved");
@@ -152,7 +147,7 @@ export default function EditTasks({ route, navigation }) {
     }
   };
 
-  // console.log(task);
+  
 
   return (
     <ScrollView>
@@ -164,13 +159,10 @@ export default function EditTasks({ route, navigation }) {
       ) : (
         <Text style={styles.NewTaskStyle}>New Task</Text>
       )}
-      {/* <Text style={styles.SumHeadLine}>Task number: {task.Task_Code}</Text> */}
       <View style={styles.DetailsContainer}>
         <Text style={{ paddingLeft: 15, fontSize: 18 }}>Employee ID:</Text>
         <TextInput
-          // label={JSON.stringify(task.EmployeeID)}
           placeholder={task.EmployeeID !== null ? JSON.stringify(task.EmployeeID) : ""}
-          // right={<TextInput.Icon name="account" />}
           mode="outlined"
           keyboardType="numeric"
           style={styles.TextInputStyle}
@@ -179,9 +171,9 @@ export default function EditTasks({ route, navigation }) {
 
         <Text style={{ paddingLeft: 15, fontSize: 18 }}>Room Number:</Text>
         <TextInput
-          // label={JSON.stringify(task.RoomNumber)}
+   
           placeholder={task.RoomNumber !== 0 ? JSON.stringify(task.RoomNumber) : ""}
-          // left={<TextInput.Icon name="" />}
+         
           mode="outlined"
           keyboardType="numeric"
           style={styles.TextInputStyle}
@@ -218,7 +210,7 @@ export default function EditTasks({ route, navigation }) {
           <View style={styles.StartEndTimeStyle}>
             <TouchableOpacity onPress={showEndTime} style={styles.Btn}>
               <Text style={{ fontSize: 18 }}>To Do By : {task.EndTime}</Text>
-              {/* <Text>{"To Do By: " + task.EndTime}</Text> */}
+             
             </TouchableOpacity>
             <TextInput.Icon
               name="clock"
@@ -240,7 +232,7 @@ export default function EditTasks({ route, navigation }) {
           onConfirm={handelTimeEnd}
           onCancel={hideEndTime}
         />
-        {/* <View style={{ height: 20 }}></View> */}
+      
 
         <View style={styles.CheckboxContainer}>
           <View style={styles.Checkbox}>
@@ -258,7 +250,7 @@ export default function EditTasks({ route, navigation }) {
           </Text>
           <TextInput
             activeOutlineColor="#000"
-            // label='Description'
+           
             left={<TextInput.Icon />}
             mode="outlined"
             placeholder={task.Description || ""}
@@ -333,7 +325,7 @@ const styles = StyleSheet.create({
 
     borderBottomWidth: 0.2,
     margin: 5,
-    // flex: 1,
+  
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -356,14 +348,14 @@ const styles = StyleSheet.create({
   timeStyle: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    // alignSelf:'flex-end',
+   
     justifyContent: "space-between",
-    // paddingHorizontal: 10,
+   
   },
   StartEndTimeStyle: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    // alignSelf:'flex-end',
+   
     justifyContent: "space-between",
     paddingLeft: 28,
     borderColor: "white",

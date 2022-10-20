@@ -1,5 +1,13 @@
 import React, { useContext, useState } from "react";
-import { ImageBackground, View, StyleSheet, Image, Text, TouchableOpacity, FlatList, } from "react-native";
+import {
+  ImageBackground,
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { images } from "../../images";
@@ -7,83 +15,83 @@ import moment from "moment";
 
 // import { Ionicons } from "@expo/vector-icons";
 // import { CustomCard } from "./CustomCard";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import AppContext from "../../AppContext";
 
-
 export default function ExistingReservation({ route, navigation }) {
+  // let { Id } = route.params
 
-  let { Id } = route.params
-
-  const [id, setId] = useState(Id)
+  const [id, setId] = useState("");
   const myContext = useContext(AppContext);
-  const roomsReservation = myContext.roomsReservation
+  const roomsReservation = myContext.roomsReservation;
   useFocusEffect(
     React.useCallback(() => {
-      roomsReservation.CustomerID= '',
-      roomsReservation.CustomerType= 1,
-      roomsReservation.FirstName= '',
-      roomsReservation.LastName= '',
-      roomsReservation.Mail= '',
-      roomsReservation.PhoneNumber='',
-      roomsReservation.CardHolderName= '',
-      roomsReservation.CreditCardNumber= '',
-      roomsReservation.CreditCardDate= '',
-      roomsReservation.ThreeDigit= '',
-      roomsReservation.AmountOfPeople= 1,
-      roomsReservation.EmployeeID= -1,
-      roomsReservation.CounterSingle= 0,
-      roomsReservation.CounterDouble= 0,
-      roomsReservation.CounterSuite= 0,
-      roomsReservation.EntryDate=moment().toDate(),
-      roomsReservation. ExitDate= moment().add(1, "days").toDate(),
-    
-      roomsReservation.Breakfast=false,
-      roomsReservation.NumberOfNights=0,
-      roomsReservation.totalSum=0,
-      roomsReservation.rooms=[]
- 
-  
+      (roomsReservation.CustomerID = ""),
+        (roomsReservation.CustomerType = 1),
+        (roomsReservation.FirstName = ""),
+        (roomsReservation.LastName = ""),
+        (roomsReservation.Mail = ""),
+        (roomsReservation.PhoneNumber = ""),
+        (roomsReservation.CardHolderName = ""),
+        (roomsReservation.CreditCardNumber = ""),
+        (roomsReservation.CreditCardDate = ""),
+        (roomsReservation.ThreeDigit = ""),
+        (roomsReservation.AmountOfPeople = 1),
+        (roomsReservation.EmployeeID = -1),
+        (roomsReservation.CounterSingle = 0),
+        (roomsReservation.CounterDouble = 0),
+        (roomsReservation.CounterSuite = 0),
+        (roomsReservation.EntryDate = moment().toDate()),
+        (roomsReservation.ExitDate = moment().add(1, "days").toDate()),
+        (roomsReservation.Breakfast = false),
+        (roomsReservation.NumberOfNights = 0),
+        (roomsReservation.totalSum = 0),
+        (roomsReservation.rooms = []);
     }, [])
   );
 
   const ReservationCheck = async () => {
+    if (id !== "") {
+      const requestOptions = {
+        method: "PUT",
+        body: JSON.stringify({
+          id: id,
+        }),
+        headers: { "Content-Type": "application/json" },
+      };
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId",
+        requestOptions
+      );
+      let currReservation = await result.json();
+      // console.log(currReservation);
+      if (currReservation.length !== 0) {
+        roomsReservation.AmountOfPeople = currReservation[0].AmountOfPeople;
+        roomsReservation.BillDate = currReservation[0].BillDate;
+        roomsReservation.BillNumber = currReservation[0].BillNumber;
+        roomsReservation.Breakfast = currReservation[0].Breakfast;
+        roomsReservation.CustomerID = currReservation[0].CustomerID;
+        roomsReservation.CustomerType = currReservation[0].CustomerType;
+        roomsReservation.EntryDate = currReservation[0].EntryDate;
+        roomsReservation.ExitDate = currReservation[0].ExitDate;
+        roomsReservation.FirstName = currReservation[0].FirstName;
+        roomsReservation.LastName = currReservation[0].LastName;
+        roomsReservation.Mail = currReservation[0].Mail;
+        roomsReservation.PhoneNumber = currReservation[0].PhoneNumber;
+        if (currReservation.length > 1) {
+          currReservation.map((room) =>
+            roomsReservation.rooms.push({
+              RoomNumber: room.RoomNumber,
+              PricePerNight: room.PricePerNight,
+            })
+          );
+        }
+        console.log(currReservation);
 
-    const requestOptions = {
-      method: 'PUT',
-      body: JSON.stringify({
-        "id": id,
-      }),
-      headers: { 'Content-Type': 'application/json' }
-    };
-    let result = await fetch('http://proj13.ruppin-tech.co.il/GetReservedRoomsByCustomerId', requestOptions);
-    let currReservation = await result.json();
-    // console.log(currReservation);
-    if (currReservation.length !== 0) {
-    
-      roomsReservation.AmountOfPeople = currReservation[0].AmountOfPeople 
-      roomsReservation.BillDate =  currReservation[0].BillDate
-      roomsReservation.BillNumber =  currReservation[0].BillNumber
-      roomsReservation.Breakfast=  currReservation[0].Breakfast
-      roomsReservation.CustomerID=  currReservation[0].CustomerID
-      roomsReservation.CustomerType=  currReservation[0].CustomerType
-      roomsReservation.EntryDate=  currReservation[0].EntryDate
-      roomsReservation.ExitDate=  currReservation[0].ExitDate
-      roomsReservation.FirstName=  currReservation[0].FirstName
-      roomsReservation.LastName=  currReservation[0].LastName
-      roomsReservation.Mail=  currReservation[0].Mail
-      roomsReservation.PhoneNumber=  currReservation[0].PhoneNumber
-     if(currReservation.length >1){
-       currReservation.map((room)=> roomsReservation.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
-     }
-     navigation.navigate("ShortCheckIn")
-   
-   }
-
-
-    else alert("No matching Reservation for the ID you entered")
-
-  }
+         navigation.navigate("ShortCheckIn")
+      } else alert("No matching Reservation for the ID you entered");
+    } else alert("No matching Reservation for the ID you entered");
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -107,7 +115,6 @@ export default function ExistingReservation({ route, navigation }) {
 
           <TextInput
             style={styles.input}
-
             autoCapitalize="none"
             keyboardType="numeric"
             onChangeText={(id) => setId(id)}
@@ -146,7 +153,6 @@ export default function ExistingReservation({ route, navigation }) {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
-
         </View>
       </View>
     </View>
@@ -154,7 +160,6 @@ export default function ExistingReservation({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   bottomview: {
     flex: 4,
     backgroundColor: "#fff",
@@ -169,10 +174,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 35,
     zIndex: 1,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     bottom: 40,
-    color: 'white',
-    paddingLeft: 20
+    color: "white",
+    paddingLeft: 20,
   },
   input: {
     marginHorizontal: 30,

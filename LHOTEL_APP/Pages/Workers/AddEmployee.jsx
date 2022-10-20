@@ -33,7 +33,7 @@ export default function AddEmployee({ navigation }) {
   };
 
   const HandelDate = (date) => {
-    // let dateStr = moment(date).format("DD/MM/YYYY");
+ 
     SetDate(date);
     HideDate();
   };
@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
   goodsStyle: {
     flexDirection: "row-reverse",
     paddingTop: 10,
-    // justifyContent: "space-between",
   },
   button: {
     backgroundColor: "rgba(35,100,168, 0.4)",
@@ -246,7 +245,7 @@ const styles = StyleSheet.create({
   counterStyle: {
     flex: 1,
     flexDirection: "row",
-    // justifyContent: "flex-end",
+   
     alignItems: "center",
     justifyContent: "space-between",
     padding: 15,
@@ -258,7 +257,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    // paddingHorizontal:70,
-    // paddingVertical:90,
+    
   },
 });

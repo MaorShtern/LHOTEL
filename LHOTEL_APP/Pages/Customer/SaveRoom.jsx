@@ -236,12 +236,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   button: {
+
+
+
     flex: 1,
     width: 100,
-    backgroundColor: "gray",
-    padding: 10,
+    backgroundColor: "rgba(35,100,168, 0.4)",
+    padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    fontWeight: "500",
   },
   container: {
     flex: 1,

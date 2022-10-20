@@ -21,13 +21,13 @@ export default function EmployeesManagement({ navigation }) {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        setKeyboardVisible(true); // or some other action
+        setKeyboardVisible(true); 
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
-        setKeyboardVisible(false); // or some other action
+        setKeyboardVisible(false); 
       }
     );
 
@@ -63,7 +63,6 @@ export default function EmployeesManagement({ navigation }) {
     let employee = DBemployees.filter(
       (employee) => employee.EmployeeName === value
     );
-    // console.log(employee);
     if (employee.length > 0) {
       SetEmployees(employee);
     } else {
@@ -71,11 +70,9 @@ export default function EmployeesManagement({ navigation }) {
     }
   };
 
-  //   צריך לרשום מתודת מחיקה לעובד
   const DeleteEmployeeFromDB = async (id) => {
     try {
       SetLoading(false);
-      // console.log(value);
       const requestOptions = {
         method: "DELETE",
         body: JSON.stringify({
@@ -84,7 +81,6 @@ export default function EmployeesManagement({ navigation }) {
         headers: { "Content-Type": "application/json" },
       };
 
-      //   console.log(requestOptions.body);
       let result = await fetch(
         "http://proj13.ruppin-tech.co.il/DeleteEmployeeById",
         requestOptions
@@ -102,7 +98,6 @@ export default function EmployeesManagement({ navigation }) {
   };
 
   const DeleteEmployee = (value) => {
-    // console.log(value);
     return Alert.alert(
       "Deleting an employee",
       "Are you sure you want to delete the employee from the system?",
@@ -114,8 +109,7 @@ export default function EmployeesManagement({ navigation }) {
               (employee) => employee.EmployeeID === value
             )[0].EmployeeID;
             DeleteEmployeeFromDB(employee);
-            // let newArray = employees.filter((per) => per.Employee_ID !== value)
-            // SetEmployees(newArray)
+            
           },
         },
         { text: "No" },
@@ -124,15 +118,12 @@ export default function EmployeesManagement({ navigation }) {
   };
 
   const EditDetails = (value) => {
-    // console.log(valuse);
     let employee = employees.filter(
       (employee) => employee.EmployeeID === value
     )[0];
-    // console.log(JSON.stringify(employee));
     navigation.navigate("UpdateDetails", { employee: employee });
   };
 
-  // console.log("employees:   ---> "+JSON.stringify(employees));
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
@@ -165,7 +156,6 @@ export default function EmployeesManagement({ navigation }) {
         onChangeText={SerchEmployee}
         value={search}
       />
-      {/* <Image style={styles.circle} source={images.plus} /> */}
 
       <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("AddEmployee")}>
         <Image style={styles.circleImg} source={images.plus} />
@@ -183,13 +173,7 @@ export default function EmployeesManagement({ navigation }) {
           <Text style={styles.HeadLine}>Employees Management</Text>
 
         </View>
-        {/* 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("AddEmployee")}
-          >
-            <Text>Add New Employee</Text>
-          </TouchableOpacity> */}
+       
 
         <View style={styles.Empcontainer}>
 
@@ -219,17 +203,10 @@ const styles = StyleSheet.create({
 
   },
   topview: {
-    // marginTop:60,
-    // marginHorizontal:24,
+   
 
     flex: 1,
-    // justifyContent:"space-between",
-    // marginTop:60,
-    // marginHorizontal:24,
-    //  backgroundColor:'red',
-    // flex:1,
-
-    // justifyContent:"space-between"
+   
   },
   Empcontainer: {
     flex: 3.5,
@@ -249,16 +226,13 @@ const styles = StyleSheet.create({
 
 
 
-    // flexDirection:"row",
+   
     backgroundColor: "#CDCDCD",
 
-    // alignSelf: "center",
-    // width: "95%",
-    // height:40,
     borderRadius: 50,
     zIndex: 2,
 
-    // paddingBottom:20,
+    
 
   },
   circle: {
@@ -269,7 +243,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 25,
     right: 20,
-    // borderWidth: 2,
+   
     zIndex: 8,
   },
   circleImg: {
@@ -286,9 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 25,
     borderRadius: 10,
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'space-between',
+   
     marginBottom: 20,
   },
   itemLeft: {
@@ -300,7 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     alignItems: "center",
     padding: 5,
-    // justifyContent: 'space-between',
+   
   },
   BTNContainer: {
     flex: 1,

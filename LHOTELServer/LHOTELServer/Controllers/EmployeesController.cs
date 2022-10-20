@@ -21,19 +21,6 @@ namespace LHOTELServer.Controllers
     {
 
 
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Http.Route("~/GetAllEmployees")]
-        //public IHttpActionResult GetAllEmployees()
-        //{
-        //    try
-        //    {
-        //        return Ok(BLLEmployees.GetAllEmployees());
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
 
         [System.Web.Http.HttpPost]

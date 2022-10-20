@@ -35,8 +35,8 @@ export default function ConfirmationPage({ route, navigation }) {
 
             <View style={styles.ButtonContainer}>
          
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-                    <Text>Home Page</Text>
+                <TouchableOpacity  onPress={() => navigation.navigate('Home')}>
+                    <Text style={{textAlign:'center',fontSize:16}}>Home Page</Text>
                 </TouchableOpacity>
             </View>
             <View style={{ height: 30 }}></View>
@@ -66,8 +66,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     ButtonContainer: {
-        alignItems:"center",
-        paddingTop: 10
+        alignSelf:"center",
+       marginTop:40,
+        paddingTop: 10,
+          width: 150,
+        backgroundColor: "rgba(35,100,168, 0.4)",
+        padding: 15,
+        borderRadius: 10,
+    //   flex:1,
+        fontWeight: "500",
     },
 
     pay: {
@@ -88,11 +95,5 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
 
     },
-    button:
-    {
-        backgroundColor: 'gray',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 10,
-    },
+  
 })

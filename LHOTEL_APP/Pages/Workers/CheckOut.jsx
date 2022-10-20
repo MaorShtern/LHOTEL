@@ -33,13 +33,13 @@ export default function CheckOut() {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        setKeyboardVisible(true); // or some other action
+        setKeyboardVisible(true); 
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
-        setKeyboardVisible(false); // or some other action
+        setKeyboardVisible(false); 
       }
     );
 
@@ -60,11 +60,9 @@ export default function CheckOut() {
     );
     let rooms = await result.json();
     if (rooms !== null) {
-      // console.log(rooms);
-      // setReservationItems(rooms)
-      // SetDBReservationItems(rooms)
+      
       let roomsData = BilldReservationItemsData(rooms);
-      // console.log(roomsData);
+     
       setReservationItems(roomsData);
       SetDBReservationItems(roomsData);
       return;
@@ -72,18 +70,7 @@ export default function CheckOut() {
     FetchData();
   };
   const renderItem = ({ item }) => (
-    // console.log(item)
-    // <>
-
-    // {
-    //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-    //   Room : {item.RoomNumber}
-    // </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-    //   Room : {roomNumber}
-    // </Text>)
-    // }
-
-    //   </>
+   
     <>
       <Divider
         style={{
@@ -130,32 +117,13 @@ export default function CheckOut() {
     return temp;
   };
 
-  // const RenderItem = ({ item}) => {
-  //   console.log(item)
-
-  //   return(
-  //     <>
-
-  // {
-  //   item.RoomNumber.length === undefined? <Text style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-  //   Room : {item.RoomNumber}
-  // </Text> :item.RoomNumber.map((roomNumber,index)=>  <Text key = {index}style={{ fontSize: 17, paddingHorizontal: 5, marginRight: 10, paddingBottom: 5, }}>
-  //   Room : {roomNumber}
-  // </Text>)
-  // }
-
-  //   </>
-  //   )
-
-  // }
-
   const SerchReservation = (value) => {
-    // console.log(value);
+  
     setSearch(value);
     let occupiedReservation = reservationItems.filter(
       (reservation) => reservation.CustomerID == value
     );
-    // console.log(occupiedReservation);
+   
     if (occupiedReservation.length > 0) {
       setReservationItems(occupiedReservation);
     } else {
@@ -223,7 +191,7 @@ export default function CheckOut() {
               />
             )}
 
-            {/* <RenderItem item ={item}/> */}
+          
           </View>
 
           <View style={styles.BTNContainer}>
@@ -258,20 +226,7 @@ export default function CheckOut() {
       return;
     }
   };
-  // const func = ()=>{
-  //   let rooms = []
-  //   DBreservationItems.map((room) =>
-  //   rooms.push({
-  //         type: per.RoomType,
-  //         allrooms: rooms.filter((room) => room.RoomType === per.RoomType).length,
-  //         details: per.Details,
-  //         pricePerNight: per.PricePerNight,
-  //       })
-  //   rooms .push()
-  // }
 
-  // let cards = reservationItems.map((per) => CheckOutCard(per))
-  // console.log("reservationItems : ---   "+ reservationItems);
 
   return (
     <View style={styles.container}>
@@ -294,12 +249,9 @@ export default function CheckOut() {
             value={search}
             keyboardType="numeric"
           />
-          {/* <Ionicons name="search-outline" size={25} color="#BEBEBE" style={{width:40,transform: [{rotateY: '180deg'}]}} /> */}
-          {/* <TextInput placeholder="Search" style={{color:"#BEBEBE",marginLeft:15,opacity:0.5,fontSize:20}}></TextInput> */}
         </View>
 
         <View style={styles.SearchbarContainer}>
-          {/* </View> */}
           
           <View style={{ paddingHorizontal:  5 ,paddingTop: isKeyboardVisible? 40:5}}>
             <FlatList
@@ -317,17 +269,10 @@ export default function CheckOut() {
 
 const styles = StyleSheet.create({
   topview: {
-    // marginTop:60,
-    // marginHorizontal:24,
+
 
     flex: 1,
-    // justifyContent:"space-between",
-    // marginTop:60,
-    // marginHorizontal:24,
-    //  backgroundColor:'red',
-    // flex:1,
-
-    // justifyContent:"space-between"
+  
   },
   welcomemessage: {
     color: "#888",
@@ -335,15 +280,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   searchbar: {
-    // flexDirection:"row",
+
     backgroundColor: "#CDCDCD",
     
     alignSelf: "center",
     width: "95%",
-    // height:40,
     borderRadius: 50,
     zIndex: 2,
-    // paddingBottom:20,
     marginTop: 5,
   },
   circle: {
@@ -418,27 +361,16 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // backgroundColor: "green",
-    // borderBottomColor: "black",
-    // borderRadius: 5,
-    // paddingTop: 20,
-    // flex: 1,
-    // margin: 2,
+   
   },
   containerTaskDedtails: {
     borderColor: "black",
     borderWidth: 1,
-    // flexDirection: "row",
-    // justifyContent: "space-between",
+ 
   },
-  // IDIconContain:{
-  //   flexDirection: "row",
-  //   alignItems: "flex-end",
-  //   justifyContent: "space-between",
-  // },
 
   Details: {
-    // flex: 1,
+   
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
