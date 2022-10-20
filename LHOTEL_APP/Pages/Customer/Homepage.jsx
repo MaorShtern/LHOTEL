@@ -47,11 +47,19 @@ export default function Homepage({ navigation }) {
                     <Text  style={styles.buttonText}>ADDRESS</Text>
                 </TouchableOpacity>
             </View>
+            <View>
+                <Text>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+
+                </Text>
+            </View>
             <Text style={styles.Text}>POPULERS ROOMS</Text>
             <CarouselImages />
            
-            <View style={{ height: 10 }}></View>
-
+            
             <Text style={styles.Text}>ACTIVITES</Text>
 
             <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between', paddingTop: 10 }}>
