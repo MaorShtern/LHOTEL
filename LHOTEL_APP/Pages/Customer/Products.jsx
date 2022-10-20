@@ -6,13 +6,6 @@ import { useState, useEffect, useContext } from "react";
 import Counter from "react-native-counters";
 import AppContext from "../../AppContext";
 
-// const ProductsArr = [
-//   {id: 1,image: images.waterbottle,name: "Water bottle", price: 10,amountTaken: 0},
-//   {id: 2, image: images.whisky,name: "Whiskey",price: 5,amountTaken: 0},
-//   {id: 3,image: images.choclatebar, name: "Chocolate bar",price: 16,amountTaken: 0 },
-//   {id: 4,image: images.alcoholWine, name: "White wine",price: 3, amountTaken: 0 },
-//   { id: 5,image: images.cocacola,name: "Coca Cola bottle", price: 20, amountTaken: 0},
-// ];
 
 const ProductsArr = [
   { ProductCode: 1, ProductDec: "Coca cola", Price: 15, Amount: 0 },
@@ -25,18 +18,18 @@ const ProductsArr = [
 ];
 
 export default function Products({ RoomNumber, SetRequest, navigation }) {
-  // useEffect(() => { SetCount(0) }, []);
+ 
   const myContext = useContext(AppContext);
   const [totalSum, SetTotalSum] = useState(0);
   const [start, SetStart] = useState(0);
   const [showBox, setShowBox] = useState(true);
   const [goodsCount, SetGoodsCount] = useState(0);
-  // const [counter, SetCounter] = useState(0);
+
 
   useEffect(() => {
     SetTotalSum(0);
     SetGoodsCount(0);
-    // SetCounter(0);
+ 
   }, []);
 
   const cancel = () => {
@@ -51,47 +44,25 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
       "order",
       "Are you sure you want to  add the selected products to your account?",
       [
-        // The "Yes" button
+       
         {
           text: "Yes",
           onPress: () => {
             setShowBox(false);
             AddChargeToDB();
 
-            // let temp = []
-            // ProductsArr.map((item) =>
-            //   temp.push(
-            //     {
-            //       ProductCode: item.ProductCode,
-            //       image: item.image,
-            //       ProductDec: item.ProductDec,
-            //       Price: item.Price,
-            //       Amount:  item.Amount
-
-            //     }))
-
-            //     let selectedItems = ProductsArr.filter((selectedItem) =>
-            // selectedItem.Amount !== 0 )
-
-            // navigation.navigate("Bill",{Products:selectedItems,totalSum:totalSum});
             cancel();
-            // getSelectedProducts()
+          
           },
         },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
+    
         {
           text: "No",
         },
       ]
     );
   };
-  // const getSelectedProducts = () => {
-  //   for (let i = 0; i < data.length; i++) {
-  //     data[i].amountTaken = 0;
-  //   }
-
-  // };
+  
   const ChargeToDB = async (selectedItem) => {
     try {
       let counter = 0
@@ -129,7 +100,7 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
 
   }
   const AddChargeToDB = () => {
-    // try {
+   
     let selectedItems = [];
     ProductsArr.map((selectedItem) => {
       if (selectedItem.Amount !== 0)
@@ -137,70 +108,7 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
     });
 
     ChargeToDB(selectedItems)
-    // console.log(selectedItems);
-    // selectedItems.map((selectedItem) => ChargeToDB(selectedItem))
-    // if (counter > 0) {
-    //   alert("The purchase was successfully registered");
-    //   navigation.goBack();
-    // } else {
-    //   alert("The purchase has not been made");
-    // }
-    // selectedItems.map((selectedItem) => console.log(selectedItem))
-    // let counter = 0
-    // for (let index = 0; index < selectedItems.length; index++) {
-    //   // const element = array[index];
-    //   // console.log(selectedItems[index]);
-    //   let flag = ChargeToDB(selectedItems[index])
-    //   console.log(flag);
-    //   // if (ChargeToDB(selectedItems[index]) === true)
-    //   //   counter++
-    // }
-    // if (counter > 0) {
-    //   alert("The purchase was successfully registered");
-    //   navigation.goBack();
-    // } else {
-    //   alert("The purchase has not been made");
-    // }
-
-
-    //   let counter = 0;
-    //   for (let index = 0; index < ProductsArr.length; index++) {
-    //     if (ProductsArr[index].Amount > 0) {
-    //       const requestOptions = {
-    //         method: "POST",
-    // body: JSON.stringify({
-    //   CustomerID: myContext.bill.CustomerID,
-    //   RoomNumber: RoomNumber,
-    //   ProductDec: ProductsArr[index].ProductDec,
-    //   Amount: ProductsArr[index].Amount,
-    //   PaymentMethod: "Credit",
-    // }),
-    //         headers: { "Content-Type": "application/json" },
-    //       };
-    //       // console.log(requestOptions.body);
-    //       let result = await fetch(
-    //         "http://proj13.ruppin-tech.co.il/AddCharge",
-    //         requestOptions
-    //       );
-    //       let temp = await result.json();
-    //       if (temp) {
-    //         counter++;
-    //         // GetAllTasksFromDB()
-
-    //       }
-    //     }
-    //   }
-    //   console.log("counter" +  counter);
-    //   if (counter > 0) {
-    //     alert("The purchase was successfully registered");
-    //     navigation.goBack();
-    //   } else {
-    //     alert("The purchase has not been made");
-    //   }
-    // } catch (error) {
-    //   alert(error);
-    //   SetLoading(true);
-    // }
+   
   };
 
   const RestCount = () => {
@@ -208,12 +116,9 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
       ProductsArr[i].Amount = 0;
     }
 
-    // SetTotalSum(0);
-    // SetGoodsCount(0);
-    // SetStart(0)
   };
 
-  // console.log(start);
+ 
 
   const Calculate_Final_Amount = () => {
     let sum = 0;
@@ -239,7 +144,7 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
             : styles.containerStyle
         }
       >
-        {/* <Image source={item.image} style={styles.imageStyle} /> */}
+       
 
         <View style={styles.textStyle}>
           <Text
@@ -265,10 +170,10 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
             start={start}
             max={5}
             style={styles.counterStyle}
-            // onChange={(count) => {SetCount.bind(this)}}
+           
             onChange={(count) => {
               (item.Amount = count),
-                // console.log(count),
+         
                 Calculate_Final_Amount();
             }}
           />
@@ -280,15 +185,13 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
   return (
     <View>
       <View style={styles.headerStyle}>
-        {/* <TouchableOpacity onPress={() => { SetRequest(""), SetTotalSum(0), SetGoodsCount(0), SetStart(0) }}> */}
+    
         <TouchableOpacity onPress={cancel}>
           <Icon name="ios-close" size={35} color="#a8a9ad" />
         </TouchableOpacity>
 
         <Text style={{ fontSize: 20 }}>Mini Bar</Text>
-        {/* <Text onPress={RestCount}>Empty</Text> */}
       </View>
-      {/* <Header  func={func}/> */}
       <FlatList
         data={ProductsArr}
         renderItem={GetItem}
@@ -306,13 +209,11 @@ export default function Products({ RoomNumber, SetRequest, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <Footer totalSum={totalSum} goodsCount={goodsCount} /> */}
     </View>
   );
 }
 
 const TotalComponent = ({ totalSum, goodsCount }) => {
-  // const { totalContainerStyle, goodsStyle, totalStyle } = styles;
   return (
     <View style={styles.totalContainerStyle}>
       <View style={styles.goodsStyle}>
@@ -326,45 +227,7 @@ const TotalComponent = ({ totalSum, goodsCount }) => {
     </View>
   );
 };
-// const Footer = ({ totalSum, goodsCount }) => {
-//   const {
-//     footerContainerStyle,
-//     buttonContainerStyle,
-//     closeButtonStyle,
-//     checkoutButtonStyle,
-//   } = styles;
-//   return (
-//     <View style={footerContainerStyle}>
-//       <TotalComponent totalSum={totalSum} goodsCount={goodsCount} />
-//       <View style={buttonContainerStyle}>
-//         <TouchableOpacity
-//           style={closeButtonStyle}
-//           onPress={() => console.log("dgdfgdgfdfg")}
-//         >
-//           <Text style={{ color: "#fff" }}>Close</Text>
-//         </TouchableOpacity>
 
-//         <View style={checkoutButtonStyle}>
-//           <Text style={{ color: "#fff" }}>Go to checkout</Text>
-//         </View>
-//       </View>
-//     </View>
-//   );
-// };
-
-// const Header = ({func}) => {
-//   return (
-//     <View style={styles.headerStyle}>
-//        <TouchableOpacity   onPress={() => console.log("dgdfgdgfdfg")}>
-//          <Icon name="ios-close" size={35} color="#a8a9ad" />
-
-//           </TouchableOpacity>
-
-//       <Text style={{ fontSize: 18 }}>Mini Bar</Text>
-//       <Text onPress={func}>Empty</Text>
-//     </View>
-//   );
-// };
 
 const styles = StyleSheet.create({
   containerStyle: {
@@ -427,24 +290,15 @@ const styles = StyleSheet.create({
     borderColor: "#e2e2e2",
   },
   buttonContainerStyle: {
-    // flexDirection: "row",
+   
     justifyContent: "center",
     paddingTop: 15,
   },
-  // closeButtonStyle: {
-  //   backgroundColor: "#7f8c8d",
-  //   padding: 10,
-  //   paddingRight: 30,
-  //   paddingLeft: 30,
-  //   borderRadius: 3,
-  // },
+
   checkoutButtonStyle: {
     backgroundColor: "#f39c12",
     padding: 10,
-    // textAlign:'center',
-    // paddingRight: 60,
-    // paddingLeft: 60,
-    // justifyContent: "center",
+   
     borderRadius: 3,
   },
   totalContainerStyle: {
@@ -461,20 +315,4 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
-{
-  /* <View style={styles.footerContainerStyle}>
-<TotalComponent totalSum={totalSum} goodsCount={goodsCount} />
-<View style={styles.buttonContainerStyle}>
-  <TouchableOpacity
-    style={styles.closeButtonStyle}
-    onPress={() => console.log("dgdfgdgfdfg")}
-  >
-    <Text style={{ color: "#fff" }}>Close</Text>
-  </TouchableOpacity>
 
-  <View style={styles.checkoutButtonStyle}>
-    <Text style={{ color: "#fff" }}>Go to checkout</Text>
-  </View>
-</View>
-</View> */
-}

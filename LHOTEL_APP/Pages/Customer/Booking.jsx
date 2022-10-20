@@ -25,18 +25,14 @@ export default function Booking({ navigation }) {
   const [singleFlag, setSingle] = useState(false);
   const [doubleFlag, setDouble] = useState(false);
   const [suiteFlag, setSuite] = useState(false);
-  // const [numberOfNights, setNumberOfNights] = useState(false);
 
-  // const [entryDate, setEntryDate] = useState(moment().toDate());
-  // const [exitDate, setExitDate] = useState(moment(entryDate).add(1, "days").toDate()
-  // );
 
   const [isEntryModalOpened, SetIsEntryModalOpened] = useState(false);
   const [isExitModalOpened, SetIsExitModalOpened] = useState(false);
   const [numberOfNights, setNumberOfNights] = useState(0);
   const [breakfast, setBreakfast] = useState(false);
 
-  // const [AmountOfPeople, setAmountOfPeople] = useState(0);
+ 
 
   const showDatePickerEntry = () => {
     setFlagEntry(true);
@@ -54,13 +50,13 @@ export default function Booking({ navigation }) {
   };
   const handleConfirmEnteryDate = (date) => {
     roomsReservation.EntryDate = date
-    // setEntryDate(date);
+    /
     hideDatePickerEntry();
   };
 
   const handleConfirmExitDate = (date) => {
     roomsReservation.ExitDate = date
-    // setExitDate(date);
+    
     hideDatePickerExit();
   };
 
@@ -73,15 +69,15 @@ export default function Booking({ navigation }) {
       moment(roomsReservation.ExitDate).isBefore(roomsReservation.EntryDate, "day")
     ) {
       setNumberOfNights(0);
-      // roomsReservation.NumberOfNights = 0
+     
       return;
     }
     if (!isEntryModalOpened && isExitModalOpened) {
       setNumberOfNights(moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days") + 1);
-      // roomsReservation.NumberOfNights = moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days") + 1;
+     
       return;
     }
-    // roomsReservation.NumberOfNights =moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days");
+   
     setNumberOfNights(moment(roomsReservation.ExitDate).diff(moment(roomsReservation.EntryDate), "days"));
   });
 
@@ -318,7 +314,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    // paddingHorizontal:70,
-    // paddingVertical:90,
+ 
   },
 });

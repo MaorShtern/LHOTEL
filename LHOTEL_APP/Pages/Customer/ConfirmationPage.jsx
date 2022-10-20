@@ -27,18 +27,14 @@ export default function ConfirmationPage({ route, navigation }) {
                     <Text style={styles.textStyle}>ID : {roomsReservation.CustomerID}</Text>
                     <Text style={styles.textStyle}>total Price : {roomsReservation.totalSum}$</Text>
                     <Text style={styles.textStyle}>Amount Of People : {roomsReservation.AmountOfPeople}</Text>
-                    {/* <Text style={styles.textStyle}>Number Of Nights : {customer.NumberOfNights}</Text> */}
                     <Text style={styles.textStyle}>Cardholder's Name: {roomsReservation.CardHolderName}</Text>
                     <Text style={styles.textStyle}>Card Number: ************{roomsReservation.CreditCardNumber.slice(-4)}</Text>
 
                 </View>
             </View>
-            {/* curr.CreditCardNumber.slice(-4) */}
 
             <View style={styles.ButtonContainer}>
-                {/* <TouchableOpacity style={styles.button} onPress={Delete}>
-                    <Text>Delete order</Text>
-                </TouchableOpacity> */}
+         
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
                     <Text>Home Page</Text>
                 </TouchableOpacity>

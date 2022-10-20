@@ -1,18 +1,21 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity, } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState} from "react";
 import { ActivityIndicator } from "react-native";
-import Modal from "react-native-modal";
-import AppContext from "../../AppContext";
+
 
 export default function Login({ navigation }) {
   const [id, setID] = useState("");
   const [password, setPassword] = useState("");
   const [loading, SetLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
-  const myContext = useContext(AppContext);
-
-  const user = myContext.user;
-  const bill = myContext.bill;
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -29,16 +32,17 @@ export default function Login({ navigation }) {
         }),
         headers: { "Content-Type": "application/json" },
       };
-      let result = await fetch("http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword", requestOptions
+      let result = await fetch(
+        "http://proj13.ruppin-tech.co.il/GetCustomerByMailAndPassword",
+        requestOptions
       );
       let user = await result.json();
-      // console.log(JSON.stringify(user));
+
       if (user !== null) {
-        // console.log(JSON.stringify(user));
         SetLoading(true);
         myContext.setUserDB(user);
-       
-        navigation.navigate('Home')
+
+        navigation.navigate("Home");
         return;
       } else {
         alert("There is no registered user in the system");
@@ -46,10 +50,9 @@ export default function Login({ navigation }) {
     } catch (error) {
       alert(error);
     }
-    // setModalVisible(!isModalVisible)
+
     SetLoading(true);
   };
-  
 
   const Spinner = () => (
     <View style={[styles.container, styles.horizontal]}>
@@ -57,69 +60,17 @@ export default function Login({ navigation }) {
     </View>
   );
 
-  // const saveUser = async (value) => {
-  //   try {
-  //     await AsyncStorage.setItem('@user', JSON.stringify(value), () => {
-  //       navigation.navigate('Home')
-  //     });
-
-  //   }
-  //   catch (error) {
-  //     Alert.alert(error)
-  //   }
-  // }
-  
-
   const LogIn = () => {
     if (id.length != 0 && password.length != 0) {
       var Hashes = require("jshashes");
       let hashPassword = new Hashes.SHA1().b64_hmac(id, password); // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה
       FetchUserFromDB(hashPassword);
-      // setModalVisible(!isModalVisible);
-      // toggleModal()
-    
+     
     } else {
       Alert.alert("No such user exists in the system");
     }
   };
-//   const FetchCustomerReservationFromDB = async () => {
-    
-   
-//      try {
-//        const requestOptions = {
-//          method: "PUT",
-//          body: JSON.stringify({
-//            id: id,
-//          }),
-//          headers: { "Content-Type": "application/json" },
-//        };
-//        let result = await fetch(
-//          "http://proj13.ruppin-tech.co.il/GetRoomResit",
-//          requestOptions
-//        );
-//        let customerReservation = await result.json();
-//        // console.log(JSON.stringify(user))
-//        if (customerReservation !== null) {
-//            bill.CustomerID = customerReservation[0].CustomerID
-//            bill.BillNumber = customerReservation[0].BillNumber
-//            bill.BillDate = customerReservation[0].BillDate
-//            bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-//            bill.Breakfast = customerReservation[0].Breakfast
-//            bill.NumberOfNights = customerReservation[0].NumberOfNights
-//            bill.AmountOfPeople = customerReservation[0].AmountOfPeople
-//        if(bill.rooms.length ===0)
-//                customerReservation.map((room)=> bill.rooms.push({RoomNumber:room.RoomNumber,PricePerNight:room.PricePerNight}))
-            
-        
-//         //  console.log(JSON.stringify(bill));
-//        }
-    
-//      } catch (error) {
-//        alert(error);
-     
-//  }
- 
-//  };
+
   const Delete = () => {
     setID("");
     setPassword("");
@@ -145,41 +96,7 @@ export default function Login({ navigation }) {
           style={styles.TextInput}
         ></TextInput>
       </View>
-      {/* <Modal isVisible={isModalVisible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#90A9A4",
-            width: "90%",
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: "#fff",
-            marginVertical: 150,
-            alignSelf: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 30,
-              paddingVertical: 50,
-              width: 180,
-              alignSelf: "center",
-              textAlign: "center",
-            }}
-          >
-            Please log in to continue placing the order
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              paddingVertical: 50,
-            }}
-          >
-            <Button title="OK" onPress={FetchCustomerReservationFromDB} />
-          </View>
-        </View>
-      </Modal> */}
+
       <View style={styles.ButtonContainer}>
         <TouchableOpacity>
           <Text style={styles.button} onPress={Delete}>

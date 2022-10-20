@@ -15,8 +15,7 @@ export default function Bill() {
   const [request, SetRequest] = useState('')
   const myContext = useContext(AppContext);
   const user = myContext.user
-  // console.log(user);
-  // console.log(use r.FirstName === undefined);
+ 
 
 
   const FetchTableFromDB = async (request) => {

@@ -40,7 +40,7 @@ export default function Registration({ navigation }) {
                 SetLoading(false)
                 let user = CreateUser()
                 user = JSON.stringify(user.fields)
-                // console.log(user)
+              
                 const requestOptions = {
                     method: 'POST',
                     body: user,
@@ -65,8 +65,7 @@ export default function Registration({ navigation }) {
         var Hashes = require('jshashes')
         let SHA1 = new Hashes.SHA1().b64_hmac(id, password) // הצפנת סיסמת משתמש לפי מפתח ת.ז שלו והשמה במשתנה 
 
-        // let bcrypt = require('bcryptjs');
-        // let hash = bcrypt.hashSync(password , 10);
+ 
 
         //  יצירת אובייקט מהמחלקה "יוזר" אשר יכיל את כול פרטי המשתמש
         let user = {

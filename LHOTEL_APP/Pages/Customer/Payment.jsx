@@ -78,7 +78,6 @@ export default function Payment({ route, navigation }) {
     try {
       const user = await AsyncStorage.getItem('@user');
       if (user !== null) {
-        // console.log("user: " + user);
         SetUser(JSON.parse(user))
         Calculate_Final_Amount()
       }
@@ -102,7 +101,6 @@ export default function Payment({ route, navigation }) {
       let customerResult = await result.json();
       if (customerResult)
 
-        // console.log(customerResult);
         navigation.navigate('ConfirmationPage', {
           id: value.CustomerID, the_data: the_data,
           number_Of_Nights: number_Of_Nights, breakfast: breakfast, entryDate: entryDate, exitDate: exitDate,
@@ -122,7 +120,6 @@ export default function Payment({ route, navigation }) {
       let counter_Double =  the_data.filter((per) => per.type === "Double room")[0] === undefined ?0: the_data.filter((per) => per.type === "Double room")[0].count 
      let counter_Suite = the_data.filter((per) => per.type === "Suite")[0] === undefined ?0: the_data.filter((per) => per.type === "Suite")[0].count
     
-     // console.log(user);
       let customer = {
         calssName: Customer,
         fields: {

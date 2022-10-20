@@ -5,8 +5,7 @@ import moment from 'moment/moment';
 
 export default function BillHistoryCard(props) {
 
-  // let { data } = props
-  // console.log(data);
+  
 
   let { BillNumber, BillDate, EntryDate, ExitDate, SumTotal, BillDetailes } = props
 
