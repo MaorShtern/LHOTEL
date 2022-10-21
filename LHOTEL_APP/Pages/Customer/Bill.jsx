@@ -48,6 +48,7 @@ export default function Bill() {
         }),
         headers: { "Content-Type": "application/json" },
       };
+      // console.log(request);
       let result = await fetch(
         "http://proj13.ruppin-tech.co.il/" + request,
         requestOptions
@@ -220,6 +221,7 @@ export default function Bill() {
         }),
         headers: { "Content-Type": "application/json" },
       };
+      // console.log(requestOptions.body);
       let result = await fetch(
         "http://proj13.ruppin-tech.co.il/DeleteReservation",
         requestOptions
@@ -242,6 +244,7 @@ export default function Bill() {
         text: "Yes",
         onPress: () => {
           DeleteReservationFromDB();
+
         },
       },
       { text: "No" },

@@ -62,11 +62,8 @@
     <Compile Include="Classes\RoomResit.cs" />
     <Compile Include="DALBillDetails.cs" />
     <Compile Include="Classes\Charge.cs" />
-    <Compile Include="Classes\Amount_Of_Products_Purchased_In_The_Store.cs" />
     <Compile Include="Classes\Customer.cs" />
     <Compile Include="Classes\Employee.cs" />
-    <Compile Include="Classes\Number_Of_Visitors_Per_Month.cs" />
-    <Compile Include="Classes\ProductPurchase.cs" />
     <Compile Include="Classes\Product.cs" />
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\Shift.cs" />

@@ -2417,7 +2417,7 @@ as
 	end
 commit tran
 go
---exec Amount_Of_Products_Purchased_In_The_Store
+exec Amount_Of_Products_Purchased_In_The_Store
 --select * from dbo.Purchases_Documentation
 --select * from dbo.Products
 

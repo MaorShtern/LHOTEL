@@ -65,6 +65,7 @@ export default function App() {
   const setUserDB = (obj) => {
     SetUser(obj)
   }
+  
 
   const SetReservastionData = (obj) => {
     SetRoomsReservation(obj)
@@ -82,7 +83,7 @@ export default function App() {
     setEmployeeDB,
     setUserDB,
     setIsUserExist,
-    
+    SetBill,
     SetReservastionData
   };
 
