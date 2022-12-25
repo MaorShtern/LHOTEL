@@ -92,7 +92,6 @@ create table Employees
 go
 
 
-
 create table Customers
 (
 	Customer_ID int NOT NULL,
